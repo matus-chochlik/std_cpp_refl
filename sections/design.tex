@@ -1,3 +1,66 @@
 \section{Design Decisions}
 
 \subsection{Compile-time vs. Run-time reflection}
+
+Run-time, dynamic reflection facilities may seem more readily
+usable, but with the increasing popularity of compile-time metaprogramming,
+the need for compile-time introspection (already taken care of
+by \verb@type_traits@) and reflection also increases.
+
+From the performance point of view, algorithms based on static
+meta-data offer much more possibilities for the compiler to do
+optimizations.
+
+Also, if compile-time reflection is well supported it is relatively
+easy to implement run-time or even dynamically loadable reflection
+on top of it.
+
+Thus, taking shortcuts directly to run-time reflection, without
+compile-time support has obvious drawbacks.
+
+\subsection{Desired features} 
+
+The proposed reflection facility is designed with the following
+goals in mind:
+
+\begin{itemize}
+\item {\em Reusability}: The provided metadata should be reusable
+in many situations and for many different purposes, not only
+the obvious ones. This is closely related to {\em completeness} (below).
+
+\item {\em Flexibility}: The basic reflection and the libraries
+built on top of it should be designed
+in a way that they are eventually usable during both compile-time
+and run-time and under various paradigms (object-oriented, functional, etc.),
+depending on the application needs.
+
+\item {\em  Encapsulation}: The metadata should be accessible
+through conceptually well-defined interfaces.
+
+\item {\em  Stratification}: Reflection should be non-intrusive,
+and the meta-level should be separated from the base-level language
+constructs it reflects. Also, reflection should not be implemented
+in a all-or-nothing manner. Things that are not needed, should not generally
+be compiled-into the final application.
+
+\item {\em  Ontological correspondence}: The meta-level facilities should
+correspond to the ontology of the base-level C++ language constructs
+which they reflect. This basically means that all existing language
+features should be reflected and new ones should not be invented.
+This rule may have some important exceptions like the reflection of
+containers.
+
+\item {\em  Completeness}: The proposed reflection facility should
+provide as much useful metadata as possible, including various specifiers,
+(like constness, storage-class, access, etc.), namespace members,
+enumerated types, iteration of namespace members and much more.
+
+\item {\em  Ease of use}: Although reflection-based metaprogramming
+allows to implement very complicated things, simple things
+should be kept simple.
+
+\item {\em  Cooperation with other librares}: Reflection should be
+usable with the existing introspection facilites (like \verb@type_traits@)
+already provided by the standard library and with other libraries.
+\end{itemize}
+

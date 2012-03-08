@@ -1,5 +1,10 @@
 \documentclass[11pt,a4paper,oneside]{article}
 
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{Matus.Chochlik@fri.uniza.sk}
+\newcommand{\docnum}{Dnnnn=12-mmmm}
+\newcommand{\docdate}{2012-03-08}
+
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 \usepackage{hyperref}
@@ -8,19 +13,27 @@
 \usepackage{listings}
 \lstset{language=C++}
 
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{ISO/IEC JTC1 SC22 WG21 \docnum{} - Static reflection}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
 \setcounter{tocdepth}{2} 
 
 \title{Static reflection}
-\author{Mat\'{u}\v{s} Chochl\'{i}k Matus.Chochlik@fri.uniza.sk}
+
+\author{\mchname (\mchmail)}
 
 \begin{document}
 
-
 \begin{tabular}{r l}
-Document number: & Dnnnn=12-nnnn\\
-Date: & 2012-03-12 \\
+Document number: & \docnum\\
+Date: & \docdate\\
 Project: & Programming Language C++, Library Working Group \\
-Reply-to: & Mat\'{u}\v{s} Chochl\'{i}k \href{mailto:Matus.Chochlik@fri.uniza.sk}{Matus.Chochlik@fri.uniza.sk}\\
+Reply-to: & Mat\'{u}\v{s} Chochl\'{i}k (\href{mailto:\mchmail}{\mchmail})\\
 \end{tabular}
 
 
@@ -33,6 +46,5 @@ Reply-to: & Mat\'{u}\v{s} Chochl\'{i}k \href{mailto:Matus.Chochlik@fri.uniza.sk}
 \input{sections/tech_spec.tex}
 \input{sections/acknowl.tex}
 \input{sections/references.tex}
-
 
 \end{document}
