@@ -1,0 +1,69 @@
+
+\section{Motivation and Scope}
+
+\subsection{Usefullness of reflection}
+
+There is a wide range of computer programming tasks that involve
+the execution of the same algorithm on a set of types defined by an
+application or on instances of these types, accessing member variables,
+calling free or member functions in an uniform
+manner, converting data between the language's intrinsic representation and
+external formats for the purpose of implementing the following:
+
+\begin{itemize}
+
+\item serialization or storing of persistent data in a
+custom binary format or in XML, JSON, XDR, etc.,
+
+\item (re-)construction of class instances
+from external data representations (like those listed above),
+from the data stored in a relational database, from data entered by
+a user through a user interface or queried through a web service API,
+
+\item automatic generation of a relational schema from the application
+object model and object-relational mapping (ORM),
+
+\item support for scripting 
+
+\item support remote procedure calls (RPC) / remote method invocation (RMI),
+
+\item inspection and manipulation of existing objects via a (graphic) user interface
+or a web service,
+
+\item visualization of objects or data and the relations between objects or
+relations in the data,
+
+\item automatic or semi-automatic implementation of certain software design patterns,
+
+\item etc.
+
+\end{itemize}
+
+There are several aproaches to the implementation of such
+functionality. The most straightforward and also usually the most
+error-prone is manual implementation. Many of the tasks listed above
+are inherently repetitive and basically require to process programming
+language constructs (types, structures, containers, functions, constructors,
+class member variables, enumerated values, etc.)
+in a very uniform way that could be easily transformed into a meta-algorithm.
+
+While it is acceptable (even if not very advantageous)
+for example, for a design pattern implementation to be made by a human,
+writing RPC/RMI-related code is a task much better suited for a computer.
+
+This leads to the second, heavily used approach: preprocessing
+and parsing of the program source text by a (usually very specfic) external
+program (documentation generation tool, interface definition language compiler
+for RPC/RMI, web service interface generator, a rapid application
+development environment with a form designer, etc.) resulting in additional
+program source code, which is then compiled into the final application binary.
+
+This approach has several problems, first it requires the external
+tools which may not fit well into the build system or may not be portable
+between platforms or be free; second, such tools are task-specific
+and many of them allow only a limited, if any, customization of the output.
+
+Another way to automate these tasks is to use reflection,
+reflective programming, metaprogramming and generic programming as
+explained below.
+
