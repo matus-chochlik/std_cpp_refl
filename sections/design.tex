@@ -1,23 +1,5 @@
 \section{Design Decisions}
 
-\subsection{Compile-time vs. Run-time reflection}
-
-Run-time, dynamic reflection facilities may seem more readily
-usable, but with the increasing popularity of compile-time metaprogramming,
-the need for compile-time introspection (already taken care of
-by \verb@type_traits@) and reflection also increases.
-
-From the performance point of view, algorithms based on static
-meta-data offer much more possibilities for the compiler to do
-optimizations.
-
-Also, if compile-time reflection is well supported it is relatively
-easy to implement run-time or even dynamically loadable reflection
-on top of it.
-
-Thus, taking shortcuts directly to run-time reflection, without
-compile-time support has obvious drawbacks.
-
 \subsection{Desired features} 
 
 The proposed reflection facility is designed with the following
@@ -63,4 +45,139 @@ should be kept simple.
 usable with the existing introspection facilites (like \verb@type_traits@)
 already provided by the standard library and with other libraries.
 \end{itemize}
+
+\subsection{Layered approach and extensibility}
+
+The purpose of this section is to show that a {\em static} $\to$ {\em dynamic}
+and {\em basic} $\to$ {\em complex} approach in designing reflection
+can accomodate a wide variety of programming styles and is arguably
+the "best" one. It does not propose to add all layers described
+below into the standard library.
+
+The Mirror reflection utilities \cite{mirror-doc-cpp11} on which this
+proposal is based, implements several distinct components which
+are stacked on top of each other. From the low-level metadata, through
+a functional-style compile-time interface to a completely dynamic
+object-oriented run-time layer (all described in greater detail below).
+
+\subsubsection{Basic metaobjects}
+The very basic metadata, which are in Mirror
+provided (registered) by the user (or an automated command-line tool) via a set
+of preprocessor macros. This approach is both inconvenient and error-prone
+in many situations, but also has its advantages.
+
+We propose that a standard compiler would make these basic metadata available
+to the programmer through the basic metadata static interfaces. These would
+serve as the basis for other (standard and non-standard) higher-level
+reflection libraries and utilities.
+
+In the Mirror utilities the basic metadata are not used directly by the
+applications.
+
+\subsubsection{Mirror}
+
+A compile-time functional-style reflective programming library,
+which is based directly on the basic metadata and is suitable for generic programming,
+similar to the standard \verb@type_traits@ library.
+It provides a more user-friendly and rich interface than the basic-metaobjects.
+
+Mirror also provides a set of metaprogramming utilities which allow
+to write compile-time meta-programs, which can generate efficient
+and optimized program code using only those metadata that are required.
+
+The following code shows several (rather simple) examples of usage
+and the functional style of the algorithms based on metadata provided by Mirror.
+
+The first example gets all types (registered) in the global scope,
+applies some \verb@type_traits@ modifiers like \verb@std::add_pointer@
+\verb@std::add_const@ and for each of such modified types calls a functor
+that prints the names of the individual types to the standard output:
+
+\begin{lstlisting}
+struct name_printer
+{
+    template <typename MetaNamedObject>
+    void operator()(MetaNamedObject mo) const
+    {
+        std::cout << mo.base_name() << std::endl;
+    }
+};
+
+int main(void)
+{
+    using namespace mirror;
+    // this function calls the name_printer functor passed
+    // as the function argument on each element in the 
+    // range that is passed as the template argument
+    mp::for_each<
+        // this template transforms the elements in the range
+        // passed as the first argument by the unary template
+        // passed as the second argument
+        mp::transform<
+            // this template filters out only those metaobjects
+            // that satisfy the predicate passed as the second
+            // argument from the range of metaobjects passed
+            // as the first argument
+            mp::only_if<
+                // this template "returns" a range of metaobjects
+                // reflecting the members of the namespace
+                // (or other scope) that is passed as argument
+                members<
+                    // this macro expands into a class
+                    // conforming to the Mirror's MetaNamespace
+                    // concept and provides metadata describing
+                    // the global scope namespace.
+                    // in the proposed solution for standard C++
+                    // this would be relaced by a special stdlib
+                    // function or by an operator.
+                    MIRRORED_GLOBAL_SCOPE()
+                >,
+                // this is a lambda function testing if its first
+                // argument falls to the MetaType category
+                mp::is_a<
+                    mp::arg<1>,
+                    meta_type_tag
+                >
+            >,
+            // this is a unary lambda function that modifies the
+            // type passed as its argument by the add_pointer
+            // and add_const type traits
+            apply_modifier<
+                mp::arg<1>,
+                mp::protect<
+                    std::add_pointer<
+                        std::add_const<
+                            mp::arg<1>
+                        >
+                    >
+                >
+            >
+        >
+    >(name_printer());
+    std::cout << std::endl;
+    return 0;
+}
+
+\end{lstlisting}
+
+
+\subsection{Compile-time vs. Run-time reflection}
+
+Run-time, dynamic reflection facilities may seem more readily
+usable, but with the increasing popularity of compile-time metaprogramming,
+the need for compile-time introspection (already taken care of
+by \verb@type_traits@) and reflection also increases.
+
+Also, if compile-time reflection is well supported it is relatively
+easy to implement run-time or even dynamically loadable reflection
+on top of it. The oposite is not true: One cannot use run-time metaobjects
+or the value returned by their member functions as template parameters
+or compile-time constants.
+
+From the performance point of view, algorithms based on static
+meta-data offer much more possibilities for the compiler to do
+optimizations.
+
+Thus, taking shortcuts directly to run-time reflection, without
+compile-time support has obvious drawbacks.
 

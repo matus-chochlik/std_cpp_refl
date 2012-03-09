@@ -1,1 +1,16 @@
 \section{Technical Specifications}
+
+\subsection{Metaobject Concepts}
+
+In the proposed solution the metadata describing a program written
+in C++ would be made available through a set of anonymous types (classes)
+defined by the compiler. These classes would describe various program
+constructs like, namespaces, types, typedefs, classes, their member variables
+(member data), member functions, inheritance, templates, template parameters,
+etc.
+
+This section rescribes a hierarchy of concepts (static interfaces) for these
+metaobjects. The concepts described here would not exist as concrete
+types and would not be defined by the standard library or compiler. They
+only describe which member typedefs, member functions, etc. are available
+for various kinds of metaobjects.
