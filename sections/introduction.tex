@@ -24,6 +24,28 @@ doing changes to algorithms or changing the way the program code
 is interpreted. Reflective programming is a particular kind
 of \emph{metaprogramming}.
 
+Reflection should follow the principle of {\em Ontological correspondence},
+i.e. should {\em reflect} the base-level program constructs as closely
+as possible to a reasonable level.
+Reflection should not omit existing language features not invent new
+ones that do not exist at the base-level.
+
+What reflection "looks like" is thefore very language-specific.
+Reflection for C++ is necessary different from reflection in Smalltalk
+since these are two quite different languages.
+
+The "reasonability" applies to the level-of-detail of the metadata
+provided by reflection. It is a tradeoff between the complexity
+of the reflection system and its usefullness. The "metadata" provided
+by the currently standard \verb@typeid@ operator are rather simple
+(which may be good), but their usefullness is very limited (which
+is bad). On the other hand a fictional reflection facility that would
+allow to inspect the individual instructions of a function could
+be useful for some specific applications, but this system would
+also be very complex to implement and use.
+The proposed reflection system tries to walk a "middle ground"
+and be usable in many situations without unmanagable complexity.
+
 The advantage of using reflection is in the fact that everything
 is implemented in a single programming language, and the human-written
 code can be closely tied with the customizable reflection-based

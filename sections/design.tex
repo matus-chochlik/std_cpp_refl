@@ -105,57 +105,57 @@ struct name_printer
 
 int main(void)
 {
-    using namespace mirror;
-    // this function calls the name_printer functor passed
-    // as the function argument on each element in the 
-    // range that is passed as the template argument
-    mp::for_each<
-        // this template transforms the elements in the range
-        // passed as the first argument by the unary template
-        // passed as the second argument
-        mp::transform<
-            // this template filters out only those metaobjects
-            // that satisfy the predicate passed as the second
-            // argument from the range of metaobjects passed
-            // as the first argument
-            mp::only_if<
-                // this template "returns" a range of metaobjects
-                // reflecting the members of the namespace
-                // (or other scope) that is passed as argument
-                members<
-                    // this macro expands into a class
-                    // conforming to the Mirror's MetaNamespace
-                    // concept and provides metadata describing
-                    // the global scope namespace.
-                    // in the proposed solution for standard C++
-                    // this would be relaced by a special stdlib
-                    // function or by an operator.
-                    MIRRORED_GLOBAL_SCOPE()
-                >,
-                // this is a lambda function testing if its first
-                // argument falls to the MetaType category
-                mp::is_a<
-                    mp::arg<1>,
-                    meta_type_tag
-                >
-            >,
-            // this is a unary lambda function that modifies the
-            // type passed as its argument by the add_pointer
-            // and add_const type traits
-            apply_modifier<
-                mp::arg<1>,
-                mp::protect<
-                    std::add_pointer<
-                        std::add_const<
-                            mp::arg<1>
-                        >
-                    >
-                >
-            >
+  using namespace mirror;
+  // this function calls the name_printer functor passed
+  // as the function argument on each element in the 
+  // range that is passed as the template argument
+  mp::for_each<
+    // this template transforms the elements in the range
+    // passed as the first argument by the unary template
+    // passed as the second argument
+    mp::transform<
+      // this template filters out only those metaobjects
+      // that satisfy the predicate passed as the second
+      // argument from the range of metaobjects passed
+      // as the first argument
+      mp::only_if<
+        // this template "returns" a range of metaobjects
+        // reflecting the members of the namespace
+        // (or other scope) that is passed as argument
+        members<
+          // this macro expands into a class
+          // conforming to the Mirror's MetaNamespace
+          // concept and provides metadata describing
+          // the global scope namespace.
+          // in the proposed solution for standard C++
+          // this would be relaced by a special stdlib
+          // function or by an operator.
+          MIRRORED_GLOBAL_SCOPE()
+        >,
+        // this is a lambda function testing if its first
+        // argument falls to the MetaType category
+        mp::is_a<
+          mp::arg<1>,
+          meta_type_tag
         >
-    >(name_printer());
-    std::cout << std::endl;
-    return 0;
+      >,
+      // this is a unary lambda function that modifies the
+      // type passed as its argument by the add_pointer
+      // and add_const type traits
+      apply_modifier<
+        mp::arg<1>,
+        mp::protect<
+          std::add_pointer<
+            std::add_const<
+              mp::arg<1>
+            >
+          >
+        >
+      >
+    >
+  >(name_printer());
+  std::cout << std::endl;
+  return 0;
 }
 
 \end{lstlisting}
