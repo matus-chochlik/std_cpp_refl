@@ -12,7 +12,7 @@ all: $(addprefix $(outdir)/, $(addsuffix .pdf, $(docs)))
 
 $(blddir)/%.tex.d: %.tex | $(blddir)
 	echo "$(blddir)/$*.pdf: \\" > $@
-	sed -n 's|\\input{\([^}]\+\)}|\1 \\|p' < $< >> $@
+	./tex_scan_deps.sh $< >> $@
 	echo "$<" >> $@
 
 $(blddir)/%.pdf: %.tex $(blddir)/%.tex.d | $(blddir)

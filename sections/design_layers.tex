@@ -1,0 +1,30 @@
+\subsection{Layered approach and extensibility}
+
+The purpose of this section is to show that a {\em static} $\to$ {\em dynamic}
+and {\em basic} $\to$ {\em complex} approach in designing reflection
+can accomodate a wide variety of programming styles and is arguably
+the "best" one. We do not propose to add all layers described
+below into the standard library.
+
+The Mirror reflection utilities \cite{mirror-doc-cpp11} on which this
+proposal is based, implements several distinct components which
+are stacked on top of each other. From the low-level metadata, through
+a functional-style compile-time interface to a completely dynamic
+object-oriented run-time layer (all described in greater detail below).
+
+\subsubsection{Basic metaobjects}
+The very basic metadata, which are in Mirror
+provided (registered) by the user (or an automated command-line tool) via a set
+of preprocessor macros. This approach is both inconvenient and error-prone
+in many situations, but also has its advantages.
+
+We propose that a standard compiler would make these metadata available
+to the programmer through the static basic metaobject interfaces. These would
+serve as the basis for other (standard and non-standard) higher-level
+reflection libraries and utilities.
+
+In the Mirror utilities the basic metadata are not used directly by
+applications.
+
+\input{sections/design_layers_mirror.tex}
+\input{sections/design_layers_puddle.tex}
