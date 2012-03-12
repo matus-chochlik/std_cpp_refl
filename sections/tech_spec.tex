@@ -1,33 +1,33 @@
 \section{Technical Specifications}
 
 We propose that the basic metadata describing a program written
-in C++ would be made available through a set of anonymous types (classes)
-defined by the compiler. These classes would describe various program
+in C++ should be made available through a set of {\em anonymous} classes
+defined by the compiler. These classes should describe various program
 constructs like, namespaces, types, typedefs, classes, their member variables
 (member data), member functions, inheritance, templates, template parameters,
 enumerated values, etc.
 
-The compiler would generate metadata for the program constructs defined
+The compiler should generate metadata for the program constructs defined
 in the currently processed translation unit. Indexed sets of metaobjects,
-like scope members, parameters of a function, etc. would be listed
+like scope members, parameters of a function, etc. should be listed
 in the order of appearance in the processed source code.
 
-Since we want the metadata to be static, different base-level constructs
-would be described by {\em "statically" different} metaobjects and thus
-by {\em different} types.
-For example a metaobject reflecting the global scope namespace would
-be a different {\em type} than a metaobject (type) reflecting the \verb@std@
-namespace, a metaobject reflecting the \verb@int@ type would
+Since we want the metadata to be available at compile-time,
+different base-level constructs should be reflected by
+{\em "statically" different} metaobjects and thus by {\em different} types.
+For example a metaobject reflecting the global scope namespace should
+be a different {\em type} than a metaobject reflecting the \verb@std@
+namespace, a metaobject reflecting the \verb@int@ type should
 have a different type then a metaobject reflecting the \verb@double@
-type, a metaobject reflecting \verb@::foo(int)@ function would
+type, a metaobject reflecting \verb@::foo(int)@ function should
 have a different type than a metaobject reflecting \verb@::foo(double)@,
 function, etc.
 
-In a manner of speaking these special types (metaobjects) become
+In a manner of speaking these special types (metaobjects) should become
 "instances" of the meta-level concepts (static interfaces which
-would not exist as concrete types, but rather only at the
+should not exist as concrete types, but rather only at the
 "specification-level" similar for example to the iterator concepts).
-This section describes a hierarchy of these metaobject concepts,
+This section describes a set of metaobject concepts,
 their interfaces, tag types for metaobject classification and
 functions (or operators) providing access to the metaobjects.
 
@@ -36,7 +36,7 @@ functions (or operators) providing access to the metaobjects.
 \subsection{Basic Metaobject Concepts}
 
 This section describes the requirements that various metaobjects
-need to satisfy in order to be considered models of the particular
+need to satisfy in order to be considered models of the individual
 concepts.
 
 \subsubsection{Namespace}
@@ -44,22 +44,52 @@ concepts.
 Namespace is a \verb@struct@ that has the following public members:
 
 \begin{itemize}
+
 \item{\verb@static const char* name(void);@} returns the base name
 of the namespace, without the nested name specifier. For namespace
-\verb@std@ this function returns "std", for namespace \verb@foo::bar::baz@
-this function returns "baz", for the global scope this functions returns ""
-(an empty c-string literal).
+\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
+this function should return "baz", for the global scope this functions
+should return "" (an empty c-string literal).
 
-\item{\verb@typedef@ {\em Namespace} \verb@scope;@} typedef "pointing to"
-a \verb@Namespace@ reflecting the parent namespace. In the \verb@Namespace@
+\item{\verb@typedef@ {\em Namespace} \verb@scope;@} a typedef "pointing to"
+a {\em Namespace} reflecting the parent namespace. In the {\em Namespace}
 reflecting the global scope, this typedef points to itself.
 
-\item{\verb@integral_constant<int,@ {\em number-of-nested-namespaces}
-\verb@> namespace_count;@}
+\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-namespaces}
+\verb@>@\\\verb@namespace_count;@} the number of namespaces defined inside
+the namespace reflected by a {\em Namespace}.
 
-\item{\verb@Namespace namespace_i(integral_constant<int, @{\em i}
-\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$, each overload
-returns a \verb@Namespace@ reflecting the {\em i}-th nested namespace.
+\item{{\em Namespace} \verb@ith_namespace(integral_constant<int, @{\em i}
+\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-namespaces},
+each overload returns a different {\em Namespace} reflecting the {\em i}-th nested namespace.
+
+\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-types}
+\verb@>@\\\verb@type_count;@} the number of types defined inside
+the namespace reflected by a {\em Namespace}.
+
+\item{{\em Type} \verb@ith_type(integral_constant<int, @{\em i}
+\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-types},
+each overload returns a different {\em Type} reflecting the {\em i}-th nested type.
+
+\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-variables}
+\verb@>@\\\verb@variable_count;@} the number of variables defined in
+the namespace reflected by a {\em Namespace}.
+
+\item{{\em Variable} \verb@ith_variable(integral_constant<int, @{\em i}
+\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-variables},
+each overload returns a different {\em Variable} reflecting the {\em i}-th
+variable defined in the namespace.
+
+\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-functions}
+\verb@>@\\\verb@function_count;@} the number of different functions 
+the namespace reflected by a {\em Namespace}. By different functions we mean
+distinct function names not counting multiple overloads as different functions.
+
+\item{{\em OverloadedFunction} \verb@ith_function(integral_constant<int, @{\em i}
+\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-functions},
+each overload returns a different {\em OverloadedFunction} reflecting the {\em i}-th
+overloaded function defined in the namespace.
+
 \end{itemize}
 
 \subsection{Basic Metaobject Categorization}

@@ -40,7 +40,7 @@ int main(void)
     mirror::mp::for_each<
         members<
 
-            // this would be in standard C++ be replaced by 
+            // this should be in standard C++ be replaced by 
             // a specialstandard library function or operator
             MIRRORED_GLOBAL_SCOPE()
         >
@@ -50,7 +50,7 @@ int main(void)
     mp::for_each<
         members<
 
-            // this would be in standard C++ be replaced by
+            // this should be in standard C++ be replaced by
             // a special standard library function or operator
             MIRRORED_NAMESPACE(std)
         >
@@ -143,7 +143,7 @@ int main(void)
           // concept and provides metadata describing
           // the global scope namespace.
           // in the proposed solution for standard C++
-          // this would be relaced by a special stdlib
+          // this should be relaced by a special stdlib
           // function or by an operator.
           MIRRORED_GLOBAL_SCOPE()
         >,
