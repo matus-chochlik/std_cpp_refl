@@ -158,7 +158,7 @@ types:
 
 {\metaobject Named} is a {\metaobject Metaobject} reflecting program constructs,
 which have a name, like namespaces, types, functions, variables, etc. {\metaobject Named}
-metaobjects have the following interface:
+metaobjects add the following functions to the {\metaobject Metaobject} interface:
 
 \begin{itemize}
 
@@ -178,7 +178,8 @@ metaobjects have the following interface:
 	should return "" (an empty c-string literal).\\For \verb@std::vector<int>::iterator@
 	it should return "std::vector$<$int$>$::iterator". For derived and qualified types like\\
 	\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should return
-	"volatile std::vector$<$const foo::bar::fubar*$>$ * const *", etc.
+	"volatile std::vector$<$const foo::bar::fubar*$>$ * const *", etc. For some
+	metaobjects this function may return the same value as the \verb@base_name@ function.
 \end{itemize}
 
 The following is also true for {\metaobject Named} metaobjects.
@@ -238,7 +239,6 @@ The following is also true for {\metaobject Scope} metaobjects.
 	\verb@namespace_tag@.
 \end{itemize}
 
-
 \subsubsection{Type}
 
 {\metaobject Type} is a {\metaobject Named} and {\metaobject Scoped} metaobject which
@@ -257,11 +257,77 @@ The following is also true for {\metaobject Type} metaobjects.
 
 \subsubsection{Typedef}
 
+{\metaobject Typedef} is a {\metaobject Type} metaobject that reflects typedefs,
+i.e. types that were defined as alternate names for another types.
+{\metaobject Typedef} adds the following to the interface of {\metaobject Type}:
+
+\begin{itemize}
+	\item{\verb@typedef @{\metaobject Type}\verb@ type;@} defined as the {\metaobject Type}
+	reflecting the "source" type of the typedef.
+\end{itemize}
+
+The following is also true for {\metaobject Typedef} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Typedef>::category@ is defined as \verb@typedef_tag@.
+\end{itemize}
+
 \subsubsection{Class}
+
+{\metaobject Class} is a {\metaobject Type} and a {\metaobject Scope} that reflects
+an elaborated type (class, struct, union). {\metaobject Class} has the following interface:
+
+\begin{itemize}
+	\item{\verb@typedef @{\metaobject Specifier}\verb@ elaborated_type;@} defined as
+	a {\metaobject Specifier} reflecting the elaborated type specifier used
+	to define the class (\verb@class@, \verb@struct@, \verb@union@).
+\end{itemize}
+
+The following is also true for {\metaobject Class}.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Class>::category@ is defined as \verb@class_tag@.
+\end{itemize}
 
 \subsubsection{Function}
 
+{\metaobject Function} is a {\metaobject Scope} metaobject that reflects a function.
+
+\begin{itemize}
+	\item{\verb@typedef @{\metaobject Type}\verb@ result_type;@} defined as
+	a {\metaobject Type} reflecting the result type of the function.
+
+	\item{\verb@typedef @{\metaobject Specifier}\verb@ linkage;@} defined as 
+	a {\metaobject Specifier} reflecting the linkage specifier of the function.
+\end{itemize}
+
+The following is also true for {\metaobject Function} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Function>::category@ is defined as \verb@function_tag@.
+\end{itemize}
+
+\subsubsection{ClassMember}
+
+{\metaobject ClassMember} is a {\metaobject Named} and {\metaobject Scoped} metaobject
+that is a member of a class. It has the following interface:
+
+\begin{itemize}
+	\item{\verb@typedef @{\metaobject Specifier}\verb@ access_type;@} defined as
+	a {\metaobject Specifier} reflecting the access type specifier of ther class member
+	(\verb@private@, \verb@protected@ or \verb@public@).
+\end{itemize}
+
+The following is also true for {\metaobject ClassMember} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<ClassMember::scope>::category@ is \verb@class_tag@.
+\end{itemize}
+
 \subsubsection{Constructor}
+
+{\metaobject Constructor} is a {\metaobject ClassMember} and {\metaobject Function} that
+reflects a constructor.
 
 \subsubsection{Operator}
 
