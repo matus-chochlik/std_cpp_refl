@@ -31,66 +31,252 @@ This section describes a set of metaobject concepts,
 their interfaces, tag types for metaobject classification and
 functions (or operators) providing access to the metaobjects.
 
-\subsection{Specifier Concepts}
-
-\subsection{Basic Metaobject Concepts}
+\subsection{Metaobject Concepts}
 
 This section describes the requirements that various metaobjects
 need to satisfy in order to be considered models of the individual
 concepts.
 
-\subsubsection{Namespace}
+\subsubsection{Categorization and Traits}
 
-Namespace is a \verb@struct@ that has the following public members:
+In order to provide means for distinguishing between regular types
+and metaobjects the \verb@is_metaobject@ trait should be added
+and should "return" \verb@true_type@ for metaobjects (types defined
+by the compiler providing metadata) and \verb@false_type@
+for non-metaobjects (native or user defined types).
+
+The \verb@metaobject_traits@ structure should be defined to provide
+categorization and additional information about the interface of metaobjects.
+
+\begin{lstlisting}
+template <typename Metaobject>
+struct metaobject_traits
+{
+	typedef typename Metaobject::category category;
+
+	typedef Bool has_name;
+
+	typedef Bool has_scope;
+
+	typedef Bool has_members;
+
+	typedef Bool has_template;
+};
+\end{lstlisting}
+
+The meaning of the individual trait typedefs is following:
+
+\begin{itemize}
+\item{\verb@category@} Is one of the following types and specifies the category
+of the metaobject:
+	\begin{itemize}
+		\item{\verb@specifier_tag@} indicates a {\metaobject Specifier}.
+		\item{\verb@namespace_tag@} indicates a {\metaobject Namespace}.
+		\item{\verb@type_tag@} indicates a {\metaobject Type}.
+		\item{\verb@typedef_tag@} indicates a {\metaobject Typedef}.
+		\item{\verb@class_tag@} indicates a {\metaobject Class}.
+		\item{\verb@function_tag@} indicates a {\metaobject Function}.
+		\item{\verb@constructor_tag@} indicates a {\metaobject Constructor}.
+		\item{\verb@operator_tag@} indicates an {\metaobject Operator}.
+		\item{\verb@overloaded_function_tag@} indicates an {\metaobject OverloadedFunction}.
+		\item{\verb@template_tag@} indicates a {\metaobject Template}.
+		\item{\verb@enum_tag@} indicates an {\metaobject Enum}.
+		\item{\verb@enum_value_tag@} indicates an {\metaobject EnumValue}.
+		\item{\verb@inheritance_tag@} indicates an {\metaobject Inheritance}.
+		\item{\verb@variable_tag@} indicates a {\metaobject Variable}.
+		\item{\verb@parameter_tag@} indicates a {\metaobject Parameter}.
+	\end{itemize}
+
+\item{\verb@has_name@} indicates that the reflected object is {\metaobject Named}.
+\item{\verb@has_scope@} indicates that the reflected object is {\metaobject Scoped}.
+\item{\verb@has_members@} indicates that the reflected object is a {\metaobject Scope}.
+\item{\verb@has_template@} indicates that the reflected object is {\metaobject Templated}.
+\end{itemize}
+
+\subsubsection{Metaobject}
+
+{\metaobject Metaobject} is a stateless anonymous \verb@struct@ that provides
+metadata reflecting certain program constructs and has the following properties:
+
+\begin{itemize}
+\item For every {\metaobject Metaobject} the \verb@is_metaobject@ trait returns \verb@true_type@.
+\item For every {\metaobject Metaobject} the \verb@metaobject_traits@ structure is defined.
+\item For every {\metaobject Metaobject} the {\verb@typedef Metaobject::category@} is defined
+and has the same meaning as \verb@metaobject_category<Metaobject>::category@.
+\end{itemize}
+
+The exact type of a specific {\metaobject Metaobject} reflecting a specific
+program feature is not defined by the standard, instances of metaobjects
+should be always declared through the \verb@auto@ type specifier.
+
+All instances of a specific {\metaobject Metaobject} should be equal to
+the programmer and no internal context should be visible on the outside.
+
+\subsubsection{Specifier}
+
+{\metaobject Specifier} is a {\metaobject Metaobject}, which reflects specifiers like
+\verb@const@, \verb@volatile@, \verb@private@,
+\verb@protected@, \verb@public@, \verb@virtual@, etc. and has the following
+interface:
 
 \begin{itemize}
 
-\item{\verb@static const char* name(void);@} returns the base name
-of the namespace, without the nested name specifier. For namespace
-\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
-this function should return "baz", for the global scope this functions
-should return "" (an empty c-string literal).
+\item{\verb@static const char* keyword(void);@} returns the keyword
+of the reflected specifier. If \verb@category@ is \verb@spec_none_tag@
+then \verb@keyword@ returns "" (an empty c-string).
 
-\item{\verb@typedef@ {\em Namespace} \verb@scope;@} a typedef "pointing to"
-a {\em Namespace} reflecting the parent namespace. In the {\em Namespace}
-reflecting the global scope, this typedef points to itself.
+\item{\verb@typedef Category category;@} is defined as one of the following 
+types:
+	\begin{itemize}
+		\item{\verb@spec_none_tag@} a category for missing specifiers,
+		for example a non-const member function would have a \verb@spec_none_tag@
+		constness specifier or a variable with automatic storage class
+		would have a \verb@spec_none_tag@ storage class specifier, etc.
 
-\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-namespaces}
-\verb@>@\\\verb@namespace_count;@} the number of namespaces defined inside
-the namespace reflected by a {\em Namespace}.
+		\item{\verb@spec_extern_tag@} indicates \verb@extern@ storage class / linkage.
+		\item{\verb@spec_static_tag@} indicates \verb@static@ storage class / linkage.
+		\item{\verb@spec_mutable_tag@} indicates \verb@mutable@ storage class / linkage.
+		\item{\verb@spec_register_tag@} indicates \verb@register@ storage class / linkage.
+		\item{\verb@spec_thread_local_tag@} indicates \verb@thread_local@ storage class / linkage.
 
-\item{{\em Namespace} \verb@ith_namespace(integral_constant<int, @{\em i}
-\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-namespaces},
-each overload returns a different {\em Namespace} reflecting the {\em i}-th nested namespace.
+		\item{\verb@spec_const_tag@} indicates \verb@const@ member functions.
 
-\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-types}
-\verb@>@\\\verb@type_count;@} the number of types defined inside
-the namespace reflected by a {\em Namespace}.
+		\item{\verb@spec_virtual_tag@} indicates \verb@virtual@ inheritance or function linkage.
 
-\item{{\em Type} \verb@ith_type(integral_constant<int, @{\em i}
-\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-types},
-each overload returns a different {\em Type} reflecting the {\em i}-th nested type.
+		\item{\verb@spec_private_tag@} indicates \verb@private@ member access.
+		\item{\verb@spec_protected_tag@} indicates \verb@protected@ member access.
+		\item{\verb@spec_public_tag@} indicates \verb@public@ member access.
 
-\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-variables}
-\verb@>@\\\verb@variable_count;@} the number of variables defined in
-the namespace reflected by a {\em Namespace}.
-
-\item{{\em Variable} \verb@ith_variable(integral_constant<int, @{\em i}
-\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-variables},
-each overload returns a different {\em Variable} reflecting the {\em i}-th
-variable defined in the namespace.
-
-\item{\verb@typedef integral_constant<int,@ {\em number-of-nested-functions}
-\verb@>@\\\verb@function_count;@} the number of different functions 
-the namespace reflected by a {\em Namespace}. By different functions we mean
-distinct function names not counting multiple overloads as different functions.
-
-\item{{\em OverloadedFunction} \verb@ith_function(integral_constant<int, @{\em i}
-\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-nested-functions},
-each overload returns a different {\em OverloadedFunction} reflecting the {\em i}-th
-overloaded function defined in the namespace.
-
+		\item{\verb@spec_class_tag@} indicates the \verb@class@ elaborated type specifier.
+		\item{\verb@spec_struct_tag@} indicates the \verb@struct@ elaborated type specifier.
+		\item{\verb@spec_union_tag@} indicates the \verb@union@ elaborated type specifier.
+		\item{\verb@spec_enum_tag@} indicates the \verb@enum@ elaborated type specifier.
+	\end{itemize}
 \end{itemize}
 
-\subsection{Basic Metaobject Categorization}
+\subsubsection{Named}
 
+{\metaobject Named} is a {\metaobject Metaobject} reflecting program constructs,
+which have a name, like namespaces, types, functions, variables, etc. {\metaobject Named}
+metaobjects have the following interface:
+
+\begin{itemize}
+
+	\item{\verb@static const char* base_name(void);@} returns the base name
+	of the reflected construct, without the nested name specifier. For namespace
+	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
+	this function should return "baz", for the global scope this function
+	should return "" (an empty c-string literal).\\For \verb@std::vector<int>::iterator@
+	it should return "iterator". For derived and qualified types like \\
+	\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should return
+	"volatile vector$<$const fubar*$>$ * const *", etc.
+
+	\item{\verb@static const char* full_name(void);@} returns the full name
+	of the reflected construct, with the nested name specifier. For namespace
+	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
+	this function should return "foo::bar::baz", for the global scope this function
+	should return "" (an empty c-string literal).\\For \verb@std::vector<int>::iterator@
+	it should return "std::vector$<$int$>$::iterator". For derived and qualified types like\\
+	\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should return
+	"volatile std::vector$<$const foo::bar::fubar*$>$ * const *", etc.
+\end{itemize}
+
+The following is also true for {\metaobject Named} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Named>::has_name@ is defined as \verb@true_type@.
+\end{itemize}
+
+\subsubsection{Scoped}
+
+{\metaobject Scoped} is a {\metaobject Metaobject} reflecting program constructs,
+which are defined inside a scope (global scope, namespace, class, etc.). {\metaobject Scoped}
+metaobjects have the following interface:
+
+\begin{itemize}
+	\item{\verb@typedef Scope scope;@} defined as a {\metaobject Scope} metaobject
+	reflecting the scope of the scoped object.
+\end{itemize}
+
+The following is also true for {\metaobject Scoped} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Scoped>::has_scope@ is defined as \verb@true_type@.
+\end{itemize}
+
+\subsubsection{Scope}
+
+{\metaobject Scope} is a {\metaobject Named} and {\metaobject Scoped} metaobject,
+which reflects scopes like namespaces, classes, enums, etc. {\metaobject Scope}
+has the following interface:
+
+\begin{itemize}
+
+	\item{\verb@typedef integral_constant<int,@ {\em number-of-scope-members}
+	\verb@>@\\\verb@member_count;@} the total number of various members like types,
+	namespace, functions, variables, etc. defined inside
+	the scope reflected by a {\em Scope}.
+
+	\item{\verb@static @{\em Scoped}\verb@ member(integral_constant<int, @{\em i}
+	\verb@>);@} defined for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-scope-members},
+	each overload returns a different {\metaobject Scoped} metaobject reflecting the {\em i}-th member
+	defined inside the scope reflected by a {\metaobject Scope}.
+\end{itemize}
+
+The following is also true for {\metaobject Scope} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Scope>::has_members@ is defined as \verb@true_type@.
+\end{itemize}
+
+\subsubsection{Namespace}
+
+{\metaobject Namespace} is a {\metaobject Scope} for which the following is true:
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Namespace>::category@ is defined as
+	\verb@namespace_tag@.
+\end{itemize}
+
+
+\subsubsection{Type}
+
+{\metaobject Type} is a {\metaobject Named} and {\metaobject Scoped} metaobject which
+has the following interface:
+
+\begin{itemize}
+	\item{\verb@typedef @{\em original-type}\verb@ original_type;@} defined as the original type
+	reflected by the {\metaobject Type}.
+\end{itemize}
+
+The following is also true for {\metaobject Type} metaobjects.
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Type>::category@ is defined as \verb@type_tag@.
+\end{itemize}
+
+\subsubsection{Typedef}
+
+\subsubsection{Class}
+
+\subsubsection{Function}
+
+\subsubsection{Constructor}
+
+\subsubsection{Operator}
+
+\subsubsection{OverloadedFunction}
+
+\subsubsection{Template}
+
+\subsubsection{Templated}
+
+\subsubsection{Enum}
+
+\subsubsection{EnumValue}
+
+\subsubsection{Inheritance}
+
+\subsubsection{Variable}
+
+\subsubsection{Parameter}

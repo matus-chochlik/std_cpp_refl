@@ -36,22 +36,26 @@ int main(void)
 {
     using namespace mirror;
 
-    // print the info about each of the members of the global scope
+    // print the info about each of the members
+    // of the global scope
     mirror::mp::for_each<
         members<
 
-            // this should be in standard C++ be replaced by 
-            // a specialstandard library function or operator
+            // this should be in standard C++
+            // be replaced by a specialstandard library
+            // function or operator
             MIRRORED_GLOBAL_SCOPE()
         >
     >(info_printer());
 
-    // print the info about each of the members of the std namespace
+    // print the info about each of the members
+    // of the std namespace
     mp::for_each<
         members<
 
-            // this should be in standard C++ be replaced by
-            // a special standard library function or operator
+            // this should be in standard C++
+            // be replaced by a special standard
+            // library function or operator
             MIRRORED_NAMESPACE(std)
         >
     >(info_printer());
