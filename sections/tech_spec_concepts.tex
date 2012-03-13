@@ -45,6 +45,8 @@ of the metaobject:
 
 		\item{\verb@namespace_tag@} indicates a {\metaobject Namespace}.
 
+		\item{\verb@global_scope_tag@} indicates the {\metaobject GlobalScope}.
+
 		\item{\verb@type_tag@} indicates a {\metaobject Type}.
 
 		\item{\verb@typedef_tag@} indicates a {\metaobject Typedef}.
@@ -100,7 +102,7 @@ concept description below.
 
 \subsubsection{Metaobject}
 
-{\metaobject Metaobject} is a stateless anonymous \verb@struct@ that provides
+{\metaobject Metaobject} is a stateless (or monostate) anonymous \verb@struct@ that provides
 metadata reflecting certain program features and has the following properties:
 
 \begin{itemize}
@@ -114,8 +116,24 @@ The exact type of a specific {\metaobject Metaobject} reflecting a specific
 program feature is not defined by the standard, instances of metaobjects
 should be always declared through the \verb@auto@ type specifier.
 
-All instances of a specific {\metaobject Metaobject} should be equal to
-the programmer and no internal context should be noticable on the outside.
+All instances (in the classical sense) of a concrete {\metaobject Metaobject} (i.e all instances 
+of the concrete anonymous type satysfying the requirements of the {\metaobject Type} concept
+reflecting for example the \verb@int@ type) should be equal to
+the programmer.
+
+Instances (in the classical sense) of two different metaobjects (like an instance
+of the concrete anonymous type satysfying the requirements of the {\metaobject Type} concept
+reflecting the \verb@int@ type and an instance 
+of the concrete anonymous type satysfying the requirements of the {\metaobject Type} concept
+reflecting the \verb@double@ type) of course can (and will) be different.
+
+\begin{lstlisting}
+// for all purposes these two instances of (Meta)Type
+// should be equal and interchangable without any change
+// to the behavior of the program
+auto meta_int_1 = reflected<int>();
+auto meta_int_2 = reflected<int>();
+\end{lstlisting}
 
 \subsubsection{Specifier}
 
@@ -201,6 +219,9 @@ metaobjects have the following requirements:
 \begin{itemize}
 	\item{\verb@typedef Scope scope;@} member typedef defined as
 	a {\metaobject Scope} metaobject reflecting the scope of the scoped object.
+	In concrete metaobjects this typedef can be a {\metaobject Namespace}, {\metaobject Class},
+	etc. The \verb@metaobject_traits<Scoped::scope>::category@ typedef can be used to
+	query the kind of the scope.
 
 	\item \verb@metaobject_traits<Scoped>::has_scope@ is defined as \verb@true_type@.
 \end{itemize}
@@ -223,6 +244,10 @@ has the following requirements:
 	for $i \in \{0, 1, \dots, n-1\}$;{\em n = number-of-scope-members},
 	each overload returns a different {\metaobject Scoped} metaobject reflecting the {\em i}-th member
 	defined inside the scope reflected by a {\metaobject Scope}.
+	In concrete metaobjects reflecting various kinds of scopes the \verb@member(...)@ function
+	can return metaobjects like {\metaobject Namespace}, ({\metaobject ClassMember}) {\metaobject Variable},
+	({\metaobject ClassMember}) {\metaobject OverloadedFunction}, {\metaobject Typedef},
+	{\metaobject Enum}, etc.
 
 	\item \verb@metaobject_traits<Scope>::is_scope@ is defined as \verb@true_type@.
 \end{itemize}
@@ -234,6 +259,16 @@ has the following requirements:
 \begin{itemize}
 	\item \verb@metaobject_traits<Namespace>::category@ is defined as
 	\verb@namespace_tag@.
+\end{itemize}
+
+\subsubsection{GlobalScope}
+
+{\metaobject GlobalScope} is a {\metaobject Namespace} reflecting the global scope
+and requires the following:
+
+\begin{itemize}
+	\item \verb@metaobject_traits<GlobalScope>::category@ is defined as
+	\verb@global_scope_tag@.
 \end{itemize}
 
 \subsubsection{Type}
@@ -248,7 +283,7 @@ has the following requirements:
 	\item \verb@metaobject_traits<Type>::category@ is defined as \verb@type_tag@.
 \end{itemize}
 
-The \verb@is_template@ typedef in the \verb@metaobject_traits@ changes the requirements
+The \verb@is_template@ typedef in \verb@metaobject_traits@ changes the requirements
 in the concepts derived from {\metaobject Type}.
 
 \subsubsection{Typedef}
@@ -260,6 +295,8 @@ i.e. types that were defined as alternate names for another types.
 \begin{itemize}
 	\item{\verb@typedef @{\metaobject Type}\verb@ type;@} member typedef
 	defined as the {\metaobject Type} reflecting the "source" type of the typedef.
+	In concrete {\metaobject Typedef} metaobjects \verb@type@ can be a 
+	{\metaobject Type}, {\metaobject Class}, {\metaobject Enum} or {\metaobject Typedef}.
 
 	\item \verb@metaobject_traits<Typedef>::category@ is defined as \verb@typedef_tag@.
 \end{itemize}
@@ -323,10 +360,34 @@ required:
 	with the parameters specified to \verb@call@.
 \end{itemize}
 
+If \verb@metaobject_traits<Function>::is_class_member@ is defined as \verb@true_type@
+i.e. the reflected is a member function and not a free function or lambda function,
+then the following is also required:
+
+\begin{itemize}
+	\item{\verb@typedef @ {\metaobject Specifier} \verb@ constness;@} member typedef
+	defined as the constness {\metaobject Specifier} reflecting the constness
+	of the member functions.
+\end{itemize}
+
+{\metaobject Function} metaobjects are {\em not} direct members of scopes. Instead,
+all functions with the same name (even those that are not overloaded) in a specific scope
+are grouped into a {\metaobject OverloadedFunction}. Individual overloaded functions
+in the group can be obtained through the interface of {\metaobject OverloadedFunction}.
+The same should also apply to {\metaobject Constructor}s and {\metaobject Operator}s.
+
+The idea is that (direct) scope members (i.e. metaobjects accessible through \verb@Scope::member(...)@
+should have unique names.
+
+The \verb@scope@ typedef of every single {\metaobject Function} in a {\metaobject OverloadedFunction}
+is the same as the \verb@scope@ of that {\metaobject OverloadedFunction}, i.e.
+the \verb@scope@ of a {\metaobject Function} can be a {\metaobject Namespace} or a {\metaobject Class}
+but {\em not} a {\metaobject OverloadedFunction}.
+
 \subsubsection{ClassMember}
 
 {\metaobject ClassMember} is a {\metaobject Named} and {\metaobject Scoped} metaobject
-that is a member of a class. It has the following requirements:
+that reflects a member of a class. It has the following requirements:
 
 \begin{itemize}
 	\item{\verb@typedef @{\metaobject Specifier}\verb@ access_type;@} member typedef defined as
