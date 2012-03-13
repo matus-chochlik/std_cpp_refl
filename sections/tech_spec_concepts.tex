@@ -65,9 +65,9 @@ of the metaobject:
 
 		\item{\verb@enum_tag@} indicates an {\metaobject Enum}.
 
-		\item{\verb@enum_value_tag@} indicates an {\metaobject EnumValue}.
-
 		\item{\verb@inheritance_tag@} indicates an {\metaobject Inheritance}.
+
+		\item{\verb@constant_tag@} indicates an {\metaobject Constant}.
 
 		\item{\verb@variable_tag@} indicates a {\metaobject Variable}.
 
@@ -376,7 +376,7 @@ are grouped into a {\metaobject OverloadedFunction}. Individual overloaded funct
 in the group can be obtained through the interface of {\metaobject OverloadedFunction}.
 The same should also apply to {\metaobject Constructor}s and {\metaobject Operator}s.
 
-The idea is that (direct) scope members (i.e. metaobjects accessible through \verb@Scope::member(...)@
+The idea is that (direct) scope members (i.e. metaobjects accessible through \verb@Scope::member(...)@)
 should have unique names.
 
 The \verb@scope@ typedef of every single {\metaobject Function} in a {\metaobject OverloadedFunction}
@@ -462,10 +462,24 @@ that reflects a function or class template. It has the following requirements:
 	each overload returns a different {\metaobject Parameter} metaobject reflecting the {\em i}-th parameter
 	of the template reflected by {\metaobject Template}.
 
+%TODO
+% template <parameters...>
+% struct instantiation
+% {
+%     typedef Instantiation type;
+% };
+
 	\item \verb@metaobject_traits<Template>::is_template@ is defined as \verb@true_type@.
 \end{itemize}
 
 \subsubsection{TemplateParameter}
+
+{\metaobject TemplateParameter} is a {\metaobject Typedef} or a {\metaobject Constant} that
+reflects a template parameter. 
+
+\begin{itemize}
+	\item \verb@metaobject_traits<TemplateParameter>::is_template@ is defined as \verb@true_type@.
+\end{itemize}
 
 \subsubsection{Instantiation}
 
@@ -479,14 +493,25 @@ that reflects a templated function or class for which the following is required:
 	(reflected by an {\metaobject Instantiation}) is an instantiation of.
 
 	\item \verb@metaobject_traits<Instantiation>::has_template@ is defined as \verb@true_type@.
+	This trait is used to distinguish classes and functions which are instantiations
+	of a template from non-templated classes and functions.
 \end{itemize}
 
 \subsubsection{Enum}
 
-\subsubsection{EnumValue}
+{\metaobject Enum} is a {\metaobject Type} and a {\metaobject Scope} that reflects an enumerated
+type with the following requirements:
+
+\begin{itemize}
+	\item \verb@metaobject_traits<Enum>::category@ is defined as \verb@enum_tag@.
+
+	\item The \verb@members@ of {\metaobject Enum} are only {\metaobject Constant} metaobjects.
+\end{itemize}
 
 \subsubsection{Inheritance}
 
 \subsubsection{Variable}
+
+\subsubsection{Constant}
 
 \subsubsection{Parameter}
