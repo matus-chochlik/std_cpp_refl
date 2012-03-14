@@ -220,7 +220,7 @@ metaobjects have the following requirements:
 	\item{\verb@static Scope scope(void);@} static member function returning
 	a {\metaobject Scope} metaobject reflecting the scope of the scoped object.
 	In concrete metaobjects the result can be a {\metaobject Namespace}, {\metaobject Class},
-	etc. The \verb@metaobject_traits<decltype(Scoped::scope())>::category@ typedef can be used to
+	etc.\\The \verb@metaobject_traits<decltype(Scoped::scope())>::category@ typedef can be used to
 	query the kind of the scope.
 
 	\item \verb@metaobject_traits<Scoped>::has_scope@ is defined as \verb@true_type@.
@@ -295,7 +295,7 @@ i.e. types that were defined as alternate names for another types.
 \begin{itemize}
 	\item{\verb@static @{\metaobject Type}\verb@ type(void);@} static member function
 	returning a {\metaobject Type} reflecting the "source" type of the typedef.
-	In concrete {\metaobject Typedef} metaobjects \verb@type@ can be a 
+	In concrete {\metaobject Typedef} metaobjects \verb@type@ can return a 
 	{\metaobject Type}, {\metaobject Class}, {\metaobject Enum} or {\metaobject Typedef}.
 
 	\item \verb@metaobject_traits<Typedef>::category@ is defined as \verb@typedef_tag@.
@@ -318,7 +318,7 @@ inherited from the {\metaobject Type} concept as described below.
 	\verb@>@\\\verb@base_class_count(void);@} static member function returning the total number
 	of base classes that the class reflected by {\metaobject Class} inherits from.
 
-	\item{\verb@static @{\metaobject Inheritance}\verb@ parameter(integral_constant<int, @{\em i}
+	\item{\verb@static @{\metaobject Inheritance}\verb@ base_class(integral_constant<int, @{\em i}
 	\verb@>);@} overloaded member function defined
 	for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-base-classes},
 	each overload returns a different {\metaobject Inheritance} metaobject reflecting the inheritance
@@ -367,7 +367,7 @@ required:
 	static inline member function with the same return value type and the same number
 	and type of parameters as the original function reflected by {\metaobject Function}.
 	Calls to this function should be replaced with the call of the reflected function
-	with the parameters specified to \verb@call@.
+	with the arguments passed to \verb@call@.
 \end{itemize}
 
 If \verb@metaobject_traits<Function>::is_class_member@ is defined as \verb@true_type@
@@ -382,7 +382,7 @@ then the following is also required:
 
 {\metaobject Function} metaobjects are {\em not} direct members of scopes. Instead,
 all functions with the same name (even those that are not overloaded) in a specific scope
-are grouped into a {\metaobject OverloadedFunction}. Individual overloaded functions
+are grouped into a {\metaobject OverloadedFunction}. Individual overloaded {\metaobject Function}s
 in the group can be obtained through the interface of {\metaobject OverloadedFunction}.
 The same should also apply to {\metaobject Constructor}s and {\metaobject Operator}s.
 
@@ -423,6 +423,9 @@ reflects a constructor and requires the following:
 
 \begin{itemize}
 	\item \verb@metaobject_traits<Constructor>::category@ is defined as  \verb@constructor_tag@.
+
+	\item The result of \verb@Constructor::result_type()@ is the same as the result of
+	\verb@Constructor::scope()@.
 \end{itemize}
 
 \subsubsection{Operator}
@@ -484,11 +487,22 @@ that reflects a function or class template. It has the following requirements:
 \subsubsection{TemplateParameter}
 
 {\metaobject TemplateParameter} is a {\metaobject Typedef} or a {\metaobject Constant} that
-reflects a template parameter. 
+reflects a template parameter. In class templates the types of member variables, typedefs and
+the return value type and parameters of member functions may be {\metaobject TemplateParameter}
+metaobjects.
 
 \begin{itemize}
+	\item{\verb@static integral_constant<int, @{\metaobject position-of-parameter}\verb@> postion(void);@}
+	static member function returning the postion of the template parameter.
+
+	\item The \verb@scope@ member function inherited from {\metaobject Scoped} returns a {\metaobject Template}
+	reflecting the template which defined this template parameter.
+
 	\item \verb@metaobject_traits<TemplateParameter>::is_template@ is defined as \verb@true_type@.
 \end{itemize}
+
+The \verb@metaobject_traits<TemplateParameter>::category@ typedef should be used to distinguish between
+type and non-type template parameters.
 
 \subsubsection{Instantiation}
 
@@ -519,11 +533,68 @@ type with the following requirements:
 
 \subsubsection{Inheritance}
 
-{\metaobject Inheritance} is a {\metaobject Metaobject} reflecting class inheritance and has
-the followingh requirements:
+{\metaobject Inheritance} is a {\metaobject Metaobject} that is reflecting class inheritance and has
+the following requirements:
+
+\begin{itemize}
+	\item{\verb@static @{\metaobject Specifier}\verb@access_type(void);@} static member function
+	returning a access-type {\metaobject Specifier} that reflects the inheritance access type
+	(private, protected or public).
+
+	\item{\verb@static @{\metaobject Specifier}\verb@inheritance_type(void);@} static member function
+	returning an inheritance-type {\metaobject Specifier} that reflects the inheritance access type
+	(virtual or non-virtual).
+
+	\item{\verb@static @{\metaobject Class} \verb@ base_class(void);@} static member function
+	returning a {\metaobject Class} reflecting the base class in the inheritance.
+
+	\item{\verb@static @{\metaobject Class} \verb@ derived_class(void);@} static member function
+	returning a {\metaobject Class} reflecting the derived class in the inheritance.
+
+	\item \verb@metaobject_traits<Inheritance>::category@ is defined as \verb@inheritance_tag@.
+\end{itemize}
 
 \subsubsection{Variable}
 
-\subsubsection{Constant}
+{\metaobject Variable} is a {\metaobject Named} and {\metaobject Scoped} metaobject and possibly a
+{\metaobject ClassMember}, that reflects some kind of variable defined in a namespace, class, function, etc.
+and has the following requirements:
+
+\begin{itemize}
+	\item{\verb@static @{\metaobject Specifier}\verb@ storage_class();@} static member function returning
+	a storage-class {\metaobject Specifier} reflecting the storage class of the variable.
+
+	\item{\verb@static @{\metaobject Type}\verb@ type();@} static member function returning
+	a {\metaobject Type} reflecting the type of the variable.
+
+	\item \verb@metaobject_traits<Variable>::category@ is defined as \verb@variable_tag@.
+\end{itemize}
 
 \subsubsection{Parameter}
+
+{\metaobject Parameter} is a {\metaobject Variable} that reflects a parameter of a function.
+The following is required for metaobjects reflecting parameters:
+
+\begin{itemize}
+	\item{\verb@static integral_constant<int, @{\em position-of-parameter}\verb@> position(void);@}
+	static member function returning the position of the parameter in the function parameter
+	declaration.
+
+	\item \verb@metaobject_traits<Parameter>::category@ is defined as \verb@parameter_tag@.
+
+	\item The \verb@scope@ member function inherited from {\metaobject Scoped} returns
+	the {\metaobject Function} that the parameter belongs to.
+\end{itemize}
+
+\subsubsection{Constant}
+
+{\metaobject Constant} is a {\metaobject Named} and possibly {\metaobject Scoped} metaobject reflecting
+named compile-time constant values like the non-type template parameters and enumeration values.
+
+\begin{itemize}
+	\item{\verb@static integral_type<@{\em value-type}\verb@, @{\em constant-value}\verb@> value(void);@}
+	static member function returning the reflected value wrapped in \verb@integral_constant@.
+
+	\item \verb@metaobject_traits<Constant>::category@ is defined as \verb@constant_tag@.
+\end{itemize}
+

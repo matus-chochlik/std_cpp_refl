@@ -1,1 +1,12 @@
 \section{Unresolved Issues}
+
+\begin{itemize}
+	\item {\em Normalization of names returned by \verb@Named::base_name()@ and \verb@Named::full_name()@:}
+	The strings returned by the \verb@base_name@ and \verb@full_name@ functions should be
+	implementation-independent and the same on every platform/compiler.
+	
+
+	\item {\em Returning names as compile-time strings:} It could be advantageous if even
+	the names of various metaobjects were compile-time constants and could be introspected
+	or used as template parameters.
+\end{itemize}

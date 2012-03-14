@@ -1,1 +1,13 @@
 \section{Implementation hints}
+
+\subsection{Lazyness}
+
+The metaobjects should be generated / instantiated by the compiler only
+when requested. This also applies to members of the metaobjects. For example when a {\metaobject Namespace}
+reflecting the \verb@std@ namespace is generated the individual \verb@member(...)@
+functions (and the resulting metaobjects) should {\em not} be generated automatically
+unless the \verb@Scope::member(...)@ function is called or its type queried (by \verb@decltype@
+or otherwise).
+
+This should probably improve the compilation times and avoid reflection-related
+overhead when reflection is not used.
