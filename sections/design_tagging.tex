@@ -1,0 +1,47 @@
+\subsection{Tagging and relations}
+
+Strict adhering to the principle of {\em Ontological correspondence} can pose
+a problem and decrease the usefullness of reflection in certain cases.
+Probably the most important case in C++ is the reflection of containers
+which are not implemented as first-class citizens but rather by libraries.
+
+The principle of ontological correspondence says that the meta-level facilities
+should not invent metaobjects that do not correspond to base-level
+language features. In C++ where containers are basically regular
+classes internally implementing a data structure that is not standardized
+and is platform-specific and having only a public interface defined 
+by the standard, automated reflection-based implementation of operations
+like serialization, de-serialization, and others may become complicated.
+
+The purpose of serialization (for example as a part of RPC) may be to
+convert an instance of a container class into an external representation
+that can be used to transfer the instance (for example via network) 
+to a machine running the receiving application, but having a different
+OS, compiler, using a different implementation of the standard library
+and thus a different implementation of the container class.
+
+If the serialization algorithm would use the description of the internal
+(non-standard vendor-specific) structure of a class, then the receiving
+application would not be able to restore the instance, because the 
+internal structure of the class would be different.
+
+Because of this a high-level mechanism is required, that would allow
+reflection-based metaalgorithms to handle such cases.
+
+One possible option is to break the principle of correspondence
+and add new concepts for metaobjects allowing for example
+"high-level" traversal or insertion of elements in an arbitrary
+container. This approach has its advantages and could be implemented
+for such special classes as containers, but is unsystematic.
+
+Another option is to allow the base-level constructs to be annotated
+and let the metaobjects to provide these annotations to the metaalgorithms.
+
+This annotations should take the form of {\em tags}: identifiers assigned
+to base-level constructs, like types, variables, class members, parameters,
+etc. and binary directional {\em relations} between two language constructs,
+for example a relation between a class member and a constructor parameter
+initializing the class member, a relation between (a pair of) container
+element traversal functions (like begin and end in std. containers) and 
+functions or constructors doing element insertion into the same container
+class.

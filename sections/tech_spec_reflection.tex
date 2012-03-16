@@ -1,9 +1,168 @@
-\subsection{Reflection Functions}
+\subsection{Reflection}
 
-The metaobject should be provided via a set of overloaded
-functions defined in the \verb@std@ namespace.
+The metaobjects can be provided either via a set of overloaded
+functions defined in the \verb@std@ namespace or by a new operator.
+Both of these approaches have advantages and disadvantages.
 
-\subsubsection{Global scope reflection}
+\subsubsection{Reflection functions}
 
-\subsubsection{Type reflection}
+In this approach at least two functions should be defined
+in the \verb@std@ namespace:
 
+\begin{itemize}
+	\item{{\em unspecified-type} \verb@ reflected_global_scope(void);@}
+	This function should return a type conforming to the {\metaobject GlobalScope}
+	concept, reflecting the global scope.
+	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
+	If the caller needs to store the result of this function the \verb@auto@ type
+	specifier should always be used.
+
+	\item{\verb@template <typename Type>@\\
+	{\em unspecified-type} \verb@ reflected(void);@}
+	This function should return a type conforming to the {\metaobject Type}
+	concept, reflecting the \verb@Type@ passed as template argument to this function.
+	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
+	If the caller needs to store the result of this function the \verb@auto@ type
+	specifier should always be used.
+\end{itemize}
+
+Several other similar functions could be added to the list above
+for reflection of templates, enumerated values, etc. Without defining
+new rules for what regular function and template parameters can be.
+The advantages of using reflection functions are following:
+
+\begin{itemize}
+	\item No need to add a new keyword to the language.
+
+	\item Reduced chance of breaking existing code. The \verb@reflected_global_scope()@
+	and \verb@reflected<Type>()@ functions are currently not defined in the \verb@std@
+	namespace and therefore should not clash with existing user code.
+\end{itemize}
+
+This approach has the following disadvantages:
+
+\begin{itemize}
+	\item Less direct reflection. Using this approach it is not possible
+	(at least without adding new rules for possible values of template
+	and function parameters) to reflect constructors, overloaded functions
+	and some other things.
+\end{itemize}
+
+\subsubsection{Reflection operator}
+
+In this approach a new operator (we suggest the name) \verb@reflect(@{\em param}\verb@)@
+should be added (for some alternatives see below).
+Depending on {\em param}, which could be a type name, namespace name,
+template name, overloaded function name, enumerated value name, etc. the operator should
+return a {\metaobject Named} metaobject reflecting the specified feature.
+If the parameter is ommited a type conforming to the {\metaobject GlobalScope} metaobject
+concept should be returned.
+The exact types returned by the operators should be implementation details and if the
+result needs to be stored in a variable the \verb@auto@ type specifier should always
+be used.
+For example:
+
+\begin{lstlisting}
+// reflect the global scope
+// meta_gs conforms to the GlobalScope concept
+auto meta_gs = reflect();
+
+// reflect the std namespace
+// meta_std conforms to the Namespace concept
+auto meta_std = reflect(std);
+
+// reflect the errno variable
+// meta_errno conforms to the Variable concept
+auto meta_errno = reflect(errno);
+
+// reflect the int type
+// meta_int conforms to the Type concept
+auto meta_int = reflect(int);
+
+// reflect the std::string typedef
+// meta_std_string conforms to the Typedef concept
+auto meta_std_string = reflect(std::string);
+
+// reflect the std::map template
+// meta_std_map conforms to the Template
+// and Class concepts
+auto meta_std_map = reflect(std::map);
+
+// reflect the std::map<int, std::string> type
+// meta_std_map_int_std_string conforms to Class
+// and Instantiation concepts
+auto meta_std_map_int_std_string = 
+	reflect(std::map<int, std::string>);
+
+// reflect the std::string's (overloaded) constructors
+// meta_std_string_string conforms to
+// the OverloadedFunction concept and the individual
+// overloads that it allows to traverse conform
+// to the Constructor concept
+auto meta_std_string_string = 
+	reflect(std::string::string);
+
+// reflect ths std::string's copy constructor
+// meta_std_string_string_copy conforms to
+// the Constructor concept
+auto meta_std_string_string_copy =
+	reflect(std::string::string(const std::string&));
+
+// reflect the std::swap overloaded free function
+// meta_std_swap conforms to OverloadedFunction
+auto meta_std_swap = reflect(std::swap);
+
+\end{lstlisting}
+
+Using a new operator has the following advantages:
+
+\begin{itemize}
+	\item More direct reflection. Even features that
+	could not be reflected by using a (templated) function
+	could be reflected with an operator.
+
+	\item More consistent reflection. Everything is reflected
+	with a single operator.
+\end{itemize}
+
+and these disadvantages:
+
+\begin{itemize}
+	\item Requires a new keyword or the usage of an existing
+	keyword in a new context or the usage of a character
+	sequence that is currently invalid.
+
+	\item Increased risk of breaking existing code. Could
+	be resolved by using an existing operator like \verb@%@,
+	\verb@|@, etc.,
+	or the use of a currently invalid character or character
+	sequence like \verb'@', \verb@$@ or the usage of a new set
+	of quotations like \verb@`@ (backtick character).
+	For example:
+	\begin{lstlisting}
+	// instead of:
+	auto meta_std_string = reflect(std::string);
+	// use
+	auto meta_std_string = %std::string;
+	// or 
+	auto meta_std_string = |std::string;
+	// or
+	auto meta_std_string = @std::string;
+	// or
+	auto meta_std_string = `std::string`;
+	\end{lstlisting}
+	The problem with these may be the reflection
+	of the global scope, which when using some of
+	the above would result in awkward expressions
+	like:
+	\begin{lstlisting}
+	// instead of
+	auto meta_gs = reflect();
+	// use
+	auto meta_gs = %;
+	auto meta_gs = |;
+	auto meta_gs = @;
+	// or 
+	auto meta_gs = ``; 
+	\end{lstlisting}
+\end{itemize}
