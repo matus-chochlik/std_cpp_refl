@@ -367,7 +367,11 @@ required:
 	static inline member function with the same return value type and the same number
 	and type of parameters as the original function reflected by {\metaobject Function}.
 	Calls to this function should be replaced with the call of the reflected function
-	with the arguments passed to \verb@call@.
+	with the arguments passed to \verb@call@. Additionaly if the reflected function is
+	a member function, then the first of the {\em parameters} of \verb@call@ should be
+	a reference to the class where the member function is defined and should be used
+	as the \verb@this@ argument when calling the member function. If the member function
+	is declared as \verb@const@ then the reference to the class should also be \verb@const@.
 \end{itemize}
 
 If \verb@metaobject_traits<Function>::is_class_member@ is defined as \verb@true_type@
@@ -402,7 +406,7 @@ that reflects a member of a class. It has the following requirements:
 
 \begin{itemize}
 	\item{\verb@static @{\metaobject Specifier}\verb@ access_type(void);@} static member function returning
-	a {\metaobject Specifier} reflecting the access type specifier of ther class member
+	a {\metaobject Specifier} reflecting the access type specifier of the class member
 	(\verb@private@, \verb@protected@ or \verb@public@).
 
 	\item \verb@metaobject_traits<ClassMember::scope>::is_class_member@ is \verb@true_type@.
