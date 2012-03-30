@@ -4,7 +4,9 @@ The purpose of this section is to show that a {\em static} $\to$ {\em dynamic}
 and {\em basic} $\to$ {\em complex} approach in designing reflection
 can accomodate a wide variety of programming styles and is arguably
 the "best" one. We do not propose to add all layers described
-below into the standard library.
+below into the standard library. They are mentioned here only to
+show that a well designed compile-time reflection is a good foundation
+for many (if not all) other reflection facilities.
 
 The Mirror reflection utilities \cite{mirror-doc-cpp11} on which this
 proposal is based, implements several distinct components which
@@ -23,8 +25,10 @@ to the programmer through the static basic metaobject interfaces. These should
 serve as the basis for other (standard and non-standard) higher-level
 reflection libraries and utilities.
 
-In the Mirror utilities the basic metadata are not used directly by
+In the Mirror utilities the basic metadata is not used directly by
 applications.
 
 \input{sections/design_layers_mirror.tex}
 \input{sections/design_layers_puddle.tex}
+\input{sections/design_layers_rubber.tex}
+\input{sections/design_layers_lagoon.tex}

@@ -1,1 +1,15 @@
 \section{Impact On the Standard}
+
+The impact on the standard and the existing applications depends
+mainly on the method of reflection (functions vs. operators).
+Reflection functions pose a very small risk of breaking existing
+standard conforming code. The \verb@reflect@ operator on the other
+hand has a significant potential of breaking existing applications.
+This can be alleviated by using existing keywords like \verb@%@
+as suggested above.
+
+Since compilers already have all the metadata required to generate
+the proposed metaobjects, making them available to programmers
+should not pose a big problem to the compiler vendors.
+
+TODO: to be revised/completed

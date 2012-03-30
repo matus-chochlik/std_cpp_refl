@@ -23,6 +23,8 @@ static_assert(
 
 \end{lstlisting}
 
+Puddle allows to do the following:
+
 \begin{lstlisting}
 assert(
   reflected_type<person>()
@@ -33,7 +35,9 @@ assert(
 );
 \end{lstlisting}
 
-or a more complex example:
+or a more complex example, in which a reflection-based algorithm
+traverses the global scope namespace and its nested scopes
+and prints information about their members:
 
 \begin{lstlisting}
 struct object_printer
