@@ -139,7 +139,7 @@ RDBS query, etc.)
 Even more interesting is, that such factories can be
 implemented semi-automatically with the help of reflection.
 
-Every factory is a composition of two distinct (an nearly orthogonal)
+Every factory is a composition of two distinct (and nearly orthogonal)
 parts:
 
 \begin{itemize}
@@ -177,21 +177,15 @@ struct vector
         double x,y,z;
 
         vector(double _x, double _y, double _z)
-         : x(_x)
-         , y(_y)
-         , z(_z)
+         : x(_x), y(_y), z(_z)
         { }
 
         vector(double _w)
-         : x(_w)
-         , y(_w)
-         , z(_w)
+         : x(_w), y(_w), z(_w)
         { }
 
         vector(void)
-         : x(0.0)
-         , y(0.0)
-         , z(0.0)
+         : x(0.0), y(0.0), z(0.0)
         { }
 
         /* other members */
@@ -201,13 +195,8 @@ struct triangle
 {
         vector a, b, c;
 
-        triangle(
-                const vector& _a,
-                const vector& _b,
-                const vector& _c
-        ): a(_a)
-         , b(_b)
-         , c(_c)
+        triangle(const vector& _a, const vector& _b, const vector& _c)
+         : a(_a), b(_b), c(_c)
         { }
 
         triangle(void){ }
@@ -221,8 +210,7 @@ struct tetrahedron
         vector apex;
 
         tetrahedron(const triangle& _base, const vector& _apex)
-         : base(_base)
-         , apex(_apex)
+         : base(_base), apex(_apex)
         { }
 
         tetrahedron(
@@ -230,8 +218,7 @@ struct tetrahedron
                 const vector& b,
                 const vector& c,
                 const vector& d
-        ): base(a, b, c)
-         , apex(d)
+        ): base(a, b, c), apex(d)
         { }
 
         /* other members */
