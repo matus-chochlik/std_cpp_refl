@@ -194,22 +194,25 @@ struct vector
          , z(0.0)
         { }
 
-	/* other members */
+        /* other members */
 };
 
 struct triangle
 {
         vector a, b, c;
 
-        triangle(const vector& _a, const vector& _b, const vector& _c)
-         : a(_a)
+        triangle(
+                const vector& _a,
+                const vector& _b,
+                const vector& _c
+        ): a(_a)
          , b(_b)
          , c(_c)
         { }
 
         triangle(void){ }
 
-	/* other members */
+        /* other members */
 };
 
 struct tetrahedron
@@ -231,7 +234,7 @@ struct tetrahedron
          , apex(d)
         { }
 
-	/* other members */
+        /* other members */
 };
 
 \end{lstlisting}

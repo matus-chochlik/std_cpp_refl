@@ -20,9 +20,9 @@ lambda function which could not be used with Mirror's or Puddle's meda-objects
 
 int main(void)
 {
-    // use the Mirror's for_each function, but erase the types
-    // of the iterated compile-time metaobjects before passing
-    // them as arguments to the lambda function.
+    // use the Mirror's for_each function, but erase
+    // the types of the iterated compile-time metaobjects
+    // before passing them as arguments to the lambda function.
     mirror::mp::for_each<
         mirror::members<
             MIRRORED_GLOBAL_SCOPE()
