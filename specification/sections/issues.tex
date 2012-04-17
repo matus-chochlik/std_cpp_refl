@@ -8,10 +8,21 @@
 	\item {\em Returning names as compile-time strings:} It would be advantageous if even
 	the names of various metaobjects were compile-time constants and could be introspected
 	or used as template parameters. See for example the Mirror's compile-time strings~\cite{mirror-ct-strings}.
+	An interesting use-case is the filtering of scope members based on their names
+	if a good naming policy is consistently applied. For example: filter out all scope
+	members whose name starts with an underscore, etc.
 
-	\item {\em Annotation base-level program constructs with tags and relations}.
+	\item {\em The syntax of annotation of base-level program constructs with tags and relations}.
 
-	\item {\em Explicit specification of what should eb reflected}. It might be useful to have
+	\item {\em Explicit specification of what should be reflected}. It might be useful to have
 	the ability to explicitly specify either what to reflect or what to hide from reflection.
+	For example the "whitelisting" (explicitly specifying of what should be reflected) of namespace
+	or class members could simplify reflective meta-algorithms so that they would not have
+	to implement complicated filters when traversing scope members, to hide implementation details and
+	to improve compilation times. It is important that this functionality is decoupled from the
+	scope member declarations, since it would allow applications to cherry-pick what should be
+	reflected even in third-party libraries.
 	This might be a separate feature, but it also could be merged with the tagging functionality.
+	Applications could tag program constructs in which they are interested and apply a simple
+	filter based on the tag(s) when traversing scope members.
 \end{itemize}
