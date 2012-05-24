@@ -356,6 +356,30 @@ by the \verb@metaobject_traits<Function>::is_template@ typedef as described belo
 	each overload returns a different {\metaobject Parameter} metaobject reflecting the {\em i}-th parameter
 	of the function reflected by {\metaobject Function}.
 
+	\item{\verb@static integral_constant<bool, @ {\em true-or-false}\verb@> throw_limited(void);@}
+	static member function indicating whether the reflected function has only a limited list of exceptions
+	that it can throw. If the reflected function was declared with the \verb@throw@ exception specification
+	(either empty or with a list of exception types) then \verb@throw_limited@ returns
+	\verb@true_type@, otherwise if the function can throw any exception, \verb@throw_limited@ returns \verb@false_type@.
+	If \verb@true_type@ is returned, then the \verb@exception_count@ and \verb@exception@ functions
+	can be used to traverse the list of exception types that the reflected function is allowed
+	to throw.
+
+	\item{\verb@static integral_constant<int,@ {\em number-of-exceptions}
+	\verb@>@\\\verb@exception_count(void);@} static member function returning either the total number
+	of exceptions that the function reflected by {\metaobject Function} can throw or returning
+	\verb@integral_constant<int, -1>@. The result type of this function depends on the result
+	of the \verb@throw_limited@ member function. If \verb@throw_limited@ returns \verb@true_type@
+	then the actual number of allowed exception types is returned. If \verb@throw_limited@ returns
+	\verb@false_type@ then \verb@integral_constant<int, -1>@ is returned to indicate that
+	the reflected function can throw anything.
+
+	\item{\verb@static @{\metaobject Type}\verb@ exception(integral_constant<int, @{\em i}
+	\verb@>);@} overloaded member function defined
+	for $i \in \{0, 1, \dots, n-1\}$; {\em n = number-of-exceptions},
+	each overload returns a different {\metaobject Type} metaobject reflecting the {\em i}-th exception
+	from the explicit exception specification of the function reflected by {\metaobject Function}.
+
 	\item \verb@metaobject_traits<Function>::category@ is defined as \verb@function_tag@.
 \end{itemize}
 
@@ -369,6 +393,7 @@ required:
 	and type of parameters as the original function reflected by {\metaobject Function}.
 	Calls to this function should be replaced with the call of the reflected function
 	with the arguments passed to \verb@call@. Additionaly if the reflected function is
+
 	a member function, then the first of the {\em parameters} of \verb@call@ should be
 	a reference to the class where the member function is defined and should be used
 	as the \verb@this@ argument when calling the member function. If the member function
@@ -383,6 +408,11 @@ then the following is also required:
 	\item{\verb@static @ {\metaobject Specifier} \verb@ constness(void);@} static member function
 	returning  the constness {\metaobject Specifier} reflecting the constness
 	of the member functions.
+
+	\item{\verb@static integral_constant<bool,@ {\em true-or-false}\verb@> is_pure(void);@}
+	static inline member function that returns \verb@true_type@ or \verb@false_type@ indicating
+	whether the reflected member function is a {\em pure} virtual function. For non-virtual
+	functions it always returns \verb@false_type@.
 \end{itemize}
 
 {\metaobject Function} metaobjects are {\em not} direct members of scopes. Instead,
