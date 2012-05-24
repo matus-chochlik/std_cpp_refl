@@ -10,7 +10,8 @@ In this approach at least two functions should be defined
 in the \verb@std@ namespace:
 
 \begin{itemize}
-	\item{{\em unspecified-type} \verb@ reflected_global_scope(void);@}
+	\item{{\em unspecified-type} \verb@ reflected_global_scope(void);@} (or
+	alternatively \verb@mirrored_global_scope()@)
 	This function should return a type conforming to the {\metaobject GlobalScope}
 	concept, reflecting the global scope.
 	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
@@ -18,7 +19,7 @@ in the \verb@std@ namespace:
 	specifier should always be used.
 
 	\item{\verb@template <typename Type>@\\
-	{\em unspecified-type} \verb@ reflected(void);@}
+	{\em unspecified-type} \verb@ reflected(void);@} (or alternativelly \verb@mirrored<Type>()@)
 	This function should return a type conforming to the {\metaobject Type}
 	concept, reflecting the \verb@Type@ passed as template argument to this function.
 	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
@@ -35,7 +36,8 @@ The advantages of using reflection functions are following:
 	\item No need to add a new keyword to the language.
 
 	\item Reduced chance of breaking existing code. The \verb@reflected_global_scope()@
-	and \verb@reflected<Type>()@ functions are currently not defined in the \verb@std@
+	and \verb@reflected<Type>()@ (nor \verb@mirrored_global_scope()@ and 
+	\verb@mirrored<Type>()@) functions are currently not defined in the \verb@std@
 	namespace and therefore should not clash with existing user code.
 \end{itemize}
 
@@ -50,8 +52,9 @@ This approach has the following disadvantages:
 
 \subsubsection{Reflection operator}
 
-In this approach a new operator (we suggest the name) \verb@reflect(@{\em param}\verb@)@
-should be added (for some alternatives see below).
+In this approach a new operator (we suggest the name) \verb@reflected(@{\em param}\verb@)@
+(or \verb@mirrored(@{\em param}\verb@)@)
+should be added (for additional alternatives see below).
 Depending on {\em param}, which could be a type name, namespace name,
 template name, overloaded function name, enumerated value name, etc. the operator should
 return a {\metaobject Named} metaobject reflecting the specified feature.
@@ -63,54 +66,101 @@ be used.
 For example:
 
 \begin{lstlisting}
+//
+typedef integral_constant<int, 0> _0;
+typedef integral_constant<int, 1> _1;
+typedef integral_constant<int, 2> _2;
+typedef integral_constant<int, 3> _3;
+//
 // reflect the global scope
 // meta_gs conforms to the GlobalScope concept
-auto meta_gs = reflect();
+auto meta_gs = mirrored();
 
+static_assert(
+	decltype(meta_gs.member_count())::value > 0,
+	"The global scope has no members!"
+);
+
+static_assert(
+	decltype(meta_gs.base_name().size())::value == 0,
+	"Name of the global scope is not an empty string!"
+);
+
+
+//
 // reflect the std namespace
 // meta_std conforms to the Namespace concept
-auto meta_std = reflect(std);
+auto meta_std = mirrored(std);
 
+static_assert(
+	is_same<
+		decltype(meta_gs),
+		decltype(meta_std.scope())
+	>::value,
+	"Namespace std is not in the global scope!"
+);
+
+static_assert(
+	decltype(meta_std.base_name().size())::value == 3,
+	"Name of the std namespace does not have 3 characters!"
+);
+
+static_assert(
+	decltype(meta_std.base_name().at(_0))::value == 's',
+	"Name of the std namespace does not start with 's'!"
+);
+
+assert(strcmp(meta_std.base_name().c_str(), "std") == 0);
+
+
+//
 // reflect the errno variable
 // meta_errno conforms to the Variable concept
-auto meta_errno = reflect(errno);
+auto meta_errno = mirrored(errno);
 
+//
 // reflect the int type
 // meta_int conforms to the Type concept
-auto meta_int = reflect(int);
+auto meta_int = mirrored(int);
 
+//
 // reflect the std::string typedef
 // meta_std_string conforms to the Typedef concept
-auto meta_std_string = reflect(std::string);
+auto meta_std_string = mirrored(std::string);
 
+//
 // reflect the std::map template
 // meta_std_map conforms to the Template
 // and Class concepts
 auto meta_std_map = reflect(std::map);
 
+//
 // reflect the std::map<int, std::string> type
 // meta_std_map_int_std_string conforms to Class
 // and Instantiation concepts
 auto meta_std_map_int_std_string = 
-	reflect(std::map<int, std::string>);
+	mirrored(std::map<int, std::string>);
 
+//
 // reflect the std::string's (overloaded) constructors
 // meta_std_string_string conforms to
 // the OverloadedFunction concept and the individual
 // overloads that it allows to traverse conform
 // to the Constructor concept
 auto meta_std_string_string = 
-	reflect(std::string::string);
+	mirrored(std::string::string);
 
+//
 // reflect ths std::string's copy constructor
 // meta_std_string_string_copy conforms to
 // the Constructor concept
 auto meta_std_string_string_copy =
-	reflect(std::string::string(const std::string&));
+	mirrored(std::string::string(const std::string&));
 
+//
 // reflect the std::swap overloaded free function
 // meta_std_swap conforms to OverloadedFunction
-auto meta_std_swap = reflect(std::swap);
+auto meta_std_swap = mirrored(std::swap);
 
 \end{lstlisting}
 

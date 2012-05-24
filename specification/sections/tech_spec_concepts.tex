@@ -100,6 +100,36 @@ By default it is defined as \verb@false_type@ unless specified otherwise in the
 concept description below.
 \end{itemize}
 
+\subsubsection{String}
+
+{\em String} is a stateless (or monostate) \verb@class@ that represents a compile-time
+character string constant storing for example a name of a type, function, namespace, etc. or the keyword
+of a specifier. It allows compile-time metaprograms to examine and make decisions based
+on the value of such strings. If necessary, the stored string can be returned
+as a regular C-string.
+See for example the Mirror's compile-time strings~\cite{mirror-ct-strings}.
+
+One of the use-cases for these string is the filtering of scope members based on their names
+if a good naming policy is consistently applied. For example: filter out all scope
+members whose name starts with an underscore, or process only classes with names
+starting with \verb@DB@, etc.
+
+Types conforming to this concept must implement the following:
+
+\begin{itemize}
+	\item{\verb@static const char* c_str(void);@} static member function returning the static
+	string as a regular null-terminated C-string.
+
+	\item{\verb@static integral_constant<int, @{\em number-of-characters}\verb@> size(void);@}
+	static member function returning the number of characters in the string (obviously without
+	counting any terminating character).
+
+	\item{\verb@static integral_constant<char, @{\em i-th-character}\verb@>@\\
+	\verb@at(integral_constant<int, @{\em i} \verb@>);@} overloaded member function defined for 
+	for $i \in \{0, 1, \dots, n-1\}$;{\em n = number-string-characters},
+	each overload returning the respective character in the string.
+\end{itemize}
+
 \subsubsection{Metaobject}
 
 {\metaobject Metaobject} is a stateless (or monostate) anonymous \verb@struct@ that provides
@@ -144,7 +174,7 @@ requirements:
 
 \begin{itemize}
 
-\item{\verb@static const char* keyword(void);@} returns the keyword
+\item{\verb@static @{\em String}\verb@ keyword(void);@} returns the keyword
 of the reflected specifier. If \verb@category@ is \verb@spec_none_tag@
 then \verb@keyword@ returns "" (an empty c-string).
 
@@ -185,7 +215,7 @@ the following requirements:
 
 \begin{itemize}
 
-	\item{\verb@static const char* base_name(void);@} member function that returns the base name
+	\item{\verb@static @{\em String}\verb@ base_name(void);@} member function that returns the base name
 	of the reflected construct, without the nested name specifier. For namespace
 	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
 	this function should return "baz", for the global scope this function
@@ -196,7 +226,7 @@ the following requirements:
 	function is owned by the function and should not be freed by the caller. Alternatively 
 	this member function could be called \verb@identifier@.
 
-	\item{\verb@static const char* full_name(void);@} member function that returns the full name
+	\item{\verb@static @{\em String}\verb@ full_name(void);@} member function that returns the full name
 	of the reflected construct, with the nested name specifier. For namespace
 	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
 	this function should return "foo::bar::baz", for the global scope this function
