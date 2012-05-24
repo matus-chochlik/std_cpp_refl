@@ -4,13 +4,6 @@
 	\item {\em Normalization of names returned by \verb@Named::base_name()@\\and \verb@Named::full_name()@:}
 	The strings returned by the \verb@base_name@ and \verb@full_name@ functions should be
 	implementation-independent and the same on every platform/compiler.
-	
-	\item {\em Returning names as compile-time strings:} It would be advantageous if even
-	the names of various metaobjects were compile-time constants and could be introspected
-	or used as template parameters. See for example the Mirror's compile-time strings~\cite{mirror-ct-strings}.
-	An interesting use-case is the filtering of scope members based on their names
-	if a good naming policy is consistently applied. For example: filter out all scope
-	members whose name starts with an underscore, etc.
 
 	\item {\em The syntax of annotation of base-level program constructs with tags and relations}.
 
