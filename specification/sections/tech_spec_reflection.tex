@@ -14,7 +14,7 @@ in the \verb@std@ namespace:
 	alternatively \verb@mirrored_global_scope()@)
 	This function should return a type conforming to the {\metaobject GlobalScope}
 	concept, reflecting the global scope.
-	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
+	The real type of the result is not defined by the standard, i.e. it is an implementation detail. 
 	If the caller needs to store the result of this function the \verb@auto@ type
 	specifier should always be used.
 
@@ -22,13 +22,13 @@ in the \verb@std@ namespace:
 	{\em unspecified-type} \verb@ reflected(void);@} (or alternativelly \verb@mirrored<Type>()@)
 	This function should return a type conforming to the {\metaobject Type}
 	concept, reflecting the \verb@Type@ passed as template argument to this function.
-	The real type or the result is not defined by the standard, i.e. it is an implementation detail. 
+	The real type of the result is not defined by the standard, i.e. it is an implementation detail. 
 	If the caller needs to store the result of this function the \verb@auto@ type
 	specifier should always be used.
 \end{itemize}
 
 Several other similar functions could be added to the list above
-for reflection of templates, enumerated values, etc. Without defining
+for reflection of templates, enumerated values, etc. without defining
 new rules for what regular function and template parameters can be.
 The advantages of using reflection functions are following:
 
@@ -161,6 +161,11 @@ auto meta_std_string_string_copy =
 // reflect the std::swap overloaded free function
 // meta_std_swap conforms to OverloadedFunction
 auto meta_std_swap = mirrored(std::swap);
+
+// reflect the (local) variable i
+// meta_i conforms to Variable
+int i = 42;
+auto meta_i = reflect(i);
 
 \end{lstlisting}
 
