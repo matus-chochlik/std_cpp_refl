@@ -132,7 +132,7 @@ auto meta_std_string = mirrored(std::string);
 // reflect the std::map template
 // meta_std_map conforms to the Template
 // and Class concepts
-auto meta_std_map = reflect(std::map);
+auto meta_std_map = mirrored(std::map);
 
 //
 // reflect the std::map<int, std::string> type
@@ -191,7 +191,7 @@ and these disadvantages:
 	For example:
 	\begin{lstlisting}
 	// instead of:
-	auto meta_std_string = reflect(std::string);
+	auto meta_std_string = mirrored(std::string);
 	// use
 	auto meta_std_string = %std::string;
 	// or 
@@ -207,7 +207,7 @@ and these disadvantages:
 	like:
 	\begin{lstlisting}
 	// instead of
-	auto meta_gs = reflect();
+	auto meta_gs = mirrored();
 	// use
 	auto meta_gs = %;
 	auto meta_gs = |;
