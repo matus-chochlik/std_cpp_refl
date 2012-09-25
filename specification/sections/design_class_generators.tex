@@ -1,0 +1,102 @@
+\subsection{Class generators}
+\label{class-generators}
+
+There are situations where the following transformation of
+scopes (classes, enumerations, etc.) and their members would be very useful.
+Consider a simple user-defined \verb@struct@s
+\verb|address| and \verb|person|,
+
+\begin{lstlisting}
+struct address
+{
+	std::string street;
+	std::string number;
+	std::string postal_code;
+	std::string city;
+	std::string country;
+};
+
+struct person
+{
+	std::string name;
+	std::string surname;
+
+	address residence;
+
+	std::tm birth_date;
+};
+\end{lstlisting}
+
+and an object-relational mapping (ORM)
+library, that would allow automatic generation of SQL queries
+from strongly typed expressions in a DSEL in C++. It would
+be advantageous to have some counterparts for all "ORM-aware"
+classes having members with the same names as the original
+class, but with different types, like:
+
+\begin{lstlisting}
+template <class T>
+struct orm_table;
+
+template <>
+struct orm_table<address>
+ : public base_table
+{
+	orm_column<std::string> street;
+	orm_column<std::string> number;
+	orm_column<std::string> postal_code;
+	orm_column<std::string> city;
+	orm_column<std::string> country;
+
+	orm_table(orm_param& param)
+	 : base_table(param)
+	 , street(this, param)
+	 , number(this, param)
+	 , postal_code(this, param)
+	 , city(this, param)
+	 , country(this, param)
+	{ }
+};
+
+template <>
+struct orm_table<person>
+ : public base_table
+{
+	orm_column<std::string> name;
+	orm_column<std::string> surname;
+	orm_column<address> residence;
+	orm_column<std::tm> birth_date;
+
+	orm_table(orm_param& param)
+	 : base_table(param)
+	 , name(this, param)
+	 , surname(this, param)
+	 , residence(this, param)
+	 , birth_date(this, param)
+	{ }
+};
+\end{lstlisting}
+
+Generating such or similar classes can also be achieved with reflection.
+The Mirror library implements the \verb@by_name@ metafunction template
+and the \verb@class_generator@ utility for this purpose.
+
+The {\em Puddle} layer, described above, uses this functionality and allows
+access to metadata reflecting member variables of a class or free variables
+of a namespace through the overloaded \verb@operator ->@ of a metaclass
+or metanamespace:
+
+\begin{lstlisting}
+auto meta_person = puddle::reflected_type<person>();
+// access the metavariable reflecting the birth_date member of person
+assert(meta_person->birth_date().access_type().is_public());
+// access the metadata for person::name and person::surname
+// by their names
+assert(meta_person.member_variables().at_c<0>() == meta_person->name());
+assert(meta_person.member_variables().at_c<0>() != meta_person->surname());
+
+\end{lstlisting}
+
+This functionality could be extended to any scope member and
+the mechanism is described below.
+

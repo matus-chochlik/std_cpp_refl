@@ -2,7 +2,7 @@
 blddir = $(PWD)/_bld
 outdir = $(PWD)/_out
 
-components = specification gcc-plugin
+components = specification gcc-plugin doxy-tool
 
 all: $(components)
 

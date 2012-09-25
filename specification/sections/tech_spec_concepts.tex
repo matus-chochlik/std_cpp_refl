@@ -21,17 +21,17 @@ struct metaobject_traits
 {
 	typedef typename Metaobject::category category;
 
-	typedef Bool has_name;
+	typedef integral_constant<bool, ...> has_name;
 
-	typedef Bool has_scope;
+	typedef integral_constant<bool, ...> has_scope;
 
-	typedef Bool is_scope;
+	typedef integral_constant<bool, ...> is_scope;
 
-	typedef Bool is_class_member;
+	typedef integral_constant<bool, ...> is_class_member;
 
-	typedef Bool has_template;
+	typedef integral_constant<bool, ...> has_template;
 
-	typedef Bool is_template;
+	typedef integral_constant<bool, ...> is_template;
 };
 \end{lstlisting}
 
@@ -67,7 +67,7 @@ of the metaobject:
 
 		\item{\verb@inheritance_tag@} indicates an {\metaobject Inheritance}.
 
-		\item{\verb@constant_tag@} indicates an {\metaobject Constant}.
+		\item{\verb@constant_tag@} indicates an {\metaobject NamedConstant}.
 
 		\item{\verb@variable_tag@} indicates a {\metaobject Variable}.
 
@@ -225,17 +225,6 @@ the following requirements:
 	"volatile vector$<$const fubar*$>$ * const *", etc. The string returned by this
 	function is owned by the function and should not be freed by the caller. Alternatively 
 	this member function could be called \verb@identifier@.
-
-	\item{\verb@static @{\em String}\verb@ full_name(void);@} member function that returns the full name
-	of the reflected construct, with the nested name specifier. For namespace
-	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
-	this function should return "foo::bar::baz", for the global scope this function
-	should return "" (an empty c-string literal).\\For \verb@std::vector<int>::iterator@
-	it should return "std::vector$<$int$>$::iterator". For derived and qualified types like\\
-	\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should return
-	"volatile std::vector$<$const foo::bar::fubar*$>$ * const *", etc. For some
-	metaobjects this function may return the same value as the \verb@base_name@ function.
-	The string returned by this function is owned by the function and should not be freed by the caller.
 	
 
 	\item \verb@metaobject_traits<Named>::has_name@ is defined as \verb@true_type@.
@@ -255,6 +244,73 @@ metaobjects have the following requirements:
 	query the kind of the scope.
 
 	\item \verb@metaobject_traits<Scoped>::has_scope@ is defined as \verb@true_type@.
+\end{itemize}
+
+\subsubsection{Scoped and Named}
+
+Many of the concepts described below are specializations of both
+the {\metaobject Scoped} and {\metaobject Named} concepts.
+Metaobjects conforming to these concepts have these additional
+requirements:
+
+\begin{itemize}
+	\item{\verb@static @{\em String}\verb@ full_name(void);@} member function that returns the full name
+	of the reflected construct, with the nested name specifier. For namespace
+	\verb@std@ this function should return "std", for namespace \verb@foo::bar::baz@
+	this function should return "foo::bar::baz", for the global scope this function
+	should return "" (an empty c-string literal).\\For \verb@std::vector<int>::iterator@
+	it should return "std::vector$<$int$>$::iterator". For derived and qualified types like\\
+	\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should return
+	"volatile std::vector$<$const foo::bar::fubar*$>$ * const *", etc. For some
+	metaobjects this function may return the same value as the \verb@base_name@ function.
+	The string returned by this function is owned by the function and should not be freed by the caller.
+
+	\item{\verb@named_typedef@} nested member template struct defined as in
+	the following pseudo-code:
+	\begin{lstlisting}
+	template <typename X>
+	struct named_typedef
+	{
+		typedef X $NAME$;
+	};
+	\end{lstlisting}
+	The \verb@$NAME$@ expression above would be replaced by the name of the reflected
+	named scoped object. This structure could be used to generate new classes
+	with member typedefs having the same names as the members of the scope of the named object
+	reflected by this {\metaobject Named}, {\metaobject Scoped} metaobject.
+	One way to combinine the \verb@$NAME$@ typedefs from various {\metaobject Named} and 
+	{\metaobject Scoped} scope members into a single class would be to let the class inherit from
+	multiple \verb@named_typedef@s from the metaobjects obtained by reflection.
+
+
+
+	\item{\verb@named_mem_var@} nested member template struct defined as in
+	the following pseudo-code:
+	\begin{lstlisting}
+	template <typename X>
+	struct named_mem_var
+	{
+		X $NAME$;
+
+		named_mem_var(void) = default;
+
+		template <class Parent, class Param>
+		named_mem_var(Parent& parent, Param param)
+		 : $NAME$(parent, param)
+		{ }
+	};
+	\end{lstlisting}
+	The \verb@$NAME$@ expression above would be replaced by the name of the reflected
+	named scoped object. This structure could be used to generate new classes
+	with member variables having the same names as the members of the scope of the named object
+	reflected by this {\metaobject Named}, {\metaobject Scoped} metaobject.
+	The member variable \verb@$NAME$@ could be default constructible or constructible 
+	from two parameters; a reference to the generated class to which the member variable
+	will belong and an application specific parameter.
+	One way to combinine the \verb@$NAME$@ member variables from various {\metaobject Named} and 
+	{\metaobject Scoped} scope members into a single class would be to let the class inherit from
+	multiple \verb@named_mem_var@s from the metaobjects obtained by reflection.
+	
 \end{itemize}
 
 \subsubsection{Scope}
@@ -504,7 +560,8 @@ that reflects an operator and requires the following:
 
 \subsubsection{OverloadedFunction}
 
-{\metaobject OverloadedFunction} is a {\metaobject Function} and possibly a {\metaobject ClassMember}
+{\metaobject OverloadedFunction} is a {\metaobject Named} and {\metaobject Scoped} metaobject
+and possibly a {\metaobject ClassMember}
 that reflects a set of overloaded functions, i.e. functions with the same name.
 {\metaobject OverloadedFunction} has the following requirements:
 
@@ -551,7 +608,7 @@ that reflects a function or class template. It has the following requirements:
 
 \subsubsection{TemplateParameter}
 
-{\metaobject TemplateParameter} is a {\metaobject Typedef} or a {\metaobject Constant} that
+{\metaobject TemplateParameter} is a {\metaobject Typedef} or a {\metaobject NamedConstant} that
 reflects a template parameter. In class templates the types of member variables, typedefs and
 the return value type and parameters of member functions may be {\metaobject TemplateParameter}
 metaobjects.
@@ -593,7 +650,7 @@ type with the following requirements:
 \begin{itemize}
 	\item \verb@metaobject_traits<Enum>::category@ is defined as \verb@enum_tag@.
 
-	\item The \verb@members@ of {\metaobject Enum} are only {\metaobject Constant} metaobjects.
+	\item The \verb@members@ of {\metaobject Enum} are only {\metaobject NamedConstant} metaobjects.
 \end{itemize}
 
 \subsubsection{Inheritance}
@@ -651,15 +708,15 @@ The following is required for metaobjects reflecting parameters:
 	the {\metaobject Function} that the parameter belongs to.
 \end{itemize}
 
-\subsubsection{Constant}
+\subsubsection{NamedConstant}
 
-{\metaobject Constant} is a {\metaobject Named} and possibly {\metaobject Scoped} metaobject reflecting
+{\metaobject NamedConstant} is a {\metaobject Named} and possibly {\metaobject Scoped} metaobject reflecting
 named compile-time constant values like the non-type template parameters and enumeration values.
 
 \begin{itemize}
 	\item{\verb@static integral_type<@{\em value-type}\verb@, @{\em constant-value}\verb@> value(void);@}
 	static member function returning the reflected value wrapped in \verb@integral_constant@.
 
-	\item \verb@metaobject_traits<Constant>::category@ is defined as \verb@constant_tag@.
+	\item \verb@metaobject_traits<NamedConstant>::category@ is defined as \verb@constant_tag@.
 \end{itemize}
 

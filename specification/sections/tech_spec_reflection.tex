@@ -52,8 +52,8 @@ This approach has the following disadvantages:
 
 \subsubsection{Reflection operator}
 
-In this approach a new operator (we suggest the name) \verb@reflected(@{\em param}\verb@)@
-(or \verb@mirrored(@{\em param}\verb@)@)
+In this approach a new operator (we suggest the name) \verb@mirrored(@{\em param}\verb@)@
+(or \verb@reflected(@{\em param}\verb@)@)
 should be added (for additional alternatives see below).
 Depending on {\em param}, which could be a type name, namespace name,
 template name, overloaded function name, enumerated value name, etc. the operator should
@@ -165,7 +165,7 @@ auto meta_std_swap = mirrored(std::swap);
 // reflect the (local) variable i
 // meta_i conforms to Variable
 int i = 42;
-auto meta_i = reflect(i);
+auto meta_i = mirrored(i);
 
 \end{lstlisting}
 

@@ -1,0 +1,121 @@
+#!/bin/bash
+#
+function normalize_path()
+{
+        local normal_path="${1}"
+
+        # make an absolute path
+        case "${normal_path}" in
+                /*);;
+                ~*) normal_path="${HOME}${normal_path:1}";;
+                *)  normal_path="${PWD%/}/${normal_path}";;
+        esac
+        # translates '/./' -> '/'
+	normal_path="${normal_path//\/.\///}"
+
+        # removes 'dir/../'
+        while [[ "${normal_path}" =~ ([^/][^/]*/\.\./) ]]
+        do normal_path="${normal_path/${BASH_REMATCH[0]}/}"
+        done
+
+        # removes '/dir/..' from the end of the path
+        if [[ "${normal_path}" =~ (/[^/][^/]*/\.\.) ]]
+        then normal_path="${normal_path/${BASH_REMATCH[0]}/}"
+        fi
+
+        # removes '/.' from the end of the path
+        echo ${normal_path%/.}
+}
+
+function print_short_help()
+{
+	echo "C++ Metaobject generator"
+	echo "Invalid option '${1}'"
+	echo
+	echo "Usage: $(basename $0) [options] input.cpp"
+	echo "Options:"
+	echo "    -o output-file: Output file"
+	echo "    -I dir-path:    Additional include directory"
+}
+
+output=a.hpp
+unset input
+unset include_dirs
+
+while true
+do
+	param="${1}"
+	shift
+
+	case "${param}" in
+
+	-o) output="$(normalize_path ${1})" && shift;;
+	-o=*) output="$(normalize_path ${param:3})";;
+	-o*) output="$(normalize_path ${param:2})";;
+
+	-I) include_dirs="${include_dirs} $(normalize_path ${1})" && shift;;
+	-I=*) include_dirs="${include_dirs} $(normalize_path ${param:3})";;
+	-I*) include_dirs="${include_dirs} $(normalize_path ${param:2})";;
+
+	*)
+		if [ "${1}" == "" ]
+		then input="$(normalize_path ${param})" && break
+		else print_short_help "${param}" && exit 1
+		fi
+		;;
+	esac
+done
+
+#tempdir=$(mktemp -d)
+tempdir=/tmp/doxy-tool
+rm -rf ${tempdir}/*
+mkdir -p ${tempdir}
+
+(
+exec > ${tempdir}/Doxyfile
+echo "DOXYFILE_ENCODING      = UTF-8"
+echo "INPUT_ENCODING         = UTF-8"
+echo "OUTPUT_LANGUAGE        = English"
+
+echo "ENABLE_PREPROCESSING   = YES"
+echo "MACRO_EXPANSION        = YES"
+echo "INCLUDE_FILE_PATTERNS  = *"
+echo "INCLUDE_PATH           = ${include_dirs}"
+
+echo "INPUT = ${input}"
+echo "OUTPUT_DIRECTORY       = ${tempdir}"
+
+echo "XML_PROGRAMLISTING     = NO"
+echo "HIDE_UNDOC_MEMBERS     = NO"
+echo "HIDE_UNDOC_CLASSES     = NO"
+echo "HIDE_UNDOC_RELATIONS   = NO"
+echo "SHOW_NAMESPACES        = NO"
+echo "SHOW_FILES             = NO"
+echo "SHOW_INCLUDE_FILES     = NO"
+echo "FULL_PATH_NAMES        = NO"
+
+echo "CALL_GRAPH             = NO"
+echo "CALLER_GRAPH           = NO"
+echo "CLASS_GRAPH            = NO"
+echo "INCLUDE_GRAPH          = NO"
+echo "INCLUDED_BY_GRAPH      = NO"
+echo "DIRECTORY_GRAPH        = NO"
+echo "COLLABORATION_GRAPH    = NO"
+echo "GROUP_GRAPHS           = NO"
+
+echo "GENERATE_HTML          = NO"
+echo "GENERATE_LATEX         = NO"
+echo "GENERATE_MAN           = NO"
+echo "GENERATE_XML           = YES"
+echo "XML_OUTPUT             = xml"
+
+echo "QUIET                  = YES"
+echo "WARNINGS               = NO"
+)
+(
+cd ${tempdir} && doxygen && (cd xml && xsltproc combine.xslt index.xml > _all.xml)
+)
+xsltproc $(dirname ${0})/../xslt/test.xsl ${tempdir}/xml/_all.xml
+
+#rm -rf ${tempdir}
+
