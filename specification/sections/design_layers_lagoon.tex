@@ -97,7 +97,7 @@ of instances is constructed:
 namespace morse {
 
 // declares an enumerated class for morse code symbols
-enum class signal { dash = '-', dot = '.' };
+enum class signal : char { dash = '-', dot = '.' };
 
 // declares a type for a sequence of morse code symbols
 typedef std::vector<signal> sequence;
@@ -134,7 +134,7 @@ int main(void)
         // the input data for the factory
         auto data = in.data();
 
-    // polyomrphic meta-type reflecting the morse::code type
+        // polymorphic meta-type reflecting the morse::code type
         auto meta_morse_code = reflected_class<morse::code>();
 
         // a polymorphic factory that can be used to construct

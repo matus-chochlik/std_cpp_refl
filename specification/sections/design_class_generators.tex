@@ -83,17 +83,24 @@ and the \verb@class_generator@ utility for this purpose.
 
 The {\em Puddle} layer, described above, uses this functionality and allows
 access to metadata reflecting member variables of a class or free variables
-of a namespace through the overloaded \verb@operator ->@ of a metaclass
-or metanamespace:
+of a namespace through the overloaded \verb@operator ->@ of a meta-class
+or meta-namespace:
 
 \begin{lstlisting}
 auto meta_person = puddle::reflected_type<person>();
-// access the metavariable reflecting the birth_date member of person
+// access the metavariable reflecting
+// the birth_date member of person
 assert(meta_person->birth_date().access_type().is_public());
-// access the metadata for person::name and person::surname
-// by their names
-assert(meta_person.member_variables().at_c<0>() == meta_person->name());
-assert(meta_person.member_variables().at_c<0>() != meta_person->surname());
+// access the metadata for person::name
+// and person::surname by their names
+assert(
+	meta_person->name() ==
+	meta_person.member_variables().at_c<0>()
+);
+assert(
+	meta_person->surname() !=
+	meta_person.member_variables().at_c<0>()
+);
 
 \end{lstlisting}
 
