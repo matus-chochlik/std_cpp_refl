@@ -2,11 +2,12 @@
 input_tex = std_cpp_refl
 
 # the intermediate build and final output directory
+wrkdir = $(PWD)
 blddir = ../_bld/$(notdir $(PWD))
 outdir = ../_out/$(notdir $(PWD))
 
 # options passed to (pdf)latex
-latexopts = --output-dir=$(blddir)
+latexopts = -shell-escape
 
 output_pdf = $(addprefix $(outdir)/, $(addsuffix .pdf, $(input_tex)))
 
@@ -14,23 +15,32 @@ all: $(output_pdf)
 
 $(blddir)/%.tex.d: %.tex | $(blddir)
 	echo "$(blddir)/$*.pdf: \\" > $@
-	./tex_scan_deps.sh $< >> $@
-	echo "$<" >> $@
+	$(wrkdir)/tex_scan_deps.sh $(blddir) $< >> $@
+	echo "$(blddir)/$<" >> $@
 
-$(blddir)/%.pdf: %.tex $(blddir)/%.tex.d | $(blddir)
-	pdflatex $(latexopts) $<
-	pdflatex $(latexopts) $<
+$(blddir)/%.tex: %.tex | $(blddir)/sections
+	cp $< $@
+
+$(blddir)/sections/%.tex: xslt/%-tex.xsl concepts.xml | $(blddir)/sections
+	xsltproc $+ > $@
+
+$(blddir)/%.sty: %.sty | $(blddir)
+	cp $< $@
+
+$(blddir)/%.pdf: $(blddir)/%.tex $(blddir)/%.tex.d $(blddir)/minted.sty | $(blddir)
+	cp -r images $(blddir)/images
+	cd $(blddir) && pdflatex $(latexopts) $(notdir $<) && cd $(wrkdir)
 
 $(outdir)/%.pdf: $(blddir)/%.pdf | $(outdir)
 	cp $< $@
 		
-$(blddir) $(outdir):
+$(outdir) $(blddir) $(blddir)/sections:
 	mkdir -p $@
+
+sinclude $(addprefix $(blddir)/, $(addsuffix .tex.d, $(input_tex)))
 
 .PHONY: clean
 clean:
 	rm -rf $(blddir)
 	rm -rf $(outdir)
 
-
-sinclude $(addprefix $(blddir)/, $(addsuffix .tex.d, $(input_tex)))

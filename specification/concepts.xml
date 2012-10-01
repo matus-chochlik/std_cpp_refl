@@ -1,0 +1,1003 @@
+<?xml version='1.0' ?>
+<concepts>
+	<concept name="String">
+		<desc>$(self) is an "object" which can be examined at compile-time that represents
+		constant C-character string storing for example a name of a type, function, namespace, etc. or the keyword
+		of a specifier. It allows compile-time metaprograms to examine and make decisions based
+		on the value of such strings. If necessary, the stored string can be returned
+		as a regular C-string.
+
+		One of the use-cases for these strings is the filtering of scope members based on their names
+		if a good naming policy is consistently applied. For example: filter out all scope
+		members whose name starts with an underscore or process only classes with names
+		starting with @DB@, @Persistent@, etc.
+		</desc>
+
+		<attribute constant="size_t" name="size" value="unspecified">
+			<desc>Specifies the length (in @char@s) of the $(self), not counting any terminating characters.</desc>
+		</attribute>
+
+		<attribute constant="const char*" name="c_str" value="unspecified">
+			<desc>The encapsulated constant character string value.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Range" parameter="Element">
+		<desc>$(self) is a static constant parametrized container, containing and
+		providing random-access to elements satisfying the @Element@ concept</desc>
+
+		<attribute constant="size_t" name="size" value="unspecified">
+			<desc>Specifies the number of elements in the $(self).</desc>
+		</attribute>
+
+		<element placeholder="Element" name="at">
+			<parameter constant="size_t" name="position" min="0" max="size-1">
+				<desc>The position of the element to be returned.</desc>
+			</parameter>
+			<desc>Returns the element at the specified @position@ in the $(self).</desc>
+		</element>
+	</concept>
+
+	<concept name="MetaobjectCategory" kind="tag">
+		<desc>$(self) is a compile-time tag specifying the category of a metaobject.</desc>
+		<instance name="namespace" indicates="Namespace"/>
+		<instance name="global_scope" indicates="GlobalScope"/>
+		<instance name="type" indicates="Type"/>
+		<instance name="typedef" indicates="Typedef"/>
+		<instance name="class" indicates="Class"/>
+		<instance name="function" indicates="Function"/>
+		<instance name="constructor" indicates="Constructor"/>
+		<instance name="operator" indicates="Operator"/>
+		<instance name="overloaded_function" indicates="OverloadedFunction"/>
+		<instance name="enum" indicates="Enum"/>
+		<instance name="inheritance" indicates="Inheritance"/>
+		<instance name="constant" indicates="Constant"/>
+		<instance name="variable" indicates="Variable"/>
+		<instance name="parameter" indicates="Parameter"/>
+	</concept>
+
+	<concept name="SpecifierCategory" kind="tag">
+		<is_a concept="MetaobjectCategory"/>
+		<desc>$(self) is a specialization of $(base) indicating an exact C++ specifier.</desc>
+
+		<graph_layout>
+			<concept name="MetaobjectCategory"/>
+			<concept name="SpecifierCategory">
+				<rel pos="right" name="MetaobjectCategory"/>
+			</concept>
+		</graph_layout>
+
+		<instance name="none">
+			<desc>Indicates missing specifiers; for example a reflected non-const
+			member function would have a @none@ constness specifier tag or a variable
+			with automatic storage class would have a @none@ storage class
+			specifier, etc. The @keyword@ attribute in $(Specifier)s with this category tag
+			is an empty $(String).</desc>
+		</instance>
+		<instance name="extern" indicates="Specifier"><kind>storage</kind><kind>linkage</kind></instance>
+		<instance name="static" indicates="Specifier"><kind>storage</kind><kind>linkage</kind></instance>
+		<instance name="mutable" indicates="Specifier"><kind>storage</kind><kind>linkage</kind></instance>
+		<instance name="register" indicates="Specifier"><kind>storage</kind><kind>linkage</kind></instance>
+		<instance name="thread_local" indicates="Specifier"><kind>storage</kind><kind>linkage</kind></instance>
+		<instance name="const" indicates="Specifier"><kind>constness</kind></instance>
+		<instance name="virtual" indicates="Specifier"><kind>inheritance type</kind><kind>linkage</kind></instance>
+		<instance name="private" indicates="Specifier"><kind>access type</kind></instance>
+		<instance name="protected" indicates="Specifier"><kind>access type</kind></instance>
+		<instance name="public" indicates="Specifier"><kind>access type</kind></instance>
+		<instance name="class" indicates="Specifier"><kind>elaborated type</kind></instance>
+		<instance name="struct" indicates="Specifier"><kind>elaborated type</kind></instance>
+		<instance name="union" indicates="Specifier"><kind>elaborated type</kind></instance>
+		<instance name="enum" indicates="Specifier"><kind>elaborated type</kind></instance>
+	</concept>
+
+	<concept name="Metaobject">
+		<desc>$(self) is a stateless or (monostate) anonymous type which provides metadata reflecting certain program features.</desc>
+		<attribute concept="MetaobjectCategory" name="category">
+			<desc>
+				A tag specifying the category of the concrete metaobject,
+				which allows metaprograms to do tag dispatching and indicates
+				which concepts the concrete metaobject models.
+			</desc>
+		</attribute>
+
+		<trait constant="bool" name="is_metaobject" indicates="Metaobject"/>
+		<trait constant="bool" name="has_name" indicates="Named"/>
+		<trait constant="bool" name="has_scope" indicates="Scoped"/>
+		<trait constant="bool" name="is_scope" indicates="Scope"/>
+		<trait constant="bool" name="is_class_member" indicates="ClassMember"/>
+		<trait constant="bool" name="has_template" indicates="Instantiation"/>
+		<trait constant="bool" name="is_template" indicates="Template"/>
+	</concept>
+
+	<concept name="Specifier">
+		<is_a concept="Metaobject"/>
+		<reflects>
+			specifiers (like const, static, virtual, etc.)
+			used in the definition the base-level program constructs.
+		</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Specifier">
+				<rel pos="right" name="Metaobject"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="SpecifierCategory" name="category" override="Metaobject">
+			<desc>
+				Refines the category. The resulting tag can be used to
+				identify the concrete specifier reflected by this $(self).
+			</desc>
+		</attribute>
+		<attribute concept="String" name="keyword">
+			<desc>The C++ keyword of the reflected specifier.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Named">
+		<alt_name>identifier</alt_name>
+		<is_a concept="Metaobject"/>
+		<reflects>program constructs, which have a name, like namespaces, types, functions, variables, parameters, etc.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="right" name="Metaobject"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="String" name="base_name">
+			<desc>
+			The base name of the reflected construct, without the nested name specifier.
+			For namespace @std@ the value should be @"std"@, for namespace @foo::bar::baz@
+			it should be @"baz"@, for the global scope the value should be an empty c-string
+			literal.
+
+			For @std::vector&lt;int&gt;::iterator@ it should be @"iterator"@. For derived,
+			qualified types like
+			@volatile std::vector&lt;const foo::bar::fubar*&gt; * const *@ it should be
+			@"volatile vector&lt;const fubar*&gt; * const *"@, etc.
+			</desc>	
+		</attribute>
+	</concept>
+
+	<concept name="Scoped">
+		<is_a concept="Metaobject"/>
+		<reflects>
+			program constructs, which are defined inside of a named $(Scope)
+			(global scope, namespace, class, etc.).
+		</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Scoped">
+				<rel pos="right" name="Metaobject"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Scope" name="scope">
+			<desc>
+			A $(Scope) metaobject reflecting the scope of the scoped object reflected by
+			this $(self) metaobject. In concrete metaobjects the result
+			can be a $(Namespace), $(GlobalScope), $(Class), etc.
+			</desc>
+		</attribute>
+	</concept>
+
+	<concept name="NamedScoped">
+		<is_a concept="Named"/>
+		<is_a concept="Scoped"/>
+		<desc>
+			Many of the concepts are specializations of both the $(Scoped) and $(Named)
+			concepts.
+		</desc>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="above right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="above right" name="Scoped" edge="bend left"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="String" name="full_name">
+			<desc>The full name of the reflected construct, with the nested
+			name specifier. For namespace @std@ the value 
+			should be @"std"@, for namespace @foo::bar::baz@ the value should
+			be @"foo::bar::baz"@, for the global scope the value should be an empty
+			c-string literal.
+			For @std::vector&lt;int&gt;::iterator@ it should be @"std::vector&lt;int&gt;::iterator"@.
+			For derived qualified types like
+			@volatile std::vector&lt;const foo::bar::fubar*&gt; * const *@ it should be defined as
+			@"volatile std::vector&lt;const foo::bar::fubar*&gt; * const *"@, etc. For some metaobjects
+			this value may be the same as the $((base_name)) attribute.</desc>
+		</attribute>
+
+		<template name="named_typedef">
+			<desc>A template, instantiation of which should result in
+			a type equivalent to the @struct@ in the following pseudo-code:
+	@@
+	struct unspecified
+	{
+		typedef X &lt;NAME&gt;;
+	};
+	@@
+		        The @&lt;NAME&gt;@ expression above should be replaced by the name of the reflected
+		        named scoped object. This structure could be used to generate new classes
+		        with member typedefs having the same names as the members of the scope of the named object
+		        reflected by this $(self) metaobject.
+		        One way to combinine the @&lt;NAME&gt;@ typedefs from various reflected
+		        scope members into a single class would be to let the class inherit from
+		        multiple types generated by the @named_typedef@ template from the metaobjects obtained by reflection.</desc>
+			<parameter unspecified_type="user-defined-type" name="X">
+				<desc>The parameter passed to the @named_typedef@ template by the end-user.
+				It is used as the "source" type of the typedef (with the same name as the
+				reflected language construct) in the resulting type.
+				</desc>
+			</parameter>
+		</template>
+
+		<template name="named_mem_var">
+			<desc>A template, instantiation of which should result in
+			a type equivalent to the @struct@ in the following pseudo-code:
+	@@
+	struct unspecified
+	{
+		X &lt;NAME&gt;;
+
+		unspecified(void) = default;
+
+		template &lt;typename Param&gt;
+		unspecified(Param&amp;&amp; param)
+		 : &lt;NAME&gt;(std::forward&lt;Param&gt;(param))
+		{ }
+	};
+	@@
+		        The @&lt;NAME&gt;@ expression above should be replaced by the name of the reflected
+		        named scoped object. This structure could be used to generate new classes
+		        with member variables having the same names as the members of the scope of the named object
+		        reflected by this $(self) metaobject.
+		        One way to combinine the @&lt;NAME&gt;@ member variables from various reflected
+		        scope members into a single class would be to let the class inherit from
+		        multiple types generated by the @named_mem_var@ template from the metaobjects obtained by reflection.</desc>
+			<parameter unspecified_type="user-defined-type" name="X">
+				<desc>The parameter passed to the @named_mem_var@ template by the end-user.
+				It is used as the type of the member variable (with the same name as the
+				reflected language construct) in the resulting type.
+				</desc>
+			</parameter>
+		</template>
+	</concept>
+
+	<concept name="Scope">
+		<is_a concept="NamedScoped"/>
+		<reflects>scopes like namespaces, classes, enums, etc.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="above right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="above right" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+		</graph_layout>
+
+		<range concept="Range" argument="Scoped" name="members" singular="member">
+			<desc>A range of $(Scoped) metaobjects reflecting the individual members
+			like types, namespaces, functions, variables, etc. defined inside the
+			scope reflected by this $(self).</desc>
+		</range>
+	</concept>
+
+	<concept name="Namespace">
+		<reflects>a namespace.</reflects>
+		<is_a concept="Scope"/>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Namespace">
+				<rel pos="right" name="Scope"/>
+			</concept>
+		</graph_layout>
+	</concept>
+
+	<concept name="GlobalScope">
+		<reflects>the global scope.</reflects>
+		<is_a concept="Namespace"/>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Namespace">
+				<rel pos="right" name="Scope"/>
+			</concept>
+			<concept name="GlobalScope">
+				<rel pos="right" name="Namespace"/>
+			</concept>
+		</graph_layout>
+	</concept>
+
+	<concept name="Type">
+		<is_a concept="NamedScoped"/>
+		<reflects>types</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+		</graph_layout>
+
+		<attribute unspecified_type="original-type" name="original_type">
+			<desc>The original base-level type that this $(self) is reflecting.
+			Note, that if a concept derived from $(self), for example $(Class),
+			is also a $(Template) (i.e. is reflecting a template not a concrete type),
+			then this attribute is not inherited.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Typedef">
+		<is_a concept="Type"/>
+		<reflects>typedefs, i.e. types that were defined as alternate names
+		for other types using the C++ @typedef@ expression.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Typedef">
+				<rel pos="right" name="Type"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Type" name="type">
+			<desc>A $(Type) metaobject reflecting the "source" type of the typedef.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Class">
+		<is_a concept="Type"/>
+		<is_a concept="Scope"/>
+		<reflects>elaborated types (class, struct, union) or class templates.</reflects>
+		<desc>Note, that if a $(self) is also a $(Template), i.e. is reflecting
+		a class template not a concrete class,
+		then the @original_type@ attribute is not inherited from $(Type). </desc>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Class">
+				<rel pos="below right" name="Scope" edge="bend right"/>
+				<rel pos="below left" name="Type" edge="bend left"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Specifier" name="elaborated_type">
+			<desc>Specifier reflecting the elaborated type specifier used to define
+			the class (@class@, @struct@, @union@).</desc>
+		</attribute>
+
+		<range concept="Range" argument="Inheritance" name="base_classes" singular="base_class">
+			<desc>A $(Range) of $(Inheritance) metaobjects reflecting the base classes
+			that the class reflected by this $(self) inherits from.
+			</desc>
+		</range>
+	</concept>
+
+	<concept name="Function">
+		<is_a concept="Scope"/>
+		<reflects>a function or a function template.</reflects>
+		<desc>$(self) metaobjects are not direct members of scopes. Instead,
+		all functions with the same name, even those that are not overloaded in a specific scope
+		are grouped into an $(OverloadedFunction). Individual overloaded $(Function)s
+		in the group can be obtained through the interface of $(OverloadedFunction).
+		The same should also apply to $(Constructor)s and $(Operator)s.
+
+		The rationale for this is that direct scope members, i.e. metaobjects accessible through the $(Scope)'s
+		@members@ attribute should have unique names, which would not be the case if $(Function)s
+		were direct scope members.
+
+		The @scope@ attribute of an $(OverloadedFunction) is the same as the @scope@
+		attribute of all $(Function)s grouped by that $(OverloadedFunction).
+		</desc>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="right" name="Scope"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Specifier" name="linkage">
+			<desc>$(Specifier) reflecting the linkage specifier of the function reflected by this $(self).</desc>
+		</attribute>
+
+		<attribute constant="bool" name="constexpr">
+			<desc>Indicates if the reflected function is defined as @constexpr@.</desc>
+		</attribute>
+
+		<attribute concept="Type" name="result_type">
+			<desc>$(Type) reflecting the result type of the function.</desc>
+		</attribute>
+
+		<range concept="Range" argument="Parameter" name="parameters" singular="parameter">
+			<desc>A $(Range) of $(Parameter) metaobject reflecting the parameters
+			of the function reflected by this $(self). </desc>
+		</range>
+
+		<attribute constant="bool" name="noexcept">
+			<desc>Indicates if the reflected function is defined as @noexcept@.</desc>
+		</attribute>
+
+		<range concept="Range" argument="Type" name="exceptions" singular="exception">
+			<desc>A $(Range) of $(Type) metaobject reflecting the exception types
+			that the function reflected by this $(self) is allowed to throw. </desc>
+		</range>
+
+		<attribute concept="Specifier" name="constness">
+			<desc>$(Specifier) reflecting the the constness specifier of the function reflected by this $(self).</desc>
+			<enabled_if trait="is_class_member"/>
+		</attribute>
+
+		<attribute constant="bool" name="pure">
+			<desc>Indicates if the function is a pure virtual function.</desc>
+			<enabled_if trait="is_class_member"/>
+		</attribute>
+
+		<function unspecified_type="result-type-of-reflected-function" name="call">
+			<desc>Function with the same return value type and the same number
+			and type of parameters as the original function reflected by this $(Function).
+			Calls to this function should be equivalent to the call of the reflected function
+			with the arguments passed to @call@. Additionaly if the reflected function is
+			a member function, then the first of the parameters of @call@ should be
+			a reference to the class where the member function is defined and should be used
+			as the @this@ argument when calling the member function. If the member function
+			is declared as @const@ then the reference to the class should also be @const@.</desc>
+			<parameters/>
+		</function>
+
+	</concept>
+
+	<concept name="ClassMember">
+		<is_a concept="NamedScoped"/>
+		<reflects>a member of a class.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="above right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="above right" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Specifier" name="access_type">
+			<desc>$(Specifier) reflecting the access type specifier of the class member reflected by this $(self).</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Initializer">
+		<is_a concept="Function"/>
+		<reflects>an initializer (constructor) of a native type.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend left"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="right" name="Scope"/>
+			</concept>
+			<concept name="Initializer">
+				<rel pos="right" name="Function"/>
+			</concept>
+		</graph_layout>
+	</concept>
+
+	<concept name="Constructor">
+		<is_a concept="ClassMember"/>
+		<is_a concept="Function"/>
+		<reflects>a constructor.</reflects>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="right" name="Scope"/>
+			</concept>
+			<concept name="Constructor">
+				<rel pos="below right" name="ClassMember" edge="bend left"/>
+				<rel pos="below left" name="Function" edge="bend right"/>
+			</concept>
+		</graph_layout>
+	</concept>
+
+	<concept name="Operator">
+		<is_a concept="Function"/>
+		<may_be concept="ClassMember"/>
+		<reflects>an operator.</reflects>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="right" name="Scope"/>
+			</concept>
+			<concept name="Operator">
+				<rel pos="below right" name="ClassMember" edge="bend left" optional="true"/>
+				<rel pos="below left" name="Function" edge="bend right"/>
+			</concept>
+		</graph_layout>
+	</concept>
+
+	<concept name="OverloadedFunction">
+		<is_a concept="NamedScoped"/>
+		<may_be concept="ClassMember"/>
+		<reflects>an overloaded function.</reflects>
+		<desc>$(Function) metaobjects are not direct members of scopes. Instead,
+		all functions with the same name, even those that are not overloaded in a specific scope
+		are grouped into an $(OverloadedFunction). Individual overloaded $(Function)s
+		in the group can be obtained through $(self).
+		The same should also apply to $(Constructor)s and $(Operator)s.
+
+		The rationale for this is that direct scope members, i.e. metaobjects accessible through the $(Scope)'s
+		@members@ attribute should have unique names, which would not be the case if $(Function)s
+		were direct scope members.
+
+		The @scope@ attribute of an $(OverloadedFunction) is the same as the @scope@
+		attribute of all $(Function)s grouped by that $(OverloadedFunction).
+		</desc>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="OverloadedFunction">
+				<rel pos="right" name="ClassMember" optional="true"/>
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+		</graph_layout>
+
+		<range concept="Range" argument="Function" name="overloads" singular="Overload">
+			<desc>A range of $(Function) metaobjects reflecting the individual
+			overloaded functions.</desc>
+		</range>
+	</concept>
+
+	<concept name="Template">
+		<is_a concept="NamedScoped"/>
+		<may_be concept="Class"/>
+		<may_be concept="ClassMember"/>
+		<may_be concept="Function"/>
+		<reflects>a class or (member) function template.</reflects>
+		<desc>Note, that the {\metaobject{Template}} concept slightly modifies the requirements
+		of the {\metaobject{Class}} and {\metaobject{Function}} concepts.</desc>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below left" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Class">
+				<rel pos="below right" name="Scope" edge="bend left"/>
+				<rel pos="below left" name="Type" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="left" name="NamedScoped"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="below left" name="Scope" edge="bend left"/>
+			</concept>
+			<concept name="Template">
+				<rel pos="below left" name="NamedScoped"/>
+				<rel pos="below" name="ClassMember" edge="bend left" optional="true"/>
+				<rel pos="below right" name="Function" edge="bend left" optional="true"/>
+				<rel pos="below left" name="Class" edge="bend right" optional="true"/>
+			</concept>
+
+		</graph_layout>
+
+		<range concept="Range" argument="TemplateParameter" name="template_parameters" singular="template_parameter">
+			<desc>A range of $(TemplateParameter) metaobjects reflecting the individual
+			template parameters.</desc>
+		</range>
+
+		<template concept="Instantiation" name="instantiation">
+			<desc>A template, instantiation of which should result in
+			the instantiation of the template, reflected by this $(Template),
+			with the specified parameters. The template parameters for the @instantiation@
+			template should be the same as the parameters of the original template.
+			</desc>
+			<parameters/>
+		</template>
+	</concept>
+
+	<concept name="TemplateParameter">
+		<may_be concept="Typedef"/>
+		<may_be concept="Constant"/>
+		<reflects>a type or non-type template parameter.</reflects>
+		<desc>The @category@ tag should be used to distinguish between
+		type and non-type (integral constant) template parameters.
+		The @is_template@ trait should be used to distinguish reflected template
+		parameters from typedefs and constants.
+		</desc>
+
+		<trait constant="bool" name="is_template" value="true">
+			<desc>This trait, inherited from $(Metaobject), should return true
+			for template parameters.</desc>
+		</trait>
+		<attribute constant="size_t" name="position">
+			<desc>The position of the template parameter.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Instantiation">
+		<may_be concept="Class"/>
+		<may_be concept="ClassMember"/>
+		<may_be concept="Function"/>
+		<reflects>an instantiation of a class or (member) function template.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below left" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Class">
+				<rel pos="below right" name="Scope" edge="bend left"/>
+				<rel pos="below left" name="Type" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="left" name="NamedScoped"/>
+			</concept>
+			<concept name="Function">
+				<rel pos="below left" name="Scope" edge="bend left"/>
+			</concept>
+			<concept name="Template">
+				<rel pos="below" name="ClassMember" edge="bend left" optional="true"/>
+				<rel pos="below right" name="Function" edge="bend left" optional="true"/>
+				<rel pos="below left" name="Class" edge="bend right" optional="true"/>
+			</concept>
+
+		</graph_layout>
+
+		<attribute concept="Template" name="template">
+			<desc>A $(Template) metaobject reflecting the template that the class
+			or function, reflected by this $(self), is an instantiation of.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Enum">
+		<is_a concept="Type"/>
+		<is_a concept="Scope"/>
+		<reflects>an enumeration type.</reflects>
+		<desc>The members of an {\metaobject{Enum}} are only {\metaobject{Constant}} metaobjects.</desc>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Scope">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Enum">
+				<rel pos="below right" name="Scope" edge="bend right"/>
+				<rel pos="below left" name="Type" edge="bend left"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Type" name="base_type">
+			<desc>A $(Type) reflecting the underlying type of the enumeration type.</desc>
+		</attribute>
+
+	</concept>
+
+	<concept name="Inheritance">
+		<is_a concept="Metaobject"/>
+		<reflects>a class inheritance.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Inheritance">
+				<rel pos="right" name="Metaobject"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Specifier" name="access_type">
+			<desc>$(Specifier) that reflects the inheritance access type specifier (@private@, @protected@, @public@).</desc>
+		</attribute>
+
+		<attribute concept="Specifier" name="inheritance_type">
+			<desc>$(Specifier) that reflects the inheritance type specifier (@virtual@, non-virtual).</desc>
+		</attribute>
+
+		<attribute concept="Class" name="base_class">
+			<desc>A $(Class) reflecting the base-class in the inheritance.</desc>
+		</attribute>
+
+		<attribute concept="Class" name="derived_class">
+			<desc>A $(Class) reflecting the derived class in the inheritance.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Variable">
+		<is_a concept="NamedScoped"/>
+		<may_be concept="ClassMember"/>
+		<reflects>a variable defined in a namespace, class, function, etc.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="below left" name="NamedScoped" edge="bend left"/>
+			</concept>
+			<concept name="Variable">
+				<rel pos="right" name="ClassMember" optional="true"/>
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Specifier" name="storage_class">
+			<desc>$(Specifier) that reflects the storage class specifier of the variable.</desc>
+		</attribute>
+
+		<attribute concept="Type" name="type">
+			<desc>A $(Type) reflecting the type of the variable.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Parameter">
+		<is_a concept="Variable"/>
+		<reflects>a function parameter.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Variable">
+				<rel pos="right" name="NamedScoped"/>
+			</concept>
+			<concept name="Parameter">
+				<rel pos="right" name="Variable"/>
+			</concept>
+		</graph_layout>
+
+		<attribute constant="size_t" name="position">
+			<desc>The position of the parameter.</desc>
+		</attribute>
+
+		<attribute concept="Function" name="scope">
+			<desc>This attribute, inherited from {\metaobject{Scoped}}, returns
+			the function that the reflected parameter belongs to.</desc>
+		</attribute>
+	</concept>
+
+	<concept name="Constant">
+		<is_a concept="Named"/>
+		<may_be concept="NamedScoped"/>
+		<may_be concept="ClassMember"/>
+		<reflects>a named compile-time constant values, like non-type template
+		parameters and enumeration values.</reflects>
+
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="ClassMember">
+				<rel pos="below right" name="NamedScoped"/>
+			</concept>
+			<concept name="Constant">
+				<rel pos="below" name="Named"/>
+				<rel pos="left" name="ClassMember" edge="bend right" optional="true"/>
+				<rel pos="below left" name="NamedScoped" edge="bend right" optional="true"/>
+			</concept>
+		</graph_layout>
+
+		<attribute constant="unspecified-constant-value" name="value">
+			<desc>The value of the reflected constant.</desc>
+		</attribute>
+	</concept>
+</concepts>

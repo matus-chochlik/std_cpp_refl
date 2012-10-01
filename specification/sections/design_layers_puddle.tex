@@ -1,12 +1,12 @@
 \subsubsection{Puddle}
 
-Puddle is a OOP-style (mostly) compile-time interface built on top
+Puddle is an OOP-style (mostly) compile-time interface built on top
 of Mirror. It copies the metaobject concept hierarchy of Mirror,
 but provides a more "object-ish" interface as shown below:
 
 Instead of Mirror's:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 static_assert(
   is_public<
     access_type<
@@ -21,11 +21,11 @@ static_assert(
   "Shoot, persons first mem. variable is not public!"
 )
 
-\end{lstlisting}
+\end{minted}
 
 Puddle allows to do the following:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 assert(
   reflected_type<person>()
     member_variables().
@@ -33,13 +33,13 @@ assert(
         access_type().
           is_public()
 );
-\end{lstlisting}
+\end{minted}
 
 or a more complex use-case, in which a reflection-based algorithm
 traverses the global scope namespace and its nested scopes
 and prints information about their members:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 struct object_printer
 {
   std::ostream& out;
@@ -104,7 +104,7 @@ int main(void)
   print(puddle::adapt<MIRRORED_GLOBAL_SCOPE()>());
   return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 which prints the following on the standard output:
 

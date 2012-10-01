@@ -12,7 +12,7 @@ in the \verb@std@ namespace:
 \begin{itemize}
 	\item{{\em unspecified-type} \verb@ reflected_global_scope(void);@} (or
 	alternatively \verb@mirrored_global_scope()@)
-	This function should return a type conforming to the {\metaobject GlobalScope}
+	This function should return a type conforming to the {\metaobject{GlobalScope}}
 	concept, reflecting the global scope.
 	The real type of the result is not defined by the standard, i.e. it is an implementation detail. 
 	If the caller needs to store the result of this function the \verb@auto@ type
@@ -20,7 +20,7 @@ in the \verb@std@ namespace:
 
 	\item{\verb@template <typename Type>@\\
 	{\em unspecified-type} \verb@ reflected(void);@} (or alternativelly \verb@mirrored<Type>()@)
-	This function should return a type conforming to the {\metaobject Type}
+	This function should return a type conforming to the {\metaobject{Type}}
 	concept, reflecting the \verb@Type@ passed as template argument to this function.
 	The real type of the result is not defined by the standard, i.e. it is an implementation detail. 
 	If the caller needs to store the result of this function the \verb@auto@ type
@@ -57,32 +57,32 @@ In this approach a new operator (we suggest the name) \verb@mirrored(@{\em param
 should be added (for additional alternatives see below).
 Depending on {\em param}, which could be a type name, namespace name,
 template name, overloaded function name, enumerated value name, etc. the operator should
-return a {\metaobject Named} metaobject reflecting the specified feature.
-If the parameter is ommited a type conforming to the {\metaobject GlobalScope} metaobject
+return a {\metaobject{Named}} metaobject reflecting the specified feature.
+If the parameter is ommited a type conforming to the {\metaobject{GlobalScope}} metaobject
 concept should be returned.
 The exact types returned by the operators should be implementation details and if the
 result needs to be stored in a variable the \verb@auto@ type specifier should always
 be used.
 For example:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 //
-typedef integral_constant<int, 0> _0;
-typedef integral_constant<int, 1> _1;
-typedef integral_constant<int, 2> _2;
-typedef integral_constant<int, 3> _3;
+typedef integral_constant<size_t, 0> _0;
+typedef integral_constant<size_t, 1> _1;
+typedef integral_constant<size_t, 2> _2;
+typedef integral_constant<size_t, 3> _3;
 //
 // reflect the global scope
 // meta_gs conforms to the GlobalScope concept
 auto meta_gs = mirrored();
 
 static_assert(
-	decltype(meta_gs.member_count())::value > 0,
+	meta_gs.member_count() > 0,
 	"The global scope has no members!"
 );
 
 static_assert(
-	decltype(meta_gs.base_name().size())::value == 0,
+	meta_gs.base_name().size() == 0,
 	"Name of the global scope is not an empty string!"
 );
 
@@ -101,12 +101,12 @@ static_assert(
 );
 
 static_assert(
-	decltype(meta_std.base_name().size())::value == 3,
+	meta_std.base_name().size() == 3,
 	"Name of the std namespace does not have 3 characters!"
 );
 
 static_assert(
-	decltype(meta_std.base_name().at(_0))::value == 's',
+	meta_std.base_name().at(_0) == 's',
 	"Name of the std namespace does not start with 's'!"
 );
 
@@ -167,7 +167,7 @@ auto meta_std_swap = mirrored(std::swap);
 int i = 42;
 auto meta_i = mirrored(i);
 
-\end{lstlisting}
+\end{minted}
 
 Using a new operator has the following advantages:
 
@@ -194,7 +194,7 @@ and these disadvantages:
 	sequence like \verb'@', \verb@$@ or the usage of a new set
 	of quotations like \verb@`@ (backtick character).
 	For example:
-	\begin{lstlisting}
+	\begin{minted}{cpp}
 	// instead of:
 	auto meta_std_string = mirrored(std::string);
 	// use
@@ -205,12 +205,12 @@ and these disadvantages:
 	auto meta_std_string = @std::string;
 	// or
 	auto meta_std_string = `std::string`;
-	\end{lstlisting}
+	\end{minted}
 	The problem with these may be the reflection
 	of the global scope, which when using some of
 	the above would result in awkward expressions
 	like:
-	\begin{lstlisting}
+	\begin{minted}{cpp}
 	// instead of
 	auto meta_gs = mirrored();
 	// use
@@ -219,5 +219,5 @@ and these disadvantages:
 	auto meta_gs = @;
 	// or 
 	auto meta_gs = ``; 
-	\end{lstlisting}
+	\end{minted}
 \end{itemize}

@@ -6,7 +6,7 @@ scopes (classes, enumerations, etc.) and their members would be very useful.
 Consider a simple user-defined \verb@struct@s
 \verb|address| and \verb|person|,
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 struct address
 {
 	std::string street;
@@ -25,7 +25,7 @@ struct person
 
 	std::tm birth_date;
 };
-\end{lstlisting}
+\end{minted}
 
 and an object-relational mapping (ORM)
 library, that would allow automatic generation of SQL queries
@@ -34,7 +34,7 @@ be advantageous to have some counterparts for all "ORM-aware"
 classes having members with the same names as the original
 class, but with different types, like:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <class T>
 struct orm_table;
 
@@ -75,7 +75,7 @@ struct orm_table<person>
 	 , birth_date(this, param)
 	{ }
 };
-\end{lstlisting}
+\end{minted}
 
 Generating such or similar classes can also be achieved with reflection.
 The Mirror library implements the \verb@by_name@ metafunction template
@@ -86,7 +86,7 @@ access to metadata reflecting member variables of a class or free variables
 of a namespace through the overloaded \verb@operator ->@ of a meta-class
 or meta-namespace:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 auto meta_person = puddle::reflected_type<person>();
 // access the metavariable reflecting
 // the birth_date member of person
@@ -102,7 +102,7 @@ assert(
 	meta_person.member_variables().at_c<0>()
 );
 
-\end{lstlisting}
+\end{minted}
 
 This functionality could be extended to any scope member and
 the mechanism is described below.

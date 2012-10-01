@@ -10,7 +10,7 @@ even decoupled from the application using it and loaded dynamically on-demand.
 This example queries the meta-types reflecting types in the global scope,
 orders them by the value of \verb@sizeof@ and prints their names:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 #include <mirror/mirror.hpp>
 #include <lagoon/lagoon.hpp>
 #include <lagoon/range/extract.hpp>
@@ -58,7 +58,7 @@ int main(void)
     );
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 This application prints the following on the standard output:
 
@@ -84,7 +84,7 @@ object factories, in this case a factory using a text-script similar
 to C++ uniform initializers to provide input data from which a set
 of instances is constructed:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 #include <mirror/mirror_base.hpp>
 #include <mirror/pre_registered/basic.hpp>
 #include <mirror/pre_registered/class/std/vector.hpp>
@@ -222,7 +222,7 @@ int main(void)
     //
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 This application has the following output:
 

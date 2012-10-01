@@ -1,0 +1,183 @@
+\section{Concept hierarchy}
+\label{appendix-concept-hierarchy}
+
+\subsection{String}
+
+\begin{minted}{cpp}
+class String
+{
+public:
+	static constexpr const char* c_str(void);
+
+	static constexpr size_t size(void);	
+};
+
+static_assert(
+	String::c_str() != nullptr,
+	"Undefined string"
+);
+\end{minted}
+
+\subsection{MetaobjectCategory}
+
+\begin{minted}{cpp}
+struct metaobject_tag
+{ };
+
+struct specifier_tag
+ : metaobject_tag
+{ };
+
+struct spec_extern_tag
+ : specifier_tag
+{ };
+
+struct spec_static_tag
+ : specifier_tag
+{ };
+
+struct spec_mutable_tag
+ : specifier_tag
+{ };
+
+struct spec_register_tag
+ : specifier_tag
+{ };
+
+struct spec_thread_local_tag
+ : specifier_tag
+{ };
+
+struct spec_thread_local_tag
+ : specifier_tag
+{ };
+
+struct spec_const_tag
+ : specifier_tag
+{ };
+
+struct spec_virtual_tag
+ : specifier_tag
+{ };
+
+struct spec_private_tag
+ : specifier_tag
+{ };
+
+struct spec_protected_tag
+ : specifier_tag
+{ };
+
+struct spec_public_tag
+ : specifier_tag
+{ };
+
+struct spec_class_tag
+ : specifier_tag
+{ };
+
+struct spec_struct_tag
+ : specifier_tag
+{ };
+
+struct spec_union_tag
+ : specifier_tag
+{ };
+
+struct spec_enum_tag
+ : specifier_tag
+{ };
+
+struct namespace_tag
+{ };
+
+struct global_scope_tag
+{ };
+
+struct type_tag
+{ };
+
+struct typedef_tag
+{ };
+
+struct class_tag
+{ };
+
+struct function_tag
+{ };
+
+struct constructor_tag
+{ };
+
+struct operator_tag
+{ };
+
+struct overloaded_function_tag
+{ };
+
+struct enum_tag
+{ };
+
+struct inherintance_tag
+{ };
+
+struct constant_tag
+{ };
+
+struct variable_tag
+{ };
+
+struct parameter_tag
+{ };
+
+// all the types listed above are models
+// of the MetaobjectCategory concept
+typedef unspecified MetaobjectCategory;
+\end{minted}
+
+\subsection{Metaobject}
+
+\begin{minted}{cpp}
+struct Metaobject
+{
+	typedef MetaobjectCategory category;
+};
+
+static_assert(
+	is_metaobject<Metaobject>::value,
+	"Not a valid metaobject"
+);
+
+static_assert(
+	is_same<
+		Metaobject::category,
+		metaobject_traits<Metaobject>::category
+	>::value,
+	"Category mismatch"
+);
+\end{minted}
+
+\subsection{Specifier}
+
+\begin{minted}{cpp}
+struct Specifier
+ : Metaobject
+{
+	typedef specifier_tag category;
+
+	static constexpr String keyword(void);
+};
+\end{minted}
+
+\subsection{Named}
+
+\begin{minted}{cpp}
+struct Named
+ : Metaobject
+{
+	typedef specifier_tag category;
+
+	static constexpr String keyword(void);
+};
+\end{minted}
+

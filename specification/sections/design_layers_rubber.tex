@@ -13,7 +13,7 @@ The first example shows the usage of type-erased metaobjects with a C++11
 lambda function which could not be used with Mirror's or Puddle's meda-objects
 (because lambdas are not templated):
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 #include <mirror/mirror.hpp>
 #include <rubber/rubber.hpp>
 #include <iostream>
@@ -41,7 +41,7 @@ int main(void)
     );
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 This simple application prints the following on the standard output:
 
@@ -68,7 +68,7 @@ type long double
 The next example prints different information for different categories
 of metaobjects:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 #include <mirror/mirror.hpp>
 #include <rubber/rubber.hpp>
 #include <iostream>
@@ -116,7 +116,7 @@ int main(void)
     );
     return 0;
 }
-\end{lstlisting}
+\end{minted}
 
 It has the following output:
 
