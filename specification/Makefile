@@ -9,7 +9,8 @@ outdir = ../_out/$(notdir $(PWD))
 # options passed to (pdf)latex
 latexopts = -shell-escape
 
-output_pdf = $(addprefix $(outdir)/, $(addsuffix .pdf, $(input_tex)))
+revision = $(shell cat REVISION)
+output_pdf = $(addprefix $(outdir)/, $(addsuffix .pdf, $(addsuffix -rev-$(revision), $(input_tex))))
 
 all: $(output_pdf)
 
@@ -31,7 +32,7 @@ $(blddir)/%.pdf: $(blddir)/%.tex $(blddir)/%.tex.d $(blddir)/minted.sty | $(bldd
 	cp -r images $(blddir)/images
 	cd $(blddir) && pdflatex $(latexopts) $(notdir $<) && cd $(wrkdir)
 
-$(outdir)/%.pdf: $(blddir)/%.pdf | $(outdir)
+$(outdir)/%-rev-$(revision).pdf: $(blddir)/%.pdf | $(outdir)
 	cp $< $@
 		
 $(outdir) $(blddir) $(blddir)/sections:

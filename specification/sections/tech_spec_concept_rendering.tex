@@ -1,0 +1,294 @@
+\subsection{Concept transformation}
+\label{section-concept-rendering}
+
+The concepts described above need to be transformed into concrete
+C++ code in order to be usable to the programmer and there are several
+possible sets of transformation rules, with various advantages and
+disadvanateges.
+
+Please see the appendix~\ref{appendix-concept-renderings} for concrete
+examples of several possible transformations.
+
+Consider a \emph{Concept} with the following requirements:
+
+\begin{itemize}
+
+\item {\em instance:}  \verb@some_instance@ -- Instance of a tag concept.
+
+\item {\em attribute:}  \verb@Constant@ \verb@constant_attrib@-- Attribute specifying a compile-time constant value.
+
+\item {\em attribute:}  \verb@Type@ \verb@type_attrib@ -- Attribute specifying a base-level type.
+
+\item {\em attribute:}  \verb@Concept@ \verb@concept_attrib@ -- Attributes specifying a metaobject conforming to a concept.
+
+\item {\em trait:}  \verb@bool@ \verb@some_trait@ -- Boolean trait.
+
+\item {\em element:}  \verb@Element@ \verb@element(position)@ -- Unary random access getter for indexed attributes.
+
+\item {\em template:}  \verb@some_template(X)@ -- Class template which when instantiated results in a concrete type.
+
+\item {\em function:}  \verb@result_type@ \verb@some_function(@$\dots$\verb@)@ -- N-ary function.
+
+\end{itemize}
+
+This logical concept could be transformed into usable C++ as:
+
+\begin{itemize}
+\item an anonymous structure with member typedefs, functions, constant values, etc.:
+\begin{minted}{cpp}
+// definition
+struct Concept
+{
+	static constexpr size_t concept_attrib = /*...*/;
+
+	typedef /*...*/ type_attrib;
+
+	static constexpr AnotherConcept concept_attrib(void);
+
+	static constexpr bool some_trait = /*...*/;
+
+	static Element element(integral_constant<size_t, /*...*/>);
+
+	template <typename X>
+	struct some_template { /*...*/ };
+
+	static result_type some_function(/*...*/);
+};
+
+// usage
+auto metaobject = /* use reflection to get an instance of Concept */
+size_t x = metaobject.constant_attrib;
+auto y = metaobject.concept_attrib();
+// etc.
+\end{minted}
+
+\item an anonymous type (with its own identity so that it could be used
+in function overloads or template specializations) without any internal structure,
+where the related attributes, etc. would be accessed by free functions or
+by the means of templates, for example:
+\begin{minted}{cpp}
+// by function
+// declared as
+constexpr size_t constant_attrib(Concept);
+constexpr AnotherConcept concept_attrib(Concept);
+//
+// used as
+auto metaobject = /* use reflection to get an instance of Concept */
+size_t x = constant_attrib(metaobject);
+AnotherConcept y = concept_attrib(metaobject);
+result_type some_function(Concept, /*...*/);
+
+// or by template
+// defined as
+template <typename Concept>
+struct constant_attr
+{
+	static constexpr size_t value = /*...*/;
+};
+template <typename Concept>
+struct concept_attrib
+{
+	typedef AnotherConcept type;
+};
+template <typename Concept, typename X>
+struct some_template
+{
+	/*...*/
+};
+template <typename Concept>
+result_type some_function(/*...*/);
+
+// used as
+typedef /* get metaobject */ metaobject;
+size_t x = constant_attrib<metaobject>::value;
+typedef concept_attrib<metaobject>::type y;
+\end{minted}
+
+\end{itemize}
+
+The advantage of the first approach is that it does not "pollute"
+the \verb@std@ (nor any other namespace) with the \emph{getter} functions or templates.
+Everything necessary to get the metadata from the metaobject is contained
+in the metaobject itself.
+
+The advantage of the second approach is that the getters for a particular
+metaobject do not need to be defined all-in-one, which may simplify
+resolution of circular-dependencies.
+
+\subsubsection{Resolving conflicts with C++ keywords}
+\label{section-resolving-keyword-conflicts}
+
+In the concepts defined above, several requirements like instances, attributes, etc.
+have names which if transformed directly to C++ would conflict with C++ keywords.
+
+There are several ways to resolve these conflicts:
+\begin{itemize}
+\item Changing the letter case or naming convention for example to \verb@ALL_CAPS@, \verb@CamelCase@, etc. --
+this approach is however inconsistent with the naming convention adopted by the standard
+library.
+
+\item Applying a prefix and/or postfix -- the prefixes/suffixes can be meaningful or just underscores,
+for which there is a precedent in the standard - the placeholders.
+
+\item Changing the name to a synonym -- this can however lead to confusion.
+
+\end{itemize}
+
+\subsection{Suggested transformation}
+
+We suggest the following set of rules to transform the individual requirement
+kinds to C++ (see appendix~\ref{appendix-preferred-concept-rendering} for
+details). 
+
+Concrete metaobjects should be anonymous structures with the attributes,
+instances, elements, templates, etc. defined as members.
+If the name is in conflict with a C++ keyword it should be postfixed
+with an underscore, unless stated otherwise.
+
+\subsubsection{Instances of tag concepts}
+
+Tag concepts define a set of "instances" tagging other metaobjects.
+The instances are intended to be used for metaobject classification and
+tag dispatching of function overloads and template specializations --
+i.e. they must have their own identity.
+
+Tags can be either types or compile-time constant values, for example
+the values of a strongly typed enumeration.
+
+We suggest that the instances of the tag concepts are transformed
+into tag types and in order to avoid conflicts with keywords
+they should be prefixed with \verb@meta_@ (in case of {\metaobject{MetaobjectCategory}})
+and \verb@spec_@ (in case of {\metaobject{SpecifierCategory}}) and suffixed with
+\verb@_tag@.
+
+For example the {\em namespace} instance of {\metaobject{MetaobjectCategory}}
+should be transformed into:
+\begin{minted}{cpp}
+namespace std {
+struct meta_namespace_tag { };
+} // namespace std
+\end{minted}
+and the {\em static} instance of {\metaobject{SpecifierCategory}} should be
+transformed into:
+\begin{minted}{cpp}
+namespace std {
+struct spec_static_tag { };
+} // namespace std
+\end{minted}
+
+\subsubsection{Traits}
+
+Concept traits should be transformed to templates similar to \verb@type_traits@.
+For example the {\em is\_template} trait of {\metaobject{Metaobject}}
+should be transformed:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Metaobject { };
+
+template <typename Metaobject>
+struct is_template
+ : integral_constant<bool, true-or-false>
+{ };
+\end{minted}
+
+\subsubsection{Constant value attributes}
+
+Attributes specifying a constant value should be transformed to
+static constexpr data members.
+For example the {\em size} attribute of {\metaobject{String}}
+should be transformed into:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_String
+{
+	static constexpr size_t size = /*...*/;
+	/*...*/
+};
+\end{minted}
+
+\subsubsection{Type attributes}
+
+Attributes specifying a (base-level not meta-level) type should be
+transformed to member typedefs.
+For example the {\em original\_type} attribute of {\metaobject{Type}}
+should be transformed to:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Type
+{
+	typedef unspecified-type original_type;
+	/*...*/
+};
+\end{minted}
+
+\subsubsection{Concept attributes}
+
+Attributes specifying a (meta-level) type conforming to a Concept should be
+transformed to static constexpr member functions.
+For example the {\em scope} attribute of {\metaobject{Scoped}}
+should be transformed to:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Scoped
+{
+	static constexpr Scope scope(void);
+	/*...*/
+};
+\end{minted}
+The {\em template} attribute of {\metaobject{Instantiation}} that is in conflict
+with a reserved identifier should be transformed to:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Instantiation
+{
+	static constexpr Template template_(void);
+	/*...*/
+};
+\end{minted}
+
+There are cicrular dependencies in the metaobjects and using functions
+can help to avoid problems when defining the metaobjects.
+
+\subsubsection{Range elements}
+
+Indexed attributes specifying the i-th element in a {\metaobject{Range}}
+should be transformed to a set of static constexpr functions overloaded
+for every element in the range. The \verb@integral_constant@ template
+is used at the parameter distinguishing the overloads.
+For example the {\em at} element of a {\metaobject{Range}} should
+be transformed to:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Range<Element>
+{
+	// overloaded for i in (0, 1, ..., N-1) where
+	// N is the value of Range::size
+	static constexpr Element at(integral_constant<size_t, i>);
+	/*...*/
+};
+\end{minted}
+
+\subsubsection{Templates}
+
+Class templates should be transformed to nested member templates.
+For example the {\em named\_typedef} template in {\metaobject{NamedScoped}}
+should be transformed to:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_NamedScoped
+{
+	template <typename X>
+	struct named_typedef
+	{
+		/*...*/
+	};
+	/*...*/
+};
+\end{minted}
+
+\subsubsection{Functions}
+
+Functions should be transformed to static member functions.
+For example the {\em call} function in {\metaobject{Function}}
+should be transformed into:
+\begin{minted}{cpp}
+struct _unspecified_instance_of_Function
+{
+	static result_type call(/*same as the reflected function*/);
+	/*...*/
+};
+\end{minted}
+

@@ -1,9 +1,10 @@
 \section{Implementation hints}
+\label{section-impl-hints}
 
 \subsection{Generation of metaobjects}
 
 The metaobjects should be generated / instantiated by the compiler only
-when explicitly requested. This also applies to members of the metaobjects. For example when a {\metaobject Namespace}
+when explicitly requested. This also applies to members of the metaobjects. For example when a {\metaobject{Namespace}}
 reflecting the \verb@std@ namespace is generated the individual \verb@member(...)@
 functions (and the resulting metaobjects) should {\em not} be generated automatically
 unless the \verb@Scope::member(...)@ function is called or its type queried (by \verb@decltype@

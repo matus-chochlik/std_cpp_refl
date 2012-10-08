@@ -1,8 +1,10 @@
 \section{Technical Specifications}
+\label{section-tech-spec}
 
 We propose that the basic metadata describing a program written
-in C++ should be made available through a set of {\em anonymous} classes
-defined by the compiler. These classes should describe various program
+in C++ should be made available through a set of {\em anonymous} types
+and related functions and templates
+defined by the compiler. These types should describe various program
 constructs like, namespaces, types, typedefs, classes, their member variables
 (member data), member functions, inheritance, templates, template parameters,
 enumerated values, etc.
@@ -32,5 +34,6 @@ their interfaces, tag types for metaobject classification and
 functions (or operators) providing access to the metaobjects.
 
 \input{sections/tech_spec_concepts.tex}
-%\input{sections/tech_spec_reflection.tex}
-%\input{sections/tech_spec_tagging.tex}
+\input{sections/tech_spec_concept_rendering.tex}
+\input{sections/tech_spec_reflection.tex}
+\input{sections/tech_spec_tagging.tex}

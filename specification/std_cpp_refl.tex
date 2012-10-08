@@ -3,7 +3,7 @@
 \newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
 \newcommand{\mchmail}{Matus.Chochlik@fri.uniza.sk}
 \newcommand{\docnum}{Dnnnn=12-mmmm}
-\newcommand{\docdate}{2012-09-25}
+\newcommand{\docdate}{2012-10-08}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -60,6 +60,17 @@ Project: & Programming Language C++, Library Working Group \\
 Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
 \end{tabular}
 
+\paragraph{How to read this document}
+The first two sections are devoted to the introduction to reflection and reflective
+programming, they contain some motivational examples and some experiences
+with usage of a library-based reflection utility. These can be skipped
+if you are knowledgeable about reflection.
+Section \ref{section-design} contains the rationale for the design decisions. 
+The most important part is the technical specification in section \ref{section-tech-spec},
+the impact on the standard is discussed in section \ref{section-impact},
+the issues that need to be resolved are listed in section \ref{section-issues},
+and section \ref{section-impl-hints} mentions some implementation hints.
+
 \tableofcontents
 
 \input{sections/introduction.tex}
@@ -73,6 +84,6 @@ Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
 \input{sections/references.tex}
 
 \appendix
-%\input{sections/appendix.tex}
+\input{sections/appendix.tex}
 
 \end{document}

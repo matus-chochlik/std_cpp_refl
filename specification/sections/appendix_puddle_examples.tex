@@ -1,0 +1,130 @@
+\section{Puddle examples}
+\label{appendix-puddle-examples}
+
+In this example a reflection-based algorithm
+traverses the global scope namespace and its nested scopes
+and prints information about their members:
+
+\begin{minted}{cpp}
+struct object_printer
+{
+  std::ostream& out;
+  int indent_level;
+
+  std::ostream& indented_output(void)
+  {
+    for(int i=0;i!=indent_level;++i)
+      out << "  ";
+    return out;
+  }
+
+  template <class MetaObject>
+  void print_details(MetaObject obj, mirror::meta_object_tag)
+  {
+  }
+
+  template <class MetaObject>
+  void print_details(MetaObject obj, mirror::meta_scope_tag)
+  {
+    out << ": ";
+    if(obj.members().empty())
+    {
+      out << "{ }";
+    }
+    else
+    {
+      out << "{" << std::endl;
+      object_printer print_members = {out, indent_level+1};
+      obj.members().for_each(print_members);
+      indented_output() << "}";
+    }
+  }
+
+  template <class MetaObject>
+  void print(MetaObject obj, bool last)
+  {
+    indented_output()
+      << obj.self().construct_name()
+      << " "
+      << obj.base_name();
+    print_details(obj, obj.category());
+    if(!last) out << ",";
+    out << std::endl;
+  }
+  template <class MetaObject>
+  void operator()(MetaObject obj, bool first, bool last)
+  {
+    print(obj, last);
+  }
+
+  template <class MetaObject>
+  void operator()(MetaObject obj)
+  {
+    print(obj, true);
+  }
+
+
+int main(void)
+{
+  object_printer print = {std::cout, 0};
+  print(puddle::adapt<MIRRORED_GLOBAL_SCOPE()>());
+  return 0;
+}
+\end{minted}
+
+which prints the following on the standard output:
+
+\begin{verbatim}
+   global scope : {
+     namespace std: {
+       class string: { },
+       class wstring: { },
+       template pair,
+       template tuple,
+       template initializer_list,
+       template allocator,
+       template equal_to,
+       template not_equal_to,
+       template less,
+       template greater,
+       template less_equal,
+       template greater_equal,
+       template deque,
+       class tm: {
+         member variable tm_sec,
+         member variable tm_min,
+         member variable tm_hour,
+         member variable tm_mday,
+         member variable tm_mon,
+         member variable tm_year,
+         member variable tm_wday,
+         member variable tm_yday,
+         member variable tm_isdst
+       },
+       template vector,
+       template list,
+       template set,
+       template map
+     },
+     namespace boost: {
+       template optional
+     },
+     namespace mirror: { },
+     type void,
+     type bool,
+     type char,
+     type unsigned char,
+     type wchar_t,
+     type short int,
+     type int,
+     type long int,
+     type unsigned short int,
+     type unsigned int,
+     type unsigned long int,
+     type float,
+     type double,
+     type long double
+   }
+\end{verbatim}
+
+For more examples of usage see ~\cite{mirror-doc-puddle-examples}.
