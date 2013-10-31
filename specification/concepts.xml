@@ -74,15 +74,7 @@
 	</concept>
 
 	<concept name="SpecifierCategory" kind="tag" prefix="spec">
-		<is_a concept="MetaobjectCategory"/>
-		<desc>$(self) is a specialization of $(base) indicating an exact C++ specifier.</desc>
-
-		<graph_layout>
-			<concept name="MetaobjectCategory"/>
-			<concept name="SpecifierCategory">
-				<rel pos="right" name="MetaobjectCategory"/>
-			</concept>
-		</graph_layout>
+		<desc>$(self) is a compile-time tag specifying an exact C++ specifier.</desc>
 
 		<instance name="none">
 			<desc>Indicates missing specifiers; for example a reflected non-const
@@ -105,6 +97,8 @@
 		<instance name="struct" indicates="Specifier"><kind>elaborated type</kind></instance>
 		<instance name="union" indicates="Specifier"><kind>elaborated type</kind></instance>
 		<instance name="enum" indicates="Specifier"><kind>elaborated type</kind></instance>
+		<instance name="enum_class" indicates="Specifier"><kind>elaborated type</kind></instance>
+		<instance name="constexpr" indicates="Specifier"><kind>constness</kind></instance>
 	</concept>
 
 	<concept name="Metaobject">
