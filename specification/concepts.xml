@@ -782,7 +782,7 @@
 	<concept name="TemplateParameter">
 		<may_be concept="Typedef"/>
 		<may_be concept="Constant"/>
-		<reflects>a type or non-type template parameter.</reflects>
+		<reflects>a type or non-type template parameter or parameter pack.</reflects>
 		<desc>The @category@ tag should be used to distinguish between
 		type and non-type (integral constant) template parameters.
 		The @is_template@ trait should be used to distinguish reflected template
@@ -797,7 +797,7 @@
 			<desc>The position of the template parameter.</desc>
 		</attribute>
 		<attribute constant="bool" name="pack">
-			<desc>Indicates whether the reflected parameter a parameter pack of a variadic template.</desc>
+			<desc>Indicates whether the reflected parameter is a parameter pack of a variadic template.</desc>
 		</attribute>
 	</concept>
 
@@ -949,7 +949,7 @@
 
 	<concept name="Parameter">
 		<is_a concept="Variable"/>
-		<reflects>a function parameter.</reflects>
+		<reflects>a function parameter or a parameter pack.</reflects>
 
 		<graph_layout>
 			<concept name="Metaobject"/>
@@ -973,6 +973,9 @@
 
 		<attribute constant="size_t" name="position">
 			<desc>The position of the parameter.</desc>
+		</attribute>
+		<attribute constant="bool" name="pack">
+			<desc>Indicates whether the reflected parameter is a parameter pack.</desc>
 		</attribute>
 
 		<attribute concept="Function" name="scope">
