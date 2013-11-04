@@ -30,7 +30,7 @@
 		starting with @DB@, @Persistent@, etc.
 		</desc>
 
-		<attribute constant="size_t" name="size" value="unspecified">
+		<attribute integral="true" constant="size_t" name="size" value="unspecified">
 			<desc>Specifies the length (in @char@s) of the $(self), not counting any terminating characters.</desc>
 		</attribute>
 
@@ -43,7 +43,7 @@
 		<desc>$(self) is a static constant parametrized container, containing and
 		providing random-access to elements satisfying the @Element@ concept</desc>
 
-		<attribute constant="size_t" name="size" value="unspecified">
+		<attribute integral="true" constant="size_t" name="size" value="unspecified">
 			<desc>Specifies the number of elements in the $(self).</desc>
 		</attribute>
 
@@ -103,21 +103,21 @@
 
 	<concept name="Metaobject">
 		<desc>$(self) is a stateless or (monostate) anonymous type which provides metadata reflecting certain program features.</desc>
-		<attribute concept="MetaobjectCategory" name="category">
+		<trait concept="MetaobjectCategory" name="category">
 			<desc>
 				A tag specifying the category of the concrete metaobject,
 				which allows metaprograms to do tag dispatching and indicates
 				which concepts the concrete metaobject models.
 			</desc>
-		</attribute>
+		</trait>
 
-		<trait constant="bool" name="is_metaobject" indicates="Metaobject" value="true"/>
-		<trait constant="bool" name="has_name" indicates="Named" value="false"/>
-		<trait constant="bool" name="has_scope" indicates="Scoped" value="false"/>
-		<trait constant="bool" name="is_scope" indicates="Scope" value="false"/>
-		<trait constant="bool" name="is_class_member" indicates="ClassMember" value="false"/>
-		<trait constant="bool" name="has_template" indicates="Instantiation" value="false"/>
-		<trait constant="bool" name="is_template" indicates="Template" value="false"/>
+		<trait integral="true" constant="bool" name="is_metaobject" indicates="Metaobject" value="true"/>
+		<trait integral="true" constant="bool" name="has_name" indicates="Named" value="false"/>
+		<trait integral="true" constant="bool" name="has_scope" indicates="Scoped" value="false"/>
+		<trait integral="true" constant="bool" name="is_scope" indicates="Scope" value="false"/>
+		<trait integral="true" constant="bool" name="is_class_member" indicates="ClassMember" value="false"/>
+		<trait integral="true" constant="bool" name="has_template" indicates="Instantiation" value="false"/>
+		<trait integral="true" constant="bool" name="is_template" indicates="Template" value="false"/>
 	</concept>
 
 	<concept name="Specifier">
@@ -134,12 +134,12 @@
 			</concept>
 		</graph_layout>
 
-		<attribute concept="SpecifierCategory" name="category" override="Metaobject">
+		<trait concept="SpecifierCategory" name="category" override="Metaobject">
 			<desc>
 				Refines the category. The resulting tag can be used to
 				identify the concrete specifier reflected by this $(self).
 			</desc>
-		</attribute>
+		</trait>
 		<attribute concept="String" name="keyword">
 			<desc>The C++ keyword of the reflected specifier.</desc>
 		</attribute>
@@ -510,7 +510,7 @@
 			<desc>$(Specifier) reflecting the linkage specifier of the function reflected by this $(self).</desc>
 		</attribute>
 
-		<attribute constant="bool" name="constexpr">
+		<attribute integral="true" constant="bool" name="constexpr">
 			<desc>Indicates if the reflected function is defined as @constexpr@.</desc>
 		</attribute>
 
@@ -523,7 +523,7 @@
 			of the function reflected by this $(self). </desc>
 		</range>
 
-		<attribute constant="bool" name="noexcept">
+		<attribute integral="true" constant="bool" name="noexcept">
 			<desc>Indicates if the reflected function is defined as @noexcept@.</desc>
 		</attribute>
 
@@ -537,7 +537,7 @@
 			<enabled_if trait="is_class_member"/>
 		</attribute>
 
-		<attribute constant="bool" name="pure">
+		<attribute integral="true" constant="bool" name="pure">
 			<desc>Indicates if the function is a pure virtual function.</desc>
 			<enabled_if trait="is_class_member"/>
 		</attribute>
@@ -789,14 +789,14 @@
 		parameters from typedefs and constants.
 		</desc>
 
-		<trait constant="bool" name="is_template" value="true">
+		<trait integral="true" constant="bool" name="is_template" value="true">
 			<desc>This trait, inherited from $(Metaobject), should return true
 			for template parameters.</desc>
 		</trait>
-		<attribute constant="size_t" name="position">
+		<attribute integral="true" constant="size_t" name="position">
 			<desc>The position of the template parameter.</desc>
 		</attribute>
-		<attribute constant="bool" name="pack">
+		<attribute integral="true" constant="bool" name="pack">
 			<desc>Indicates whether the reflected parameter a parameter pack of a variadic template.</desc>
 		</attribute>
 	</concept>
@@ -971,7 +971,7 @@
 			</concept>
 		</graph_layout>
 
-		<attribute constant="size_t" name="position">
+		<attribute integral="true" constant="size_t" name="position">
 			<desc>The position of the parameter.</desc>
 		</attribute>
 

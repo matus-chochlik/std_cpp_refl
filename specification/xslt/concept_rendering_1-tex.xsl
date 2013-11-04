@@ -339,11 +339,24 @@
           <xsl:value-of select="$concept_name"/>
           <xsl:text>&gt;</xsl:text>
           <xsl:call-template name="nl"/>
-          <xsl:text> : integral_constant&lt;bool, </xsl:text>
-          <xsl:value-of select="@value"/>
-          <xsl:text>&gt;</xsl:text>
-          <xsl:call-template name="nl"/>
-          <xsl:text>{ };</xsl:text>
+          <xsl:if test="@constant">
+            <xsl:text> : integral_constant&lt;</xsl:text>
+            <xsl:value-of select="@constant"/>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="@value"/>
+            <xsl:text>&gt;</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>{ };</xsl:text>
+          </xsl:if>
+          <xsl:if test="@concept">
+            <xsl:text>{</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>  typedef </xsl:text>
+            <xsl:value-of select="@concept"/>
+            <xsl:text> type;</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>};</xsl:text>
+          </xsl:if>
           <xsl:call-template name="nl"/>
 
           <xsl:call-template name="nl"/>

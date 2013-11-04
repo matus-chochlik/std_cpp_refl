@@ -86,8 +86,9 @@
   <xsl:text>&lt;</xsl:text>
   <xsl:value-of select="$concept_name"/>
   <xsl:if test="../@parameter">
-    <xsl:text>, typename </xsl:text>
+    <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="../@parameter"/>
+    <xsl:text>&gt;</xsl:text>
   </xsl:if>
   <xsl:if test="name(.)='element'">
     <xsl:text>, integral_constant&lt;size_t, Index&gt;</xsl:text>
@@ -111,50 +112,68 @@
   </xsl:if>
   <xsl:text>&gt;</xsl:text>
   <xsl:call-template name="nl"/>
+  <xsl:if test="name(.)='attribute' and @constant and @integral='true'">
+    <xsl:text> : integral_constant&lt;</xsl:text>
+    <xsl:value-of select="@constant"/>
+    <xsl:text>, </xsl:text>
+    <xsl:value-of select="@value"/>
+    <xsl:text>&gt;</xsl:text>
+    <xsl:call-template name="nl"/>
+  </xsl:if>
   <xsl:text>{</xsl:text>
-  <xsl:call-template name="nl"/>
 
   <xsl:choose>
-    <xsl:when test="name(.)='attribute' and @constant">
+    <xsl:when test="name(.)='attribute' and @constant and not(@integral='true')">
+      <xsl:call-template name="nl"/>
       <xsl:text>  static constexpr </xsl:text>
       <xsl:value-of select="@constant"/>
       <xsl:text> value;</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
 
     <xsl:when test="name(.)='attribute' and (@unspecified_type or @concept or @placeholder)">
+      <xsl:call-template name="nl"/>
       <xsl:text>  typedef </xsl:text>
       <xsl:value-of select="@unspecified_type"/>
       <xsl:value-of select="@concept"/>
       <xsl:value-of select="@placeholder"/>
       <xsl:text> type;</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
 
     <xsl:when test="name(.)='range'">
+      <xsl:call-template name="nl"/>
       <xsl:text>  typedef </xsl:text>
       <xsl:value-of select="@concept"/>
       <xsl:text>&lt;</xsl:text>
       <xsl:value-of select="@argument"/>
       <xsl:text>&gt;</xsl:text>
       <xsl:text> type;</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
 
     <xsl:when test="name(.)='element'">
+      <xsl:call-template name="nl"/>
       <xsl:text>  typedef </xsl:text>
       <xsl:value-of select="@concept"/>
       <xsl:value-of select="@placeholder"/>
       <xsl:value-of select="@unspecified_type"/>
       <xsl:text> type;</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
 
 
     <xsl:when test="name(.)='template'">
+      <xsl:call-template name="nl"/>
       <xsl:text>  typedef </xsl:text>
       <xsl:value-of select="@concept"/>
       <xsl:value-of select="@unspecified_type"/>
       <xsl:text> type;</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
 
     <xsl:when test="name(.)='function'">
+      <xsl:call-template name="nl"/>
       <xsl:text>  static </xsl:text>
       <xsl:value-of select="@unspecified_type"/>
       <xsl:text> </xsl:text>
@@ -178,9 +197,10 @@
       </xsl:if>
 
       <xsl:text>);</xsl:text>
+      <xsl:call-template name="nl"/>
     </xsl:when>
+    <xsl:otherwise><xsl:text> </xsl:text></xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="nl"/>
   <xsl:text>};</xsl:text>
   <xsl:call-template name="nl"/>
 </xsl:template>
@@ -339,11 +359,24 @@
           <xsl:value-of select="$concept_name"/>
           <xsl:text>&gt;</xsl:text>
           <xsl:call-template name="nl"/>
-          <xsl:text> : integral_constant&lt;bool, </xsl:text>
-          <xsl:value-of select="@value"/>
-          <xsl:text>&gt;</xsl:text>
-          <xsl:call-template name="nl"/>
-          <xsl:text> { };</xsl:text>
+          <xsl:if test="@constant">
+            <xsl:text> : integral_constant&lt;</xsl:text>
+            <xsl:value-of select="@constant"/>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="@value"/>
+            <xsl:text>&gt;</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>{ };</xsl:text>
+          </xsl:if>
+          <xsl:if test="@concept">
+            <xsl:text>{</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>  typedef </xsl:text>
+            <xsl:value-of select="@concept"/>
+            <xsl:text> type;</xsl:text>
+            <xsl:call-template name="nl"/>
+            <xsl:text>};</xsl:text>
+          </xsl:if>
           <xsl:call-template name="nl"/>
 
           <xsl:call-template name="nl"/>
