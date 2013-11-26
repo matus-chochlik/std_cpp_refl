@@ -421,7 +421,7 @@
 			</concept>
 		</graph_layout>
 
-		<attribute concept="Type" name="type">
+		<attribute concept="Type" name="typedef_type">
 			<desc>A $(Type) metaobject reflecting the "source" type of the typedef.</desc>
 		</attribute>
 	</concept>
