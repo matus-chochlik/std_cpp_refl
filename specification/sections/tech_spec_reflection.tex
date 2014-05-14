@@ -221,6 +221,8 @@ and these disadvantages:
 	auto meta_std_string = @std::string;
 	// or
 	auto meta_std_string = `std::string`;
+	// or
+	auto meta_std_string = [[std::string]];
 	\end{minted}
 	The problem with these may be the reflection
 	of the global scope, which when using some of
@@ -235,5 +237,6 @@ and these disadvantages:
 	auto meta_gs = @;
 	// or 
 	auto meta_gs = ``; 
+	auto meta_gs = [[]];
 	\end{minted}
 \end{itemize}
