@@ -67,6 +67,7 @@
 		<instance name="operator" indicates="Operator"/>
 		<instance name="overloaded_function" indicates="OverloadedFunction"/>
 		<instance name="enum" indicates="Enum"/>
+		<instance name="enum_class" indicates="EnumClass"/>
 		<instance name="inheritance" indicates="Inheritance"/>
 		<instance name="constant" indicates="Constant"/>
 		<instance name="variable" indicates="Variable"/>
@@ -161,8 +162,7 @@
 			<desc>
 			The base name of the reflected construct, without the nested name specifier.
 			For namespace @std@ the value should be @"std"@, for namespace @foo::bar::baz@
-			it should be @"baz"@, for the global scope the value should be an empty c-string
-			literal.
+			it should be @"baz"@, for the global scope the value should be an empty string.
 
 			For @std::vector&lt;int&gt;::iterator@ it should be @"iterator"@. For derived,
 			qualified types like
@@ -288,7 +288,7 @@
 
 	<concept name="Scope">
 		<is_a concept="NamedScoped"/>
-		<reflects>scopes like namespaces, classes, enums, etc.</reflects>
+		<reflects>scopes like namespaces, classes, enum classes, etc.</reflects>
 
 		<graph_layout>
 			<concept name="Metaobject"/>
@@ -835,7 +835,7 @@
 			<concept name="Function">
 				<rel pos="below left" name="Scope" edge="bend left"/>
 			</concept>
-			<concept name="Template">
+			<concept name="Instantiation">
 				<rel pos="below" name="ClassMember" edge="bend left" optional="true"/>
 				<rel pos="below right" name="Function" edge="bend left" optional="true"/>
 				<rel pos="below left" name="Class" edge="bend right" optional="true"/>
@@ -851,9 +851,39 @@
 
 	<concept name="Enum">
 		<is_a concept="Type"/>
-		<is_a concept="Scope"/>
 		<reflects>an enumeration type.</reflects>
 		<desc>The members of an {\metaobject{Enum}} are only {\metaobject{Constant}} metaobjects.</desc>
+		<graph_layout>
+			<concept name="Metaobject"/>
+			<concept name="Named">
+				<rel pos="below left" name="Metaobject" edge="bend left"/>
+			</concept>
+			<concept name="Scoped">
+				<rel pos="below right" name="Metaobject" edge="bend right"/>
+			</concept>
+			<concept name="NamedScoped">
+				<rel pos="below right" name="Named" edge="bend right"/>
+				<rel pos="below left" name="Scoped" edge="bend left"/>
+			</concept>
+			<concept name="Type">
+				<rel pos="below right" name="NamedScoped" edge="bend right"/>
+			</concept>
+			<concept name="Enum">
+				<rel pos="below left" name="Type" edge="bend left"/>
+			</concept>
+		</graph_layout>
+
+		<attribute concept="Type" name="base_type">
+			<desc>A $(Type) reflecting the underlying type of the enumeration type.</desc>
+		</attribute>
+
+	</concept>
+
+	<concept name="EnumClass">
+		<is_a concept="Type"/>
+		<is_a concept="Scope"/>
+		<reflects>a strongly typed enumeration.</reflects>
+		<desc>The members of an {\metaobject{EnumClass}} are only {\metaobject{Constant}} metaobjects.</desc>
 		<graph_layout>
 			<concept name="Metaobject"/>
 			<concept name="Named">
