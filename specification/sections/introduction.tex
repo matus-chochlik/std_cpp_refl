@@ -8,9 +8,12 @@ implementation of several software design patterns, etc.
 C++ as one of the most prevalent programming languages 
 lacks a standardized reflection facility.
 
-In this paper we propose the addition of native support for
-compile-time reflection to C++ and a library built
-on top of the metadata provided by the compiler.
+In this paper we propose to add native support for
+compile-time reflection to C++ by the means of compiler generated
+structures providing basic metadata describing various program constructs.
+These metaobjects can later be used to implement a library or
+a set of libraries providing both compile-time and run-time high-level
+reflection utilities.
 
 The basic static metadata provided by compile-time reflection
 should be as complete as possible to be applicable in a wide
@@ -57,3 +60,7 @@ The solution proposed in this paper is based on the expirience with
 \href{http://kifri.fri.uniza.sk/~chochlik/mirror-lib/html/}{\em Mirror}
 reflection utilities~\cite{mirror-doc-cpp11} and with reflection-based
 metaprogramming.
+In the following chapters and appendices several examples of usage of various
+components of the Mirror library are provided. These are included just to show
+what can be done with a sufficiently advanced reflection facility.
+The Mirror library, however {\em is not} part of the current proposal.
