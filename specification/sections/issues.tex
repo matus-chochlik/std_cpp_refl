@@ -2,6 +2,10 @@
 \label{section-issues}
 
 \begin{itemize}
+	\item {\em Something similar to source contexts from D3972:} Should {\metaobject{Metaobject}} contain information
+	about the source file, line and possibly line column or function name where the base-level construct
+	reflected by the {\metaobject{Metaobject}} was defined ?
+
 	\item {\em Normalization of names returned by \verb@Named::base_name()@\\and \verb@NamedScoped::full_name()@:}
 	The strings returned by the \verb@base_name@ and \verb@full_name@ functions should be
 	implementation-independent and the same on every platform/compiler.
