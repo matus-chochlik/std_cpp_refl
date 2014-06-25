@@ -1,0 +1,93 @@
+\documentclass[11pt,a4paper,oneside]{scrartcl}
+
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{chochlik@gmail.com}
+\newcommand{\docname}{Static reflection}
+\newcommand{\docnum}{Nxxxx}
+\newcommand{\docdate}{2014-06-25}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+
+\usepackage{listings}
+\usepackage{minted}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\docnum - \docname}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
+%\usepackage[pdftex]{graphicx}
+%\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+%\graphicspath{{images/}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
+\tikzstyle{concept}=[
+	rectangle,	
+	very thick,
+	draw=red!80!black!80,
+	top color=white,
+	bottom color=red!20,
+	node distance=0.5em and 1.5em
+]
+\tikzstyle{inheritance}=[
+	->,
+	shorten >=1pt,
+	>=open triangle 90,
+	very thick
+]
+   
+
+\setcounter{tocdepth}{3} 
+
+\title{\docname}
+
+\author{\mchname (\mchmail)}
+
+\newcommand{\meta}[1]{\hyperref[concept-def-#1]{\em{#1}}}
+
+\begin{document}
+
+\begin{tabular}{r l}
+Document number: & \docnum\\
+Date: & \docdate\\
+Project: & Programming Language C++, SG7, Reflection\\
+Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
+\end{tabular}
+
+\begin{center}
+\vskip 2em
+{\Huge \docname}
+\vskip 1em
+{\emph \mchname}
+\vskip 2em
+\end{center}
+
+\paragraph{Abstract}
+
+In N3996 \cite{n3996} we presented some ideas on the design and possible
+implementation of a compile-time reflection facility for standard C++.
+N3996 also contained extensive discussion about usefulness of reflection,
+description of several use-cases and motivational examples from the Mirror
+reflection utilities \cite{mirror-doc-cpp11}.
+The actual proposal was however found to be confusing in some points.
+This paper tries to make the proposal more concise and detailed.
+
+\tableofcontents
+
+%\input{sections/introduction.tex}
+\input{sections/concepts.tex}
+\input{sections/reflection.tex}
+\input{sections/acknowledge.tex}
+\input{sections/references.tex}
+
+%\appendix
+%\input{sections/appendix.tex}
+
+\end{document}

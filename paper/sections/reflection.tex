@@ -1,0 +1,28 @@
+\section{Reflection operator}
+
+The metaobjects reflecting some program feature \verb@X@ as
+described above should be made available to the user by
+the means of a new operator or expression.
+More precisely, the reflection operator returns a type conforming to a particular
+metaobject concept, depending on the reflected expression.
+
+Since adding a new keyword has the potential to break existing code,
+we do not insist on any particular expression, here follows a list of options
+in order of preference (from the most to the least preferrable):
+
+\begin{itemize}
+\item{\verb@mirrored(X)@}
+\item{\verb@reflected(X)@}
+\item{\verb@reflexpr(X)@}
+\item{\verb@|X@}
+\item{\verb@[[X]]@}
+\item{\verb@<<X>>@}
+\end{itemize}
+
+The reflected expression \verb@X@ in the items listed above can be any of the following:
+
+\begin{itemize}
+\item{\verb@::@} -- The global scope, the returned metaobject is a {\meta{GlobalScope}}.
+\item{{\em Namespace name}} -- the returned metaobject is a {\meta{Namespace}}.
+\end{itemize}
+
