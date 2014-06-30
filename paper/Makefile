@@ -21,9 +21,6 @@ $(blddir)/%.tex.d: %.tex | $(blddir)
 $(blddir)/%.tex: %.tex | $(blddir)/sections
 	cp $< $@
 
-$(blddir)/sections/%.tex: xslt/%-tex.xsl concepts.xml | $(blddir)/sections
-	xsltproc $+ > $@
-
 $(blddir)/%.sty: %.sty | $(blddir)
 	cp $< $@
 

@@ -1,0 +1,43 @@
+\subsection{MetaSpecifier}
+\label{concept-MetaSpecifier}
+
+{\em MetaSpecifier} is a \meta{object} reflecting a C++ specifier. In addition to the requirements
+inherited from \meta{object}, types conforming to this concept must satisfy the following:
+
+The \verb@metaobject_category@ template should return \verb@specifier_tag@ for all {\em MetaSpecifiers}.
+
+\begin{lstlisting}
+template <>
+struct metaobject_category<MetaSpecifier>
+ : specifier_tag
+{ };
+\end{lstlisting}
+
+A template struct \verb@specifier_category@ should be defined and should return one of the
+\hyperref[specifier-category-tags]{specifier category tags}, depending on
+the actual reflected specifier.
+
+\begin{lstlisting}
+template <typename T>
+struct specifier_category;
+
+template <>
+struct specifier_category<MetaSpecifier>
+ : SpecifierCategory
+{ };
+\end{lstlisting}
+
+A template struct \verb@keyword@ should be defined and should return
+the keyword matching the reflected specifier as a
+\hyperref[concept-StringConstant]{\em StringConstant}.
+
+\begin{lstlisting}
+template <typename T>
+struct keyword;
+
+template <>
+struct keyword_category<MetaSpecifier>
+ : StringConstant
+{ };
+\end{lstlisting}
+

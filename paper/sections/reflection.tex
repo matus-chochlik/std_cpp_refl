@@ -7,7 +7,7 @@ More precisely, the reflection operator returns a type conforming to a particula
 metaobject concept, depending on the reflected expression.
 
 Since adding a new keyword has the potential to break existing code,
-we do not insist on any particular expression, here follows a list of options
+we do not insist on any particular expression, here follows a list of suggestions
 in order of preference (from the most to the least preferrable):
 
 \begin{itemize}
@@ -23,6 +23,22 @@ The reflected expression \verb@X@ in the items listed above can be any of the fo
 
 \begin{itemize}
 \item{\verb@::@} -- The global scope, the returned metaobject is a {\meta{GlobalScope}}.
-\item{{\em Namespace name}} -- the returned metaobject is a {\meta{Namespace}}.
+\item{{\em Namespace name}} -- (\verb@std@) the returned metaobject is a {\meta{Namespace}}.
+\item{{\em Type name}} -- (\verb@long double@) the returned metaobject is a {\meta{Type}}.
+\item{{\em \verb@typedef@ name}} -- (\verb@std::size_t@ or \verb@std::string@)
+     the returned metaobject is a {\meta{Typedef}}.
+\item{{\em Template name}} -- (\verb@std::tuple@ or \verb@std::map@)
+     the returned metaobject is a {\meta{Template}}.
+\item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
+     the returned metaobject is a {\meta{Class}}.
+\item{{\em Function name}} -- (\verb@std::sin@ or \verb@std::string::size@) the returned metaobject
+     is a {\meta{OverloadedFunction}}.
+\item{{\em Function signature}} -- (\verb@std::sin(double)@ or \verb@std::string::front(void) const@)
+     the returned metaobject is a {\meta{Function}}. The signature may be specified without the
+     return value type.
+\item{{\em Constructor signature}} -- (\verb@std::pair<char, double>::pair(char, double)@
+     or \verb@std::string::string(void)@) the returned metaobject is a {\meta{Constructor}}.
+\item{{\em Variable name}} -- (\verb@std::errno@) the returned metaobject is a {\meta{Variable}}.
+\item{TODO}
 \end{itemize}
 
