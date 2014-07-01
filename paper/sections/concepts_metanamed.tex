@@ -7,7 +7,17 @@
 In addition to the requirements inherited from \meta{object}, the following requirements must
 be satisfied:
 
-A template struct \verb@base_name@ should be defined an should return the base name
+The \verb@has_name@ template class specialization for a {\em MetaNamed} should
+inherit from \verb@true_type@:
+
+\begin{lstlisting}
+template <>
+struct has_name<MetaNamed>
+ : true_type
+{ };
+\end{lstlisting}
+
+A template class \verb@base_name@ should be defined an should return the base name
 of the reflected construct, without the nested name specifier as a
 \hyperref[concept-StringConstant]{\em StringConstant}:
 

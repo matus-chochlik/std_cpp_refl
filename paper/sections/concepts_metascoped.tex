@@ -1,0 +1,33 @@
+\subsection{MetaScoped}
+\label{concept-MetaScoped}
+
+{\em MetaScoped} is a \meta{object} reflecting program constructs defined inside
+of a named scope (like the global scope, a namespace, a class, etc.)
+
+In addition to the requirements inherited from \meta{object}, the following requirements must
+be satisfied:
+
+The \verb@has_scope@ template class specialization for a {\em MetaScoped} should
+inherit from \verb@true_type@:
+
+\begin{lstlisting}
+template <>
+struct has_scope<MetaScoped>
+ : true_type
+{ };
+\end{lstlisting}
+
+A template class \verb@scope@ should be defined and should inherit from the
+\meta{Scope} which reflects the parent scope of the program construct reflected
+by this {\em MetaScoped}.
+
+\begin{lstlisting}
+template <typename T>
+struct scope;
+
+template <>
+struct scope<MetaScoped>
+ : MetaScope
+{ };
+\end{lstlisting}
+
