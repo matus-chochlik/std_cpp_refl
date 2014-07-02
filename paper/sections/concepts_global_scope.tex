@@ -24,20 +24,20 @@ be satisfied:
 The \verb@metaobject_category@ template class specialization for a \meta{GlobalScope} should
 inherit from \verb@global_scope_tag@:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct metaobject_category<MetaNamespace>
  : global_scope_tag
 { };
-\end{lstlisting}
+\end{minted}
 
 The \verb@scope@ template class specialization (required by \meta{Scoped}) for \meta{GlobalScope}
 should inherit from the \meta{GlobalScope} itself:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct scope<MetaGlobalScope>
  : MetaGlobalScope
 { };
-\end{lstlisting}
+\end{minted}
 

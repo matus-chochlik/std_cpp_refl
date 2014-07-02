@@ -1,0 +1,186 @@
+\subsection{MetaFunction}
+\label{concept-MetaFunction}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaFunction)[right=of MetaNamedScoped] {MetaFunction}
+	edge [inheritance] (MetaNamedScoped);
+\end{tikzpicture}
+
+
+\meta{Function} reflects a function or function template.
+\meta{Function}s are not direct members of scopes (they are not listed in the \concept{MetaobjectSequence}
+"returned" by the \verb@members<MetaScope>@ template class).
+Instead, all functions with the same name, (and even those that are not
+overloaded in a specific scope) are grouped into a \meta{OverloadedFunction}. Individual overloaded \meta{Function}s
+in the group can be obtained through the interface of \meta{OverloadedFunction} (specifically through the
+\verb@overloads@ template described below). The same also applies to \meta{Constructor}s and \meta{Operator}s.
+
+The rationale for this is that direct scope members, i.e. metaobjects accessible through the \meta{Scope}'s
+\verb@members@ template class should have unique names, which would not be the case if \meta{Function}s
+were direct scope members.
+
+The \verb@scope@ of an \meta{OverloadedFunction} is the same as the \verb@scope@
+of all \meta{Function}s grouped by that \meta{OverloadedFunction}.
+
+In addition to the requirements inherited from \meta{NamedScoped},
+models of \meta{Function} are subject to the following:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Function} should
+inherit from \verb@function_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaFunction>
+ : function_tag
+{ };
+\end{minted}
+
+If a \meta{Function} reflects a function template, then the \verb@is_template@
+trait should inherit from \verb@true_type@
+
+\subsubsection{\texttt{linkage\_specifier}}
+
+A template class \verb@linkage_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the linkage specifier of the function reflected by
+the \meta{Function}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct linkage_specifier;
+
+template <>
+struct linkage_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{constexpr\_specifier}}
+
+A template class \verb@constexpr_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the constexpr specifier of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct constexpr_specifier;
+
+template <>
+struct constexpr_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+In case the reflected function does not have the \verb@constexpr@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{result\_type}}
+
+A template class \verb@result_type@ should be defined and should inherit from
+a \meta{Type} reflecting the return value type of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct result_type;
+
+template <>
+struct result_type<MetaFunction>
+ : MetaType
+{ };
+\end{minted}
+
+\subsubsection{\texttt{parameters}}
+
+A template class \verb@parameters@ should be defined and should inherit from
+a \concept{MetaobjectRange} or \meta{Parameter}s reflecting the individual parameters
+of the function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct parameters;
+
+template <>
+struct parameters<MetaFunction>
+ : MetaobjectRange<MetaParameter>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{noexcept\_specifier}}
+
+A template class \verb@noexcept_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the noexcept specifier of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct noexcept_specifier;
+
+template <>
+struct noexcept_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+In case the reflected function does not have the \verb@noexcept@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{exceptions}}
+
+A template class \verb@exceptions@ should be defined and should inherit from
+a \concept{MetaobjectRange} of \meta{Type}s reflecting the individual exception types
+that the reflected function is allowed to throw:
+
+\begin{minted}{cpp}
+template <typename T>
+struct exceptions;
+
+template <>
+struct exceptions<MetaFunction>
+ : MetaobjectRange<MetaType>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{const\_specifier}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@const_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the const specifier of the reflected member function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct const_specifier;
+
+template <>
+struct const_specifier<MetaFunction>
+ : MetaSpecifier
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+
+In case the reflected member function does not have the \verb@const@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{pure\_virtual}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@pure_virtual@ should be defined and should inherit from
+\verb@true_type@ if the reflected function is pure virtual or from \verb@false_type@
+otherwise:
+
+\begin{minted}{cpp}
+template <typename T>
+struct pure_virtual;
+
+struct pure_virtual<MetaFunction>
+ : std::integral_constant<bool, B>
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+

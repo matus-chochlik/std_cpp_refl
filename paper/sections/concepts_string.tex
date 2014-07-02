@@ -3,7 +3,7 @@
 
 A \concept{StringConstant} is a class conforming to the following:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 struct StringConstant
 {
 	typedef StringConstant type;
@@ -19,13 +19,13 @@ struct StringConstant
 };
 
 constexpr const char StringConstant::value[Length+1];
-\end{lstlisting}
+\end{minted}
 
 Concrete models of \concept{StringConstant} are used to return compile-time string values.
 For example the \verb@_str_void@ type defined below, conforms to the \concept{StringConstant}
 concept:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <char ... C>
 struct string_constant
 {
@@ -49,7 +49,7 @@ typedef string_constant<'v','o','i','d'> _str_void;
 cout << _str_void::value << std::endl;
 cout << _str_void() << std::endl;
 static_assert(sizeof(_str_void::value) == 4+1, "");
-\end{lstlisting}
+\end{minted}
 
 The strings stored in the \verb@value@ array should be UTF-8 encoded.
 

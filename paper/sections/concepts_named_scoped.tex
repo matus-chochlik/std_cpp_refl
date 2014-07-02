@@ -29,7 +29,7 @@ For derived qualified types like
 \verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should be defined as
 \verb@"volatile std::vector<const foo::bar::fubar*> * const *"@, etc.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct full_name;
 
@@ -37,5 +37,5 @@ template <>
 struct full_name<MetaNamedScoped>
  : StringConstant
 { };
-\end{lstlisting}
+\end{minted}
 

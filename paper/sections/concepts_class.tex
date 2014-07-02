@@ -1,0 +1,73 @@
+\subsection{MetaClass}
+\label{concept-MetaClass}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaType)[above right=of MetaNamedScoped] {MetaType}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\node [concept] (MetaScope)[below right=of MetaNamedScoped] {MetaScope}
+	edge [inheritance, bend left] (MetaNamedScoped);
+\node [concept] (MetaClass)[below right=of MetaType] {MetaClass}
+	edge [inheritance, bend right] (MetaType)
+	edge [inheritance, bend left] (MetaScope);
+\end{tikzpicture}
+
+\meta{Class} is a \meta{Type} and a \meta{Scope} if reflecting a regular class or possibly
+also a \meta{Template} if it reflects a class template.
+
+In addition to the requirements inherited from \meta{Type}, \meta{Scope}
+and optionally from \meta{Template},
+models of \meta{Class} are subject to the following:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Class} should
+inherit from \verb@class_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaClass>
+ : class_tag
+{ };
+\end{minted}
+
+If a \meta{Class} reflects a class template, then the \verb@is_template@
+trait should inherit from \verb@true_type@
+
+\subsubsection{\texttt{elaborated\_type\_specifier}}
+
+A template class called \verb@elaborated_type_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@class@, \verb@struct@ or \verb@union@
+specifiers:
+
+\begin{minted}{cpp}
+template <typename T>
+struct elaborated_type_specifier;
+
+template <>
+struct elaborated_type_specifier<MetaClass>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{base\_classes}}
+
+A template class \verb@base_classes@ should be defined and should inherit from
+a \concept{MetaobjectSequence} of \meta{Inheritance}s, each one of which reflects the inheritance
+of a single base class of the class reflected by the \meta{Class}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_classes;
+
+template <>
+struct base_classes<MetaClass>
+ : MetaobjectSequence<MetaInheritance>
+{ };
+\end{minted}
+

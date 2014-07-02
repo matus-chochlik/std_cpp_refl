@@ -16,12 +16,12 @@ be satisfied:
 The \verb@has_scope@ template class specialization for a \meta{Scoped} should
 inherit from \verb@true_type@:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct has_scope<MetaScoped>
  : true_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{\texttt{scope}}
 
@@ -29,7 +29,7 @@ A template class \verb@scope@ should be defined and should inherit from the
 \meta{Scope} which reflects the parent scope of the program construct reflected
 by this \meta{Scoped}.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct scope;
 
@@ -37,5 +37,5 @@ template <>
 struct scope<MetaScoped>
  : MetaScope
 { };
-\end{lstlisting}
+\end{minted}
 

@@ -11,21 +11,21 @@ should satisfy the following:
 
 Every metaobject should be a nullary metafunction returning itself:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 struct Metaobject
 {
 	typedef Metaobject type;
 };
-\end{lstlisting}
+\end{minted}
 
 The \verb@is_metaobject@ template should return \verb@true_type@.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct is_metaobject<Metaobject>
  : true_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{\texttt{metaobject\_category}}
 
@@ -33,7 +33,7 @@ A template class \verb@metaobject_category@ should be defined and should inherit
 one of the \hyperref[metaobject-category-tags]{metaobject category tags}, depending on
 the actual kind of the metaobject.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct metaobject_category;
 
@@ -41,17 +41,17 @@ template <>
 struct metaobject_category<Metaobject>
  : MetaobjectCategory
 { };
-\end{lstlisting}
+\end{minted}
 
 For example if the \verb@__meta_std@ metaobject reflects the \verb@std@ namespace,
 then the specialization of \verb@metaobject_category@ should be:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct metaobject_category<__meta_std>
  : namespace_tag
 { };
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{Traits}
 
@@ -60,50 +60,50 @@ should be defined and should by default inherit from \verb@false_type@ unless st
 otherwise below:
 
 \verb@has_name@ -- indicates that a \meta{object} is a \meta{Named}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct has_name
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \verb@has_scope@ -- indicates that a \meta{object} is a \meta{Scoped}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct has_scope
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \verb@is_scope@ -- indicates that a \meta{object} is a \meta{Scope}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct is_scope
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \verb@is_class_member@ -- indicates that a \meta{object} is a \meta{ClassMember}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct is_class_member
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \verb@has_template@ -- indicates that a \meta{object} is a \meta{Instantiation}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct has_template
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \verb@is_template@ -- indicates that a \meta{object} is a \meta{Template}:
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct is_template
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 

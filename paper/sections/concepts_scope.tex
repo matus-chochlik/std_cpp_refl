@@ -22,12 +22,12 @@ In addition to the requirements inherited from \meta{NamedScoped}, the following
 The \verb@is_scope@ template class specialization for a \meta{Scope} should
 inherit from \verb@true_type@:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct is_scope<MetaScope>
  : true_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{\texttt{members}}
 
@@ -35,7 +35,7 @@ A template class \verb@members@ should be defined and should inherit from a
 \concept{MetaobjectSequence} containing \meta{NamedScoped} metaobjects reflecting
 all members of the base-level scope reflected by this \meta{Scope}.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct members;
 
@@ -43,5 +43,5 @@ template <>
 struct members<MetaScope>
  : MetaobjectSequence<MetaNamedScoped>
 { };
-\end{lstlisting}
+\end{minted}
 

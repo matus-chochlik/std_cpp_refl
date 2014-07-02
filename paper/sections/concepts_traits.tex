@@ -7,12 +7,12 @@ and should inherit from \verb@true_type@ for metaobjects (types generated
 by the compiler providing metadata) and from \verb@false_type@
 for non-metaobjects (native or user defined types):
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <typename T>
 struct is_metaobject
  : false_type
 { };
-\end{lstlisting}
+\end{minted}
 
 \subsubsection{Metaobject category tags}
 \label{metaobject-category-tags}
@@ -21,7 +21,7 @@ To distiguish between various metaobject kinds (satisfying different concepts
 as described below) a set of tag \verb@struct@s (indicating the kind of the metaobject)
 should be added:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 struct specifier_tag
 {
 	typedef specifier_tag type;
@@ -101,7 +101,7 @@ struct parameter_tag
 {
 	typedef parameter_tag type;
 };
-\end{lstlisting}
+\end{minted}
 
 These tags are referred-to as \verb@MetaobjectCategory@ below:
 
@@ -111,7 +111,7 @@ These tags are referred-to as \verb@MetaobjectCategory@ below:
 Similar to the \hyperref[metaobject-category-tags]{metaobject tag} types,
 a set of tag types for individual C++ specifier keywords should be defined:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 // indicates no specifier
 struct none_tag
 {
@@ -198,6 +198,6 @@ struct constexpr_tag
 	typedef constexpr_tag type;
 };
 
-\end{lstlisting}
+\end{minted}
 
 These tags are collectively referred-to as \verb@SpecifierCategory@ below.

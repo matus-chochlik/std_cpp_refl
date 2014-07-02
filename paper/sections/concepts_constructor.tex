@@ -1,0 +1,57 @@
+\subsection{MetaConstructor}
+\label{concept-MetaConstructor}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaFunction)[above right=of MetaNamedScoped] {MetaFunction}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\node [concept] (MetaClassMember)[below right=of MetaScoped] {MetaClassMember}
+	edge [inheritance] (MetaNamedScoped);
+\node [concept] (MetaConstructor)[below right=of MetaNamedScoped] {MetaConstructor}
+	edge [inheritance] (MetaFunction)
+	edge [inheritance, bend left] (MetaClassMember);
+\end{tikzpicture}
+
+
+\meta{Constructor} reflects a constructor of an elaborated type.
+
+In addition to the requirements inherited from \meta{Function} and \meta{ClassMember},
+the following is required for \meta{Constructor}s:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Constructor} should
+inherit from \verb@constructor_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaConstructor>
+ : constructor_tag
+{ };
+\end{minted}
+
+The specialization of the \verb@result_type@ template class for a \meta{Constructor} should
+inherit from a \meta{Class} reflecting the constructed type.
+
+\begin{minted}{cpp}
+template <>
+struct result_type<MetaConstructor>
+ : MetaClass
+{ };
+\end{minted}
+
+The specialization of the \verb@scope@ template class for a \meta{Constructor} should
+inherit from a \meta{Class} reflecting the constructed type.
+
+\begin{minted}{cpp}
+template <>
+struct scope<MetaConstructor>
+ : MetaClass
+{ };
+\end{minted}
+

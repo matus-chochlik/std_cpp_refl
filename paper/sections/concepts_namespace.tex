@@ -24,10 +24,10 @@ be satisfied:
 The \verb@metaobject_category@ template class specialization for a \meta{Namespace} should
 inherit from \verb@namespace_tag@:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 template <>
 struct metaobject_category<MetaNamespace>
  : namespace_tag
 { };
-\end{lstlisting}
+\end{minted}
 
