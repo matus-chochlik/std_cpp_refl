@@ -1,0 +1,55 @@
+\subsection{Metaobject Sequence}
+\label{concept-MetaobjectSequence}
+
+As the name implies \concept{MetaobjectSequence}s are used to store seqences
+of metaobjects.
+A model of \concept{MetaobjectSequence} is a class conforming to the following:
+
+It is a nullary metafunction returning itself:
+
+\begin{lstlisting}
+template <typename Metaobject>
+struct MetaobjectSequence
+{
+	typedef MetaobjectSequence type;
+};
+\end{lstlisting}
+
+Note that the above is only a psedo-code and
+the template parameter \verb@Metaobject@ indicates here the minimal
+metaobject concept which all elements in the sequence must satisfy.
+For example a \verb@MetaobjectSequence<MetaConstructor>@ denotes a sequence
+of metaobjects that all satisfy the \meta{Constructor} concept, etc.
+
+\subsubsection{\texttt{size}}
+
+A template class \verb@size@ is defined as follows:
+
+\begin{lstlisting}
+template <typename T>
+struct size;
+
+template <>
+struct size<MetaobjectSequence<Metaobject>>
+ : integral_type<size_t, N>
+{ };
+\end{lstlisting}
+
+Where \verb@N@ is the number of elements in the sequence.
+
+\subsubsection{\texttt{at}}
+
+A template class \verb@at@, providing random access to metaobjects in a sequence
+is defined (for values of \verb@I@ between \verb@0@ and \verb@N-1@ where \verb@N@
+is the number of elements returned by \verb@size@) as follows:
+
+\begin{lstlisting}
+template <typename T, size_t I>
+struct at;
+
+template <size_t I>
+struct at<MetaobjectSequence<Metaobject>, I>
+ : Metaobject
+{ };
+\end{lstlisting}
+

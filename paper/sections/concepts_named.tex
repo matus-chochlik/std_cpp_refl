@@ -101,6 +101,17 @@ struct named_typedef<X, __meta_std>
 };
 \end{lstlisting}
 
+if a type \verb@__meta_@ reflects the global scope (or another anonymous base-level object),
+then the specialization of \verb@named_typedef@ should be:
+
+\begin{lstlisting}
+template <typename X>
+struct named_typedef<X, __meta_>
+{
+	typedef X _;
+};
+\end{lstlisting}
+
 if types \verb@__meta_int@ and \verb@_meta_long_long_unsigned_int@ reflect the \verb@int@ and \verb@long long unsigned int@
 types respectively, then the matching instantiations of \verb@named_typedef@ should be:
 should be:

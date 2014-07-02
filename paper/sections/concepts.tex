@@ -37,7 +37,10 @@ need to satisfy in order to be considered models of the individual
 concepts.
 
 Unless stated otherwise all additions proposed and described below should
-go into the \verb@std@ namespace.
+go into the \verb@std@ namespace. Alternatively, if any of the definitions
+proposed here clash with existing members (or new members proposed elsewhere)
+of the \verb@std@ namespace then they can be nested in a namespace like
+\verb@std::meta@ or \verb@std::mirror@.
 
 Also note, that in the sections below, the exaples use names for concrete
 metaobjects with names like \verb@__meta_std_string@. This convention
@@ -47,9 +50,13 @@ from the users point of view the metaobjects should be anonymous types.
 
 \input{sections/concepts_traits.tex}
 \input{sections/concepts_string.tex}
+\input{sections/concepts_sequence.tex}
 \input{sections/concepts_object.tex}
 \input{sections/concepts_specifier.tex}
 \input{sections/concepts_named.tex}
 \input{sections/concepts_scoped.tex}
 \input{sections/concepts_named_scoped.tex}
-
+\input{sections/concepts_scope.tex}
+\input{sections/concepts_global_scope.tex}
+\input{sections/concepts_namespace.tex}
+\input{sections/concepts_type.tex}
