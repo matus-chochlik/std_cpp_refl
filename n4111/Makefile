@@ -1,5 +1,5 @@
 # the output documents
-input_tex = paper
+input_tex = n4111
 
 # the intermediate build and final output directory
 wrkdir = $(PWD)
