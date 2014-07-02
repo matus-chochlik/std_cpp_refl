@@ -1,0 +1,41 @@
+\section{Examples}
+
+This section contains multiple examples of usage of the additions proposed above.
+The examples assume that the \verb@mirrored@ operator (described above) is used
+to obtain the metaobjects and the types, templates, etc. are defined in the
+\verb@std::meta@ namespace.
+
+For the sake of brevity
+
+\begin{minted}{cpp}
+using namespace std;
+\end{minted}
+
+is assumed.
+
+\begin{minted}[tabsize=4]{cpp}
+static_assert(not(is_metaobject<int>()), "");
+static_assert(not(is_metaobject<std::string>()), "");
+static_assert(not(is_metaobject<my_class>()), "");
+
+// reflected global scope
+typedef mirrored(::) meta_gs;
+
+static_assert(is_metaobject<meta_gs>(), "");
+
+static_assert(meta::has_name<meta_gs>(), "");
+static_assert(meta::has_scope<meta_gs>(), "");
+
+static_assert(
+	is_base_of<
+		meta::global_scope_tag,
+		meta::metaobject_category<meta_gs>
+	>(), ""
+);
+
+
+\end{minted}
+
+TODO
+
+

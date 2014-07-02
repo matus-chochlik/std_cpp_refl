@@ -16,19 +16,6 @@
 
 
 \meta{Function} reflects a function or function template.
-\meta{Function}s are not direct members of scopes (they are not listed in the \concept{MetaobjectSequence}
-"returned" by the \verb@members<MetaScope>@ template class).
-Instead, all functions with the same name, (and even those that are not
-overloaded in a specific scope) are grouped into a \meta{OverloadedFunction}. Individual overloaded \meta{Function}s
-in the group can be obtained through the interface of \meta{OverloadedFunction} (specifically through the
-\verb@overloads@ template described below). The same also applies to \meta{Constructor}s and \meta{Operator}s.
-
-The rationale for this is that direct scope members, i.e. metaobjects accessible through the \meta{Scope}'s
-\verb@members@ template class should have unique names, which would not be the case if \meta{Function}s
-were direct scope members.
-
-The \verb@scope@ of an \meta{OverloadedFunction} is the same as the \verb@scope@
-of all \meta{Function}s grouped by that \meta{OverloadedFunction}.
 
 In addition to the requirements inherited from \meta{NamedScoped},
 models of \meta{Function} are subject to the following:
@@ -98,7 +85,7 @@ struct result_type<MetaFunction>
 \subsubsection{\texttt{parameters}}
 
 A template class \verb@parameters@ should be defined and should inherit from
-a \concept{MetaobjectRange} or \meta{Parameter}s reflecting the individual parameters
+a \concept{MetaobjectSequence} or \meta{Parameter}s reflecting the individual parameters
 of the function:
 
 \begin{minted}{cpp}
@@ -107,7 +94,7 @@ struct parameters;
 
 template <>
 struct parameters<MetaFunction>
- : MetaobjectRange<MetaParameter>
+ : MetaobjectSequence<MetaParameter>
 { };
 \end{minted}
 
@@ -132,7 +119,7 @@ then the result should be a \meta{Specifier} reflecting the "none" specifier.
 \subsubsection{\texttt{exceptions}}
 
 A template class \verb@exceptions@ should be defined and should inherit from
-a \concept{MetaobjectRange} of \meta{Type}s reflecting the individual exception types
+a \concept{MetaobjectSequence} of \meta{Type}s reflecting the individual exception types
 that the reflected function is allowed to throw:
 
 \begin{minted}{cpp}
@@ -141,7 +128,7 @@ struct exceptions;
 
 template <>
 struct exceptions<MetaFunction>
- : MetaobjectRange<MetaType>
+ : MetaobjectSequence<MetaType>
 { };
 \end{minted}
 
