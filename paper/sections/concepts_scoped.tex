@@ -1,13 +1,19 @@
 \subsection{MetaScoped}
 \label{concept-MetaScoped}
 
-{\em MetaScoped} is a \meta{object} reflecting program constructs defined inside
+\begin{tikzpicture}
+\node[concept] (Metaobject) {Metaobject};
+\node[concept] (MetaScoped) [right=of Metaobject] {MetaScoped}
+	edge[inheritance] (Metaobject);
+\end{tikzpicture}
+
+\meta{Scoped} is a \meta{object} reflecting program constructs defined inside
 of a named scope (like the global scope, a namespace, a class, etc.)
 
 In addition to the requirements inherited from \meta{object}, the following requirements must
 be satisfied:
 
-The \verb@has_scope@ template class specialization for a {\em MetaScoped} should
+The \verb@has_scope@ template class specialization for a \meta{Scoped} should
 inherit from \verb@true_type@:
 
 \begin{lstlisting}
@@ -17,9 +23,11 @@ struct has_scope<MetaScoped>
 { };
 \end{lstlisting}
 
+\subsubsection{\texttt{scope}}
+
 A template class \verb@scope@ should be defined and should inherit from the
 \meta{Scope} which reflects the parent scope of the program construct reflected
-by this {\em MetaScoped}.
+by this \meta{Scoped}.
 
 \begin{lstlisting}
 template <typename T>

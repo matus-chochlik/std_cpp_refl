@@ -1,0 +1,41 @@
+\subsection{MetaNamedScoped}
+\label{concept-MetaNamedScoped}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\end{tikzpicture}
+
+In addition to the requirements from \meta{Named} and \meta{Scoped},
+concrete metaobjects modelling \meta{NamedScoped} must satisfy the following:
+
+\subsubsection{\texttt{full\_name}}
+
+A template class \verb@full_name@ should be defined an should return the fully
+qualified name of the reflected construct, including the nested name specifier.
+
+For namespace \verb@std@ the value 
+should be \verb@"std"@, for namespace \verb@foo::bar::baz@ the value should
+be \verb@"foo::bar::baz"@, for the global scope the value should be an empty
+\concept{StringConstant}.
+For \verb@std::vector<int>::iterator@ it should be \verb@"std::vector<int>::iterator"@.
+For derived qualified types like
+\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should be defined as
+\verb@"volatile std::vector<const foo::bar::fubar*> * const *"@, etc.
+
+\begin{lstlisting}
+template <typename T>
+struct full_name;
+
+template <>
+struct full_name<MetaNamedScoped>
+ : StringConstant
+{ };
+\end{lstlisting}
+

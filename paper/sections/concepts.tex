@@ -36,10 +36,20 @@ This section conceptualy describes the requirements that various metaobjects
 need to satisfy in order to be considered models of the individual
 concepts.
 
+Unless stated otherwise all additions proposed and described below should
+go into the \verb@std@ namespace.
+
+Also note, that in the sections below, the exaples use names for concrete
+metaobjects with names like \verb@__meta_std_string@. This convention
+is {\em NOT} part of this proposal. The actual naming of the metaobjects
+should be left to the compiler implementations and for all purposes
+from the users point of view the metaobjects should be anonymous types.
+
 \input{sections/concepts_traits.tex}
 \input{sections/concepts_string.tex}
-\input{sections/concepts_metaobject.tex}
-\input{sections/concepts_metaspec.tex}
-\input{sections/concepts_metanamed.tex}
-\input{sections/concepts_metascoped.tex}
+\input{sections/concepts_object.tex}
+\input{sections/concepts_specifier.tex}
+\input{sections/concepts_named.tex}
+\input{sections/concepts_scoped.tex}
+\input{sections/concepts_named_scoped.tex}
 

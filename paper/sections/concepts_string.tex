@@ -1,11 +1,13 @@
 \subsection{StringConstant}
 \label{concept-StringConstant}
 
-A {\em StringConstant} is a class conforming to the following:
+A \concept{StringConstant} is a class conforming to the following:
 
 \begin{lstlisting}
 struct StringConstant
 {
+	typedef StringConstant type;
+
 	// null terminated char array
         static constexpr const char value[Length+1] = {..., '\0'};
 
@@ -19,14 +21,16 @@ struct StringConstant
 constexpr const char StringConstant::value[Length+1];
 \end{lstlisting}
 
-Concrete models of {\em StringConstant} are used to return compile-time string values.
-For example the \verb@_str_void@ type defined below, conforms to the {\em StringConstant}
+Concrete models of \concept{StringConstant} are used to return compile-time string values.
+For example the \verb@_str_void@ type defined below, conforms to the \concept{StringConstant}
 concept:
 
 \begin{lstlisting}
 template <char ... C>
 struct string_constant
 {
+	typedef string_constant type;
+
 	static constexpr const char value[sizeof...(C)+1] = {C...,'\0'};
 
 	constexpr operator const char* (void) const
@@ -48,3 +52,7 @@ static_assert(sizeof(_str_void::value) == 4+1, "");
 \end{lstlisting}
 
 The strings stored in the \verb@value@ array should be UTF-8 encoded.
+
+Also note, that the \verb@string_constant@ class as defined above is just one of the
+possible implementations of \concept{StringConstant}, we do not however imply
+that it must be implemented this way.
