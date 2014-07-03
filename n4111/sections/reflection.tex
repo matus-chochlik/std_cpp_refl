@@ -42,3 +42,33 @@ The reflected expression \verb@X@ in the items listed above can be any of the fo
 \item{TODO}
 \end{itemize}
 
+The reflection operator or expression should have access to \verb@private@ and
+\verb@protected@ members of classes. The following should be valid:
+
+\begin{minted}{cpp}
+struct A
+{
+	int a;
+};
+
+class B
+{
+protected:
+	int b;
+};
+
+class C
+ : protected A
+ , public B
+{
+private:
+	int c;
+};
+
+typedef mirrored(A::a) meta_A_a;
+typedef mirrored(B::b) meta_B_b;
+typedef mirrored(C::a) meta_C_a;
+typedef mirrored(C::b) meta_C_b;
+typedef mirrored(C::c) meta_C_c;
+
+\end{minted}

@@ -12,9 +12,9 @@
 	edge [inheritance, bend left] (MetaScoped);
 \node [concept] (MetaType)[above right=of MetaNamedScoped] {MetaType}
 	edge [inheritance, bend right] (MetaNamedScoped);
-\node [concept] (MetaScope)[below right=of MetaNamedScoped] {MetaScope}
-	edge [inheritance, bend left] (MetaNamedScoped);
-\node [concept] (MetaEnumClass)[below right=of MetaType] {MetaEnumClass}
+\node [concept] (MetaScope)[below right=of MetaScoped] {MetaScope}
+	edge [inheritance] (MetaNamedScoped);
+\node [concept] (MetaEnumClass)[below right=of MetaNamedScoped] {MetaEnumClass}
 	edge [inheritance, bend right] (MetaType)
 	edge [inheritance, bend left] (MetaScope);
 \end{tikzpicture}
@@ -25,7 +25,7 @@ In addition to the requirements inherited from \meta{Type} and \meta{Scope}, the
 be satisfied:
 
 The \verb@metaobject_category@ template class specialization for a \meta{EnumClass} should
-inherit from \verb@enum_class@:
+inherit from \verb@enum_class_tag@:
 
 \begin{minted}{cpp}
 template <>
@@ -34,7 +34,7 @@ struct metaobject_category<MetaEnumClass>
 { };
 \end{minted}
 
-The \verb@members@ of \meta{EnumClass} are only \meta{NamedScoped} \meta{Constants}.
+The \verb@members@ of \meta{EnumClass} are only \meta{NamedScoped} \meta{Constant}s.
 
 \subsubsection{\texttt{base\_type}}
 

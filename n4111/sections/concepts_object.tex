@@ -29,7 +29,9 @@ struct is_metaobject<Metaobject>
 
 \subsubsection{\texttt{metaobject\_category}}
 
-A template class \verb@metaobject_category@ should be defined and should inherit from
+A template class \verb@metaobject_category@ should be defined in the \verb@std@ namespace
+(even if everything else is defined inside of a nested namespace like \verb@std::meta@)
+and should inherit from
 one of the \hyperref[metaobject-category-tags]{metaobject category tags}, depending on
 the actual kind of the metaobject.
 
@@ -99,7 +101,8 @@ struct has_template
 { };
 \end{minted}
 
-\verb@is_template@ -- indicates that a \meta{object} is a \meta{Template}:
+\verb@is_template@ -- indicates that a \meta{object} is a \meta{Template}
+or \meta{TemplateParameter}:
 \begin{minted}{cpp}
 template <typename T>
 struct is_template

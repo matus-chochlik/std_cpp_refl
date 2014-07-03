@@ -3,22 +3,34 @@
 
 \begin{tikzpicture}
 \node[concept] (Metaobject) {Metaobject};
-\node[concept] (MetaInheritance) [right=of Metaobject] {MetaInheritance}
+\node[concept] (MetaScoped) [right=of Metaobject] {MetaScoped}
 	edge[inheritance] (Metaobject);
+\node[concept] (MetaInheritance) [right=of MetaScoped] {MetaInheritance}
+	edge[inheritance] (MetaScoped);
 \end{tikzpicture}
 
-\meta{Inheritance} is a \meta{object} reflecting class inheritance.
+\meta{Inheritance} is a \meta{Scoped} reflecting class inheritance.
 
-In addition to the requirements inherited from \meta{object}, types conforming to this concept
+In addition to the requirements inherited from \meta{Scoped}, types conforming to this concept
 must satisfy the following:
 
 The \verb@metaobject_category@ template should return \verb@inheritance_tag@ for models
-of \meta{Inheritance}.
+of \meta{Inheritance}:
 
 \begin{minted}{cpp}
 template <>
 struct metaobject_category<MetaInheritance>
  : inheritance_tag
+{ };
+\end{minted}
+
+The \verb@scope@ member function should inherit from a \meta{Class} reflecting
+the derived class in the inheritance:
+
+\begin{minted}{cpp}
+template <>
+struct scope<MetaInheritance>
+ : MetaClass
 { };
 \end{minted}
 
@@ -64,21 +76,6 @@ struct base_class;
 
 template <>
 struct base_class<MetaInheritance>
- : MetaClass
-{ };
-\end{minted}
-
-\subsubsection{\texttt{derived\_class}}
-
-A template struct \verb@derived_class@ should be defined and should inherit from
-a \meta{Class} reflecting the derived class in the inheritance:
-
-\begin{minted}{cpp}
-template <typename T>
-struct derived_class;
-
-template <>
-struct derived_class<MetaInheritance>
  : MetaClass
 { };
 \end{minted}

@@ -1,0 +1,16 @@
+\subsection{Enumeration reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+enum E
+{
+	val_a = 1,
+	val_b = 2,
+	val_c = 3,
+	val_d = 4
+};
+
+// reflected enumeration
+typedef mirrored(E) meta_E;
+// reflected enum values
+typedef mirrored(val_a) meta_val_a;
+\end{minted}
