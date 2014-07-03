@@ -1,0 +1,54 @@
+\subsection{MetaConstant}
+\label{concept-MetaConstant}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaConstant)[right=of Metaobject] {MetaConstant}
+	edge [inheritance] (Metaobject);
+\end{tikzpicture}
+
+\meta{Constant} is a \meta{object} reflecting a compile-time constant value.
+
+In addition to the requirements inherited from \meta{object}, the following must
+be satisfied:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Constant} should
+inherit from \verb@constant_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaConstant>
+ : constant_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{type}}
+
+A template class \verb@type@ should be added and should inherit
+from a \meta{Type} reflecting the type of the constant value
+
+\begin{minted}{cpp}
+template <typename T>
+struct type;
+
+template <>
+struct type<MetaVariable>
+ : MetaType
+{ };
+\end{minted}
+
+\subsubsection{\texttt{value}}
+
+A template class \verb@value@ should be added and should inherit
+from an \verb@integral_constant<T, V>@:
+
+\begin{minted}{cpp}
+template <typename T>
+struct value;
+
+template <>
+struct value<MetaConstant>
+ : integral_constant<T, V>
+{ };
+\end{minted}
+

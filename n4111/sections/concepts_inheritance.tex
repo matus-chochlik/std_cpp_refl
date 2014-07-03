@@ -1,0 +1,85 @@
+\subsection{MetaInheritance}
+\label{concept-MetaInheritance}
+
+\begin{tikzpicture}
+\node[concept] (Metaobject) {Metaobject};
+\node[concept] (MetaInheritance) [right=of Metaobject] {MetaInheritance}
+	edge[inheritance] (Metaobject);
+\end{tikzpicture}
+
+\meta{Inheritance} is a \meta{object} reflecting class inheritance.
+
+In addition to the requirements inherited from \meta{object}, types conforming to this concept
+must satisfy the following:
+
+The \verb@metaobject_category@ template should return \verb@inheritance_tag@ for models
+of \meta{Inheritance}.
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaInheritance>
+ : inheritance_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{access\_specifier}}
+
+A template struct \verb@access_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting one of the \verb@private@, \verb@protected@ and
+\verb@public@ access specifiers.
+
+\begin{minted}{cpp}
+template <typename T>
+struct access_specifier;
+
+template <>
+struct access_specifier<MetaInheritance>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{inheritance\_specifier}}
+
+A template struct \verb@inheritance_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting one of the \verb@virtual@ and "none" access specifiers.
+
+\begin{minted}{cpp}
+template <typename T>
+struct inheritance_specifier;
+
+template <>
+struct inheritance_specifier<MetaInheritance>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{base\_class}}
+
+A template struct \verb@base_class@ should be defined and should inherit from
+a \meta{Class} reflecting the base class in the inheritance:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_class;
+
+template <>
+struct base_class<MetaInheritance>
+ : MetaClass
+{ };
+\end{minted}
+
+\subsubsection{\texttt{derived\_class}}
+
+A template struct \verb@derived_class@ should be defined and should inherit from
+a \meta{Class} reflecting the derived class in the inheritance:
+
+\begin{minted}{cpp}
+template <typename T>
+struct derived_class;
+
+template <>
+struct derived_class<MetaInheritance>
+ : MetaClass
+{ };
+\end{minted}
+

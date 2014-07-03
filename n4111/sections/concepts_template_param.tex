@@ -1,0 +1,64 @@
+\subsection{MetaTemplateParameter}
+\label{concept-MetaTemplateParameter}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaTemplateParameter)[above right=of MetaNamedScoped] {MetaTemplateParameter}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\end{tikzpicture}
+
+
+\meta{TemplateParameter} is a \meta{NamedScoped} and either a \meta{Typedef} or a \meta{Constant}.
+
+In addition to the requirements inherited from \meta{NamedScoped},
+models of \meta{TemplateParameter} must conform to the following:
+
+The \verb@is_template@ template class specialization for a \meta{TemplateParameter} should
+inherit from \verb@true_type@:
+
+\begin{minted}{cpp}
+template <>
+struct is_template<MetaTemplateParameter>
+ : true_type
+{ };
+\end{minted}
+
+\subsubsection{\texttt{position}}
+
+A template class called \verb@position@ should be defined and should
+inherit from \verb@integral_constant<size_t, I>@ where \verb@I@ is
+a zero-based position (index) of the parameter.
+
+\begin{minted}{cpp}
+template <typename T>
+struct position;
+
+template <>
+struct position<MetaTemplateParameter>
+ : integral_constant<size_t, I>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{is\_pack}}
+
+A template class called \verb@is_pack@ should be defined and should
+inherit from \verb@true_type@ if the template parameter is a pack
+parameter or from \verb@false_type@ otherwise.
+
+\begin{minted}{cpp}
+template <typename T>
+struct is_pack;
+
+template <>
+struct is_pack<MetaTemplateParameter>
+ : integral_constant<bool, B>
+{ };
+\end{minted}
+

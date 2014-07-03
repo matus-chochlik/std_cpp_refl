@@ -1,0 +1,61 @@
+\subsection{MetaVariable}
+\label{concept-MetaVariable}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaVariable)[above right=of MetaNamedScoped] {MetaVariable}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\end{tikzpicture}
+
+\meta{Variable} is a \meta{NamedScoped} reflecting a variable.
+
+In addition to the requirements inherited from \meta{NamedScoped}, the following must
+be satisfied:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Variable} should
+inherit from \verb@variable_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaVariable>
+ : variable_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{storage\_specifier}}
+
+A template class \verb@storage_specifier@ should be added and should
+inherit from a \meta{Specifier} reflecting a storage class specifier:
+
+\begin{minted}{cpp}
+template <typename T>
+struct storage_specifier;
+
+template <>
+struct storage_specifier<MetaVariable>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{type}}
+
+A template class \verb@type@ should be added and should inherit
+from a \meta{Type} reflecting the type of the variable:
+
+\begin{minted}{cpp}
+template <typename T>
+struct type;
+
+template <>
+struct type<MetaVariable>
+ : MetaType
+{ };
+\end{minted}
+

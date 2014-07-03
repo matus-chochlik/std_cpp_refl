@@ -1,0 +1,87 @@
+\subsection{MetaParameter}
+\label{concept-MetaParameter}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaParameter)[below right=of MetaNamed] {MetaParameter}
+	edge [inheritance, bend left] (MetaNamed)
+	edge [inheritance, bend right] (MetaScoped);
+\end{tikzpicture}
+
+\meta{Parameter} is a \meta{Named} and \meta{Scoped},
+reflecting a function parameter or a parameter pack.
+
+In addition to the requirements inherited from \meta{Named} and \meta{Scoped},
+the following must be satisfied:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Parameter} should
+inherit from \verb@parameter_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaParameter>
+ : parameter_tag
+{ };
+\end{minted}
+
+The \verb@scope@ of a \meta{Parameter} should be a \meta{Function} reflecting
+the function to which the parameter belongs:
+
+\begin{minted}{cpp}
+template <>
+struct scope<MetaParameter>
+ : MetaFunction
+{ };
+\end{minted}
+
+\subsubsection{\texttt{type}}
+
+A template class \verb@type@ should be added and should inherit
+from a \meta{Type} reflecting the type of the parameter:
+
+\begin{minted}{cpp}
+template <typename T>
+struct type;
+
+template <>
+struct type<MetaParameter>
+ : MetaType
+{ };
+\end{minted}
+
+\subsubsection{\texttt{position}}
+
+A template class called \verb@position@ should be defined and should
+inherit from \verb@integral_constant<size_t, I>@ where \verb@I@ is
+a zero-based position (index) of the parameter.
+
+\begin{minted}{cpp}
+template <typename T>
+struct position;
+
+template <>
+struct position<MetaParameter>
+ : integral_constant<size_t, I>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{is\_pack}}
+
+A template class called \verb@is_pack@ should be defined and should
+inherit from \verb@true_type@ if the parameter is a pack
+parameter or from \verb@false_type@ otherwise.
+
+\begin{minted}{cpp}
+template <typename T>
+struct is_pack;
+
+template <>
+struct is_pack<MetaParameter>
+ : integral_constant<bool, B>
+{ };
+\end{minted}
+

@@ -1,0 +1,49 @@
+\subsection{MetaEnum}
+\label{concept-MetaEnum}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaType)[above right=of MetaNamedScoped] {MetaType}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\node [concept] (MetaEnum)[below right=of MetaType] {MetaEnum}
+	edge [inheritance, bend right] (MetaType);
+\end{tikzpicture}
+
+\meta{Enum} is a \meta{Type} reflecting an enumeration type.
+
+In addition to the requirements inherited from \meta{Type}, \meta{Enum} requires
+also the following:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Enum} should
+inherit from \verb@enum@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaEnum>
+ : enum_tag
+{ };
+\end{minted}
+
+The \verb@members@ of \meta{EnumClass} are only \meta{Named} \meta{Constants}.
+
+\subsubsection{\texttt{base\_type}}
+
+A template class \verb@base_type@ should be defined and should inherit from
+a \meta{Type} reflecting the underlying type of the enumeration:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_type;
+
+template <>
+struct base_type<MetaEnum>
+ : MetaType
+{ };
+\end{minted}
