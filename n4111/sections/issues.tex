@@ -1,6 +1,34 @@
 \section{Known issues}
 
 \begin{itemize}
-\item How to distinguish \meta{NamedScoped} from metaobjects that are just \meta{Named} and \meta{Scoped} ?
+\item How to distinguish \meta{NamedScoped} from metaobjects that
+are just \meta{Named} and \meta{Scoped} ?
+
+\item What should be the \verb@<NAME>@ in \verb@named_typedef@ and
+\verb@named_mem_var@ for derived types (like pointers, arrays, cv-qualified types,
+template instantiations, etc.)
+
+\item Some better name for the \verb@template_@ metafunction template class.
+
+\item {\em Something similar to source contexts from D3972:}
+Should \meta{object} contain information about the source file,
+line and possibly line column or function name where the base-level construct
+reflected by the \meta{object} was defined ?
+
+\item {\em Normalization of names returned by \verb@MetaNamed@ \verb@base_name()@\\
+and \verb@MetaNamedScoped@ \verb@full_name()@:}
+The strings returned by the \verb@base_name@ and \verb@full_name@ metafunctions
+should be implementation-independent and the same on every platform/compiler.
+
+\item {\em The reflection of C++11/14 features not covered by this proposal}.
+
+\item {\em Explicit specification of what should be reflected}. It might be useful to have
+the ability to explicitly specify either what to reflect or what to hide from reflection.
+For example the "whitelisting" (explicitly specifying of what should be reflected) of namespace
+or class members could simplify reflective meta-algorithms so that they would not have
+to implement complicated filters when traversing scope members, to hide implementation details and
+to improve compilation times. It is important that this functionality is decoupled from the
+scope member declarations, since it would allow applications to cherry-pick what should be
+reflected even in third-party libraries.
 
 \end{itemize}

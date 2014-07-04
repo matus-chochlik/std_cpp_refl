@@ -153,18 +153,18 @@ struct const_specifier<MetaFunction>
 In case the reflected member function does not have the \verb@const@ specifier,
 then the result should be a \meta{Specifier} reflecting the "none" specifier.
 
-\subsubsection{\texttt{pure\_virtual}}
+\subsubsection{\texttt{is\_pure}}
 
 In case a \meta{Function} is also a \meta{ClassMember},
-a template class \verb@pure_virtual@ should be defined and should inherit from
+a template class \verb@is_pure@ should be defined and should inherit from
 \verb@true_type@ if the reflected function is pure virtual or from \verb@false_type@
 otherwise:
 
 \begin{minted}{cpp}
 template <typename T>
-struct pure_virtual;
+struct is_pure;
 
-struct pure_virtual<MetaFunction>
+struct is_pure<MetaFunction>
  : std::integral_constant<bool, B>
 {
 	static_assert(is_class_member<MetaFunction>::value, "");

@@ -95,9 +95,9 @@ are differences between \verb@typeid@ and \verb@mirrored@, but the basic idea is
 types with well defined and standardized names or concrete template classes, (possibly with some
 special kind of parameter accepting different arguments than types and constants)?}
 
-{\textbf A:} We wanted to avoid defining (and forcing) a specific naming convention, because
-it would be difficult and very probably not user friendly (see C++ name mangling). There
-already is a precedent for anonymous types -- {\em lambdas}.
+{\textbf A:} We wanted to avoid defining a specific naming convention, because it would
+be difficult to do so and very probably not user friendly (see C++ name mangling). There
+already is a precedent for anonymous types -- for example C++ {\em lambdas}.
 
 Another option would be to define a concrete set of template classes like:
 
@@ -112,7 +112,7 @@ class meta_type /* Model of MetaType */
 \end{minted}
 
 which could work with types, classes, etc., but would not work with namespaces, constructors,
-enumeration values, etc. (see also the Q/A above):
+etc. (see also the Q/A above):
 
 \begin{minted}{cpp}
 namespace std {
@@ -121,7 +121,13 @@ template <something X> //<- Problem
 class meta_constructor /* Model of MetaConstructor */
 { };
 
+template <something X> //<- Problem
+class meta_namespace /* Model of MetaNamespace */
+{ };
+
 }
+
+typedef std::meta_namespace<std> meta_std; //<- Problem
 \end{minted}
 
 Instead of this, the metaobjects are anonymous and their (internal) identification
