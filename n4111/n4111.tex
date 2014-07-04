@@ -10,6 +10,7 @@
 \usepackage{url}
 \usepackage[colorlinks=true]{hyperref}
 \usepackage{parskip}
+\usepackage[titletoc]{appendix}
 
 \usepackage{listings}
 \usepackage{minted}
@@ -86,11 +87,14 @@ This paper tries to make the proposal more concise and detailed.
 %\input{sections/introduction.tex}
 \input{sections/concepts.tex}
 \input{sections/reflection.tex}
-\input{sections/examples.tex}
+\input{sections/rationale.tex}
+\input{sections/issues.tex}
 \input{sections/acknowledge.tex}
 \input{sections/references.tex}
 
-%\appendix
-%\input{sections/appendix.tex}
+\begin{appendices}
+\appendix
+\input{sections/examples.tex}
+\end{appendices}
 
 \end{document}
