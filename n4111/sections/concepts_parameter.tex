@@ -38,6 +38,10 @@ struct scope<MetaParameter>
 { };
 \end{minted}
 
+The \verb@full_name@ inherited from \meta{Named} should return the same \concept{StringConstant}
+as \verb@base_name@ for models of \meta{Parameter}, i.e. the plain parameter
+name without any qualifications.
+
 \subsubsection{\texttt{type}}
 
 A template class \verb@type@ should be added and should inherit

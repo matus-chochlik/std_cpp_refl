@@ -7,19 +7,22 @@ library should be made.
 
 \subsection{Metaobject expressions}
 
-A {\em metaobject expression} is a class, which has a member typedef called \verb@type@
-which is a model of \meta{object}:
+A {\em metaobject expression} is a class, which can be {\em evaluated}
+into a \meta{object}. By default any class that has a member typedef
+which is a model of \meta{object} is a metaobject expression.
 
 \begin{minted}{cpp}
-struct MetaobjectExpression
+struct SomeMetaobjectExpression
 {
 	typedef Metaobject type;
 };
 
-static_assert(is_metaobject<MetaobjectExpression::type>(), "");
 \end{minted}
 
-Any \meta{object} is a {\em metaobject expression}.
+And thus, any \meta{object} is also a {\em metaobject expression}.
+
+Generally, however, any type for which the \verb@evaluate@ metafunction
+template class described below, "returns" a \meta{object} is a {\em metaobject expression}.
 
 \subsubsection{\texttt{evaluate}}
 
@@ -57,6 +60,9 @@ struct evaluate
 { };
 
 \end{minted}
+
+The users should be allowed to add specializations of \verb@evaluate@
+for other types if necessary.
 
 \subsection{Default implementation of metafunctions}
 

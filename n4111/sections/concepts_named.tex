@@ -26,7 +26,8 @@ struct has_name<MetaNamed>
 \subsubsection{\texttt{base\_name}}
 
 A template class \verb@base_name@ should be defined an should return the base name
-of the reflected construct, without the nested name specifier as a
+of the reflected construct, without the nested name specifier nor any qualifications
+or other decorations, as a
 \concept{StringConstant}:
 
 \begin{minted}{cpp}
@@ -57,10 +58,36 @@ For namespace \verb@std@ the value should be \verb@"std"@, for namespace
 \verb@foo::bar::baz@ it should be \verb@"baz"@, for the global scope the
 value should be an empty string.
 
+For \verb@unsigned long int * const *@ it should be \verb@"unsigned long int"@.
+
 For \verb@std::vector<int>::iterator@ it should be \verb@"iterator"@. For derived,
 qualified types like \verb@volatile std::vector<const foo::bar::fubar*> * const *@
-it should be \verb@"volatile vector<const fubar*> * const *"@, etc.
+it should be \verb@"vector"@, etc.
 
+\subsubsection{\texttt{full\_name}}
+
+A template class \verb@full_name@ should be defined and should return the fully
+qualified name of the reflected construct, including the nested name specifier
+and all qualifiers.
+
+For namespace \verb@std@ the value 
+should be \verb@"std"@, for namespace \verb@foo::bar::baz@ the value should
+be \verb@"foo::bar::baz"@, for the global scope the value should be an empty
+\concept{StringConstant}.
+For \verb@std::vector<int>::iterator@ it should be \verb@"std::vector<int>::iterator"@.
+For derived qualified types like
+\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should be defined as
+\verb@"volatile std::vector<const foo::bar::fubar*> * const *"@, etc.
+
+\begin{minted}{cpp}
+template <typename T>
+struct full_name;
+
+template <>
+struct full_name<MetaNamedScoped>
+ : StringConstant
+{ };
+\end{minted}
 
 \subsubsection{\texttt{named\_typedef}}
 
@@ -117,9 +144,9 @@ struct named_typedef<X, __meta_>
 };
 \end{minted}
 
-if types \verb@__meta_int@ and \verb@_meta_long_long_unsigned_int@ reflect the \verb@int@ and \verb@long long unsigned int@
-types respectively, then the matching instantiations of \verb@named_typedef@ should be:
-should be:
+If the types \verb@__meta_int@ and \verb@__meta_unsigned_long_long_int@ reflect the \verb@int@ and
+the \verb@unsigned long long int@ type
+respectively, then the matching instantiations of \verb@named_typedef@ should be:
 
 \begin{minted}{cpp}
 template <typename X>
@@ -134,6 +161,33 @@ struct named_typedef<X, __meta_long_long_unsigned_int>
 {
 	// note underscores replacing the spaces
 	typedef X long_long_unsigned_int;
+};
+\end{minted}
+
+If the types \verb@__meta_char_const@, \verb@__meta_long_const_ref@, \verb@__meta_int_volatile_ptr@ and \verb@__meta_double_array_5@
+reflect \verb@char const@, \verb@long const&@, \verb@int volatile*@ and \verb@double[5]@ respectively,
+then the specializations of \verb@named_typeded@ should be:
+
+\begin{minted}{cpp}
+template <typename X>
+struct named_typedef<X, __meta_char_const>
+{
+	typedef X char_;
+};
+template <typename X>
+struct named_typedef<X, __meta_long_const_ref>
+{
+	typedef X long_int;
+};
+template <typename X>
+struct named_typedef<X, __meta_int_volatile_ptr>
+{
+	typedef X int_;
+};
+template <typename X>
+struct named_typedef<X, __meta_double_array_5>
+{
+	typedef X double_;
 };
 \end{minted}
 
@@ -180,7 +234,7 @@ struct named_mem_var<X, __meta_std_string>
 };
 \end{minted}
 
-if types \verb@__meta_void@ and \verb@_meta_long_double@ reflect the \verb@void@ and \verb@long double@
+If types \verb@__meta_void@ and \verb@_meta_long_double@ reflect the \verb@void@ and \verb@long double@
 types respectively, then the matching instantiations of \verb@named_mem_var@ should be:
 should be:
 
@@ -207,6 +261,17 @@ struct named_mem_var<X, __meta_long_double>
 	named_mem_var(P&& ... p)
 	 : long_double_(std::forward<P>(p)...)
 	{ }
+};
+\end{minted}
+
+For decorated and qualified types the same rules apply as for \verb@named_typedef@.
+If \verb@__meta_std_string_const_ref@ reflects \verb@std::string const&@, then:
+
+\begin{minted}{cpp}
+template <typename X>
+struct named_typedef<X, __meta_std_string_const_ref>
+{
+	typedef X string;
 };
 \end{minted}
 

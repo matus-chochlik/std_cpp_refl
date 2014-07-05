@@ -30,6 +30,10 @@ struct is_template<MetaTemplateParameter>
 { };
 \end{minted}
 
+The \verb@full_name@ inherited from \meta{Named} should return the same \concept{StringConstant}
+as \verb@base_name@ for models of \meta{TemplateParameter}, i.e. the plain template parameter
+name without any qualifications.
+
 \subsubsection{\texttt{position}}
 
 A template class \verb@position@ should be defined and should
