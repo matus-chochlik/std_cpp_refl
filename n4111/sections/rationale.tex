@@ -34,10 +34,13 @@ Doing reflection with type traits limits the scope, because of the rules definin
 can be a template parameter. This rules could be updated to allow for example an expression
 representing a particular class constructor to  be passed as a template argument.
 Also currently there is no expression for specifying (not invoking) a constructor
-(for example for the purpose of taking its address), so additional rules would have
-to be added.
+or a particular function overload, so additional rules would have to be added.
+
 This would (in our opinion) be a much more drastic change to the standard, than
-the adoption of this proposal.
+the adoption of this proposal. If expressions denoting a namespace or a particular
+constructor or a function overload were added just for the purpose of reflecting
+them (with the \verb@mirroed@ keyword), then all the changes could be localized
+in the reflection subsystem and remain invalid in the core language.
 
 Second reason is access to private and protected members. There are many use-cases where
 access to non-public class members through reflection is desired. If reflection was

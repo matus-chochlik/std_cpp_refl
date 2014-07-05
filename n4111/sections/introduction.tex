@@ -1,3 +1,25 @@
 \section{Introduction}
 
+Reflection and reflective programming can be used
+for a wide range of tasks, such as the implementation
+of serialization-like operations, object-relational mapping,
+remote procedure calls, scripting, automated GUI-generation,
+implementation of several software design patterns, etc.
+C++ as one of the most prevalent programming languages 
+lacks a standardized reflection facility.
+
+In this paper we propose to add native support for
+compile-time reflection to C++ by the means of compiler generated
+types providing basic metadata describing various program constructs.
+These metaobjects, together with some additions to the standard
+library can later be used to implement other third-party libraries
+providing both compile-time and run-time high-level
+reflection utilities.
+
+The basic static metadata provided by compile-time reflection
+should be as complete as possible to be applicable in a wide
+range of scenarios and allow to implement custom higher-level
+static and dynamic reflection libraries and reflection-based
+utilities.
+
 TODO
