@@ -22,4 +22,34 @@ range of scenarios and allow to implement custom higher-level
 static and dynamic reflection libraries and reflection-based
 utilities.
 
-TODO
+\subsection{Differences between n3996 and n4111}
+
+This proposal (n4111) is a conceptual successor of n3996 \cite{n3996}, but it has
+been rewritten nearly from scratch (some parts of the text were reused).
+The main differences are listed here:
+
+\begin{itemize}
+\item n3996 included a brief introduction to reflection, a discussion
+of its usefulness and presented several use-cases.
+\item n3996 included multiple examples from the Mirror reflection utilities
+\cite{mirror-doc-cpp11}, for example the factory generator.
+\item In n3996, the metaobject concepts were described just conceptually
+and a possible renderings of the concepts into valid C++ were discussed.
+In n4111 the definition of the concepts is more detailed, specific and includes
+concrete definitions of what should be added to the standard and hints
+how certain concepts could be implemented.
+\item The definition of several concepts was changed. For example
+  \begin{itemize}
+  \item the requirements for the \meta{NamedScoped} concept were moved
+  to the \meta{Named} concept,
+  \item the string which is the result of the \verb@base_name@ template
+  class has been changed,
+  \item the definition of the \verb@named_typedef@ and the \verb@named_mem_var@
+  template classed is more detailed,
+  \item some of the metaobject attributes (rendered as template classes)
+  were renamed.
+  \end{itemize}
+\item This proposal includes additions to the standard library.
+\item The appendices in n4111 include concrete examples of usage
+of the proposed metaobjects and the added template classes.
+\end{itemize}
