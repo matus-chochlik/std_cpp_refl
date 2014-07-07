@@ -58,7 +58,6 @@ assert(strlen(meta::base_name<meta_size_t>()) == 6);
 assert(strcmp(meta::base_name<meta_size_t>(), "size_t") == 0);
 assert(strlen(meta::full_name<meta_size_t>()) == 11);
 assert(strcmp(meta::full_name<meta_size_t>(), "std::size_t") == 0);
-
 // YMMV
 assert(strlen(meta::base_name<meta_size_t_type>()) == 12);
 assert(strcmp(meta::base_name<meta_size_t_type>(), "unsigned int") == 0);
