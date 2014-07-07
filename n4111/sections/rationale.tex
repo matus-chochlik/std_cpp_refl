@@ -149,3 +149,34 @@ typedef std::meta_namespace<std> meta_std; //<- Problem
 Instead of this, the metaobjects are anonymous and their (internal) identification
 is left to the compiler. From the users POV, the metaobject can be distinguished
 by the means of the metaobject traits and tags as \hyperref[section-Concepts]{described above}.
+
+\subsection{Why this rendering of metaobjects?}
+
+{\textbf Q:}{\em Why were the metaobject concepts from n3996 transformed into a set
+of types with external template classes operating on them?
+}
+
+{\textbf A:} N3996 defined a set of abstract metaobject concepts including their
+instances, traits, attributes and functions.
+Then two possible concrete transformations into valid C++ were shown in the appendices.
+
+\begin{enumerate}
+\item Structures where the attributes were constexpr static member variables and the functions were
+constexpr static member functions.
+\item Types where the traits, attributes and functions are implemented as specializations of
+class templates defined on namespace-level.
+\end{enumerate}
+
+In this proposal the second option was picked for several reasons:
+
+\begin{itemize}
+\item It is closer to standard type traits and to popular metaprogramming libraries like {\em Boost.MPL}, etc.
+\item It should require less resources and time to compile, since the implementation of various
+metafunctions (class templates) like \verb@base_name@, \verb@scope@ or \verb@position@ and
+especially those returning \concept{MetaobjectSequence}s, like \verb@members@, \verb@overloads@,
+\verb@base_classes@ etc. for concrete metaobjects can be instantiated individually
+and need to be instantiated only if they are actually used in the code. It would probably be harder
+to do so if they were implemented as (non-template) class members.
+\end{itemize}
+
+

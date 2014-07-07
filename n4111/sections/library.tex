@@ -7,8 +7,8 @@ library should be made.
 
 \subsection{Metaobject expressions}
 
-A {\em metaobject expression} is a class, which can be {\em evaluated}
-into a \meta{object}. By default any class that has a member typedef
+A {\em metaobject expression} is a class which can be {\em evaluated}
+into a \meta{object}. By default any class, that has a member typedef
 which is a model of \meta{object} is a metaobject expression.
 
 \begin{minted}{cpp}
@@ -22,11 +22,11 @@ struct SomeMetaobjectExpression
 And thus, any \meta{object} is also a {\em metaobject expression}.
 
 Generally, however, any type for which the \verb@evaluate@ metafunction
-template class described below, "returns" a \meta{object} is a {\em metaobject expression}.
+(described below), "returns" a \meta{object} is a {\em metaobject expression}.
 
 \subsubsection{\texttt{evaluate}}
 
-A template class called \verb@evaluate@ should be defined and "return" a \meta{object}
+A class template called \verb@evaluate@ should be defined and should "return" a \meta{object}
 resulting from a {\em metaobject expression}:
 
 \begin{minted}{cpp}

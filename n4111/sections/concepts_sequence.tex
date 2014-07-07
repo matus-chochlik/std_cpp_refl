@@ -2,7 +2,7 @@
 \label{concept-MetaobjectSequence}
 
 As the name implies \concept{MetaobjectSequence}s are used to store seqences
-of metaobjects.
+or tuples of metaobjects.
 A model of \concept{MetaobjectSequence} is a class conforming to the following:
 
 It is a nullary metafunction returning itself:
@@ -15,7 +15,7 @@ struct MetaobjectSequence
 };
 \end{minted}
 
-Note that the above is only a psedo-code and
+\textbf{Note:} The definition above is only a psedo-code and
 the template parameter \verb@Metaobject@ indicates here the minimal
 metaobject concept which all elements in the sequence must satisfy.
 For example a \verb@MetaobjectSequence<MetaConstructor>@ denotes a sequence
@@ -82,5 +82,5 @@ struct at<__meta_seq_ABC, 2>
 { };
 \end{minted}
 
-Note, that the order of the metaobjects in a sequence is determined by the order
+\textbf{Note:} The order of the metaobjects in a sequence is determined by the order
 of appearance in the processed translation unit.

@@ -18,7 +18,31 @@ struct Metaobject
 };
 \end{minted}
 
-The \verb@is_metaobject@ template should return \verb@true_type@.
+One possible way how to achieve this is to define {\em basic metaobjects}
+as plain types (without any internal structure) and define a class template like:
+
+\begin{minted}{cpp}
+template <typename BasicMetaobject>
+struct metaobject
+{
+	typedef metaobject type;
+};
+\end{minted}
+
+and then, implement the actual \meta{object}s as instantiations of this template.
+For example if \verb@__base_meta_int@ is a basic metaobject reflecting the \verb@int@
+type then the actual metaobject \verb@__meta_int@ conforming to this concept could 
+be defined as:
+
+\begin{minted}{cpp}
+typedef metaobject<__base_meta_int> __meta_int;
+\end{minted}
+
+Although, this is just a suggestion not a requirement of this proposal.
+
+\subsubsection{\texttt{is\_metaobject}}
+
+The \verb@is_metaobject@ template should return \verb@true_type@ for all \meta{object}s.
 
 \begin{minted}{cpp}
 template <>

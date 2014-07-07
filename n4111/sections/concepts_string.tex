@@ -8,10 +8,12 @@ struct StringConstant
 {
 	typedef StringConstant type;
 
-	// null terminated char array
+	// null terminated char array with size (string length+1)
+	// known to sizeof at compile-time
         static constexpr const char value[Length+1] = {..., '\0'};
 
-	// implicit conversion to null terminated c-string
+	// implicit compile-time conversion to null terminated
+	// c-string
         constexpr operator const char* (void) const
         {
                 return value;
