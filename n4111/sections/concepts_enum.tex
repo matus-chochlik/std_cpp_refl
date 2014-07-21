@@ -31,8 +31,6 @@ struct metaobject_category<MetaEnum>
 { };
 \end{minted}
 
-The \verb@members@ of \meta{EnumClass} are only \meta{Named} \meta{Constant}s.
-
 \subsubsection{\texttt{base\_type}}
 
 A template class \verb@base_type@ should be defined and should inherit from
@@ -47,3 +45,37 @@ struct base_type<MetaEnum>
  : MetaType
 { };
 \end{minted}
+
+\subsubsection{\texttt{elaborated\_type\_specifier}}
+
+A template class called \verb@elaborated_type_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@enum@ specifier:
+
+\begin{minted}{cpp}
+template <typename T>
+struct elaborated_type_specifier;
+
+template <>
+struct elaborated_type_specifier<MetaEnum>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{members}}
+
+A template class \verb@members@ should be defined and should inherit from a
+\concept{MetaobjectSequence} containing \meta{NamedScoped} \meta{Constant} metaobjects
+reflecting all enumerated values of the base-level enum reflected by
+this \meta{Enum}. The \verb@scope@ of the enumeration values is however not the
+containing \verb@enum@, but the scope of that \verb@enum@.
+
+\begin{minted}{cpp}
+template <typename T>
+struct members;
+
+template <>
+struct members<MetaEnum>
+ : MetaobjectSequence<MetaConstant>
+{ };
+\end{minted}
+

@@ -66,7 +66,7 @@ assert(strcmp(meta::base_name<meta_A>(), "A") == 0);
 assert(strcmp(meta::base_name<meta_B>(), "B") == 0);
 assert(strcmp(meta::full_name<meta_D>(), "C::D") == 0);
 
-// reflected laborated type specifiers for A, B and U
+// reflected elaborated type specifiers for A, B and U
 typedef meta::elaborated_type_specifier<meta_A>::type meta_A_ets;
 typedef meta::elaborated_type_specifier<meta_B>::type meta_B_ets;
 typedef meta::elaborated_type_specifier<meta_U>::type meta_U_ets;
