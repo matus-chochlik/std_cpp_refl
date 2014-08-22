@@ -38,13 +38,19 @@ be defined as:
 typedef metaobject<__base_meta_int> __meta_int;
 \end{minted}
 
-Although, this is just a suggestion not a requirement of this proposal.
+Although, this is just one possibility not a requirement of this proposal.
 
 \subsubsection{\texttt{is\_metaobject}}
 
-The \verb@is_metaobject@ template should return \verb@true_type@ for all \meta{object}s.
+The \verb@is_metaobject@ template should inherit from \verb@true_type@ for all \meta{object}s,
+and inherit from \verb@false_type@ otherwise.
 
 \begin{minted}{cpp}
+template <typename T>
+struct is_metaobject
+ : false_type
+{ };
+
 template <>
 struct is_metaobject<Metaobject>
  : true_type
@@ -76,6 +82,21 @@ then the specialization of \verb@metaobject_category@ should be:
 template <>
 struct metaobject_category<__meta_std>
  : namespace_tag
+{ };
+\end{minted}
+
+\subsubsection{Comparison}
+
+A template class \verb@equal@ should be defined and should inherit from \verb@true_type@
+if a \hyperref[section-Library]{metaobject expression} \verb@Expr1@ {\em evaluates} into
+the same metaobject as the metaobject expression \verb@Expr2@ (i.e. into metaobjects
+that both reflect the same base-level construct). Otherwise it should inherit from
+\verb@false_type@:
+
+\begin{minted}{cpp}
+template <typename Expr1, typename Expr2>
+struct equal
+ : BooleanConstant
 { };
 \end{minted}
 
