@@ -1,0 +1,5 @@
+Address claim that "reflection is not code generation".
+
+Address "too complex/problematic" for compiler vendors.
+
+Why do we need meta-objects, why not just extend type-traits.

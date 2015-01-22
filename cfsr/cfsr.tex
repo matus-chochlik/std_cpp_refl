@@ -1,0 +1,94 @@
+\documentclass[11pt,a4paper,oneside]{scrartcl}
+
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{chochlik@gmail.com}
+\newcommand{\docname}{A case for strong static reflection}
+\newcommand{\docnum}{Nxxxx}
+\newcommand{\docdate}{2015-01-22}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+\usepackage[titletoc]{appendix}
+
+\usepackage{listings}
+\usepackage{minted}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\docnum - \docname}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\graphicspath{{images/}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
+\tikzstyle{concept}=[
+	rectangle,	
+	very thick,
+	draw=red!80!black!80,
+	top color=white,
+	bottom color=red!20,
+	node distance=0.5em and 1.5em
+]
+\tikzstyle{inheritance}=[
+	->,
+	shorten >=1pt,
+	>=open triangle 90,
+	very thick
+]
+   
+
+\setcounter{tocdepth}{3} 
+
+\title{\docname}
+
+\author{\mchname (\mchmail)}
+
+\newcommand{\meta}[1]{{\em \textbf{Meta#1}}}
+
+\begin{document}
+
+\begin{tabular}{r l}
+Document number: & \docnum\\
+Date: & \docdate\\
+Project: & Programming Language C++, SG7, Reflection\\
+Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
+\end{tabular}
+
+\begin{center}
+\vskip 2em
+{\Huge \docname}
+\vskip 1em
+{\emph \mchname}
+\vskip 2em
+\end{center}
+
+\paragraph{Abstract}
+
+In N3996 \cite{n3996} and N4111 \cite{n4111} we proposed the design
+and some hints on possible implementation of a compile-time reflection
+facility for standard C++. N3996 contained list of possible use-cases
+and a discussion about the usefulness of reflection. During the presentation
+of the paper concerns were expressed about the level-of-detail and scope
+of the presented proposal and possible dangers of giving non-expert language users
+a {\em too powerful} tool to use and dangers for the implementers of this proposal.
+Examples and more detailed description of use cases were called for.
+This paper aims to address these issues.
+
+
+\tableofcontents
+
+\input{sections/introduction.tex}
+\input{sections/basic_use_cases.tex}
+\input{sections/advanced_use_cases.tex}
+\input{sections/references.tex}
+
+\end{document}

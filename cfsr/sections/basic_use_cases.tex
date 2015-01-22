@@ -1,0 +1,86 @@
+\section{Basic use cases}
+
+This sections describes trivial use-cases for reflection.
+
+\subsection{Portable type names}
+
+One of the notorious problems of \verb@std::type_info@ is that the string
+returned by its \verb@name@ member function is not standardized and is
+not even guaranteed to return any meaningful, unique human-readable string,
+at least not without demangling, which is platform specific.
+Furthermore the returned string is not \verb@constexpr@ and cannot be
+reasoned about at compile-time and is applicable only to types.
+
+The ability to uniquely map any type used in a program to a human-readable,
+portable, compile-time string has several use-cases described below.
+
+The \meta{Named} concept from N4111 reflects named language constructs
+and provides the \verb@base_name@ and \verb@full_name@ metafunctions,
+returning their basic name without any qualifiers or decorations and a fully-qualified 
+portable type name.
+
+\subsubsection{Logging}
+
+When logging the execution of functions (especialy templated ones) it is sometimes
+desirable to also include the names of the parameter types or even the names of the parameters
+and other variables.
+
+The best we can do with just the \verb@std::type_info@ is the following:
+
+\begin{minted}{cpp}
+#if __PLATFORM_ABC__
+std::string demangled_type_name(const char*) { /* implementation 1 */ }
+#else if __PLATFORM_MNO__
+std::string demangled_type_name(const char*) { /* implementation 2 */ }
+#else if __PLATFORM_XYZ__
+std::string demangled_type_name(const char*) { /* implementation N */ }
+#else
+std::string demangled_type_name(const char* mangled_name)
+{
+	// don't know how to demangle this; let's try our luck
+	return mangled_name;
+}
+#endif
+
+template <typename T>
+T min(const T& a, const T& b)
+{
+	log()   << "min<"
+	        << demangled_type_name(typeid(T).name())
+	        << ">(" << a << ", " << b << ") = ";
+
+	T result = a<b?a:b;
+
+	log()   << result << std::endl;
+
+	return result;
+}
+
+\end{minted}
+
+Which may or may not work, depending on the platform.
+
+With the help of reflection as proposed in N4111 we could do:
+
+\begin{minted}{cpp}
+template <typename T>
+T min(const T& a, const T& b)
+{
+	log()   << "min<"
+	        << full_name<reflected(T)>()
+	        << ">(" << a << ", " << b << ") = ";
+
+	T result = a<b?a:b;
+
+	log()   << result << std::endl;
+
+	return result;
+}
+\end{minted}
+
+\subsection{Enumeration of base classes}
+
+\subsection{Enumeration of scope members}
+
+\subsection{Turning compile-time strings into identifiers}
+
