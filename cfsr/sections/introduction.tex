@@ -39,3 +39,81 @@ information from the compiler and why that would be useful. Since this paper is 
 to N3996 and N4111, it also indicates how the metaobjects proposed in N4111 would
 be usable in the individual use-cases.
 
+\subsection{Additions to N4111}
+
+The examples below use several features not described in N4111 (these will be added
+in the next revision of that paper):
+
+\subsubsection{For each element in Metaobject sequence}
+
+Template function \verb@for_each@, should be defined for every metaobject sequence
+and should call the specified unary functor taking values of types conforming to
+the same metaobject concept as the elements of the metaobject sequence as arguments.
+
+\begin{minted}{cpp}
+template <typename MetaobjectSequence, typename UnaryFunc>
+void for_each(UnaryFunc func)
+{
+	/* call func on each element in the sequence */
+}
+\end{minted}
+
+The interface of \meta{objectSequence} as defined in N4111 should be enough
+to define a single generic implementation of this function without the need
+to write specialization for every type modelling this concept.
+
+\subsubsection{Turning compile-time strings into identifiers}
+
+Inspired by the idea of {\em name literals} as mentioned on the WG mailing list,
+we suggest to add a new functionality to the core language, allowing to specify
+identifiers as compile-time constant C-string literal expression, i.e. expressions
+evaluating into values of \verb@constexpr const char [N]@.
+
+This could be implemented either by using a new operator (or recycling an old one),
+or maybe by using generalized attributes.
+In the examples below the \verb@identifier@ operator is used, but we do not have
+any strong preference for the name of this operator.
+
+For example:
+
+\begin{minted}{cpp}
+
+identifier("int") identifier("main")(
+	int idenitifier("argc"),
+	const identifier("char")* identifier("argv")
+)
+{
+	using namespace identifier("std");
+	return 0;
+}
+
+\end{minted}
+
+would be equivalent to
+
+\begin{minted}{cpp}
+int main(int argc, const char* argv)
+{
+	using namespace std;
+	return 0;
+}
+\end{minted}
+
+The idea is to replace preprocessor token pasting with much more flexible constexpr C++ expressions.
+Adding this feature would also allow to remove the \verb@named_mem_var@ and
+\verb@named_typedef@ metafunctions which were in N4111 defined as part of
+the interface of \meta{Named}.
+
+\subsubsection{Position of a base in the list of base classes}
+
+For every model of \meta{Inheritance} the \verb@position@ template should be defined as:
+
+\begin{minted}{cpp}
+template <>
+struct position<MetaInheritance>
+ : integral_constant<std::size_t, I>
+{ };
+\end{minted}
+
+Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
+reflected by the \meta{Inheritance}.
