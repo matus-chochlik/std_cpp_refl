@@ -147,9 +147,17 @@ void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 		<< base_name<MetaFunction>()
 		<< std::endl;
 
-	/* obtain the MetaParameter(s) from the MetaFunction
-	 * and print them pairwise with the values from params.
-	 */
+	// obtain the MetaParameter(s) from the MetaFunction
+	// and print them pairwise with the values from params.
+	for_each<parameters<MetaFunction>>(
+		[&params](auto meta_param)
+		{
+			typedef decltype(meta_param) MP;
+			log()  << base_name<MP>() << ": "
+			       << std::get<position<MP>::value>(params)
+			       << std::endl;
+		}
+	);
 }
 
 template <typename T>

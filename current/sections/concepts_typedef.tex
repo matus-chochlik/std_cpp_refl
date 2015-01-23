@@ -1,0 +1,66 @@
+\subsection{MetaTypedef}
+\label{concept-MetaTypedef}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaType)[above right=of MetaNamedScoped] {MetaType}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\node [concept] (MetaTypedef)[below right=of MetaNamedScoped] {MetaTypedef}
+	edge [inheritance] (MetaType);
+\end{tikzpicture}
+
+\meta{Typedef} is a \meta{Type} reflecting \verb@typedef@s.
+
+In addition to the requirements inherited from \meta{Type}, the following is required:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Typedef} should
+inherit from \verb@typedef_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaTypedef>
+ : typedef_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{type}}
+
+A template class called \verb@type@ should be defined and should inherit from the \meta{Type}
+reflecting the "source" type of the typedef:
+
+\begin{minted}{cpp}
+template <typename T>
+struct type;
+
+template <>
+struct type<MetaTypedef>
+ : MetaType
+{ };
+\end{minted}
+
+For example if \verb@__meta_std_string@ is a \meta{Typedef} reflecting the \verb@std::string@
+typedef and \verb@__meta_std_basic_string_char@ is the \meta{Type} that reflects
+the \verb@std::basic_string<char>@ type, and \verb@std::string@ is defined as:
+
+\begin{minted}{cpp}
+namespace std {
+typedef basic_string<char> string;
+}
+\end{minted}
+
+then the specialization of \verb@type@ for \verb@__meta_std_string@ should be following:
+
+\begin{minted}{cpp}
+template <>
+struct type<__meta_std_string>
+ : __meta_std_basic_string_char
+{ };
+\end{minted}
+

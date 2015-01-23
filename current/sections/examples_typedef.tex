@@ -1,0 +1,65 @@
+\subsection{Typedef reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+// reflected typedef std::size_t
+typedef mirrored(std::size_t) meta_size_t;
+
+static_assert(is_metaobject<meta_size_t>(), "");
+
+static_assert(meta::has_name<meta_size_t>(), "");
+static_assert(meta::has_scope<meta_size_t>(), "");
+static_assert(not(meta::is_scope<meta_size_t>()), "");
+static_assert(not(meta::is_template<meta_size_t>()), "");
+static_assert(not(meta::has_template<meta_size_t>()), "");
+static_assert(not(meta::is_class_member<meta_size_t>()), "");
+
+// Is a MetaTypedef
+static_assert(
+	is_base_of<
+		meta::typedef_tag,
+		metaobject_category<meta_size_t>
+	>(), ""
+);
+
+// The scope of std::size_t is the namespace std
+static_assert(
+	is_base_of<
+		meta_std,
+		meta::scope<meta_size_t>
+	>(), ""
+);
+
+// The original type
+static_assert(
+	is_same<
+		std::size_t,
+		meta::original_type<meta_size_t>::type
+	>(), ""
+);
+
+// the "source" type of the typedef
+typedef meta::type<meta_size_t>::type meta_size_t_type;
+static_assert(
+	is_base_of<
+		meta::type_tag,
+		metaobject_category<meta_size_t_type>
+	>(), ""
+);
+
+// The original type
+static_assert(
+	is_same<
+		std::size_t,
+		meta::original_type<meta_size_t_type>::type
+	>(), ""
+);
+
+assert(strlen(meta::base_name<meta_size_t>()) == 6);
+assert(strcmp(meta::base_name<meta_size_t>(), "size_t") == 0);
+assert(strlen(meta::full_name<meta_size_t>()) == 11);
+assert(strcmp(meta::full_name<meta_size_t>(), "std::size_t") == 0);
+// YMMV
+assert(strlen(meta::base_name<meta_size_t_type>()) == 12);
+assert(strcmp(meta::base_name<meta_size_t_type>(), "unsigned int") == 0);
+\end{minted}
+

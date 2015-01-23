@@ -1,0 +1,59 @@
+\subsection{MetaOverloadedFunction}
+\label{concept-MetaOverloadedFunction}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaOverloadedFunction)[right=of MetaNamedScoped] {MetaOverloadedFunction}
+	edge [inheritance] (MetaNamedScoped);
+\end{tikzpicture}
+
+
+Models of \meta{OverloadedFunction} reflect overloaded functions.
+\meta{Function}s (and \meta{Operator}s, \meta{Initializer}s, \meta{Constructor}s, etc.)
+are not direct members of scopes (they are not listed in the \concept{MetaobjectSequence}
+"returned" by the \verb@members<MetaScope>@ template class).
+Instead, all functions, operators and constructors with the same name, (and even those that are not
+overloaded in a specific scope) are grouped into a \meta{OverloadedFunction}. Individual overloaded \meta{Function}s
+in the group can be obtained through the interface of \meta{OverloadedFunction} (specifically through the
+\verb@overloads@ template described below). The same also applies to \meta{Constructor}s and \meta{Operator}s.
+
+The rationale for this is that direct scope members, i.e. metaobjects accessible through the \meta{Scope}'s
+\verb@members@ template class should have unique names, which would not be the case if \meta{Function}s
+were direct scope members.
+
+The \verb@scope@ of an \meta{OverloadedFunction} is the same as the \verb@scope@
+of all \meta{Function}s grouped by that \meta{OverloadedFunction}.
+
+In addition to the requirements inherited from \meta{NamedScoped},
+models of \meta{OverloadedFunction} are subject to the following:
+
+The \verb@metaobject_category@ template class specialization for a \meta{OverloadedFunction}
+should inherit from \verb@overloaded_function_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaOverloadedFunction>
+ : overloaded_function_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{overloads}}
+
+A template class called \verb@overloads@ should be defined and should
+return a \concept{MetaobjectSequence} of \meta{Function}s, reflecting
+the individual overloads:
+
+\begin{minted}{cpp}
+template <>
+struct overloads<MetaOverloadedFunction>
+ : MetaobjectSequence<MetaFunction>
+{ };
+\end{minted}
+

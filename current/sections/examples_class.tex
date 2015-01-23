@@ -1,0 +1,176 @@
+\subsection{Class reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+struct A
+{
+	int a;
+};
+
+class B
+{
+private:
+	bool b;
+public:
+	typedef int T;
+};
+
+class C
+ : public A
+ , virtual protected B
+{
+public:
+	static constexpr char c = 'C';
+
+	struct D : A
+	{
+		static double d;
+	} d;
+};
+
+union U
+{
+	long u;
+	float v;
+};
+
+typedef mirrored(A) meta_A;
+typedef mirrored(B) meta_B;
+typedef mirrored(C) meta_C;
+typedef mirrored(C::D) meta_D;
+typedef mirrored(B::T) meta_T;
+typedef mirrored(U) meta_U;
+
+// classes are scopes
+static_assert(meta::is_scope<meta_A>(), "");
+static_assert(meta::is_scope<meta_B>(), "");
+static_assert(meta::is_scope<meta_C>(), "");
+static_assert(meta::is_scope<meta_D>(), "");
+static_assert(meta::is_scope<meta_U>(), "");
+
+// A, B, C, C::D and U are all elaborated types
+assert(is_base_of<meta::class_tag, metaobject_category<meta_A>>());
+assert(is_base_of<meta::class_tag, metaobject_category<meta_B>>());
+assert(is_base_of<meta::class_tag, metaobject_category<meta_C>>());
+assert(is_base_of<meta::class_tag, metaobject_category<meta_D>>());
+assert(is_base_of<meta::class_tag, metaobject_category<meta_U>>());
+
+static_assert(!meta::is_class_member<meta_A>(), "");
+static_assert(!meta::is_class_member<meta_B>(), "");
+static_assert(!meta::is_class_member<meta_C>(), "");
+static_assert( meta::is_class_member<meta_D>(), "");
+static_assert( meta::is_class_member<meta_T>(), "");
+static_assert(!meta::is_class_member<meta_U>(), "");
+
+// typenames
+assert(strcmp(meta::base_name<meta_A>(), "A") == 0);
+assert(strcmp(meta::base_name<meta_B>(), "B") == 0);
+assert(strcmp(meta::full_name<meta_D>(), "C::D") == 0);
+
+// reflected elaborated type specifiers for A, B and U
+typedef meta::elaborated_type_specifier<meta_A>::type meta_A_ets;
+typedef meta::elaborated_type_specifier<meta_B>::type meta_B_ets;
+typedef meta::elaborated_type_specifier<meta_U>::type meta_U_ets;
+
+// specifier keywords
+assert(strcmp(meta::keyword<meta_A_ets>(), "struct") == 0);
+assert(strcmp(meta::keyword<meta_B_ets>(), "class") == 0);
+assert(strcmp(meta::keyword<meta_U_ets>(), "union") == 0);
+
+// specifier tags
+assert(is_base_of<meta::struct_tag, meta::specifier_category<meta_A_ets>>());
+assert(is_base_of< meta::class_tag, meta::specifier_category<meta_B_ets>>());
+assert(is_base_of<meta::union_tag, meta::specifier_category<meta_U_ets>>());
+
+// reflected sequences of members of the A,B and C classes
+typedef meta::members<meta_A>::type meta_A_members;
+typedef meta::members<meta_B>::type meta_B_members;
+typedef meta::members<meta_C>::type meta_C_members;
+
+static_assert(meta::size<meta_A_members>() == 1, ""); // A::a
+static_assert(meta::size<meta_B_members>() == 2, ""); // B::b,B::T
+static_assert(meta::size<meta_C_members>() == 3, ""); // C::c,C::D,C::d
+
+// reflected members of B and C
+typedef meta::at<meta_B_members, 0>::type meta_B_b;
+typedef meta::at<meta_B_members, 1>::type meta_B_T;
+typedef meta::at<meta_C_members, 0>::type meta_C_c;
+typedef meta::at<meta_C_members, 1>::type meta_C_D;
+typedef meta::at<meta_C_members, 2>::type meta_C_d;
+
+assert(is_base_of<meta::variable_tag, metaobject_category<meta_B_b>>());
+assert(is_base_of<meta::typedef_tag, metaobject_category<meta_B_T>>());
+assert(is_base_of<meta::class_tag, metaobject_category<meta_C_D>>());
+
+// MetaClassMembers
+static_assert( meta::is_class_member<meta_B_b>(), "");
+static_assert( meta::is_class_member<meta_B_T>(), "");
+static_assert( meta::is_class_member<meta_C_D>(), "");
+static_assert( meta::is_class_member<meta_C_d>(), "");
+
+// access specifiers
+typedef meta::access_specifier<meta_B_B>::type meta_B_b_access;
+typedef meta::access_specifier<meta_C_D>::type meta_C_D_access;
+
+// specifier keywords
+assert(strcmp(meta::keyword<meta_B_b_access>(), "private") == 0);
+assert(strcmp(meta::keyword<meta_C_D_access>(), "public") == 0);
+
+// sequence of base classes of C
+typedef meta::base_classes<meta_C>::type meta_C_bases;
+
+static_assert(meta::size<meta_C_bases>() == 2, ""); // A, B
+
+// MetaInheritances of C->A and C->B
+typedef meta::at<meta_C_bases, 0>::type meta_C_base_A;
+typedef meta::at<meta_C_bases, 1>::type meta_C_base_B;
+
+// inheritance specifiers
+typedef meta::inheritance_specifier<meta_C_base_A>::type meta_C_base_A_it;
+typedef meta::inheritance_specifier<meta_C_base_B>::type meta_C_base_B_it;
+
+// access specifiers
+typedef meta::access_specifier<meta_C_base_A>::type meta_C_base_A_acc;
+typedef meta::access_specifier<meta_C_base_B>::type meta_C_base_B_acc;
+
+// specifier keywords
+assert(strcmp(meta::keyword<meta_C_base_A_it>(), "") == 0);
+assert(strcmp(meta::keyword<meta_C_base_B_it>(), "virtual") == 0);
+assert(strcmp(meta::keyword<meta_C_base_A_acc>(), "public") == 0);
+assert(strcmp(meta::keyword<meta_C_base_B_acc>(), "protected") == 0);
+
+// specifier tags
+static_assert(
+	is_base_of<
+		meta::none_tag,
+		meta::specifier_category<meta_C_base_A_it>
+	>(), ""
+);
+static_assert(
+	is_base_of<
+		meta::virtual_tag,
+		meta::specifier_category<meta_C_base_B_it>
+	>(), ""
+);
+static_assert(
+	is_base_of<
+		meta::public_tag,
+		meta::specifier_category<meta_C_base_A_acc>
+	>(), ""
+);
+
+// base classes
+static_assert(
+	is_base_of<
+		meta_A,
+		meta::base_class<meta_C_base_A>
+	>(), ""
+);
+static_assert(
+	is_base_of<
+		meta_B,
+		meta::base_class<meta_C_base_B>
+	>(), ""
+);
+
+\end{minted}
+

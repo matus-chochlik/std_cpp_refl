@@ -1,0 +1,158 @@
+\section{Additions to the library}
+\label{section-Library}
+
+In order to simplify composition of the metaobjects and metafunctions defined
+\hyperref[section-Concepts]{above}, several further additions to the standard
+library should be made.
+
+\subsection{Metaobject expressions}
+
+A {\em metaobject expression} is a class which can be {\em evaluated}
+into a \meta{object}. By default any class, that has a member typedef
+called \verb@type@, which is a model of \meta{object}, is a metaobject expression.
+
+\begin{minted}{cpp}
+struct SomeMetaobjectExpression
+{
+	typedef Metaobject type;
+};
+
+\end{minted}
+
+And thus, any \meta{object} is also a {\em metaobject expression}.
+
+Generally, however, any type for which the \verb@evaluate@ metafunction
+(described below), "returns" a \meta{object} is a {\em metaobject expression}.
+
+\subsubsection{\texttt{evaluate}}
+
+A class template called \verb@evaluate@ should be defined and should "return" a \meta{object}
+resulting from a {\em metaobject expression}:
+
+\begin{minted}{cpp}
+template <class MetaobjectExpression>
+struct evaluate
+ : Metaobject
+{ };
+\end{minted}
+
+that could be implemented for example as follows:
+
+\begin{minted}{cpp}
+template <class X, bool IsMetaobject>
+struct do_evaluate;
+
+template <class X>
+struct do_evaluate<X, true>
+ : X
+{ };
+
+template <class X>
+struct do_evaluate<X, false>
+ : do_evaluate<
+	typename X::type,
+	is_metaobject<typename X::type>::value
+> { };
+
+template <class X>
+struct evaluate
+ : do_evaluate<X, is_metaobject<X>::value>
+{ };
+
+\end{minted}
+
+The users should be allowed to add specializations of \verb@evaluate@
+for other types if necessary.
+
+\subsection{Default implementation of metafunctions}
+
+The default implementation of the metafunction template classes defined above,
+should follow this pattern:
+
+\begin{minted}{cpp}
+template <typename T>
+struct Template;
+
+template <typename T>
+struct Template
+ : Template<typename evaluate<T>::type>
+{ };
+\end{minted}
+
+Where \verb@Template@ is each of the following:
+
+\begin{minipage}[t]{0.5\textwidth}
+\begin{itemize}
+\item \verb@metaobject_category@
+\item \verb@specifier_category@
+\item \verb@keyword@
+\item \verb@base_name@
+\item \verb@full_name@
+\item \verb@named_typedef@
+\item \verb@named_mem_var@
+\item \verb@scope@
+\item \verb@members@
+\item \verb@overloads@
+\item \verb@type@
+\item \verb@base_classes@
+\item \verb@base_class@
+\item \verb@base_type@
+\item \verb@result_type@
+\item \verb@parameters@
+\item \verb@template_parameters@
+\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\begin{itemize}
+\item \verb@template_arguments@
+\item \verb@template_@
+\item \verb@exceptions@
+\item \verb@instantiation@
+\item \verb@position@
+\item \verb@value@
+\item \verb@elaborated_type_specifier@
+\item \verb@access_specifier@
+\item \verb@constexpr_specifier@
+\item \verb@noexcept_specifier@
+\item \verb@const_specifier@
+\item \verb@inheritance_specifier@
+\item \verb@linkage_specifier@
+\item \verb@storage_specifier@
+\item \verb@is_pure@
+\item \verb@is_pack@
+\item \verb@original_type@
+\end{itemize}
+\end{minipage}
+
+For example:
+
+\begin{minted}{cpp}
+template <typename T>
+struct metaobject_category
+ : metaobject_category<typename evaluate<T>::type>
+{ };
+\end{minted}
+
+This will allow to compose metaobject expressions into algorithms. For example:
+
+\begin{minted}[tabsize=4]{cpp}
+// print the number of members of the scope where mycls is defined
+cout << size<members<scope<mirrored(mycls)>>>() << endl;
+
+// print the name of the first base class of mycls
+cout <<
+	base_name<base_class<at<base_classes<mirrored(mycls)>, 0>>>()
+<< endl;
+
+// print the access specifier keyword of the second base of mycls
+cout <<
+	keyword<access_specifier<at<base_classes<mirrored(mycls)>, 1>>>()
+<< endl;
+
+// print the fully qualified name of the scope of
+// the source type of the third member of mycls
+cout <<
+	full_name<scope<type<at<members<mirrored(mycls)>, 2>>>>()
+<< endl;
+\end{minted}
+

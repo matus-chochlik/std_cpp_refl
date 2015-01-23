@@ -1,0 +1,182 @@
+\section{Rationale}
+
+This section explains some of the design decisions behind this proposal and
+answers several frequently asked questions.
+
+\subsection{Why metaobjects, why not reflect directly?}
+
+{\textbf Q:}{\em Why should we define a set of metaobject concepts, let the compiler generate
+models of these concepts and use those to obtain the metadata? Why not just extend the existing
+type traits?}
+
+{\textbf A:} The most important reason is the completeness and the scope of reflection.
+Type traits (as they are defined now) work just with types. A reflection facility should
+however provide much more metadata.
+It should be able to reflect namespaces, functions, constructors, inheritance, variables, etc.
+
+For example:
+
+\begin{minted}{cpp}
+pair<long, string> my_var;
+
+// OK, we can print the name of the type of a variable:
+cout << type_name<decltype(my_var)>() << endl;
+// But we really, really want to print the name of the variable
+// (without the use of the preprocessor)
+cout << type_name<my_var>() << endl; // Error
+// similar with namespaces:
+cout << type_name<std::chrono>() << endl; // Error
+// etc.
+\end{minted}
+
+
+Doing reflection with type traits limits the scope, because of the rules defining what
+can be a template parameter. This rules could be updated to allow for example an expression
+representing a particular class constructor to  be passed as a template argument.
+Also currently there is no expression for specifying (not invoking) a constructor
+or a particular function overload, so additional rules would have to be added.
+
+This would (in our opinion) be a much more drastic change to the standard, than
+the adoption of this proposal. If expressions denoting a namespace or a particular
+constructor or a function overload were added just for the purpose of reflecting
+them (with the \verb@mirroed@ keyword), then all the changes could be localized
+in the reflection subsystem and remain invalid in the core language:
+
+\begin{minted}{cpp}
+mirrored(std::current_thread); // OK - MetaNamespace
+std::current_thread; // error - not a primary expression
+
+mirrored(std::sin); // OK - MetaOverloadedFunction
+std::sin; // error - cannot resolve overload
+
+mirrored(std::sin(double)); // OK - MetaFunction
+std::sin(double); // error - invalid expression
+//etc.
+\end{minted}
+
+
+Second reason is access to private and protected members. There are many use-cases where
+access to non-public class members through reflection is desired. If reflection was
+done through type traits directly on the class members, it would be either impossible
+to reflect non-public members or the access rules would have to be changed to somehow
+allow access in reflection expressions:
+
+\begin{minted}{cpp}
+class C
+{
+private:
+	typedef int T;
+public:
+};
+
+assert(some_trait<C::T>::value); //OK, we are reflecting so we have access
+\end{minted}
+
+but not outside:
+
+\begin{minted}{cpp}
+C::T x = 0; // Error, C::T is private
+\end{minted}
+
+With the reflection operator like \verb@mirrored(X)@, the access rules would have
+to be updated only to allow the reflection operator to have access to everthing.
+At the first glance, the following two expressions;
+
+\begin{minted}{cpp}
+some_trait<C::T>::value
+\end{minted}
+
+and
+
+\begin{minted}{cpp}
+mirrored(C::T)
+\end{minted}
+
+look similar and so the changes to the access rules could seem similar too, but
+that is not the case. The (single) \verb@mirrored@ operator would have special status,
+on the other hand type traits are regular templates (with some magic inside) and
+all (several dozens of them) would need to be distinguished from all the other templates
+in the \verb@std@ namespace, which should not have private access.
+
+Having said that, we do not object to extending the type traits where it does make sense.
+
+One other reason for having a new reflection operator is, that there already is an
+existing (very limited) reflection operator, namely \verb@typeid@ which "returns"
+a compiler-generated "metaobject" -- \verb@std::type_info@. We are aware that there
+are differences between \verb@typeid@ and \verb@mirrored@, but the basic idea is similar.
+
+\subsection{Why are the metaobjects anonymous?}
+
+{\textbf Q:}{\em Why should the metaobjects be anonymous types as opposed to
+types with well defined and standardized names or concrete template classes, (possibly with some
+special kind of parameter accepting different arguments than types and constants)?}
+
+{\textbf A:} We wanted to avoid defining a specific naming convention, because it would
+be difficult to do so and very probably not user friendly (see C++ name mangling). There
+already is a precedent for anonymous types -- for example C++ {\em lambdas}.
+
+Another option would be to define a concrete set of template classes like:
+
+\begin{minted}{cpp}
+namespace std {
+
+template <typename T>
+class meta_type /* Model of MetaType */
+{ };
+
+}
+\end{minted}
+
+which could work with types, classes, etc., but would not work with namespaces, constructors,
+etc. (see also the Q/A above):
+
+\begin{minted}{cpp}
+namespace std {
+
+template <something X> //<- Problem
+class meta_constructor /* Model of MetaConstructor */
+{ };
+
+template <something X> //<- Problem
+class meta_namespace /* Model of MetaNamespace */
+{ };
+
+}
+
+typedef std::meta_namespace<std> meta_std; //<- Problem
+\end{minted}
+
+Instead of this, the metaobjects are anonymous and their (internal) identification
+is left to the compiler. From the users POV, the metaobject can be distinguished
+by the means of the metaobject traits and tags as \hyperref[section-Concepts]{described above}.
+
+\subsection{Why this rendering of metaobjects?}
+
+{\textbf Q:}{\em Why were the metaobject concepts from n3996 transformed into a set
+of types with external template classes operating on them?
+}
+
+{\textbf A:} N3996 defined a set of abstract metaobject concepts including their
+instances, traits, attributes and functions.
+Then two possible concrete transformations into valid C++ were shown in the appendices.
+
+\begin{enumerate}
+\item Structures where the attributes were constexpr static member variables and the functions were
+constexpr static member functions.
+\item Types where the traits, attributes and functions are implemented as specializations of
+class templates defined on namespace-level.
+\end{enumerate}
+
+In this proposal the second option was picked for several reasons:
+
+\begin{itemize}
+\item It is closer to standard type traits and to popular metaprogramming libraries like {\em Boost.MPL}, etc.
+\item It should require less resources and time to compile, since the implementation of various
+metafunctions (class templates) like \verb@base_name@, \verb@scope@ or \verb@position@ and
+especially those returning \concept{MetaobjectSequence}s, like \verb@members@, \verb@overloads@,
+\verb@base_classes@ etc. for concrete metaobjects can be instantiated individually
+and need to be instantiated only if they are actually used in the code. It would probably be harder
+to do so if they were implemented as (non-template) class members.
+\end{itemize}
+
+

@@ -1,0 +1,79 @@
+\subsection{MetaTemplate}
+\label{concept-MetaTemplate}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaTemplate)[above right=of MetaNamedScoped] {MetaTemplate}
+	edge [inheritance, bend right] (MetaNamedScoped);
+\end{tikzpicture}
+
+
+\meta{Template} is a \meta{NamedScoped} and either a \meta{Class} or a \meta{Function}.
+
+\textbf{Note:} The \meta{Template} concept slightly modifies the requirements
+of the \meta{Class} and \meta{Function} concepts.
+
+In addition to the requirements inherited from \meta{NamedScoped},
+models of \meta{Template} must conform to the following:
+
+The \verb@is_template@ template class specialization for a \meta{Template} should
+inherit from \verb@true_type@:
+
+\begin{minted}{cpp}
+template <>
+struct is_template<MetaTemplate>
+ : true_type
+{ };
+\end{minted}
+
+\subsubsection{\texttt{template\_parameters}}
+
+A template class called \verb@template_parameters@ should be defined and should
+inherit from a \concept{MetaobjectSequence} of \meta{TemplateParameter}s,
+reflecting the individual type or constant template parameters:
+
+\begin{minted}{cpp}
+template <typename T>
+struct template_parameters;
+
+template <>
+struct template_parameters<MetaTemplate>
+ : MetaobjectSequence<MetaTemplateParameter>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{instantiation}}
+
+A template class \verb@instantiation@ should be defined and should
+inherit from a \meta{Instantiation} reflecting a concrete instantiation of
+the template reflected by this \meta{Template}:
+
+\begin{minted}{cpp}
+template <typename T, typename ... P>
+struct instantiation;
+
+template <typename ... P>
+struct instantiation<MetaTemplate, P...>
+ : MetaInstantiation
+{ };
+\end{minted}
+
+For example if \verb@__meta_std_pair@ is a \meta{Template} and a \meta{Class} reflecting
+the \verb@std::pair@ template and \verb@__meta_std_pair_int_double@ is a \meta{Instantiation}
+and a \meta{Class} reflecting the \verb@std::pair<int, double>@ class then:
+
+\begin{minted}{cpp}
+static_assert(
+	is_base_of<
+		__meta_std_pair_int_double,
+		instantiation<__meta_std_pair, int, double>
+	>() , ""
+);
+\end{minted}

@@ -1,0 +1,62 @@
+\subsection{MetaType}
+\label{concept-MetaType}
+
+\begin{tikzpicture}
+\node [concept] (Metaobject) {Metaobject};
+\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
+	edge [inheritance, bend right] (Metaobject);
+\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
+	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
+	edge [inheritance, bend right] (MetaNamed)
+	edge [inheritance, bend left] (MetaScoped);
+\node [concept] (MetaType)[right=of MetaNamedScoped] {MetaType}
+	edge [inheritance] (MetaNamedScoped);
+\end{tikzpicture}
+
+\meta{Type} is a \meta{NamedScoped} reflecting types.
+
+In addition to the requirements inherited from \meta{NamedScoped}, the following is required:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Type} should
+inherit from \verb@type_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaType>
+ : type_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{original\_type}}
+
+A template class \verb@original_type@ should be defined and should "return"
+the original type reflected by this \meta{Type}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct original_type;
+
+template <>
+struct original_type<MetaType>
+{
+	static_assert(not(is_template<MetaType>::value), "");
+	typedef original-type type;
+};
+\end{minted}
+
+For example, if \verb@__meta_int@ is a metaobject reflecting the \verb@int@ type,
+then the specialization of \verb@original_type@ should be following:
+
+\begin{minted}{cpp}
+template <>
+struct original_type<__meta_int>
+{
+	typedef int type;
+};
+\end{minted}
+
+\textbf{Note:} If a concept derived from \meta{Type}, for example a \meta{Class},
+is also a \meta{Template} (i.e. is reflecting a template not a concrete type),
+then the \verb@original_type@ template should be left undefined.
+

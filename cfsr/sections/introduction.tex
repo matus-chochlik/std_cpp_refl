@@ -84,6 +84,10 @@ identifier("int") identifier("main")(
 )
 {
 	using namespace identifier("std");
+	for(int i=0; i<argc; ++i)
+	{
+		cout << argv[i] << endl;
+	}
 	return 0;
 }
 
@@ -95,14 +99,20 @@ would be equivalent to
 int main(int argc, const char* argv)
 {
 	using namespace std;
-	return 0;
+	/* ... */
 }
 \end{minted}
+
+The content of the string literal passed as the argument to \verb@identifier@
+should be encoded in the source character set and subject to the same restrictions
+which are placed on identifiers.
 
 The idea is to replace preprocessor token pasting with much more flexible constexpr C++ expressions.
 Adding this feature would also allow to remove the \verb@named_mem_var@ and
 \verb@named_typedef@ metafunctions which were in N4111 defined as part of
 the interface of \meta{Named}.
+
+The following sections describe several use cases for this feature.
 
 \subsubsection{Position of a base in the list of base classes}
 
