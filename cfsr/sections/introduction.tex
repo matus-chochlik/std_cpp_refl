@@ -62,6 +62,20 @@ The interface of \meta{objectSequence} as defined in N4111 should be enough
 to define a single generic implementation of this function without the need
 to write specialization for every type modelling this concept.
 
+\subsubsection{Position of a base in the list of base classes}
+
+For every model of \meta{Inheritance} the \verb@position@ template should be defined as:
+
+\begin{minted}{cpp}
+template <>
+struct position<MetaInheritance>
+ : integral_constant<std::size_t, I>
+{ };
+\end{minted}
+
+Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
+reflected by the \meta{Inheritance}.
+
 \subsubsection{Turning compile-time strings into identifiers}
 
 Inspired by the idea of {\em name literals} as mentioned on the WG mailing list,
@@ -112,18 +126,12 @@ Adding this feature would also allow to remove the \verb@named_mem_var@ and
 \verb@named_typedef@ metafunctions which were in N4111 defined as part of
 the interface of \meta{Named}.
 
+This addition has the potential to complicate the processing of a translation unit
+by the compiler and would logically fit somewhere between phases 6 and 8 as described
+in the standard. If the use of regular templates for the purpose of creating the
+constexpr identifier strings would be too complicated to implement, phase 6 could
+be extended to allow simple compile-time text manipulation (comparison, concatenation,
+substrings, etc.) by a set of dedicated functions.
+
 The following sections describe several use cases for this feature.
 
-\subsubsection{Position of a base in the list of base classes}
-
-For every model of \meta{Inheritance} the \verb@position@ template should be defined as:
-
-\begin{minted}{cpp}
-template <>
-struct position<MetaInheritance>
- : integral_constant<std::size_t, I>
-{ };
-\end{minted}
-
-Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
-reflected by the \meta{Inheritance}.

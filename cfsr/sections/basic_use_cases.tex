@@ -253,8 +253,44 @@ int main(void)
 
 \subsubsection{Simple serialization}
 
+We need to serialize the instances of selected classes into a structured external format
+like XML or JSON. Reflection makes this task trivial:
 
+\begin{minted}{cpp}
 
+template <typename T>
+void to_xml(const T& instance, std::false_type)
+{
+	typedef reflected(T) MetaType;
+	std::cout  << "<" << base_name<MetaType>() << ">";
+
+	for_each<members<MetaType>>(
+		[](auto meta_cls_mem)
+		{
+			typedef decltype(meta_cls_mem) MetaClsMem;
+			typedef original_type<type<MetaClsMem>>::type MT;
+
+			if(std::is_base_of<
+				meta_variable_tag,
+				metaobject_category<MetaClsMem>
+			>())
+			{
+				std::cout << "<" << base_name<MetaClsMem> << ">";
+				to_xml(); //TODO
+				std::cout << "</" << base_name<MetaClsMem> << ">";
+			}
+		}
+	);
+
+	std::cout  << "</" << base_name<MetaType>() << ">";
+}
+
+\end{minted}
+
+Where necessary explicit specializations can override the generic implementation:
+
+\begin{minted}{cpp}
+\end{minted}
 
 \subsection{Enumeration of base classes}
 
