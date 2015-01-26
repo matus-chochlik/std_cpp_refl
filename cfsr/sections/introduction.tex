@@ -76,10 +76,39 @@ struct position<MetaInheritance>
 Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
 reflected by the \meta{Inheritance}.
 
+\subsection{Pointers to reflected variables and functions}
+
+For models of \meta{Variable} and \meta{Function} the \verb@pointer@ template class
+should be defined as:
+
+\begin{minted}{cpp}
+template <>
+struct pointer<MetaVariable>
+{
+	typedef _unspecified_ type;
+
+	static type get(void);
+};
+
+template <>
+struct pointer<MetaFunction>
+{
+	typedef _unspecified_ type;
+
+	static type get(void);
+};
+\end{minted}
+
+For \meta{Variable}s or \meta{Function}s reflecting namespace-level variables or functions
+the \verb@get@ function should return a pointer to that variable or function respectively.
+
+If the \meta{Variable} or \meta{Function} reflect class members then the \verb@get@ function
+should return a pointer to data member or pointer to member function respectively.
+
 \subsubsection{Turning compile-time strings into identifiers}
 
 Inspired by the idea of {\em name literals} as mentioned on the WG mailing list,
-we suggest to add a new functionality to the core language, allowing to specify
+we suggest to consider adding a new functionality to the core language, allowing to specify
 identifiers as compile-time constant C-string literal expression, i.e. expressions
 evaluating into values of \verb@constexpr const char [N]@.
 
