@@ -59,3 +59,47 @@ struct type<MetaVariable>
 { };
 \end{minted}
 
+\subsubsection{\texttt{pointer}}
+
+If the reflected variable is a namespace-level variable, then a template
+class \verb@pointer@ should be implemented as follows:
+
+\begin{minted}{cpp}
+template <typename T>
+struct pointer;
+
+template <>
+struct pointer<MetaVariable>
+{
+	typedef typename original_type<type<MetaVariable>>::type* type;
+
+	static type get(void);
+};
+\end{minted}
+
+The static member function \verb@get@ should return the address of the reflected variable.
+
+If the reflected variable is a class member variable (i.e. if the \meta{Variable}
+is also a \meta{ClassMember}), then the \verb@pointer@ template class should be
+defined as follows:
+
+\begin{minted}{cpp}
+
+template <>
+struct pointer<MetaVariable>
+{
+	typedef typename original_type<type<MetaVariable>>::type
+		_mv_t;
+	typedef typename original_type<type<scope<MetaVariable>>>::type
+		_cls_t;
+
+	typedef _mv_t _cls_t::* type;
+
+	static type get(void);
+};
+
+\end{minted}
+
+The static member function \verb@get@ should return a data member pointer to
+the reflected member variable. The \verb@_mv_t@ and \verb@_cls_t@ typedefs
+are implementation details and are not a part of this specification.

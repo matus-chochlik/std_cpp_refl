@@ -171,3 +171,37 @@ struct is_pure<MetaFunction>
 };
 \end{minted}
 
+\subsubsection{\texttt{pointer}}
+
+If the \meta{Function} reflects a namespace-level function, then
+a template class \verb@pointer@ should be defined as follows:
+
+\begin{minted}{cpp}
+template <typename T>
+struct pointer;
+
+template <>
+struct pointer<MetaFunction>
+{
+	typedef _rv_t (*type)(_param_t...);
+
+	static type get(void);
+};
+\end{minted}
+
+The \verb@get@ static member function should return a pointer to the function
+reflected by the \meta{Function}.
+
+If the \meta{Function} is also a \meta{ClassMember}, then the definition of the
+\verb@pointer@ template class should be following:
+
+\begin{minted}{cpp}
+template <>
+struct pointer<MetaFunction>
+{
+	typedef _rv_t (_cls_t::*type)(_param_t...);
+
+	static type get(void);
+};
+\end{minted}
+
