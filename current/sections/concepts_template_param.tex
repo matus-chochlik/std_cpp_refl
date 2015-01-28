@@ -7,15 +7,19 @@
 	edge [inheritance, bend right] (Metaobject);
 \node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
 	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaPositional)[below=of MetaScoped] {MetaPositional}
+	edge [inheritance, bend left] (Metaobject);
 \node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
 	edge [inheritance, bend right] (MetaNamed)
 	edge [inheritance, bend left] (MetaScoped);
 \node [concept] (MetaTemplateParameter)[above right=of MetaNamedScoped] {MetaTemplateParameter}
-	edge [inheritance, bend right] (MetaNamedScoped);
+	edge [inheritance, bend right] (MetaNamedScoped)
+	edge [inheritance, bend left] (MetaPositional);
 \end{tikzpicture}
 
 
-\meta{TemplateParameter} is a \meta{NamedScoped} and either a \meta{Typedef} or a \meta{Constant}.
+\meta{TemplateParameter} is a \meta{NamedScoped}, \meta{Positional}
+and either a \meta{Typedef} or a \meta{Constant}.
 
 In addition to the requirements inherited from \meta{NamedScoped},
 models of \meta{TemplateParameter} must conform to the following:
@@ -33,22 +37,6 @@ struct is_template<MetaTemplateParameter>
 The \verb@full_name@ inherited from \meta{Named} should return the same \concept{StringConstant}
 as \verb@base_name@ for models of \meta{TemplateParameter}, i.e. the plain template parameter
 name without any qualifications.
-
-\subsubsection{\texttt{position}}
-
-A template class \verb@position@ should be defined and should
-inherit from \verb@integral_constant<size_t, I>@ where \verb@I@ is
-a zero-based position (index) of the parameter.
-
-\begin{minted}{cpp}
-template <typename T>
-struct position;
-
-template <>
-struct position<MetaTemplateParameter>
- : integral_constant<size_t, I>
-{ };
-\end{minted}
 
 \subsubsection{\texttt{is\_pack}}
 

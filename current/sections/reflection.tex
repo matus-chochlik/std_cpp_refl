@@ -215,7 +215,17 @@ public:
 		// reflects this constructor of foo
 		typedef mirrored(this::function) _meta_foo_foo;
 	}
+
+	friend bool operator == (foo, foo)
+	{
+		// reflects this operator
+		typedef mirrored(this::function) _meta_foo_eq;
+	}
+
+	typedef mirrored(this::function) _meta_fn; // <- error
 };
+
+typedef mirrored(this::function) _meta_fn; // <- error
 
 \end{minted}
 

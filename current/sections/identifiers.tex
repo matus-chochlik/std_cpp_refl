@@ -1,6 +1,6 @@
 \section{Identifier pasting}
 
-As a part of this proposal we suggest to add a new functionality to the core language,
+As a part of this proposal we suggest to consider adding a new functionality to the core language,
 allowing to specify identifiers as compile-time constant C-string literal expression, i.e. expressions
 evaluating into values of \verb@constexpr const char [N]@.
 
@@ -18,7 +18,7 @@ identifier("int") identifier("main")(
 	const identifier("char")* identifier("argv")
 )
 {
-	using namespace identifier("std");
+	using namespace identifier(base_name<mirrored(std)>::value);
 	for(int i=0; i<argc; ++i)
 	{
 		cout << argv[i] << endl;

@@ -3,16 +3,19 @@
 
 \begin{tikzpicture}
 \node[concept] (Metaobject) {Metaobject};
-\node[concept] (MetaScoped) [right=of Metaobject] {MetaScoped}
-	edge[inheritance] (Metaobject);
-\node[concept] (MetaInheritance) [right=of MetaScoped] {MetaInheritance}
-	edge[inheritance] (MetaScoped);
+\node[concept] (MetaScoped) [above right=of Metaobject] {MetaScoped}
+	edge[inheritance, bend right] (Metaobject);
+\node[concept] (MetaPositional) [below right=of Metaobject] {MetaPositional}
+	edge[inheritance,bend left] (Metaobject);
+\node[concept] (MetaInheritance) [below right=of MetaScoped] {MetaInheritance}
+	edge[inheritance,bend right] (MetaScoped)
+	edge[inheritance,bend left] (MetaPositional);
 \end{tikzpicture}
 
-\meta{Inheritance} is a \meta{Scoped} reflecting class inheritance.
+\meta{Inheritance} is a \meta{Scoped} and \meta{Positional} reflecting class inheritance.
 
-In addition to the requirements inherited from \meta{Scoped}, types conforming to this concept
-must satisfy the following:
+In addition to the requirements inherited from \meta{Scoped} and \meta{Positional},
+types conforming to this concept must satisfy the following:
 
 The \verb@metaobject_category@ template should return \verb@inheritance_tag@ for models
 of \meta{Inheritance}:
@@ -77,23 +80,6 @@ struct base_class;
 template <>
 struct base_class<MetaInheritance>
  : MetaClass
-{ };
-\end{minted}
-
-\subsubsection{\texttt{position}}
-
-A template struct \verb@position@ should be defined and should
-inherit from \verb@integral_constant<size_t, I>@ type where \verb@I@ is
-a zero-based position (index) of the inheritance in the list of base classes
-of a derived class.
-
-\begin{minted}{cpp}
-template <typename T>
-struct position;
-
-template <>
-struct position<MetaInheritance>
- : integral_constant<size_t, I>
 { };
 \end{minted}
 

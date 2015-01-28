@@ -7,12 +7,15 @@
 	edge [inheritance, bend right] (Metaobject);
 \node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
 	edge [inheritance, bend left] (Metaobject);
+\node [concept] (MetaPositional)[below=of MetaScoped] {MetaPositional}
+	edge [inheritance, bend left] (Metaobject);
 \node [concept] (MetaParameter)[below right=of MetaNamed] {MetaParameter}
 	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
+	edge [inheritance, bend left] (MetaScoped)
+	edge [inheritance, bend left] (MetaPositional);
 \end{tikzpicture}
 
-\meta{Parameter} is a \meta{Named} and \meta{Scoped},
+\meta{Parameter} is a \meta{Named}, \meta{Scoped} and \meta{Positional},
 reflecting a function parameter or a parameter pack.
 
 In addition to the requirements inherited from \meta{Named} and \meta{Scoped},
@@ -54,22 +57,6 @@ struct type;
 template <>
 struct type<MetaParameter>
  : MetaType
-{ };
-\end{minted}
-
-\subsubsection{\texttt{position}}
-
-A template class \verb@position@ should be defined and should
-inherit from \verb@integral_constant<size_t, I>@ type where \verb@I@ is
-a zero-based position (index) of the parameter.
-
-\begin{minted}{cpp}
-template <typename T>
-struct position;
-
-template <>
-struct position<MetaParameter>
- : integral_constant<size_t, I>
 { };
 \end{minted}
 

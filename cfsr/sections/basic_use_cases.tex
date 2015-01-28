@@ -375,8 +375,8 @@ This use-case shows the following:
 \subsection{Implementing delegation or decorators}
 
 We need to create a decorator class, which wraps an instance of another
-class, implements similar interface as the original class, writes infor about
-each call into a log and then delegates the call to the private member object:
+class, implements similar interface as the original class, writes info about
+each member function call into a log and then delegates the call to the private member object:
 
 \begin{minted}[tabsize=4]{cpp}
 
@@ -528,7 +528,7 @@ be filtered to contain only \meta{Function}s.
 \item{class member reflection,}
 \item{class member function reflection,}
 \item{use of the reflection operator,}
-\item{use of the \verb@identifier@ operator or the \verb@named_mem_var@ templater.}
+\item{use of the \verb@identifier@ operator or the \verb@named_mem_var@ templates.}
 \end{itemize}
 
 \subsubsection{Source text-based metaprogramming}
