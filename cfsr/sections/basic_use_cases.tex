@@ -10,6 +10,9 @@ not even guaranteed to return any meaningful, unique human-readable string,
 at least not without demangling, which is platform specific.
 Furthermore the returned string is not \verb@constexpr@ and cannot be
 reasoned about at compile-time and is applicable only to types.
+One other problem with \verb@typeid@ that it is not aware of \verb@typedef@s.
+In some cases we would like to obtain the typedef name, instead of the
+'real' name of the type or a class member or function parameter.
 
 The ability to uniquely map any type used in a program to a human-readable,
 portable, compile-time string has several use-cases described below.
@@ -19,7 +22,7 @@ and provides the \verb@base_name@ and \verb@full_name@ metafunctions,
 returning their basic name without any qualifiers or decorations and a fully-qualified 
 portable type name.
 
-\subsubsection{Logging}
+\subsection{Logging}
 
 When logging the execution of functions (especialy templated ones) it is sometimes
 desirable to also include the names of the parameter types or even the names of the parameters
@@ -27,7 +30,7 @@ and other variables.
 
 The best we can do with just the \verb@std::type_info@ is the following:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 #if __PLATFORM_ABC__
 std::string demangled_type_name(const char*) { /* implementation 1 */ }
 #else if __PLATFORM_MNO__
@@ -62,7 +65,7 @@ Which may or may not work, depending on the platform.
 
 With the help of reflection as proposed in N4111 we could do:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <typename T>
 T min(const T& a, const T& b)
 {
@@ -85,7 +88,7 @@ used in this case, but the format of the string which this macro expands into is
 A more elaborated output containing also the parameter names could be achieved
 by using reflection:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <typename T>
 T min(const T& a, const T& b)
 {
@@ -108,7 +111,7 @@ T min(const T& a, const T& b)
 \end{minted}
 
 It is true that the lines:
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 		<< base_name<reflected(a)>() << ": "
 		<< base_name<reflected(b)>() << ": "
 \end{minted}
@@ -116,14 +119,14 @@ It is true that the lines:
 could be replaced by preprocessor stringization or just hard coded
 strings, like
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 		<< BOOST_PP_STRINGIZE(a) << ": "
 		<< BOOST_PP_STRINGIZE(b) << ": "
 \end{minted}
 
 or
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 		<< "a: "
 		<< "b: "
 \end{minted}
@@ -139,7 +142,7 @@ from inside of a function body via some invocation of the reflection operator),
 then even more would be possible; The function name and even the parameter names could
 be obtained from reflection and encapsulated into a function.
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <typename MetaFunction, typename ... P>
 void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 {
@@ -163,21 +166,21 @@ void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 template <typename T>
 T min(T a, T b)
 {
-	log_function_exec(reflected(this_function), std::tie(a, b));
+	log_function_exec(reflected(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T max(T a, T b)
 {
-	log_function_exec(reflected(this_function), std::tie(a, b));
+	log_function_exec(reflected(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T avg(T a, T b)
 {
-	log_function_exec(reflected(this_function), std::tie(a, b));
+	log_function_exec(reflected(this::function), std::tie(a, b));
 	/* ... */
 }
 \end{minted}
@@ -192,13 +195,13 @@ This example used the following features:
 \item{base names and the \meta{Named} concept.}
 \end{itemize}
 
-\subsubsection{SQL schema generation}
+\subsection{SQL schema generation}
 
 We need to create an SQL/DDL (data definition language) script for creating a schema
 with tables which will be storing the values of all structures in namespace C++ \verb@foo@
 having names starting with \verb@persistent_@:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 const char* translate_to_sql(const std::string& type_name)
 {
@@ -275,13 +278,16 @@ This example shows the following features from N4111:
 Furthermore reflection could be used to implement actual object-relational mapping,
 together with a library like \verb@SOCI@, \verb@ODBC@, \verb@libpq@, etc.
 
-\subsubsection{Simple serialization}
+\subsection{Simple serialization}
 
 We need to serialize the instances of selected classes into a structured external format
-like XML or JSON. Reflection makes this task trivial\footnote{
+like XML, JSON, XDR or even into a format like Graphviz dot for the purpose of creating
+a visualization of a static class or dynamic object hierarchy or graph.
+
+Reflection makes this task trivial\footnote{
 Admittedly this is not the most clever XML schema ever devised, but let's stick to the basics.}:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename T>
 void to_xml(const T& instance, std::true_type atomic)
@@ -340,7 +346,7 @@ void to_xml(const T& instance, std::false_type atomic)
 
 Where necessary explicit specializations can override the generic implementation:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Bool>
 void to_xml(const std::string& instance, Bool)
@@ -369,10 +375,10 @@ This use-case shows the following:
 \subsection{Implementing delegation or decorators}
 
 We need to create a decorator class, which wraps an instance of another
-class, implements similar interface as the original class, writes each call into
-a log and then delegates the call on the private member object:
+class, implements similar interface as the original class, writes infor about
+each call into a log and then delegates the call to the private member object:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 class foo
 {
@@ -395,19 +401,19 @@ private:
 public:
 	void f1(void)
 	{
-		_do_log_call<reflected(this_function)>();
+		_do_log_call<reflected(this::function)>();
 		_obj.f1();
 	}
 
 	int f2(int a, int b);
 	{
-		_do_log_call<reflected(this_function)>();
+		_do_log_call<reflected(this::function)>();
 		return _obj.f2(a, b);
 	}
 
 	double f3(float a, long b, double c, const std::string& d);
 	{
-		_do_log_call<reflected(this_function)>();
+		_do_log_call<reflected(this::function)>();
 		return _obj.f3(a, b, c, d);
 	}
 };
@@ -420,7 +426,7 @@ so we may wish to automate the implementation.
 
 Reflection to the rescue!
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Wrapped>
 class logging_base
@@ -438,7 +444,7 @@ protected:
 \verb@logging_base@ is a common virtual base class holding the wrapped object
 and the log sink.
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Wrapped, typename MetaFunction>
 class logging_helper
@@ -468,7 +474,7 @@ If the idea of the \verb@identifier@ operator is scrapped, it would still be doa
 in terms of the \verb@named_mem_var@ template as defined in N4111, or some variation
 on that theme.
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Wrapped, typename ... MetaFunctions>
 class logging_helpers
@@ -481,7 +487,7 @@ class logging_helpers
 each having a single \meta{Function} reflecting respective member functions
 of the \verb@Wrapper@ class.
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Wrapped, typename MetaFunctionSeq, typename IdxSeq>
 class logging_impl;
@@ -498,7 +504,7 @@ individual \meta{Functions} from the metafunction sequence and passes them
 to \verb@logging_helpers@ as a parameter pack.
 
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 template <typename Wrapped>
 class logging
@@ -525,3 +531,130 @@ be filtered to contain only \meta{Function}s.
 \item{use of the \verb@identifier@ operator or the \verb@named_mem_var@ templater.}
 \end{itemize}
 
+\subsubsection{Source text-based metaprogramming}
+
+In scripting languages metaprogramming often takes the form of dynamically creating
+a new script purely through text operations followed by the execution of that script.
+
+While using this approach is more complicated with compiled languages it is not
+unheard of. A C++ source can be created by a program in C++, compiled by a compiler
+(invoked from that same or in a different program) into a shared library and then
+dynamically loaded and executed.
+
+In some cases this approach could be used to generate code on a local machine,
+which is then to be compiled and executed on a remote machine with a different architecture.
+
+\begin{minted}[tabsize=4]{cpp}
+
+class foo64bit
+{
+/* ... */
+};
+
+class foo32bit
+{
+/* ... */
+};
+
+#if __THIS_IS_64BIT_ARCH
+typedef foo64bit default_foo;
+#else
+typedef foo32bit default_foo;
+#endif
+
+struct plugin
+{
+	virtual void process_foo(default_foo&) = 0;
+	/* ... */
+};
+
+\end{minted}
+
+We want to programatically create a new logging\footnote{
+We're again trying to stick to the basics, here. Much more complicated
+examples could be devised.
+} implementation of \verb@plugin@
+and we don't want to rewrite this program every time
+the interface is updated.
+
+Furthermore it is possible that we will be generating the code
+on a 32-bit machine and then compiling and executing it on a 64-bit machine
+or vice-versa.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaFunction>
+void print_func_impl(MetaFunction)
+{
+	using std::cout;
+	using std::endl;
+
+	// the result can have a typedef-ined type
+	// and we want to print here the typedef name
+	cout << base_name<result_type<MetaFunction>>() << " ";
+	cout << base_name<MetaFunction>() << "(";
+
+	for_each<parameters<MetaFunction>>(
+		[](auto meta_param)
+		{
+			typedef decltype(meta_param) MetaParam;
+			if(position<MetaParam>() > 0)
+			{
+				cout << ", ";
+			}
+			// the parameter can have a typedef-ined type
+			// and we want to print here the typedef name
+			cout << base_name<type<MetaParam>>() << " ";
+			cout << base_name<MetaParam>();
+		}
+	);
+
+	cout << base_name<MetaFunction>() << ")";
+	cout << " override" << endl;
+	cout << "{" << endl;
+	cout << "  _do_log_call<MetaFunction>(" << endl;
+
+	for_each<parameters<MetaFunction>>(
+		/* Print out a parameter list for the call */
+	);
+
+	cout << "  );" << endl;
+
+	/* Print out the rest of the implementation */
+
+	cout << "}" << endl;
+}
+
+void main(void)
+{
+	using std::cout;
+	using std::endl;
+
+	cout << "#include <foo/plugin.hpp>" << endl;
+	/* etc. */
+
+	cout << "class logging_plugin" << endl;
+	cout << " : virtual public plugin" << endl;
+	cout << "{" << endl;
+	cout << "private:" << endl;
+	cout << "  template <typename MetaFunction, typename ... P>" << endl;
+	cout << "  void _do_log_call(const P&...);" << endl;
+	cout << "public:" << endl;
+
+	for_each<members<mirrored(plugin)>>(print_func_impl);
+
+	cout << "};" << endl;
+	return 0;
+}
+
+\end{minted}
+
+The example above could be semi-automated using the preprocessor
+and (demangled) \verb@type_info::name@. The problem is that
+\verb@type_info@ is not aware of the fact that the \verb@default_foo@
+parameter type is a typedef and it would instead return either
+\verb@"foo64bit"@ or \verb@"foo32bit"@ based on the architecture
+on which the script was generated.
+
+In N4111 it is proposed that reflection is aware of and distinguishes between
+\verb@typedef@s and their 'underlying types'.

@@ -23,7 +23,7 @@ The limits stem from the fact, that while we can now use the C++'s type system
 as a (meta)programming language of its own and a C++ compiler as its interpreter
 and write complicated metaprograms automatically generating a lot of code
 which we previously had to write manually, the programmer still needlessly has to do
-a lot of things manually. Just to mention a few things; if we want portable type names,
+a lot of things manually. Just to mention a few; if we want portable type names,
 we usually have to hardcode them, if we want to create an identifier programmatically
 we need preprocessor token pasting, we cannot programmatically enumerate all member
 variables or base classes of a class, all operators working on a particular type, etc.
@@ -50,7 +50,7 @@ Template function \verb@for_each@, should be defined for every metaobject sequen
 and should call the specified unary functor taking values of types conforming to
 the same metaobject concept as the elements of the metaobject sequence as arguments.
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <typename MetaobjectSequence, typename UnaryFunc>
 void for_each(UnaryFunc func)
 {
@@ -66,7 +66,7 @@ to write specialization for every type modelling this concept.
 
 For every model of \meta{Inheritance} the \verb@position@ template should be defined as:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <>
 struct position<MetaInheritance>
  : integral_constant<std::size_t, I>
@@ -81,7 +81,7 @@ reflected by the \meta{Inheritance}.
 For models of \meta{Variable} and \meta{Function} the \verb@pointer@ template class
 should be defined as:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 template <>
 struct pointer<MetaVariable>
 {
@@ -105,6 +105,23 @@ the \verb@get@ function should return a pointer to that variable or function res
 If the \meta{Variable} or \meta{Function} reflect class members then the \verb@get@ function
 should return a pointer to data member or pointer to member function respectively.
 
+\subsubsection{Context-dependent reflection}
+
+Special expressions in the form \verb@this::{namespace,class,function}@ should be added
+as valid arguments for the reflection operator and should return metaobjects depending
+on the context where such invocation of the reflection operator was used.
+
+\begin{itemize}
+\item{\verb@mirrored(this::namespace)@} reflects the namespace inside of which the reflection
+operator was invoked.
+\item{\verb@mirrored(this::class)@} reflects the class inside of which the reflection
+operator was invoked. This should also work inside of member functions, constructors and operators
+of that class.
+\item{\verb@mirrored(this::function)@} reflects the function inside of which the reflection
+operator was invoked.
+\end{itemize}
+
+
 \subsubsection{Turning compile-time strings into identifiers}
 
 Inspired by the idea of {\em name literals} as mentioned on the WG mailing list,
@@ -119,14 +136,14 @@ any strong preference for the name of this operator.
 
 For example:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 
 identifier("int") identifier("main")(
 	int idenitifier("argc"),
 	const identifier("char")* identifier("argv")
 )
 {
-	using namespace identifier("std");
+	using namespace identifier(base_name<mirrored(std)>::value);
 	for(int i=0; i<argc; ++i)
 	{
 		cout << argv[i] << endl;
@@ -138,7 +155,7 @@ identifier("int") identifier("main")(
 
 would be equivalent to
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 int main(int argc, const char* argv)
 {
 	using namespace std;
@@ -146,7 +163,7 @@ int main(int argc, const char* argv)
 }
 \end{minted}
 
-The content of the string literal passed as the argument to \verb@identifier@
+The content of the constexpr string passed as the argument to \verb@identifier@
 should be encoded in the source character set and subject to the same restrictions
 which are placed on identifiers.
 
@@ -162,5 +179,5 @@ constexpr identifier strings would be too complicated to implement, phase 6 coul
 be extended to allow simple compile-time text manipulation (comparison, concatenation,
 substrings, etc.) by a set of dedicated functions.
 
-The following sections describe several use cases for this feature.
+The following sections describe some use cases for this feature.
 

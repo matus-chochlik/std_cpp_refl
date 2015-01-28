@@ -72,3 +72,150 @@ typedef mirrored(C::b) meta_C_b;
 typedef mirrored(C::c) meta_C_c;
 
 \end{minted}
+
+\subsection{Context-dependent reflection}
+
+We also propose to define a set of special expressions that can be used
+inside of the reflection operator, to obtain metadata based on the context
+where it is invoked, instead of the identifier.
+
+\subsubsection{Namespaces}
+
+If the \verb@this::namespace@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Namespace} reflecting the namespace
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+typedef mirrored(this::namespace) _meta_gs;
+
+\end{minted}
+
+reflects the global scope namespace and is equivalent to
+
+\begin{minted}{cpp}
+
+typedef mirrored(::) _meta_gs;
+
+\end{minted}
+
+For named namespaces:
+
+\begin{minted}{cpp}
+
+namespace foo {
+
+typedef mirrored(this::namespace) _meta_foo;
+
+namespace bar {
+
+typedef mirrored(this::namespace) _meta_foo_bar;
+
+} // namespace bar
+
+} // namespace foo
+\end{minted}
+
+\subsubsection{Classes}
+
+If the \verb@this::class@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Class} reflecting the class
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+struct foo
+{
+	const char* _name;
+
+	// reflects foo
+	typedef mirrored(this::class) _meta_foo1;
+
+	foo(void)
+	 : _name(base_name<mirrored(this::class)>())
+	{ }
+
+	void f(void)
+	{
+		// reflects foo
+		typedef mirrored(this::class) _meta_foo2;
+	}
+
+	double g(double, double);
+
+	struct bar
+	{
+		// reflects foo::bar
+		typedef mirrored(this::class) _meta_foo_bar;
+	};
+};
+
+double foo::g(double a, double b)
+{
+	// reflects foo
+	typedef mirrored(this::class) _meta_foo3;
+	return a+b;
+}
+
+class baz
+{
+private:
+	typedef mirrored(this::class) _meta_baz;
+};
+
+typedef mirrored(this::class); // <- error: not used inside of a class.
+
+\end{minted}
+
+\subsubsection{Functions}
+
+If the \verb@this::function@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Function} reflecting the function or operator
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+void foobar(void)
+{
+	// reflects this particular overload of the foobar function
+	typedef mirrored(this::function) _meta_foobar;
+}
+
+int foobar(int i)
+{
+	// reflects this particular overload of the foobar function
+	typedef mirrored(this::function) _meta_foobar;
+	return i+1;
+}
+
+class foo
+{
+private:
+	void f(void)
+	{
+		// reflects this particular overload of foo::f
+		typedef mirrored(this::function) _meta_foo_f;
+	}
+
+	double f(void)
+	{
+		// reflects this particular overload of foo::f
+		typedef mirrored(this::function) _meta_foo_f;
+		return 12345.6789;
+	}
+public:
+	foo(void)
+	{
+		// reflects this constructor of foo
+		typedef mirrored(this::function) _meta_foo_foo;
+	}
+};
+
+\end{minted}
+
