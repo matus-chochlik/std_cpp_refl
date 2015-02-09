@@ -121,6 +121,42 @@ of that class.
 operator was invoked.
 \end{itemize}
 
+\subsection{The \meta{Positional} concept}
+
+The \meta{Positional} concept defines the interface for metaobjects reflecting
+base-level constructs having a fixed position, like function or template parameters,
+class inheritance clauses, etc.
+
+The \verb@has_position@ template class can be used to distinguish metaobjects modelling
+this concept. Is should inherit from \verb@true_type@ for \meta{Positional}s and from
+\verb@false_type@ otherwise.
+
+\begin{minted}{cpp}
+template <typename X>
+struct has_position
+ : false_type
+{ };
+
+template <>
+struct has_position<MetaPositional>
+ : true_type
+{ };
+\end{minted}
+
+The \verb@position@ template class inheriting
+from \verb@integral_constant<size_t, I>@ type (where \verb@I@ is
+a zero-based position of the reflected base-level language construct)
+can be used to obtain the value of the index.
+
+\begin{minted}{cpp}
+template <typename T>
+struct position;
+
+template <>
+struct position<MetaPositional>
+ : integral_constant<size_t, I>
+{ };
+\end{minted}
 
 \subsubsection{Turning compile-time strings into identifiers}
 
