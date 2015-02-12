@@ -524,6 +524,8 @@ The \verb@logging@ template makes the use of \verb@logging_impl@ convenient.
 Note that the metaobject sequence 'returned' by \verb@members<...>@ should
 be filtered to contain only \meta{Function}s.
 
+The following features are shown in this use-case:
+
 \begin{itemize}
 \item{class member reflection,}
 \item{class member function reflection,}
@@ -658,6 +660,15 @@ on which the script was generated.
 
 In N4111 it is proposed that reflection is aware of \verb@typedef@s and distinguishes between
 \verb@typedef@s and their 'underlying types'.
+
+This example shows the following features:
+
+\begin{itemize}
+\item{typedef reflection,}
+\item{class member reflection,}
+\item{use of the reflection operator,}
+\item{use of the \verb@base_name@, \verb@type@ and \verb@original_type@ templates. }
+\end{itemize}
 
 \subsection{Cross-cutting aspects}
 
@@ -864,5 +875,13 @@ public:
 
 \end{minted}
 
-Aspects like these could also be used for logging, monitoring of object instantation,
+Class aspects like these could also be used for logging, monitoring of object instantation,
 leak detection, etc.
+
+This use-case shows the following:
+
+\begin{itemize}
+\item{current function reflection,}
+\item{current class reflection.}
+\end{itemize}
+
