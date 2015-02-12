@@ -4,8 +4,4 @@ Address "too complex/problematic" for compiler vendors.
 
 Why do we need meta-objects, why not just extend type-traits.
 
-for_each<MetaobjectSequence> ?
-
-Operator for turning constexpr const char* strings to identifiers.
-
 Interaction with generalized attributes.

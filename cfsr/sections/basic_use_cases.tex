@@ -658,3 +658,211 @@ on which the script was generated.
 
 In N4111 it is proposed that reflection is aware of \verb@typedef@s and distinguishes between
 \verb@typedef@s and their 'underlying types'.
+
+\subsection{Cross-cutting aspects}
+
+We need to execute the same action (or a set of actions) at the entry of or at the exit from the body of
+a function (from a set of multiple functions meeting some conditions) each time it is called.
+
+The action may be related to logging, debugging, profiling, but also access control, etc.
+The condition which selects the functions for which the action is invoked might be something like:
+\begin{itemize}
+\item each member function of a class,
+\item each function defined in a namespace,
+\item each function returning values of a particular type or having a particular set of parameters,
+\item each function whose name matches a search expression,
+\item each function declared in a particular source file,
+\item etc. and various combinations of the above.
+\end{itemize}
+
+It may not be possible to tell in advance the relations between the aspects and the individual functions
+or these relations may change between builds or build configurations.
+Furthermore we want to be able to quickly change the assignment of actions to functions in one
+place instead of going through the whole project source which may consists of dozens or even hundreds of files.
+
+We want for example temporarily enable logging of the entry and exit of each member function of class \verb@foo@,
+or we need to count the number of invocations of functions defined in the \verb@bar@ namespace with
+names not starting with an underscore, or we want to throw the \verb@not_logged_in@ exception at the entry
+of each member function of class \verb@secure@ if the global \verb@user_logged_in@ function returns \verb@false@.
+
+Without reflection something like this could be implemented in the following way:
+
+\begin{minted}[tabsize=4]{cpp}
+
+class logging_aspect
+{
+public:
+	template <typename ... P>
+	logging_aspect(const char* func_name, P&&...)
+	{
+		// write to clog
+	}
+};
+
+class profiling_aspect
+{
+	/* ... */
+};
+
+class authorization_aspect
+{
+public:
+	template <typename ... P>
+	authorization_aspect(const char* func_name, P&&...)
+	{
+		if(contains(func_name, "secure"))
+		{
+			if(!::is_user_logged_in())
+			{
+				throw not_authorized(func_name);
+			}
+		}
+	}
+};
+
+template <typename RV, typename ... P>
+class func_aspects
+ : logging_aspect
+ , profiling_aspect
+ , authorization_aspect
+/* ... etc. ... */
+{
+public:
+	func_aspects(
+		const char* name,
+		const char* file,
+		unsigned line,
+		P&&... args
+	): logging_aspect(name, file, line, args...)
+	 , profiling_aspect(name, file, line, args...)
+	 , authorization_aspect(name, file, line, argc...)
+	/* ... etc. ... */
+	{ }
+};
+
+template <typename RV, typename ... P>
+func_aspects<RV, P...>
+make_func_aspects(
+	const char* name,
+	const char* file,
+	unsigned line,
+	P&&...args
+);
+
+
+void func1(int a, int b)
+{
+	auto _fa = make_func_aspects<void>(
+		__func__,
+		__FILE__,
+		__LINE__,
+		a, b
+	);
+	/* function body */
+}
+
+double func2(double a, float b, long c)
+{
+	auto _fa = make_func_aspects<double>(
+		__func__,
+		__FILE__,
+		__LINE__,
+		a, b, c
+	);
+	/* function body */
+}
+
+namespace foo {
+
+long func3(int x)
+{
+	auto _fa = make_func_aspects<long>(
+		__func__,
+		__FILE__,
+		__LINE__,
+		x
+	);
+	/* function body */
+}
+
+} // namespace foo
+\end{minted}
+
+Obviously this is very repetitive and it can get quite tedious and error-prone
+to supply all this information to the aspects in each function manually.
+Also if the signature or the name of the function changes the construction
+of the \verb@func_aspects@ instance must be updated accordingly.
+With the help of reflection things can be simplified considerably:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaFunction>
+class func_aspects
+ : logging_aspect<MetaFunction>
+ , profiling_aspect<MetaFunction>
+ , authorization_aspect<MetaFunction>
+/* ... etc. ... */
+{
+public:
+};
+
+void func1(int a, int b)
+{
+	func_aspects<mirrored(this::function)> _fa;
+	/* function body */
+}
+
+double func2(double a, float b, long c)
+{
+	func_aspects<mirrored(this::function)> _fa;
+	/* function body */
+}
+
+namespace foo {
+
+long func3(int x)
+{
+	func_aspects<mirrored(this::function)> _fa;
+	/* function body */
+}
+
+} // namespace foo
+
+\end{minted}
+
+In this case the same expression is used in all functions
+regardless of their name and signature and the aspects get all the information
+they require from the metaobject reflecting the function. All the data
+obtained from the metaobjects is available at compile-time so various
+specializations of the aspect classes can be implemented as required.
+
+This same technique could also be used with instances of classes:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaClass>
+class class_aspects
+ : logging_aspects<MetaClass>
+/* ... etc. ... */
+{
+public:
+	class_aspects(typename original_type<MetaClass>::type* that);
+};
+
+class cls1
+{
+private:
+	int member1;
+	/* ... other members ... */
+	class_aspect<mirrored(this::class)> _ca;
+public:
+	cls1(void)
+	 : member1(...)
+	 , _ca(this)
+	{ }
+};
+
+\end{minted}
+
+Aspects like these could also be used for logging, monitoring of object instantation,
+leak detection, etc.
