@@ -45,6 +45,29 @@ The \verb@full_name@ inherited from \meta{Named} should return the same \concept
 as \verb@base_name@ for models of \meta{Parameter}, i.e. the plain parameter
 name without any qualifications.
 
+\subsubsection{\texttt{is\_pack}}
+
+A template class called \verb@is_pack@ should be defined and should
+inherit from \verb@true_type@ if the parameter is a part of an expanded
+parameter pack or from \verb@false_type@ otherwise.
+
+\begin{minted}{cpp}
+template <typename T>
+struct is_pack;
+
+template <>
+struct is_pack<MetaParameter>
+ : integral_constant<bool, B>
+{ };
+\end{minted}
+
+When a concrete instantiation of a function template with a parameter pack
+is reflected then the individual \meta{Parameter}s reflect the actual parameters
+of that instantiation. In such case the \verb@parameters@ template "returns"
+a \concept{MetaobjectSequence} of \meta{Parameter}s where some of the \meta{Parameter}
+have the same name (the name of the pack template parameter)
+and \verb@is_pack@ inherits from \verb@true_type@.
+
 \subsubsection{\texttt{type}}
 
 A template class \verb@type@ should be added and should inherit
@@ -60,19 +83,26 @@ struct type<MetaParameter>
 { };
 \end{minted}
 
-\subsubsection{\texttt{is\_pack}}
+\subsubsection{\texttt{pointer}}
 
-A template class called \verb@is_pack@ should be defined and should
-inherit from \verb@true_type@ if the parameter is a pack
-parameter or from \verb@false_type@ otherwise.
+A template class \verb@pointer@ should be implemented as follows:
 
 \begin{minted}{cpp}
 template <typename T>
-struct is_pack;
+struct pointer;
 
 template <>
-struct is_pack<MetaParameter>
- : integral_constant<bool, B>
-{ };
+struct pointer<MetaParameter>
+{
+	typedef typename original_type<type<MetaParameter>>::type* type;
+
+	static type get(void);
+};
 \end{minted}
 
+The static member function \verb@get@ should return the address of the reflected parameter
+instance if it is invoked (directly or indirectly) inside of the body of the function to which
+the reflected parameter belongs to. Otherwise it should return \verb@nullptr@.
+
+In case of recursively called functions, pointers to the arguments of the innermost
+invocation should be returned.

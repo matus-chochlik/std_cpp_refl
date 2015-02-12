@@ -1,3 +1,5 @@
+Reflection of parameter packs, especially how the pointer and type should be handled.
+
 Address claim that "reflection is not code generation".
 
 Address "too complex/problematic" for compiler vendors.

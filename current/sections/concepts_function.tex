@@ -136,7 +136,7 @@ struct exceptions<MetaFunction>
 
 In case a \meta{Function} is also a \meta{ClassMember},
 a template class \verb@const_specifier@ should be defined and should inherit from
-a \meta{Specifier} reflecting the const specifier of the reflected member function:
+a \meta{Specifier} reflecting the \verb@const@ specifier of the reflected member function:
 
 \begin{minted}{cpp}
 template <typename T>
@@ -151,6 +151,27 @@ struct const_specifier<MetaFunction>
 \end{minted}
 
 In case the reflected member function does not have the \verb@const@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{virtual\_specifier}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@virtual_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@virtual@ specifier of the reflected member function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct virtual_specifier;
+
+template <>
+struct virtual_specifier<MetaFunction>
+ : MetaSpecifier
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+
+In case the reflected member function does not have the \verb@virtual@ specifier,
 then the result should be a \meta{Specifier} reflecting the "none" specifier.
 
 \subsubsection{\texttt{is\_pure}}

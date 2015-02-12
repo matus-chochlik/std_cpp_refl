@@ -163,3 +163,37 @@ struct is_template
 { };
 \end{minted}
 
+\subsubsection{\texttt{source\_file}}
+
+A template class \verb@source_file@ should be defined and should return the
+path to the source file where the base-level construct reflected by a
+metaobject is defined (similar to what the preprocessor \verb@__FILE__@ macro
+expands to).
+
+\begin{minted}{cpp}
+template <typename T>
+struct source_file;
+
+template <>
+struct source_file<MetaObject>
+ : StringConstant
+{ };
+\end{minted}
+
+\subsubsection{\texttt{source\_line}}
+
+A template class \verb@source_line@ should be defined and should return the
+line number in the source file where the base-level construct reflected by a
+metaobject is defined (similar to what the preprocessor \verb@__LINE__@ symbol
+expands to).
+
+\begin{minted}{cpp}
+template <typename T>
+struct source_line;
+
+template <>
+struct source_line<MetaObject>
+ : integral_constant<unsigned, Line>
+{ };
+\end{minted}
+
