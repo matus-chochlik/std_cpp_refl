@@ -807,6 +807,45 @@ With the help of reflection things can be simplified considerably:
 
 \begin{minted}[tabsize=4]{cpp}
 
+template <typename MetaFunction, typename Enabled>
+class logging_aspect_impl;
+
+template <typename MetaFunction>
+class logging_aspect_impl<MetaFunction, false_type>
+{ };
+
+template <typename MetaFunction>
+class logging_aspect_impl<MetaFunction, true_type>
+{
+public:
+	logging_aspect_impl(void)
+	{
+		clog
+			<< base_name<MetaFunction>()
+			<< "("
+			/* ... */
+			<< ")"
+			<< endl;
+	}
+};
+
+template <typename MetaFunction>
+struct logging_enabled
+ : integral_constant<
+	bool,
+	is_base_of<mirrored(std), scope<MetaFunction>>() &&
+	constexpr_contains(base_name<MetaFunction>(), "foo") &&
+	/* ... etc. ... */
+>
+{ };
+
+template <typename MetaFunction>
+using logging_aspect =
+	logging_aspect_impl<
+		MetaFunction,
+		typename logging_enabled<MetaFunction>::type
+	>;
+
 template <typename MetaFunction>
 class func_aspects
  : logging_aspect<MetaFunction>
