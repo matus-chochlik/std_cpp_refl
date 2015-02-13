@@ -1,0 +1,20 @@
+\subsection{Portable (type) names}
+
+One of the notorious problems of \verb@std::type_info@ is that the string
+returned by its \verb@name@ member function is not standardized and is
+not even guaranteed to return any meaningful, unique human-readable string,
+at least not without demangling, which is platform specific.
+Furthermore the returned string is not \verb@constexpr@ and cannot be
+reasoned about at compile-time and is applicable only to types.
+One other problem with \verb@typeid@ that it is not aware of \verb@typedef@s.
+In some cases we would like to obtain the typedef name, instead of the
+'real' name of the type or a class member or function parameter.
+
+The ability to uniquely map any type used in a program to a human-readable,
+portable, compile-time string has several use-cases described below.
+
+The \meta{Named} concept from N4111 reflects named language constructs
+and provides the \verb@base_name@ and \verb@full_name@ metafunctions,
+returning their basic name without any qualifiers or decorations and a fully-qualified 
+portable type name.
+

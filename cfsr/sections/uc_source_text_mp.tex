@@ -1,0 +1,137 @@
+\subsection{Source text-based metaprogramming}
+
+In scripting languages metaprogramming often takes the form of dynamically creating
+a new script purely through text operations followed by the execution of that script.
+
+While using this approach is more complicated with compiled languages it is not
+unheard of. A C++ source can be created by a program in C++, compiled by a compiler
+(invoked from that same or in a different program) into a shared library and then
+dynamically loaded and executed.
+
+In some cases this approach could be used to generate code on a local machine,
+which is then compiled and executed on a remote machine with a different architecture.
+
+\begin{minted}[tabsize=4]{cpp}
+
+class foo64bit
+{
+/* ... */
+};
+
+class foo32bit
+{
+/* ... */
+};
+
+#if __THIS_IS_64BIT_ARCH
+typedef foo64bit default_foo;
+#else
+typedef foo32bit default_foo;
+#endif
+
+struct plugin
+{
+	virtual void process_foo(default_foo&) = 0;
+	/* ... */
+};
+
+\end{minted}
+
+We want to programatically create a new logging\footnote{
+We're again trying to stick to the basics, here. Much more complicated
+examples could be devised.
+} implementation of \verb@plugin@
+and we don't want to rewrite this program every time
+the interface is updated.
+
+Furthermore it is possible that we will be generating the code
+on a 32-bit machine and then compiling and executing it on a 64-bit machine
+or vice-versa.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaFunction>
+void print_func_impl(MetaFunction)
+{
+	using std::cout;
+	using std::endl;
+
+	// the result can have a typedef-ined type
+	// and we want to print here the typedef name
+	cout << base_name<result_type<MetaFunction>>() << " ";
+	cout << base_name<MetaFunction>() << "(";
+
+	for_each<parameters<MetaFunction>>(
+		[](auto meta_param)
+		{
+			typedef decltype(meta_param) MetaParam;
+			if(position<MetaParam>() > 0)
+			{
+				cout << ", ";
+			}
+			// the parameter can have a typedef-ined type
+			// and we want to print here the typedef name
+			cout << base_name<type<MetaParam>>() << " ";
+			cout << base_name<MetaParam>();
+		}
+	);
+
+	cout << base_name<MetaFunction>() << ")";
+	cout << " override" << endl;
+	cout << "{" << endl;
+	cout << "  _do_log_call<MetaFunction>(" << endl;
+
+	for_each<parameters<MetaFunction>>(
+		/* Print out a parameter list for the call */
+	);
+
+	cout << "  );" << endl;
+
+	/* Print out the rest of the implementation */
+
+	cout << "}" << endl;
+}
+
+void main(void)
+{
+	using std::cout;
+	using std::endl;
+
+	cout << "#include <foo/plugin.hpp>" << endl;
+	/* etc. */
+
+	cout << "class logging_plugin" << endl;
+	cout << " : virtual public plugin" << endl;
+	cout << "{" << endl;
+	cout << "private:" << endl;
+	cout << "  template <typename MetaFunction, typename ... P>" << endl;
+	cout << "  void _do_log_call(const P&...);" << endl;
+	cout << "public:" << endl;
+
+	for_each<members<mirrored(plugin)>>(print_func_impl);
+
+	cout << "};" << endl;
+	return 0;
+}
+
+\end{minted}
+
+The example above could be semi-automated using the preprocessor
+and (demangled) \verb@type_info::name@. The problem is that
+\verb@type_info@ is not aware of the fact that the \verb@default_foo@
+parameter type is a typedef and it would instead return either
+\verb@"foo64bit"@ or \verb@"foo32bit"@ based on the architecture
+on which the script was generated.
+
+In N4111 it is proposed that reflection is aware of \verb@typedef@s and distinguishes between
+\verb@typedef@s and their 'underlying types'.
+
+This example shows the following features:
+
+\begin{itemize}
+\item{typedef reflection,}
+\item{class member reflection,}
+\item{use of the reflection operator,}
+\item{use of the \verb@base_name@, \verb@type@ and \verb@original_type@ templates. }
+\end{itemize}
+

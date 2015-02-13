@@ -1,0 +1,161 @@
+\subsection{Implementing delegation or decorators}
+
+We need to create a decorator class, which wraps an instance of another
+class, implements similar interface as the original class, writes info about
+each member function call into a log and then delegates the call to the private member object:
+
+\begin{minted}[tabsize=4]{cpp}
+
+class foo
+{
+public:
+	void f1(void);
+
+	int f2(int a, int b);
+
+	double f3(float a, long b, double c, const std::string& d);
+};
+
+class logging_foo
+{
+private:
+	foo _obj;
+	loglib::log_sink _log;
+
+	template <typename MetaFunction, typename ... P>
+	void _do_log_call(const P&...);
+public:
+	void f1(void)
+	{
+		_do_log_call<reflected(this::function)>();
+		_obj.f1();
+	}
+
+	int f2(int a, int b);
+	{
+		_do_log_call<reflected(this::function)>();
+		return _obj.f2(a, b);
+	}
+
+	double f3(float a, long b, double c, const std::string& d);
+	{
+		_do_log_call<reflected(this::function)>();
+		return _obj.f3(a, b, c, d);
+	}
+};
+
+\end{minted}
+
+Obviously the definition of \verb@logging_foo@ is very repetitive and if this
+pattern is recurring in the code it may lead to subtle, hard to track bugs,
+so we may wish to automate the implementation.
+
+Reflection to the rescue!
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename Wrapped>
+class logging_base
+{
+protected:
+	Wrapped _obj;
+	loglib::log_sink _log;
+
+	template <typename MetaFunction, typename ... P>
+	void _do_log_call(const P&...);
+};
+
+\end{minted}
+
+\verb@logging_base@ is a common virtual base class holding the wrapped object
+and the log sink.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename Wrapped, typename MetaFunction>
+class logging_helper
+ : virtual public logging_base<Wrapped>
+{
+public:
+	template <typename ... P>
+	auto identifier(base_name<MetaFunction>::value)(P&& ... p)
+	{
+		this->_do_log_call<MetaFunction>(std::forward<P>(p)...);
+
+		auto mfp = pointer<MetaFunction>::get();
+
+		return (this->_obj.*mfp)(std::forward<P>(p)...);
+	}
+};
+
+\end{minted}
+
+\verb@logging_helper@ is a unit implementing the delegation of a single function
+call from the interface of the \verb@Wrapped@ class. 
+
+The \verb@identifier@ operator is used here to define the name of the member function
+to be the same as the name of the wrapped function.
+
+If the idea of the \verb@identifier@ operator is scrapped, it would still be doable
+in terms of the \verb@named_mem_var@ template as defined in N4111, or some variation
+on that theme.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename Wrapped, typename ... MetaFunctions>
+class logging_helpers
+ : public logging_helper<Wrapped, MetaFunctions>...
+{ };
+
+\end{minted}
+
+\verb@logging_helpers@ inherits from multiple \verb@logging_helper@ units
+each having a single \meta{Function} reflecting respective member functions
+of the \verb@Wrapper@ class.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename Wrapped, typename MetaFunctionSeq, typename IdxSeq>
+class logging_impl;
+
+template <typename Wrapped, typename MetaFunctionSeq, std::size_t ... I>
+class logging_impl<Wrapped, MetaFunctionSeq, std::index_sequence<I...>>
+ : public logging_helpers<Wrapped, at<MetaFunctionSeq, I>...>
+{ };
+
+\end{minted}
+
+\verb@logging_impl@ uses a standard \verb@index_sequence@ to extract the
+individual \meta{Functions} from the metafunction sequence and passes them
+to \verb@logging_helpers@ as a parameter pack.
+
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename Wrapped>
+class logging
+ : public logging_impl<
+	Wrapped,
+	members<reflected(Wrapped)>,
+	std::make_index_sequence<size<members<reflected(Wrapped)>>::value>
+>
+{ };
+
+typedef logging<foo> logging_foo;
+
+\end{minted}
+
+The \verb@logging@ template makes the use of \verb@logging_impl@ convenient.
+
+Note that the metaobject sequence 'returned' by \verb@members<...>@ should
+be filtered to contain only \meta{Function}s.
+
+The following features are shown in this use-case:
+
+\begin{itemize}
+\item{class member reflection,}
+\item{class member function reflection,}
+\item{use of the reflection operator,}
+\item{use of the \verb@identifier@ operator or the \verb@named_mem_var@ templates.}
+\end{itemize}
+

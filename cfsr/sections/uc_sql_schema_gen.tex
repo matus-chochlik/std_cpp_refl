@@ -1,0 +1,82 @@
+\subsection{SQL schema generation}
+
+We need to create an SQL/DDL (data definition language) script for creating a schema
+with tables which will be storing the values of all structures in namespace C++ \verb@foo@
+having names starting with \verb@persistent_@:
+
+\begin{minted}[tabsize=4]{cpp}
+
+const char* translate_to_sql(const std::string& type_name)
+{
+	if(type_name == "int")
+		return "INTEGER";
+	/* .. etc. */
+}
+
+template <typename MetaMemVar>
+void create_table_column_from(MetaMemVar)
+{
+	if(!std::is_base_of<
+		variable_tag,
+		metaobject_category<MetaMemVar>
+	>()) return;
+
+	std::cout << base_name<MetaMemVar>() << " ";
+
+	std::cout << translate_to_sql(base_name<type<MetaMemVar>());
+
+	if(starts_with(base_name<MetaMemVar>(), "id_"))
+	{
+		std::cout << " PRIMARY KEY";
+	}
+	std::cout << std::endl;
+}
+
+template <typename MetaClass>
+void create_table_from(MetaClass)
+{
+	if(!std::is_base_of<
+		class_tag,
+		metaobject_category<MetaClass>
+	>()) return;
+
+	std::cout << "CREATE TABLE "
+	          << strip_prefix("persistent_", base_name<MetaClass>())
+	          << "(" << std::endl;
+
+	for_each<members<MetaClass>>(create_table_column_from);
+
+	std::cout << ");"
+}
+
+template <typename MetaNamespace>
+void create_schema_from(MetaNamespace)
+{
+	std::cout << "CREATE SCHEMA "
+	          << base_name<MetaNamespace>()
+	          << ";" << std::endl;
+
+	for_each<members<MetaNamespace>>(create_table_from);
+}
+
+int main(void)
+{
+	create_schema_from(reflected(foo));
+	return 0;
+}
+
+\end{minted}
+
+This example shows the following features from N4111:
+
+\begin{itemize}
+\item{namespace reflection,}
+\item{namespace member reflection,}
+\item{class member reflection,}
+\item{use of metaobject sequence,}
+\item{metaobject categorization,}
+\item{base names and the \meta{Named} concept.}
+\end{itemize}
+
+Furthermore reflection could be used to implement actual object-relational mapping,
+together with a library like \verb@SOCI@, \verb@ODBC@, \verb@libpq@, etc.
