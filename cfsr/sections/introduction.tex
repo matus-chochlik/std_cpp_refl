@@ -44,6 +44,31 @@ be usable in the individual use-cases.
 The examples below use several features not described in N4111 (these will be added
 in the next revision of that paper):
 
+\subsubsection{Source file and line}
+
+Template class \verb@source_file@ should be defined for \meta{object}s
+and should "return" a compile-time string containing the path to the source file
+where the base-level construct reflected by the metaobject was declared.
+
+\begin{minted}[tabsize=4]{cpp}
+template <>
+struct source_file<MetaObject>
+ : String
+{ };
+\end{minted}
+
+Template class \verb@source_line@ should be defined for \meta{object}s
+and should inherit from \verb@integral_constant<unsigned, Line>@ where
+\verb@Line@ is the line number in the source file
+where the base-level construct reflected by the metaobject was declared.
+
+\begin{minted}[tabsize=4]{cpp}
+template <>
+struct source_file<MetaObject>
+ : String
+{ };
+\end{minted}
+
 \subsubsection{For each element in Metaobject sequence}
 
 Template function \verb@for_each@, should be defined for every metaobject sequence
@@ -76,7 +101,7 @@ struct position<MetaInheritance>
 Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
 reflected by the \meta{Inheritance}.
 
-\subsection{Pointers to reflected variables and functions}
+\subsubsection{Pointers to reflected variables and functions}
 
 For models of \meta{Variable} and \meta{Function} the \verb@pointer@ template class
 should be defined as:
@@ -121,7 +146,7 @@ of that class.
 operator was invoked.
 \end{itemize}
 
-\subsection{The \meta{Positional} concept}
+\subsubsection{The \meta{Positional} concept}
 
 The \meta{Positional} concept defines the interface for metaobjects reflecting
 base-level constructs having a fixed position, like function or template parameters,

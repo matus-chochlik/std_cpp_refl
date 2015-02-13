@@ -180,9 +180,12 @@ struct source_file<MetaObject>
 { };
 \end{minted}
 
+For base-level constructs like namespaces which don't have a single specific
+declaration, an empty string should be returned.
+
 \subsubsection{\texttt{source\_line}}
 
-A template class \verb@source_line@ should be defined and should return the
+A template class \verb@source_line@ should be defined and should return the (positive)
 line number in the source file where the base-level construct reflected by a
 metaobject is defined (similar to what the preprocessor \verb@__LINE__@ symbol
 expands to).
@@ -196,4 +199,7 @@ struct source_line<MetaObject>
  : integral_constant<unsigned, Line>
 { };
 \end{minted}
+
+For base-level constructs like namespaces which don't have a single specific
+declaration, line number zero should be returned.
 
