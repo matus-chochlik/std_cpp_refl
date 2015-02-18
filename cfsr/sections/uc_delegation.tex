@@ -27,19 +27,19 @@ private:
 public:
 	void f1(void)
 	{
-		_do_log_call<reflected(this::function)>();
+		_do_log_call<mirrored(this::function)>();
 		_obj.f1();
 	}
 
 	int f2(int a, int b);
 	{
-		_do_log_call<reflected(this::function)>();
+		_do_log_call<mirrored(this::function)>();
 		return _obj.f2(a, b);
 	}
 
 	double f3(float a, long b, double c, const std::string& d);
 	{
-		_do_log_call<reflected(this::function)>();
+		_do_log_call<mirrored(this::function)>();
 		return _obj.f3(a, b, c, d);
 	}
 };
@@ -136,8 +136,8 @@ template <typename Wrapped>
 class logging
  : public logging_impl<
 	Wrapped,
-	members<reflected(Wrapped)>,
-	std::make_index_sequence<size<members<reflected(Wrapped)>>::value>
+	members<mirrored(Wrapped)>,
+	std::make_index_sequence<size<members<mirrored(Wrapped)>>::value>
 >
 { };
 
@@ -149,6 +149,10 @@ The \verb@logging@ template makes the use of \verb@logging_impl@ convenient.
 
 Note that the metaobject sequence 'returned' by \verb@members<...>@ should
 be filtered to contain only \meta{Function}s.
+
+This programming pattern of creating a new class with the same or similar interface
+than another class is quite frequent and includes not just typical decorators or delegation
+but also adapters, type-erasures, etc.\footnote{See also the following use-case.}
 
 The following features are shown in this use-case:
 

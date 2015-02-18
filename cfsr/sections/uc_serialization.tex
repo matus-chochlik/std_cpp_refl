@@ -12,7 +12,7 @@ Admittedly this is not the most clever XML schema ever devised, but let's stick 
 template <typename T>
 void to_xml(const T& instance, std::true_type atomic)
 {
-	typedef reflected(T) MetaType;
+	typedef mirrored(T) MetaType;
 	std::cout << "<" << base_name<MetaType>() << ">";
 	std::cout << instance;
 	std::cout << "</" << base_name<MetaType>() << ">";
@@ -27,7 +27,7 @@ void to_xml(const T& instance)
 template <typename T>
 void to_xml(const T& instance, std::false_type atomic)
 {
-	typedef reflected(T) MetaType;
+	typedef mirrored(T) MetaType;
 	std::cout << "<" << base_name<MetaType>() << ">";
 
 	for_each<base_classes<MetaType>>(

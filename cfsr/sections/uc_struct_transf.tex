@@ -1,0 +1,78 @@
+\subsection{Structure data member transformations}
+
+We need to create a new structure, which has data members with the same names
+as an original structure, but we need to change some of the properties
+of the data members (for example their types).
+
+For example we need to transform:
+
+\begin{minted}[tabsize=4]{cpp}
+
+struct foo
+{
+	bool b;
+	char c;
+	double d;
+	float f;
+	std::string s;
+};
+
+\end{minted}
+
+into
+
+\begin{minted}[tabsize=4]{cpp}
+
+struct rdbs_table_placeholder_foo
+{
+	column_placeholder<bool>::type b;
+	column_placeholder<char>::type c;
+	column_placeholder<double>::type d;
+	column_placeholder<float>::type f;
+	column_placeholder<std::string>::type s;
+};
+
+\end{minted}
+
+By using the proposed \verb@identifier@ operator, class member reflection
+and multiple inheritance we can create a new structure that is
+nearly equivalent to \verb@rdbs_table_foo@ via metaprogramming:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaVariable>
+struct rdbs_table_placeholder_helper
+{
+	typename column_placeholder<
+		typename original_type<type<MetaVariable>>::type
+	>::type identifier(base_name<MetaVariable>::value);
+};
+
+template <typename ... MetaVariables>
+struct rdbs_table_placeholder_helpers
+ : rdbs_table_placeholder_helper<MetaVariables>...
+{ };
+
+template <typename MetaVariableSeq, typename IdxSeq>
+class rdbs_table_impl;
+
+template <typename MetaVariableSeq, std::size_t ... I>
+class rdbs_table_impl<MetaFunctionSeq, std::index_sequence<I...>>
+ : public rdbs_table_placeholder_helpers<at<MetaFunctionSeq, I>...>
+{ };
+
+typedef rdbs_table_impl<
+	members<mirrored(foo)>,
+	std::make_index_sequence<size<members<mirrored(foo)>>::value>
+> rdbs_table_placeholder_foo;
+
+\end{minted}
+
+This examples uses the following features.
+
+\begin{itemize}
+\item{class member reflection,}
+\item{use of the reflection operator,}
+\item{use of the \verb@identifier@ operator or the \verb@named_mem_var@ templates.}
+\end{itemize}
+

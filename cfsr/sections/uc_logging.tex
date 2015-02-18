@@ -46,7 +46,7 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "min<"
-	        << full_name<reflected(T)>()
+	        << full_name<mirrored(T)>()
 	        << ">(" << a << ", " << b << ") = ";
 
 	T result = a<b?a:b;
@@ -69,17 +69,17 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "function: min<"
-	        << full_name<reflected(T)>()
+	        << full_name<mirrored(T)>()
 	        << ">"
 		<< std::endl
-		<< base_name<reflected(a)>() << ": "
+		<< base_name<mirrored(a)>() << ": "
 		<< a << std::endl
-		<< base_name<reflected(b)>() << ": "
+		<< base_name<mirrored(b)>() << ": "
 		<< b << std::endl;
 
 	T result = a<b?a:b;
 
-	log()   << base_name<reflected(result)>() << ": "
+	log()   << base_name<mirrored(result)>() << ": "
 		<< b << std::endl;
 
 	return result;
@@ -88,8 +88,8 @@ T min(const T& a, const T& b)
 
 It is true that the lines:
 \begin{minted}[tabsize=4]{cpp}
-		<< base_name<reflected(a)>() << ": "
-		<< base_name<reflected(b)>() << ": "
+		<< base_name<mirrored(a)>() << ": "
+		<< base_name<mirrored(b)>() << ": "
 \end{minted}
 
 could be replaced by preprocessor stringization or just hard coded
@@ -142,21 +142,21 @@ void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 template <typename T>
 T min(T a, T b)
 {
-	log_function_exec(reflected(this::function), std::tie(a, b));
+	log_function_exec(mirrored(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T max(T a, T b)
 {
-	log_function_exec(reflected(this::function), std::tie(a, b));
+	log_function_exec(mirrored(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T avg(T a, T b)
 {
-	log_function_exec(reflected(this::function), std::tie(a, b));
+	log_function_exec(mirrored(this::function), std::tie(a, b));
 	/* ... */
 }
 \end{minted}
