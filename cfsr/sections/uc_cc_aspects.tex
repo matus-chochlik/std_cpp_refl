@@ -6,8 +6,8 @@ a function (from a set of multiple functions meeting some conditions) each time 
 The action may be related to logging, debugging, profiling, but also access control, etc.
 The condition which selects the functions for which the action is invoked might be something like:
 \begin{itemize}
-\item each member function of a class,
-\item each function defined in a namespace,
+\item each member function of a particular class,
+\item each function defined in some namespace,
 \item each function returning values of a particular type or having a particular set of parameters,
 \item each function whose name matches a search expression,
 \item each function declared in a particular source file,
@@ -15,7 +15,7 @@ The condition which selects the functions for which the action is invoked might 
 \end{itemize}
 
 It may not be possible to tell in advance the relations between the aspects and the individual functions
-or these relations may change between builds or build configurations.
+or these relations may vary for different builds or build configurations.
 Furthermore we want to be able to quickly change the assignment of actions to functions in one
 place instead of going through the whole project source which may consists of dozens or even hundreds of files.
 

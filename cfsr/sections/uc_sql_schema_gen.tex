@@ -40,6 +40,11 @@ void create_table_from(MetaClass)
 		metaobject_category<MetaClass>
 	>()) return;
 
+	if(!starts_with(
+		"persistent_",
+		base_name<MetaClass>()
+	)) return;
+
 	std::cout << "CREATE TABLE "
 	          << strip_prefix("persistent_", base_name<MetaClass>())
 	          << "(" << std::endl;
@@ -80,3 +85,4 @@ This example shows the following features from N4111:
 
 Furthermore reflection could be used to implement actual object-relational mapping,
 together with a library like \verb@SOCI@, \verb@ODBC@, \verb@libpq@, etc.
+See for example \cite{mirror-doc-cpp11}.

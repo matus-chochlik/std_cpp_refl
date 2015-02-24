@@ -87,19 +87,47 @@ The interface of \meta{objectSequence} as defined in N4111 should be enough
 to define a single generic implementation of this function without the need
 to write specialization for every type modelling this concept.
 
-\subsubsection{Position of a base in the list of base classes}
+\subsubsection{The \meta{Positional} concept}
 
-For every model of \meta{Inheritance} the \verb@position@ template should be defined as:
+The \meta{Positional} concept defines the interface for metaobjects reflecting
+base-level constructs having a fixed position, like function or template parameters,
+class inheritance clauses, etc.
 
-\begin{minted}[tabsize=4]{cpp}
+The \verb@has_position@ template class can be used to distinguish metaobjects modelling
+this concept. Is should inherit from \verb@true_type@ for \meta{Positional}s and from
+\verb@false_type@ otherwise.
+
+\begin{minted}{cpp}
+template <typename X>
+struct has_position
+ : false_type
+{ };
+
 template <>
-struct position<MetaInheritance>
- : integral_constant<std::size_t, I>
+struct has_position<MetaPositional>
+ : true_type
 { };
 \end{minted}
 
-Where \verb@I@ is the zero-based index of the base class in the inheritance list of a derived class
-reflected by the \meta{Inheritance}.
+The \verb@position@ template class inheriting
+from \verb@integral_constant<size_t, I>@ type (where \verb@I@ is
+a zero-based position of the reflected base-level language construct)
+can be used to obtain the value of the index.
+
+\begin{minted}{cpp}
+template <typename T>
+struct position;
+
+template <>
+struct position<MetaPositional>
+ : integral_constant<size_t, I>
+{ };
+\end{minted}
+
+\subsubsection{Position of a base in the list of base classes}
+
+Every model of \meta{Inheritance} should also conform to the \meta{Positional}
+concept described above.
 
 \subsubsection{Pointers to reflected variables and functions}
 
@@ -145,43 +173,6 @@ of that class.
 \item{\verb@mirrored(this::function)@} reflects the function inside of which the reflection
 operator was invoked.
 \end{itemize}
-
-\subsubsection{The \meta{Positional} concept}
-
-The \meta{Positional} concept defines the interface for metaobjects reflecting
-base-level constructs having a fixed position, like function or template parameters,
-class inheritance clauses, etc.
-
-The \verb@has_position@ template class can be used to distinguish metaobjects modelling
-this concept. Is should inherit from \verb@true_type@ for \meta{Positional}s and from
-\verb@false_type@ otherwise.
-
-\begin{minted}{cpp}
-template <typename X>
-struct has_position
- : false_type
-{ };
-
-template <>
-struct has_position<MetaPositional>
- : true_type
-{ };
-\end{minted}
-
-The \verb@position@ template class inheriting
-from \verb@integral_constant<size_t, I>@ type (where \verb@I@ is
-a zero-based position of the reflected base-level language construct)
-can be used to obtain the value of the index.
-
-\begin{minted}{cpp}
-template <typename T>
-struct position;
-
-template <>
-struct position<MetaPositional>
- : integral_constant<size_t, I>
-{ };
-\end{minted}
 
 \subsubsection{Turning compile-time strings into identifiers}
 
