@@ -78,19 +78,16 @@ This paper is the follow-up to N3996 and N4111 an it is the third revision
 of the proposal to add support for static reflection to the C++ standard.
 During the presentation of N4111 concerns were expressed about the level-of-detail and scope
 of the presented proposal and possible dangers of giving non-expert language users
-a {\em too powerful} tool to use and dangers for the implementers of this proposal
-if it was implemented as is.
+a {\em too powerful} tool to use and the dangers of implementing it all at once.
 This paper aims to address these issues.
-
-Furthermore the accompanying paper -- N4452 describes several use cases of reflection which were called for
-during the presentation of N4111.
+Furthermore the accompanying paper -- N4452 describes several use cases of reflection,
+which were called for during the presentation of N4111.
 
 \tableofcontents
 
 \input{sections/introduction.tex}
 \input{sections/concepts.tex}
 \input{sections/reflection.tex}
-\input{sections/identifiers.tex}
 \input{sections/library.tex}
 \input{sections/rationale.tex}
 \input{sections/issues.tex}
@@ -99,6 +96,7 @@ during the presentation of N4111.
 
 \begin{appendices}
 \appendix
+\input{sections/identifiers.tex}
 \input{sections/examples.tex}
 \end{appendices}
 
