@@ -2,9 +2,9 @@
 
 \newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
 \newcommand{\mchmail}{chochlik@gmail.com}
-\newcommand{\docname}{A case for strong static reflection}
-\newcommand{\docnum}{Nxxxx}
-\newcommand{\docdate}{2015-03-12}
+\newcommand{\docname}{Static reflection (rev. 3)}
+\newcommand{\docnum}{N4451}
+\newcommand{\docdate}{2015-04-11}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -52,7 +52,8 @@
 
 \author{\mchname (\mchmail)}
 
-\newcommand{\meta}[1]{{\em \textbf{Meta#1}}}
+\newcommand{\concept}[1]{\hyperref[concept-#1]{\em{#1}}}
+\newcommand{\meta}[1]{\concept{Meta#1}}
 
 \begin{document}
 
@@ -73,23 +74,24 @@ Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
 
 \paragraph{Abstract}
 
-In N3996 \cite{n3996} and N4111 \cite{n4111} we proposed the design
-and some hints on possible implementation of a compile-time reflection
-facility for standard C++. N3996 contained list of possible use-cases
-and a discussion about the usefulness of reflection. During the presentation
-of the paper concerns were expressed about the level-of-detail and scope
-of the presented proposal and possible dangers of giving non-expert language users
-a {\em too powerful} tool to use and dangers for the implementers of this proposal.
-Examples and more detailed description of use cases were called for.
-This paper aims to address these issues.
-
+This paper is the follow-up to N3996 and N4111 an it is the third revision
+of the proposal to add support for static reflection to the C++ standard.
 
 \tableofcontents
 
 \input{sections/introduction.tex}
-\input{sections/basic_use_cases.tex}
-\input{sections/advanced_use_cases.tex}
-\input{sections/design_prefs.tex}
+\input{sections/concepts.tex}
+\input{sections/reflection.tex}
+\input{sections/identifiers.tex}
+\input{sections/library.tex}
+\input{sections/rationale.tex}
+\input{sections/issues.tex}
+\input{sections/acknowledge.tex}
 \input{sections/references.tex}
+
+\begin{appendices}
+\appendix
+\input{sections/examples.tex}
+\end{appendices}
 
 \end{document}

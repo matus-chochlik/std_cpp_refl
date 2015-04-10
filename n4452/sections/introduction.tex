@@ -1,0 +1,42 @@
+\section{Introduction}
+
+There is a wide range of computer programming scenarios in which
+the programmer has to (or had to) manualy implement some generic boilerplate
+code doing the same thing on multiple different types (or other language constructs,
+like namespaces, constructors, etc.). For example accessing member variables or
+calling free or member functions and operators in an uniform
+manner, converting data between the language's intrinsic representation and
+external formats, implementing delegation or some of the other
+established design patterns, etc.
+
+With the right tools most of these tasks could be properly algorithmized,
+encapsulated into some form of parametric {\em 'callable'} and then invoked
+with appropriate arguments.
+
+The C/C++ preprocessor and C++'s templates were devised to help dealing
+with some of such cases and later gave rise to particular forms of metaprogramming,
+which have since become relatively popular. However, while preprocessor and template-based
+metaprogramming is being put to good use by more and more libraries and applications written
+in C++, we are starting to hit the limits of these tools.
+
+The limits stem from the fact, that while we can now use the C++'s type system
+as a (meta)programming language of its own and a C++ compiler as its interpreter
+and write complicated metaprograms automatically generating a lot of code
+which we previously had to write manually, the programmer still needlessly has to do
+a lot of things manually. Just to mention a few; if we want portable type names,
+we usually have to hardcode them, if we want to create an identifier programmatically
+we need preprocessor token pasting, we cannot programmatically enumerate all member
+variables or base classes of a class, all operators working on a particular type, etc.
+
+A C++ compiler processing a translation unit has access to a large amount
+of very useful metadata, but unfortunately shares only a tiny amount of it
+with the programmer. Not so long ago the {\em type-traits} -- introspection primitives,
+many of which rely on some sort of compiler 'magic' (a.k.a. reflection) were introduced.
+Before that the only 'reflection-facility' in C++ was the \verb@typeid@ operator.
+
+The aim of this paper is to show that we can and should be able to get much more
+information from the compiler and why that would be useful. Since this paper is a follow-up
+to N3996 and N4111, it also indicates how the metaobjects proposed in N4111 would
+be usable in the individual use-cases.
+
+

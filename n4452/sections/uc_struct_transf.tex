@@ -1,4 +1,5 @@
 \subsection{Structure data member transformations}
+\label{use-case-struct-transf}
 
 We need to create a new structure, which has data members with the same names
 as an original structure, but we need to change some of the properties
@@ -34,7 +35,7 @@ struct rdbs_table_placeholder_foo
 
 \end{minted}
 
-By using the proposed \verb@identifier@ operator, class member reflection
+By using the proposed \verb@identifier@ operator\footnote{See appendix~\ref{appendix-operator-identifier}.}, class member reflection
 and multiple inheritance we can create a new structure that is
 nearly equivalent to \verb@rdbs_table_foo@ via metaprogramming:
 

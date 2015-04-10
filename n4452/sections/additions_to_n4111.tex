@@ -1,50 +1,9 @@
-\section{Introduction}
+\section{Additions to N4111}
 
-There is a wide range of computer programming scenarios in which
-the programmer has to (or had to) manualy implement some generic boilerplate
-code doing the same thing on multiple different types (or other language constructs,
-like namespaces, constructors, etc.). For example accessing member variables or
-calling free or member functions and operators in an uniform
-manner, converting data between the language's intrinsic representation and
-external formats, implementing delegation or some of the other
-established design patterns, etc.
+The examples described in this paper use several features not described in N4111
+(these will be added to the next revision of that paper -- N4451):
 
-With the right tools most of these tasks could be properly algorithmized,
-encapsulated into some form of parametric {\em 'callable'} and then invoked
-with appropriate arguments.
-
-The C/C++ preprocessor and C++'s templates were devised to help dealing
-with some of such cases and later gave rise to particular forms of metaprogramming,
-which have since become relatively popular. However, while preprocessor and template-based
-metaprogramming is being put to good use by more and more libraries and applications written
-in C++, we are starting to hit the limits of these tools.
-
-The limits stem from the fact, that while we can now use the C++'s type system
-as a (meta)programming language of its own and a C++ compiler as its interpreter
-and write complicated metaprograms automatically generating a lot of code
-which we previously had to write manually, the programmer still needlessly has to do
-a lot of things manually. Just to mention a few; if we want portable type names,
-we usually have to hardcode them, if we want to create an identifier programmatically
-we need preprocessor token pasting, we cannot programmatically enumerate all member
-variables or base classes of a class, all operators working on a particular type, etc.
-
-A C++ compiler processing a translation unit has access to a large amount
-of very useful metadata, but unfortunately shares only a tiny amount of it
-with the programmer. Not so long ago the {\em type-traits} -- introspection primitives,
-many of which rely on some sort of compiler 'magic' (a.k.a. reflection) were introduced.
-Before that the only 'reflection-facility' in C++ was the \verb@typeid@ operator.
-
-The aim of this paper is to show that we can and should be able to get much more
-information from the compiler and why that would be useful. Since this paper is a follow-up
-to N3996 and N4111, it also indicates how the metaobjects proposed in N4111 would
-be usable in the individual use-cases.
-
-\subsection{Additions to N4111}
-
-The examples below use several features not described in N4111 (these will be added
-in the next revision of that paper):
-
-\subsubsection{Source file and line}
+\subsection{Source file and line}
 
 Template class \verb@source_file@ should be defined for \meta{object}s
 and should "return" a compile-time string containing the path to the source file
@@ -69,7 +28,7 @@ struct source_file<MetaObject>
 { };
 \end{minted}
 
-\subsubsection{For each element in Metaobject sequence}
+\subsection{For each element in Metaobject sequence}
 
 Template function \verb@for_each@, should be defined for every metaobject sequence
 and should call the specified unary functor taking values of types conforming to
@@ -87,7 +46,7 @@ The interface of \meta{objectSequence} as defined in N4111 should be enough
 to define a single generic implementation of this function without the need
 to write specialization for every type modelling this concept.
 
-\subsubsection{The \meta{Positional} concept}
+\subsection{The \meta{Positional} concept}
 
 The \meta{Positional} concept defines the interface for metaobjects reflecting
 base-level constructs having a fixed position, like function or template parameters,
@@ -124,12 +83,12 @@ struct position<MetaPositional>
 { };
 \end{minted}
 
-\subsubsection{Position of a base in the list of base classes}
+\subsection{Position of a base in the list of base classes}
 
 Every model of \meta{Inheritance} should also conform to the \meta{Positional}
 concept described above.
 
-\subsubsection{Pointers to reflected variables and functions}
+\subsection{Pointers to reflected variables and functions}
 
 For models of \meta{Variable} and \meta{Function} the \verb@pointer@ template class
 should be defined as:
@@ -158,7 +117,8 @@ the \verb@get@ function should return a pointer to that variable or function res
 If the \meta{Variable} or \meta{Function} reflect class members then the \verb@get@ function
 should return a pointer to data member or pointer to member function respectively.
 
-\subsubsection{Context-dependent reflection}
+\subsection{Context-dependent reflection}
+\label{appendix-context-dependent-reflection}
 
 Special expressions in the form of \verb@this::{namespace,class,function}@ should be added
 as valid arguments for the reflection operator and should return metaobjects depending
@@ -174,7 +134,8 @@ of that class.
 operator was invoked.
 \end{itemize}
 
-\subsubsection{Turning compile-time strings into identifiers}
+\subsection{Turning compile-time strings into identifiers}
+\label{appendix-operator-identifier}
 
 Inspired by the idea of {\em name literals} as mentioned on the WG mailing list,
 we suggest to consider adding a new functionality to the core language, allowing to specify
@@ -183,7 +144,7 @@ evaluating into values of \verb@constexpr const char [N]@.
 
 This could be implemented either by using a new operator (or recycling an old one),
 or maybe by using generalized attributes.
-In the examples below the \verb@identifier@ operator is used, but we do not have
+In the use-cases described in this paper the \verb@identifier@ operator is used, but we do not have
 any strong preference for the name of this operator.
 
 For example:
@@ -230,6 +191,4 @@ in the standard. If the use of regular templates for the purpose of creating the
 constexpr identifier strings would be too complicated to implement, phase 6 could
 be extended to allow simple compile-time text manipulation (comparison, concatenation,
 substrings, etc.) by a set of dedicated functions.
-
-The following sections describe some use cases for this feature.
 

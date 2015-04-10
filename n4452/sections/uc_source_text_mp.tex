@@ -5,10 +5,10 @@ a new script purely through text operations followed by the execution of that sc
 
 While using this approach is more complicated with compiled languages it is not
 unheard of. A C++ source can be created by a program in C++, compiled by a compiler
-(invoked from that same or in a different program) into a shared library and then
+(invoked from that same or from a different program) into a shared library and then
 dynamically loaded and executed.
 
-In some cases this approach could be used to generate code on a local machine,
+In some cases this approach could be used to generate source code on a local machine,
 which is then compiled and executed on a remote machine with a different architecture.
 
 \begin{minted}[tabsize=4]{cpp}
@@ -123,8 +123,9 @@ parameter type is a typedef and it would instead return either
 \verb@"foo64bit"@ or \verb@"foo32bit"@ based on the architecture
 on which the script was generated.
 
-In N4111 it is proposed that reflection is aware of \verb@typedef@s and distinguishes between
-\verb@typedef@s and their 'underlying types'.
+In N4111 (and subsequent papers) it is proposed that reflection
+is aware of \verb@typedef@s and distinguishes between
+\verb@typedef@s and their {\em underlying types}.
 
 This example shows the following features:
 
