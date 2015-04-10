@@ -5,8 +5,9 @@ for a wide range of tasks, such as the implementation
 of serialization-like operations, object-relational mapping,
 remote procedure calls, scripting, automated GUI-generation,
 implementation of several software design patterns, etc.
-C++ as one of the most prevalent programming languages 
-lacks a standardized reflection facility.
+
+However, C++ as one of the most prevalent programming languages 
+still lacks a standardized reflection facility.
 
 In this paper we propose to add native support for
 compile-time reflection to C++ by the means of compiler generated
@@ -16,19 +17,21 @@ library can later be used to implement other third-party libraries
 providing both compile-time and run-time high-level
 reflection utilities.
 
-The basic static metadata provided by compile-time reflection
-should be as complete as possible to be applicable in a wide
-range of scenarios and allow to implement custom higher-level
-static and dynamic reflection libraries and reflection-based
+When finalized, the reflection facility providing compile-tim metadata
+should be as complete as possible in order to be applicable in a wide
+range of scenarios and to allow to implement custom higher-level
+static and dynamic reflection software libraries and reflection-based
 utilities.
 
-\subsection{Differences between N3996, N4111 and N4451}
+However we recognize that implementing the whole proposed set of metaobjects
+all at once may be problematic and that a more gradual approach is necessary.
+Therefore\footnote{And to keep the number of pages of the main body of the proposal reasonable.}
+in the main body of this paper we propose to add in the first phase
+only a subset of the metaobjects from N4111, which we assume to be essential
+and which provide a good starting point for future extensions.
 
-This proposal (N4451) is a revision of N4111, with several modification
-listed below:
+The appendices still contain the whole set of metaobjects including their
+full interfaces as currently envisioned\footnote{As previously described in N4111 with several
+important changes}. The appendices are provided only to keep the bigger picture
+in mind, but are not part of the current proposal.
 
-\begin{itemize}
-\item \verb@position@ has been added to the definition of the \meta{Inheritance} concept.
-\item \verb@for_each@ has been added to the definition of the \meta{objectSequence} concept.
-\item TODO
-\end{itemize}
