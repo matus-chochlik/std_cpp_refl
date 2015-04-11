@@ -1,0 +1,91 @@
+\subsection{MetaNamed}
+\label{concept-MetaNamed}
+
+\begin{tikzpicture}
+\node[concept] (Metaobject) {Metaobject};
+\node[concept] (MetaNamed) [right=of Metaobject] {MetaNamed}
+	edge[inheritance] (Metaobject);
+\end{tikzpicture}
+
+\meta{Named} is a \meta{object} reflecting program constructs, which have a name
+(are identified by an identifier) like namespaces, types, functions, variables, parameters, etc.
+
+In addition to the requirements inherited from \meta{object}, the following requirements must
+be satisfied:
+
+The \verb@has_name@ template class specialization for a \meta{Named} should
+inherit from \verb@true_type@:
+
+\begin{minted}{cpp}
+template <>
+struct has_name<MetaNamed>
+ : true_type
+{ };
+\end{minted}
+
+\subsubsection{\texttt{base\_name}}
+
+A template class \verb@base_name@ should be defined an should return the base name
+of the reflected construct, without the nested name specifier nor any qualifications
+or other decorations, as a
+\concept{StringConstant}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_name;
+
+template <>
+struct base_name<MetaNamed>
+ : StringConstant
+{ };
+\end{minted}
+
+For example, if \verb@__meta_std_size_t@ reflects the \verb@std::size_t@ type,
+then the matching specialization of \verb@base_name@ could be implemented in the following
+way:
+
+\begin{minted}{cpp}
+template <>
+struct base_name<__meta_std_size_t>
+ : string_constant<'s','i','z','e','_','t'>
+{ };
+\end{minted}
+
+where the \verb@string_constant<'s','i','z','e','_','t'>@ class is a model
+of \concept{StringConstant} as described above.
+
+For namespace \verb@std@ the value should be \verb@"std"@, for namespace
+\verb@foo::bar::baz@ it should be \verb@"baz"@, for the global scope the
+value should be an empty string.
+
+For \verb@unsigned long int * const *@ it should be \verb@"unsigned long int"@.
+
+For \verb@std::vector<int>::iterator@ it should be \verb@"iterator"@. For derived,
+qualified types like \verb@volatile std::vector<const foo::bar::fubar*> * const *@
+it should be \verb@"vector"@, etc.
+
+\subsubsection{\texttt{full\_name}}
+
+A template class \verb@full_name@ should be defined and should return the fully
+qualified name of the reflected construct, including the nested name specifier
+and all qualifiers.
+
+For namespace \verb@std@ the value 
+should be \verb@"std"@, for namespace \verb@foo::bar::baz@ the value should
+be \verb@"foo::bar::baz"@, for the global scope the value should be an empty
+\concept{StringConstant}.
+For \verb@std::vector<int>::iterator@ it should be \verb@"std::vector<int>::iterator"@.
+For derived qualified types like
+\verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should be defined as
+\verb@"volatile std::vector<const foo::bar::fubar*> * const *"@, etc.
+
+\begin{minted}{cpp}
+template <typename T>
+struct full_name;
+
+template <>
+struct full_name<MetaNamedScoped>
+ : StringConstant
+{ };
+\end{minted}
+

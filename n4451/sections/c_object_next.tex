@@ -1,0 +1,44 @@
+\subsection{Metaobject}
+\label{concept-Metaobject}
+
+\begin{tikzpicture}
+\node[concept] (Metaobject) {Metaobject};
+\end{tikzpicture}
+
+\subsubsection{Comparison}
+
+A template class \verb@equal@ should be defined and should inherit from \verb@true_type@
+if a \hyperref[section-Library]{metaobject expression} \verb@Expr1@ {\em evaluates} into
+the same metaobject as the metaobject expression \verb@Expr2@ (i.e. into metaobjects
+that both reflect the same base-level construct). Otherwise it should inherit from
+\verb@false_type@:
+
+\begin{minted}{cpp}
+template <typename Expr1, typename Expr2>
+struct equal
+ : BooleanConstant
+{ };
+\end{minted}
+
+\subsubsection{Traits}
+
+The exisiting set of traits described in section~\ref{section-metaobject-concepts},
+should be extended in the future to indicate:
+
+\verb@has_template@ -- indicates that a \meta{object} is an \meta{Instantiation}:
+\begin{minted}{cpp}
+template <typename T>
+struct has_template
+ : false_type
+{ };
+\end{minted}
+
+\verb@is_template@ -- indicates that a \meta{object} is a \meta{Template}
+or \meta{TemplateParameter}:
+\begin{minted}{cpp}
+template <typename T>
+struct is_template
+ : false_type
+{ };
+\end{minted}
+
