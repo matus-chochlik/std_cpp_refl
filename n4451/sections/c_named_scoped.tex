@@ -1,15 +1,4 @@
 \subsection{MetaNamedScoped}
 \label{concept-MetaNamedScoped}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\end{tikzpicture}
-
 Models of \meta{NamedScoped} combine the requirements of \meta{Named} and \meta{Scoped}.

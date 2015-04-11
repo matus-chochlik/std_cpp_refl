@@ -1,14 +1,9 @@
 \subsection{MetaScoped}
 \label{concept-MetaScoped}
 
-\begin{tikzpicture}
-\node[concept] (Metaobject) {Metaobject};
-\node[concept] (MetaScoped) [right=of Metaobject] {MetaScoped}
-	edge[inheritance] (Metaobject);
-\end{tikzpicture}
-
 \meta{Scoped} is a \meta{object} reflecting program constructs defined inside
-of a named scope (like the global scope, a namespace, a class, etc.)
+of a named scope (like the global scope, a namespace, a class, etc.\footnote{
+and in the future an enum, an enum class etc.})
 
 In addition to the requirements inherited from \meta{object}, the following requirements must
 be satisfied:

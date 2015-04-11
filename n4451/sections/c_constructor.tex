@@ -1,25 +1,6 @@
 \subsection{MetaConstructor}
 \label{concept-MetaConstructor}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaFunction)[above right=of MetaNamedScoped] {MetaFunction}
-	edge [inheritance, bend right] (MetaNamedScoped);
-\node [concept] (MetaClassMember)[below right=of MetaScoped] {MetaClassMember}
-	edge [inheritance] (MetaNamedScoped);
-\node [concept] (MetaConstructor)[below right=of MetaNamedScoped] {MetaConstructor}
-	edge [inheritance] (MetaFunction)
-	edge [inheritance, bend left] (MetaClassMember);
-\end{tikzpicture}
-
-
 \meta{Constructor} reflects a constructor of an elaborated type.
 
 In addition to the requirements inherited from \meta{Function} and \meta{ClassMember},

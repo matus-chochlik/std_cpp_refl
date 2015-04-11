@@ -1,21 +1,6 @@
 \subsection{MetaGlobalScope}
 \label{concept-MetaGlobalScope}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaScope)[above right=of MetaNamedScoped] {MetaScope}
-	edge [inheritance, bend right] (MetaNamedScoped);
-\node [concept] (MetaGlobalScope)[below right=of MetaNamedScoped] {MetaGlobalScope}
-	edge [inheritance] (MetaScope);
-\end{tikzpicture}
-
 \meta{GlobalScope} is a \meta{Scope} reflecting the global scope.
 
 In addition to the requirements inherited from \meta{Scope}, the following must

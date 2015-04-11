@@ -1,11 +1,16 @@
 \section{Design preferences}
 
+When designing the reflection facility we did so with
+the following principles\footnote{Some of the principles
+apply only to the whole reflection facility as it is envisioned
+to look in the future, not to the current limited subset proposed
+in this paper.} in mind.
 
 \subsection{Consistency}
 
 The reflection facility as a whole
-should be consistent, instead of being composed of ad-hoc, individually
-designed parts.
+should be consistent, instead of being composed of ad-hoc,
+individually-designed parts.
 
 \subsection{Reusability}
 
@@ -23,7 +28,7 @@ depending on the application needs.
 
 \subsection{Encapsulation}
 
-The metadata should not be exposed directly to the used by compiler built-ins, etc.
+The metadata should not be exposed directly to the user by compiler built-ins, etc.
 Instead it should be accessible through conceptually well-defined interfaces.
 
 \subsection{Stratification}
@@ -43,10 +48,11 @@ features should be reflected and new ones should not be invented.
 
 \subsection{Completeness}
 
-The proposed reflection facility should
+When finalized, the proposed reflection facility should
 provide as much useful metadata as possible, including various specifiers,
 (like constness, storage-class, access, etc.), namespace members,
-enumerated types, iteration of namespace members and much more.
+enumerated types, iteration of namespace members and much more,
+in order to be useful in a wide range of scenarios.
 
 \subsection{Ease of use}
 

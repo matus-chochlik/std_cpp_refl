@@ -1,0 +1,36 @@
+\subsection{MetaEnumClass}
+\label{concept-MetaEnumClass}
+
+\meta{EnumClass} is a \meta{Type} and a \meta{Scope} reflecting a strongly type enumeration.
+
+In addition to the requirements inherited from \meta{Type} and \meta{Scope}, the following must
+be satisfied:
+
+The \verb@metaobject_category@ template class specialization for a \meta{EnumClass} should
+inherit from \verb@enum_class_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaEnumClass>
+ : enum_class_tag
+{ };
+\end{minted}
+
+Currently the \verb@members@ template should inherit only from an empty
+\concept{MetaobjectSequence}. In the future the sequence should allow
+to traverse the enumerated values.
+
+\subsubsection{\texttt{base\_type}}
+
+A template class \verb@base_type@ should be defined and should inherit from
+a \meta{Type} reflecting the base type of the enumeration:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_type;
+
+template <>
+struct base_type<MetaEnumClass>
+ : MetaType
+{ };
+\end{minted}

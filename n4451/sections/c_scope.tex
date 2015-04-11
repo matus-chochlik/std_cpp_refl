@@ -1,19 +1,6 @@
 \subsection{MetaScope}
 \label{concept-MetaScope}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaScope)[right=of MetaNamedScoped] {MetaScope}
-	edge [inheritance] (MetaNamedScoped);
-\end{tikzpicture}
-
 \meta{Scoped} is a \meta{NamedScoped} reflecting program constructs defined inside
 of a named scope (like the global scope, a namespace, a class, etc.)
 
@@ -33,7 +20,11 @@ struct is_scope<MetaScope>
 
 A template class \verb@members@ should be defined and should inherit from a
 \concept{MetaobjectSequence} containing \meta{NamedScoped} metaobjects reflecting
-all members of the base-level scope reflected by this \meta{Scope}.
+the members of the base-level scope reflected by this \meta{Scope}.
+Note that at this point, for \meta{Scope}s reflecting namespaces and enums
+\verb@members@ should return an empty \concept{MetaobjectSequence}, until the
+issue of how their members are reflected is resolved.
+
 
 \begin{minted}{cpp}
 template <typename T>

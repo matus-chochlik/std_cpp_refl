@@ -1,0 +1,21 @@
+\subsection{MetaClassMember}
+
+In addition to the requirements specified in section~\ref{concept-MetaClassMember}
+the following requirements should be added in the future.
+
+\subsubsection{\texttt{access\_specifier}}
+
+A template class called \verb@access_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@private@, \verb@protected@ or \verb@public@
+access specifier:
+
+\begin{minted}{cpp}
+template <typename T>
+struct access_specifier;
+
+template <>
+struct access_specifier<MetaClassMember>
+ : MetaSpecifier
+{ };
+\end{minted}
+

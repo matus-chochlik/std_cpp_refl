@@ -1,17 +1,6 @@
 \subsection{MetaInheritance}
 \label{concept-MetaInheritance}
 
-\begin{tikzpicture}
-\node[concept] (Metaobject) {Metaobject};
-\node[concept] (MetaScoped) [above right=of Metaobject] {MetaScoped}
-	edge[inheritance, bend right] (Metaobject);
-\node[concept] (MetaPositional) [below right=of Metaobject] {MetaPositional}
-	edge[inheritance,bend left] (Metaobject);
-\node[concept] (MetaInheritance) [below right=of MetaScoped] {MetaInheritance}
-	edge[inheritance,bend right] (MetaScoped)
-	edge[inheritance,bend left] (MetaPositional);
-\end{tikzpicture}
-
 \meta{Inheritance} is a \meta{Scoped} and \meta{Positional} reflecting class inheritance.
 
 In addition to the requirements inherited from \meta{Scoped} and \meta{Positional},

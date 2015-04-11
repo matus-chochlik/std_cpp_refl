@@ -1,19 +1,6 @@
 \subsection{MetaType}
 \label{concept-MetaType}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaType)[right=of MetaNamedScoped] {MetaType}
-	edge [inheritance] (MetaNamedScoped);
-\end{tikzpicture}
-
 \meta{Type} is a \meta{NamedScoped} reflecting types.
 
 In addition to the requirements inherited from \meta{NamedScoped}, the following is required:
@@ -56,7 +43,7 @@ struct original_type<__meta_int>
 };
 \end{minted}
 
-\textbf{Note:} If a concept derived from \meta{Type}, for example a \meta{Class},
-is also a \meta{Template} (i.e. is reflecting a template not a concrete type),
-then the \verb@original_type@ template should be left undefined.
+\textbf{Note:} In the future a concept derived from \meta{Type}, for example a \meta{Class},
+may also be a \meta{Template} (i.e. metaobject reflecting a template not a concrete type).
+In such case the \verb@original_type@ template should be undefined.
 

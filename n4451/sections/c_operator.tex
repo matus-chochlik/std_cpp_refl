@@ -1,21 +1,6 @@
 \subsection{MetaOperator}
 \label{concept-MetaOperator}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaFunction)[above right=of MetaNamedScoped] {MetaFunction}
-	edge [inheritance, bend right] (MetaNamedScoped);
-\node [concept] (MetaOperator)[below right=of MetaNamedScoped] {MetaOperator}
-	edge [inheritance] (MetaFunction);
-\end{tikzpicture}
-
 
 \meta{Operator} is a \meta{Function} which reflects an operator.
 

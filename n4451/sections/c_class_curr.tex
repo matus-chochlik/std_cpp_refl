@@ -1,0 +1,30 @@
+\subsection{MetaClass}
+\label{concept-MetaClass}
+
+\meta{Class} is a \meta{Type} and a \meta{Scope} if reflecting a regular
+class\footnote{\texttt{struct}, \texttt{class}, \texttt{union}} or later in the future possibly
+also a class template.
+
+In addition to the requirements inherited from \meta{Type} and \meta{Scope}
+models of \meta{Class} are subject to the following:
+
+The \verb@metaobject_category@ template class specialization for a \meta{Class} should
+inherit from \verb@class_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct metaobject_category<MetaClass>
+ : class_tag
+{ };
+\end{minted}
+
+\textbf{Note:} In the future when specifier reflection is added
+to the standard the \verb@elaborated_type_specifier@ template
+should inherit from a metaobject reflecting the specifier used
+to declare the class.
+
+\textbf{Note:} In the future when class inheritance reflection
+is added, the \verb@base_classes@ template should inherit from
+a \concept{MetaobjectSequence} of metaobjects reflecting the
+inheritance of individual base classes.
+

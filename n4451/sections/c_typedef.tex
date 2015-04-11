@@ -1,21 +1,6 @@
 \subsection{MetaTypedef}
 \label{concept-MetaTypedef}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaType)[above right=of MetaNamedScoped] {MetaType}
-	edge [inheritance, bend right] (MetaNamedScoped);
-\node [concept] (MetaTypedef)[below right=of MetaNamedScoped] {MetaTypedef}
-	edge [inheritance] (MetaType);
-\end{tikzpicture}
-
 \meta{Typedef} is a \meta{Type} reflecting \verb@typedef@s.
 
 In addition to the requirements inherited from \meta{Type}, the following is required:

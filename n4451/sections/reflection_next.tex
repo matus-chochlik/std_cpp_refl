@@ -1,0 +1,84 @@
+\section{Reflection}
+
+In addition to the expressions which are listed as valid
+in section~\ref{section-reflection-operator} the following should
+also be valid expressions for the reflection operator in the future.
+
+\begin{itemize}
+\item{{\em Template name}} -- (\verb@std::map@ or \verb@std::vector@)
+     the returned metaobject is a {\meta{Template}}.
+\item{{\em Function name}} -- (\verb@std::sin@ or \verb@std::string::size@) the returned metaobject
+     is a {\meta{OverloadedFunction}}.
+\item{{\em Function signature}} -- (\verb@std::sin(double)@ or \verb@std::string::front(void) const@)
+     the returned metaobject is a {\meta{Function}}. The signature may be specified without the
+     return value type.
+\item{{\em Constructor signature}} -- (\verb@std::pair<char, double>::pair(char, double)@
+     or \verb@std::string::string(void)@) the returned metaobject is a {\meta{Constructor}}.
+\item{{\em Variable name}} -- (\verb@std::errno@) the returned metaobject is a {\meta{Variable}}.
+%TODO
+\end{itemize}
+
+\subsection{Context-dependent reflection}
+
+In addition to the context-dependent reflection expressions described
+in section~\ref{section-context-dependent-reflection} the following
+should also be added in the future.
+
+\subsubsection{Functions}
+
+If the \verb@this::function@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Function} reflecting the function or operator
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+void foobar(void)
+{
+	// reflects this particular overload of the foobar function
+	typedef mirrored(this::function) _meta_foobar;
+}
+
+int foobar(int i)
+{
+	// reflects this particular overload of the foobar function
+	typedef mirrored(this::function) _meta_foobar;
+	return i+1;
+}
+
+class foo
+{
+private:
+	void f(void)
+	{
+		// reflects this particular overload of foo::f
+		typedef mirrored(this::function) _meta_foo_f;
+	}
+
+	double f(void)
+	{
+		// reflects this particular overload of foo::f
+		typedef mirrored(this::function) _meta_foo_f;
+		return 12345.6789;
+	}
+public:
+	foo(void)
+	{
+		// reflects this constructor of foo
+		typedef mirrored(this::function) _meta_foo_foo;
+	}
+
+	friend bool operator == (foo, foo)
+	{
+		// reflects this operator
+		typedef mirrored(this::function) _meta_foo_eq;
+	}
+
+	typedef mirrored(this::function) _meta_fn; // <- error
+};
+
+typedef mirrored(this::function) _meta_fn; // <- error
+
+\end{minted}
+

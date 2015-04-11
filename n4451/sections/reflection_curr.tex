@@ -1,4 +1,5 @@
 \section{Reflection operator}
+\label{section-reflection-operator}
 
 The metaobjects reflecting some program feature \verb@X@ as
 described above should be made available to the user by
@@ -14,6 +15,7 @@ in order of preference (from the most to the least preferrable):
 \item{\verb@mirrored(X)@}
 \item{\verb@reflected(X)@}
 \item{\verb@reflexpr(X)@}
+\item{\verb@constexpr(X)@}
 \item{\verb@|X@}
 \item{\verb@[[X]]@}
 \item{\verb@<<X>>@}
@@ -31,15 +33,6 @@ The reflected expression \verb@X@ in the items listed above can be any of the fo
      the returned metaobject is a {\meta{Template}}.
 \item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
      the returned metaobject is a {\meta{Class}}.
-\item{{\em Function name}} -- (\verb@std::sin@ or \verb@std::string::size@) the returned metaobject
-     is a {\meta{OverloadedFunction}}.
-\item{{\em Function signature}} -- (\verb@std::sin(double)@ or \verb@std::string::front(void) const@)
-     the returned metaobject is a {\meta{Function}}. The signature may be specified without the
-     return value type.
-\item{{\em Constructor signature}} -- (\verb@std::pair<char, double>::pair(char, double)@
-     or \verb@std::string::string(void)@) the returned metaobject is a {\meta{Constructor}}.
-\item{{\em Variable name}} -- (\verb@std::errno@) the returned metaobject is a {\meta{Variable}}.
-%\item{TODO}
 \end{itemize}
 
 The reflection operator or expression should have access to \verb@private@ and
@@ -74,6 +67,7 @@ typedef mirrored(C::c) meta_C_c;
 \end{minted}
 
 \subsection{Context-dependent reflection}
+\label{section-context-dependent-reflection}
 
 We also propose to define a set of special expressions that can be used
 inside of the reflection operator, to obtain metadata based on the context
@@ -168,64 +162,6 @@ private:
 };
 
 typedef mirrored(this::class); // <- error: not used inside of a class.
-
-\end{minted}
-
-\subsubsection{Functions}
-
-If the \verb@this::function@ expression is used as the argument of the reflection
-operator, then it should return a \meta{Function} reflecting the function or operator
-inside of which the reflection operator was invoked.
-
-For example:
-
-\begin{minted}{cpp}
-
-void foobar(void)
-{
-	// reflects this particular overload of the foobar function
-	typedef mirrored(this::function) _meta_foobar;
-}
-
-int foobar(int i)
-{
-	// reflects this particular overload of the foobar function
-	typedef mirrored(this::function) _meta_foobar;
-	return i+1;
-}
-
-class foo
-{
-private:
-	void f(void)
-	{
-		// reflects this particular overload of foo::f
-		typedef mirrored(this::function) _meta_foo_f;
-	}
-
-	double f(void)
-	{
-		// reflects this particular overload of foo::f
-		typedef mirrored(this::function) _meta_foo_f;
-		return 12345.6789;
-	}
-public:
-	foo(void)
-	{
-		// reflects this constructor of foo
-		typedef mirrored(this::function) _meta_foo_foo;
-	}
-
-	friend bool operator == (foo, foo)
-	{
-		// reflects this operator
-		typedef mirrored(this::function) _meta_foo_eq;
-	}
-
-	typedef mirrored(this::function) _meta_fn; // <- error
-};
-
-typedef mirrored(this::function) _meta_fn; // <- error
 
 \end{minted}
 

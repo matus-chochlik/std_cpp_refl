@@ -1,12 +1,6 @@
 \subsection{MetaSpecifier}
 \label{concept-MetaSpecifier}
 
-\begin{tikzpicture}
-\node[concept] (Metaobject) {Metaobject};
-\node[concept] (MetaSpecifier) [right=of Metaobject] {MetaSpecifier}
-	edge[inheritance] (Metaobject);
-\end{tikzpicture}
-
 \meta{Specifier} is a \meta{object} reflecting a C++ specifier. There also should be a "none"
 \meta{Specifier} reflecting a missing specifier. For example the \verb@const@ specifier
 on member functions can be either specified or not. In the latter case this "none" \meta{Specifier}

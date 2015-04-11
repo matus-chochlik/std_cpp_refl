@@ -32,18 +32,18 @@ assert(strcmp(meta::base_name<meta_E>(), "E") == 0);
 assert(strcmp(meta::base_name<meta_val_a>(), "val_a") == 0);
 assert(strcmp(meta::full_name<meta_val_d>(), "val_d") == 0);
 
-// reflected elaborated type specifiers for E
-typedef meta::elaborated_type_specifier<meta_E>::type meta_E_ets;
+%// reflected elaborated type specifiers for E
+%typedef meta::elaborated_type_specifier<meta_E>::type meta_E_ets;
 
-// specifier keyword
-assert(strcmp(meta::keyword<meta_E_ets>(), "enum") == 0);
+%// specifier keyword
+%assert(strcmp(meta::keyword<meta_E_ets>(), "enum") == 0);
 
-// the members
-typedef meta::members<meta_E>::type meta_E_members;
+%// the members
+%typedef meta::members<meta_E>::type meta_E_members;
 
-assert(meta::size<meta_E_members>() == 4);
-assert(is_base_of<meta_val_a, meta::at<meta_E_members, 0>>());
-assert(is_same<meta_val_d, meta::at<meta_E_members, 3>::type>());
+%assert(meta::size<meta_E_members>() == 4);
+%assert(is_base_of<meta_val_a, meta::at<meta_E_members, 0>>());
+%assert(is_same<meta_val_d, meta::at<meta_E_members, 3>::type>());
 
 // the scope of the enum values is the same
 // as the scope of the enum type

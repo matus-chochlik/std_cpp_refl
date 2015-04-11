@@ -1,20 +1,6 @@
 \subsection{MetaOverloadedFunction}
 \label{concept-MetaOverloadedFunction}
 
-\begin{tikzpicture}
-\node [concept] (Metaobject) {Metaobject};
-\node [concept] (MetaNamed)[above right=of Metaobject] {MetaNamed}
-	edge [inheritance, bend right] (Metaobject);
-\node [concept] (MetaScoped)[below right=of Metaobject] {MetaScoped}
-	edge [inheritance, bend left] (Metaobject);
-\node [concept] (MetaNamedScoped)[below right=of MetaNamed, above right=of MetaScoped] {MetaNamedScoped}
-	edge [inheritance, bend right] (MetaNamed)
-	edge [inheritance, bend left] (MetaScoped);
-\node [concept] (MetaOverloadedFunction)[right=of MetaNamedScoped] {MetaOverloadedFunction}
-	edge [inheritance] (MetaNamedScoped);
-\end{tikzpicture}
-
-
 Models of \meta{OverloadedFunction} reflect overloaded functions.
 \meta{Function}s (and \meta{Operator}s, \meta{Initializer}s, \meta{Constructor}s, etc.)
 are not direct members of scopes (they are not listed in the \concept{MetaobjectSequence}
