@@ -12,10 +12,6 @@ static_assert(meta::has_name<meta_std>(), "");
 static_assert(meta::has_scope<meta_std>(), "");
 // Is a MetaScope
 static_assert(meta::is_scope<meta_std>(), "");
-// Is not a MetaTemplate
-static_assert(not(meta::is_template<meta_std>()), "");
-// Is not a MetaInstantiation
-static_assert(not(meta::has_template<meta_std>()), "");
 // Is not a MetaClassMember
 static_assert(not(meta::is_class_member<meta_std>()), "");
 

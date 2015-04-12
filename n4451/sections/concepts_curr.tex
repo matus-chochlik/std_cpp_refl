@@ -14,7 +14,8 @@ template parameters, enumerated values, specifiers, etc.
 See appendix~\ref{section-all-Concepts} for more details.
 
 The compiler should generate metadata for the program constructs defined
-in the currently processed translation unit. Members of ordered sets (ranges) of metaobjects,
+in the currently processed translation unit, when requested by invoking
+the reflection operator. Members of ordered sets (ranges) of metaobjects,
 like scope members, parameters of a function, and so on, should be listed
 in the order of appearance in the processed source code.
 
@@ -39,8 +40,7 @@ This section describes a set of metaobject concepts,
 their interfaces\footnote{the requirements that the various metaobjects
 need to satisfy in order to be considered models of the individual
 concepts},
-tag types for metaobject classification and
-functions (or operators) providing access to the metaobjects.
+tag types for metaobject classification and operators providing access to the metaobjects.
 
 Unless stated otherwise, all named templates proposed and described below should
 go into the \verb@std@ namespace. Alternatively, if any of the definitions
@@ -52,7 +52,7 @@ Also note, that in the sections below, the examples use names for concrete
 metaobjects, like \verb@__meta_std_string@, etc. This convention
 is {\em NOT} part of this proposal. The actual naming of the metaobjects
 should be left to the compiler implementations and for all purposes,
-from the users point of view, the metaobjects should be anonymous types.
+from the user's point of view, the metaobjects should be anonymous types.
 
 \input{sections/c_traits_curr.tex}
 \input{sections/c_string.tex}

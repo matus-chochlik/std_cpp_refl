@@ -12,7 +12,7 @@ type traits?}
 {\textbf A:} The most important reason is the completeness and the scope of reflection.
 Type traits (as they are defined now) work just with types. A reflection facility should
 however provide much more metadata.
-It should be able to reflect namespaces, functions, constructors, inheritance, variables, etc.
+It should eventualy be able to reflect namespaces, functions, constructors, inheritance, variables, etc.
 
 For example:
 
@@ -39,7 +39,7 @@ or a particular function overload, so additional rules would have to be added.
 This would (in our opinion) be a much more drastic change to the standard, than
 the adoption of this proposal. If expressions denoting a namespace or a particular
 constructor or a function overload were added just for the purpose of reflecting
-them (with the \verb@mirroed@ keyword), then all the changes could be localized
+them (with the \verb@mirrored@ keyword), then all the changes could be localized
 in the reflection subsystem and remain invalid in rest of the language:
 
 \begin{minted}{cpp}
@@ -113,7 +113,7 @@ special kind of parameter accepting different arguments than types and constants
 
 {\textbf A:} We wanted to avoid defining a specific naming convention, because it would
 be difficult to do so and very probably not user friendly (see C++ name mangling). There
-already is a precedent for anonymous types -- for example C++ {\em lambdas}.
+already are precedents for anonymous types -- for example C++ {\em lambdas}.
 
 Another option would be to define a concrete set of template classes like:
 
@@ -147,7 +147,7 @@ typedef std::meta_namespace<std> meta_std; //<- Problem
 \end{minted}
 
 Instead of this, the metaobjects are anonymous and their (internal) identification
-is left to the compiler. From the users POV, the metaobject can be distinguished
+is left to the compiler. From the user's point of view, the metaobject can be distinguished
 by the means of the metaobject traits and tags as \hyperref[section-current-Concepts]{described above}.
 
 \subsection{Why this rendering of metaobjects?}
@@ -167,7 +167,7 @@ constexpr static member functions.
 class templates defined on namespace-level.
 \end{enumerate}
 
-In this proposal the second option was picked for several reasons:
+In N4111 the second option was picked for several reasons:
 
 \begin{itemize}
 \item It is closer to standard type traits and to popular metaprogramming libraries like {\em Boost.MPL}, etc.
@@ -179,4 +179,10 @@ and need to be instantiated only if they are actually used in the code. It would
 to do so if they were implemented as (non-template) class members.
 \end{itemize}
 
+\subsection{Should reflection have access to private members?}
 
+Some concerns were raised about the potential misuse of reflection to
+bypass the class member access restrictions. This is a valid point, but
+there are, several different ways to achieve this if the programmer
+wants to and we feel that restricting reflection only to public class members
+would severly limit its usefulness.

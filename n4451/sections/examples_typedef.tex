@@ -9,8 +9,6 @@ static_assert(is_metaobject<meta_size_t>(), "");
 static_assert(meta::has_name<meta_size_t>(), "");
 static_assert(meta::has_scope<meta_size_t>(), "");
 static_assert(not(meta::is_scope<meta_size_t>()), "");
-static_assert(not(meta::is_template<meta_size_t>()), "");
-static_assert(not(meta::has_template<meta_size_t>()), "");
 static_assert(not(meta::is_class_member<meta_size_t>()), "");
 
 // Is a MetaTypedef

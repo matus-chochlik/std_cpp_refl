@@ -17,7 +17,6 @@ in order of preference (from the most to the least preferrable):
 \item{\verb@reflexpr(X)@}
 \item{\verb@constexpr(X)@}
 \item{\verb@|X@}
-\item{\verb@[[X]]@}
 \item{\verb@<<X>>@}
 \end{itemize}
 
@@ -29,10 +28,12 @@ The reflected expression \verb@X@ in the items listed above can be any of the fo
 \item{{\em Type name}} -- (\verb@long double@) the returned metaobject is a {\meta{Type}}.
 \item{{\em \verb@typedef@ name}} -- (\verb@std::size_t@ or \verb@std::string@)
      the returned metaobject is a {\meta{Typedef}}.
-\item{{\em Template name}} -- (\verb@std::tuple@ or \verb@std::map@)
-     the returned metaobject is a {\meta{Template}}.
 \item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
      the returned metaobject is a {\meta{Class}}.
+\item{{\em Enum name}} -- 
+     the returned metaobject is a {\meta{Enum}}.
+\item{{\em Enum class name}} -- (\verb@std::launch@)
+     the returned metaobject is a {\meta{EnumClass}}.
 \end{itemize}
 
 The reflection operator or expression should have access to \verb@private@ and
