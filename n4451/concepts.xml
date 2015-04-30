@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf8" ?>
+<reflection>
+	<trait name="is_metaobject">
+		<param name="X"/>
+		<returns value="true_type"/>
+	</trait>
+
+	<concept name="StringConstant">
+	</concept>
+
+	<concept name="MetaobjectTag">
+	</concept>
+
+	<concept name="SpecifierTag">
+	</concept>
+
+	<concept name="Metaobject">
+		<trait name="is_metaobject" result="true"/>
+		<trait name="has_name" result="false"/>
+		<trait name="has_scope" result="false"/>
+		<trait name="is_scope" result="false"/>
+		<trait name="has_position" result="false"/>
+		<trait name="is_class_member" result="false"/>
+		<trait name="has_template" result="false"/>
+		<trait name="is_template" result="false"/>
+	</concept>
+
+	<concept name="MetaSpecifier">
+		<is_a base="Metaobject"/>
+	</concept>
+
+	<concept name="MetaNamed">
+		<is_a base="Metaobject"/>
+		<trait name="has_name" result="true"/>
+	</concept>
+
+	<concept name="MetaScoped">
+		<is_a base="Metaobject"/>
+		<trait name="has_scope" result="true"/>
+	</concept>
+
+	<concept name="MetaNamedScoped">
+		<is_a base="MetaNamed"/>
+		<is_a base="MetaScoped"/>
+	</concept>
+
+	<concept name="MetaScope">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="is_scope" result="true"/>
+	</concept>
+
+	<concept name="MetaPositional">
+		<is_a base="Metaobject"/>
+		<trait name="has_position" result="true"/>
+	</concept>
+
+	<concept name="MetaClassMember">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaTemplate"/>
+		<trait name="is_class_member" result="true"/>
+	</concept>
+
+	<concept name="MetaGlobalScope">
+		<is_a base="MetaScope"/>
+	</concept>
+
+	<concept name="MetaNamespace">
+		<is_a base="MetaScope"/>
+	</concept>
+
+	<concept name="MetaType">
+		<is_a base="MetaNamedScoped"/>
+	</concept>
+
+	<concept name="MetaTypedef">
+		<is_a base="MetaType"/>
+		<can_be base="MetaClassMember"/>
+	</concept>
+
+	<concept name="MetaClass">
+		<is_a base="MetaType"/>
+		<is_a base="MetaScope"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaInstantiation"/>
+	</concept>
+
+	<concept name="MetaEnum">
+		<is_a base="MetaType"/>
+	</concept>
+
+	<concept name="MetaEnumClass">
+		<is_a base="MetaType"/>
+		<is_a base="MetaScope"/>
+	</concept>
+
+	<concept name="MetaEnumValue">
+		<is_a base="MetaConstant"/>
+		<is_a base="MetaNamed"/>
+		<can_be base="MetaNamedScoped"/>
+		
+	</concept>
+
+	<concept name="MetaVariable">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaClassMember"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaInstantiation"/>
+	</concept>
+
+	<concept name="MetaOverloadedFunction">
+		<is_a base="MetaNamedScoped"/>
+	</concept>
+
+	<concept name="MetaFunction">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaClassMember"/>
+		<can_be base="MetaInstantiation"/>
+	</concept>
+
+	<concept name="MetaParameter">
+		<is_a base="MetaNamedScoped"/>
+		<is_a base="MetaPositional"/>
+	</concept>
+
+	<concept name="MetaInitializer">
+		<is_a base="MetaFunction"/>
+	</concept>
+
+	<concept name="MetaConstructor">
+		<is_a base="MetaFunction"/>
+		<can_be base="MetaClassMember"/>
+	</concept>
+
+	<concept name="MetaOperator">
+		<is_a base="MetaFunction"/>
+		<can_be base="MetaClassMember"/>
+	</concept>
+
+	<concept name="MetaTemplate">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="is_template" result="true"/>
+	</concept>
+
+	<concept name="MetaTemplateParameter">
+		<is_a base="MetaNamed"/>
+		<is_a base="MetaPositional"/>
+		<either>
+			<is_a base="MetaTypedef"/>
+			<is_a base="MetaConstant"/>
+		</either>
+	</concept>
+
+	<concept name="MetaInstantiation">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="has_template" result="true"/>
+	</concept>
+
+	<concept name="MetaInheritance">
+		<is_a base="MetaScoped"/>
+		<is_a base="MetaPositional"/>
+	</concept>
+
+	<concept name="MetaConstant">
+		<is_a base="Metaobject"/>
+	</concept>
+</reflection>
