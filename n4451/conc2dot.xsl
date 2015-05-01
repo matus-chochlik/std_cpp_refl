@@ -9,6 +9,8 @@
 
 <xsl:template match="/reflection">
 digraph Reflection {
+	bgcolor="white"
+	style="filled"
 	ratio=1.4141
 	sep=-0.1
 	overlap=false
@@ -63,16 +65,18 @@ digraph Reflection {
 
 	<xsl:for-each select="concept">
 	<xsl:for-each select="is_a">
-	<xsl:value-of select="../@name"/> -&gt; <xsl:value-of select="@base"/> [penwidth="3",arrowhead="onormal"]
+	<xsl:variable name="pw"><xsl:choose><xsl:when test="@base='MetaNamedScoped'">1.5</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:variable>
+	<xsl:value-of select="../@name"/> -&gt; <xsl:value-of select="@base"/> [penwidth="<xsl:value-of select="$pw"/>",arrowhead="onormal"]
 	</xsl:for-each>
 
 	<xsl:for-each select="can_be">
-	<xsl:value-of select="../@name"/> -&gt; <xsl:value-of select="@base"/> [penwidth="3",arrowhead="onormal",style="dashed",constraint=false]
+	<xsl:variable name="pw"><xsl:choose><xsl:when test="@base='MetaNamedScoped'">1.5</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:variable>
+	<xsl:value-of select="../@name"/> -&gt; <xsl:value-of select="@base"/> [penwidth="<xsl:value-of select="$pw"/>",arrowhead="onormal",style="dashed",constraint=false]
 	</xsl:for-each>
 
 	<xsl:for-each select="either">
 	<xsl:variable name="temp">_<xsl:value-of select="../@name"/>_base_<xsl:value-of select="position()"/></xsl:variable>
-	<xsl:value-of select="$temp"/> [label="",penwidth="8",shape="point"]
+	<xsl:value-of select="$temp"/> [label="",penwidth="3",shape="point"]
 	<xsl:value-of select="../@name"/> -&gt; <xsl:value-of select="$temp"/> [penwidth="3",arrowhead="none"]
 	<xsl:for-each select="is_a">
 	<xsl:value-of select="$temp"/> -&gt; <xsl:value-of select="@base"/> [penwidth="3",arrowhead="onormal"]

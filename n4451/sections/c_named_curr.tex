@@ -56,7 +56,8 @@ For \verb@unsigned long int * const *@ it should be \verb@"unsigned long int"@.
 
 For \verb@std::vector<int>::iterator@ it should be \verb@"iterator"@. For derived,
 qualified types like \verb@volatile std::vector<const foo::bar::fubar*> * const *@
-it should be \verb@"vector"@, etc.
+it should be \verb@"vector"@, etc. For the global scope, anonymous namespaces and types
+an empty string should be returned.
 
 \subsubsection{\texttt{full\_name}}
 
@@ -72,6 +73,7 @@ For \verb@std::vector<int>::iterator@ it should be \verb@"std::vector<int>::iter
 For derived qualified types like
 \verb@volatile std::vector<const foo::bar::fubar*> * const *@ it should be defined as
 \verb@"volatile std::vector<const foo::bar::fubar*> * const *"@, etc.
+For the global scope, anonymous namespaces and types an empty string should be returned.
 
 \begin{minted}{cpp}
 template <typename T>

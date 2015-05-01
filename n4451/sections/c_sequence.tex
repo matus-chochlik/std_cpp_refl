@@ -103,6 +103,28 @@ void for_each(UnaryFunc func)
 
 \end{minted}
 
+This design requires the metaobjects to be default constructible.
+If this should prove to be a problem then an \verb@identity@ wrapper could be used
+instead:
+
+\begin{minted}{cpp}
+template <typename X>
+struct identity
+{
+	typedef X type;
+};
+
+template <typename MetaobjectSequence, typename UnaryFunc>
+void for_each(UnaryFunc func)
+{
+	func(identity<Metaobject1>());
+	func(identity<Metaobject2>());
+	/* ... */
+	func(identity<MetaobjectN>());
+}
+
+\end{minted}
+
 \textbf{Note:} The interface of \meta{objectSequence}, in particular \verb@size@
 and \verb@at@ together with \verb@std::index_sequence@ should be enough
 to implement a single generic version of \verb@for_each@.
