@@ -1,0 +1,38 @@
+\subsection{MetaConstructor}
+\label{concept-MetaConstructor}
+
+\meta{Constructor} reflects a constructor of an elaborated type.
+
+In addition to the requirements inherited from \meta{Function} and \meta{ClassMember},
+the following is required for \meta{Constructor}s:
+
+The \verb@category@ template class specialization for a \meta{Constructor} should
+inherit from \verb@constructor_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct category<MetaConstructor>
+ : constructor_tag
+{ };
+\end{minted}
+
+The specialization of the \verb@result_type@ template class for a \meta{Constructor} should
+inherit from a \meta{Class} reflecting the constructed type.
+
+\begin{minted}{cpp}
+template <>
+struct result_type<MetaConstructor>
+ : MetaClass
+{ };
+\end{minted}
+
+The specialization of the \verb@scope@ template class for a \meta{Constructor} should
+inherit from a \meta{Class} reflecting the constructed type.
+
+\begin{minted}{cpp}
+template <>
+struct scope<MetaConstructor>
+ : MetaClass
+{ };
+\end{minted}
+

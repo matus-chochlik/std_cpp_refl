@@ -1,0 +1,28 @@
+\subsection{MetaInitializer}
+\label{concept-MetaInitializer}
+
+\meta{Initializer} reflects an initializer (constructor) of a native type.
+
+In addition to the requirements inherited from \meta{Function},
+models of \meta{Initializer} must conform to the following:
+
+The \verb@category@ template class specialization for a \meta{Initializer} should
+inherit from \verb@constructor_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct category<MetaInitializer>
+ : constructor_tag
+{ };
+\end{minted}
+
+The specialization of the \verb@result_type@ template class for a \meta{Initializer} should
+inherit from a \meta{Type} reflecting the initialized type:
+
+\begin{minted}{cpp}
+template <>
+struct result_type<MetaInitializer>
+ : MetaType
+{ };
+\end{minted}
+

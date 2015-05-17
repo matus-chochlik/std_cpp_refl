@@ -1,0 +1,38 @@
+\subsection{MetaScope}
+\label{concept-MetaScope}
+
+\meta{Scope} is a \meta{NamedScoped} reflecting program constructs defined inside
+of a named or anonymous scope (like the global scope, a namespace, a class, etc.)
+
+In addition to the requirements inherited from \meta{NamedScoped}, the following is required:
+
+The \verb@is_scope@ template class specialization for a \meta{Scope} should
+inherit from \verb@true_type@:
+
+\begin{minted}{cpp}
+template <>
+struct is_scope<MetaScope>
+ : true_type
+{ };
+\end{minted}
+
+\subsubsection{\texttt{members}}
+
+A template class \verb@members@ should be defined and should inherit from a
+\concept{MetaobjectSequence} containing \meta{NamedScoped} metaobjects reflecting
+the members of the base-level scope reflected by this \meta{Scope}.
+Note that at this point, for \meta{Scope}s reflecting namespaces and enums
+\verb@members@ should return an empty \concept{MetaobjectSequence}, until the
+issue of how their members are reflected is resolved.
+
+
+\begin{minted}{cpp}
+template <typename T>
+struct members;
+
+template <>
+struct members<MetaScope>
+ : MetaobjectSequence<MetaNamedScoped>
+{ };
+\end{minted}
+

@@ -1,0 +1,46 @@
+\subsection{Enumeration reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+enum E
+{
+	val_a = 1,
+	val_b = 2,
+	val_c = 3,
+	val_d = 4
+};
+
+// reflected enumeration
+typedef mirrored(E) meta_E;
+// reflected enum values
+typedef mirrored(val_a) meta_val_a;
+typedef mirrored(val_d) meta_val_d;
+
+// enums are not scopes
+static_assert(not(meta::is_scope<meta_E>()), "");
+// other traits
+static_assert(meta::has_scope<meta_E>(), "");
+static_assert(meta::has_name<meta_E>(), "");
+static_assert(meta::has_scope<meta_val_a>(), "");
+static_assert(meta::has_name<meta_val_a>(), "");
+
+// the categories
+assert(is_base_of<meta::enum_tag, meta::category<meta_E>>());
+assert(is_base_of<meta::constant_tag, meta::category<meta_val_a>>());
+
+// names
+assert(strcmp(meta::base_name<meta_E>(), "E") == 0);
+assert(strcmp(meta::base_name<meta_val_a>(), "val_a") == 0);
+assert(strcmp(meta::full_name<meta_val_d>(), "val_d") == 0);
+
+// the scope of the enum values is the same
+// as the scope of the enum type
+assert(is_same<
+	meta::scope<meta_E>::type,
+	meta::scope<meta_val_a>::type
+>());
+assert(is_same<
+	meta::scope<meta_E>::type,
+	meta::scope<meta::at<meta_E_members, 1>>::type
+>());
+
+\end{minted}

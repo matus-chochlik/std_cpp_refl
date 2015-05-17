@@ -1,0 +1,46 @@
+\subsection{Type reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+// reflected type unsigned int
+typedef mirrored(unsigned int) meta_uint;
+
+static_assert(is_metaobject<meta_uint>(), "");
+
+// Is a MetaNamed
+static_assert(meta::has_name<meta_uint>(), "");
+// Is a MetaScoped
+static_assert(meta::has_scope<meta_uint>(), "");
+// Is not a MetaScope
+static_assert(not(meta::is_scope<meta_uint>()), "");
+// Is not a MetaClassMember
+static_assert(not(meta::is_class_member<meta_uint>()), "");
+
+// Is a MetaType
+static_assert(
+	is_base_of<
+		meta::type_tag,
+		meta::category<meta_uint>
+	>(), ""
+);
+
+// The scope of unsigned int is the global scope
+static_assert(
+	is_base_of<
+		meta_gs,
+		meta::scope<meta_uint>
+	>(), ""
+);
+
+// The original type
+static_assert(
+	is_same<
+		unsigned int,
+		meta::original_type<meta_uint>::type
+	>(), ""
+);
+
+assert(strlen(meta::base_name<meta_uint>()) == 12);
+assert(strcmp(meta::base_name<meta_uint>(), "unsigned int") == 0);
+assert(strlen(meta::full_name<meta_uint>()) == 12);
+assert(strcmp(meta::full_name<meta_uint>(), "unsigned int") == 0);
+\end{minted}

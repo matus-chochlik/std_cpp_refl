@@ -1,0 +1,169 @@
+\section{Reflection operator}
+\label{section-reflection-operator}
+
+The metaobjects reflecting some program feature \verb@X@ as
+described above should be made available to the user by
+the means of a new operator or expression.
+More precisely, the reflection operator should return
+a type\footnote{like the {\texttt decltype} operator} conforming to a particular
+metaobject concept, depending on the reflected expression.
+
+Since adding a new keyword has the potential to break existing code,
+we do not insist on any particular expression, here follows a list of suggestions
+in order of preference (from the most to the least preferrable):
+
+\begin{itemize}
+\item{\verb@mirrored(X)@}
+\item{\verb@reflected(X)@}
+\item{\verb@reflexpr(X)@}
+\item{\verb@constexpr(X)@}
+\item{\verb@|X@}
+\item{\verb@<<X>>@}
+\end{itemize}
+
+The reflected expression \verb@X@ in the items listed above can be any of the following:
+
+\begin{itemize}
+\item{\verb@::@} -- The global scope, the returned metaobject is a {\meta{GlobalScope}}.
+\item{{\em Namespace name}} -- (\verb@std@) the returned metaobject is a {\meta{Namespace}}.
+\item{{\em Type name}} -- (\verb@long double@) the returned metaobject is a {\meta{Type}}.
+\item{{\em \verb@typedef@ name}} -- (\verb@std::size_t@ or \verb@std::string@)
+     the returned metaobject is a {\meta{Typedef}}.
+\item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
+     the returned metaobject is a {\meta{Class}}.
+\item{{\em Enum name}} -- 
+     the returned metaobject is a {\meta{Enum}}.
+\item{{\em Enum class name}} -- (\verb@std::launch@)
+     the returned metaobject is a {\meta{EnumClass}}.
+\end{itemize}
+
+The reflection operator or expression should have access to \verb@private@ and
+\verb@protected@ members of classes. The following should be valid:
+
+\begin{minted}{cpp}
+struct A
+{
+	int a;
+};
+
+class B
+{
+protected:
+	int b;
+};
+
+class C
+ : protected A
+ , public B
+{
+private:
+	int c;
+};
+
+typedef mirrored(A::a) meta_A_a;
+typedef mirrored(B::b) meta_B_b;
+typedef mirrored(C::a) meta_C_a;
+typedef mirrored(C::b) meta_C_b;
+typedef mirrored(C::c) meta_C_c;
+
+\end{minted}
+
+\subsection{Context-dependent reflection}
+\label{section-context-dependent-reflection}
+
+We also propose to define a set of special expressions that can be used
+inside of the reflection operator, to obtain metadata based on the context
+where it is invoked, instead of the identifier.
+
+\subsubsection{Namespaces}
+
+If the \verb@this::namespace@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Namespace} reflecting the namespace
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+typedef mirrored(this::namespace) _meta_gs;
+
+\end{minted}
+
+reflects the global scope namespace and is equivalent to
+
+\begin{minted}{cpp}
+
+typedef mirrored(::) _meta_gs;
+
+\end{minted}
+
+For named namespaces:
+
+\begin{minted}{cpp}
+
+namespace foo {
+
+typedef mirrored(this::namespace) _meta_foo;
+
+namespace bar {
+
+typedef mirrored(this::namespace) _meta_foo_bar;
+
+} // namespace bar
+
+} // namespace foo
+\end{minted}
+
+\subsubsection{Classes}
+
+If the \verb@this::class@ expression is used as the argument of the reflection
+operator, then it should return a \meta{Class} reflecting the class
+inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}{cpp}
+
+struct foo
+{
+	const char* _name;
+
+	// reflects foo
+	typedef mirrored(this::class) _meta_foo1;
+
+	foo(void)
+	 : _name(base_name<mirrored(this::class)>())
+	{ }
+
+	void f(void)
+	{
+		// reflects foo
+		typedef mirrored(this::class) _meta_foo2;
+	}
+
+	double g(double, double);
+
+	struct bar
+	{
+		// reflects foo::bar
+		typedef mirrored(this::class) _meta_foo_bar;
+	};
+};
+
+double foo::g(double a, double b)
+{
+	// reflects foo
+	typedef mirrored(this::class) _meta_foo3;
+	return a+b;
+}
+
+class baz
+{
+private:
+	typedef mirrored(this::class) _meta_baz;
+};
+
+typedef mirrored(this::class); // <- error: not used inside of a class.
+
+\end{minted}
+

@@ -1,0 +1,214 @@
+\subsection{MetaFunction}
+\label{concept-MetaFunction}
+
+\meta{Function} is a \meta{NamedScoped} which reflects a function or a function template.
+
+In addition to the requirements inherited from \meta{NamedScoped},
+models of \meta{Function} are subject to the following:
+
+The \verb@category@ template class specialization for a \meta{Function} should
+inherit from \verb@function_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct category<MetaFunction>
+ : function_tag
+{ };
+\end{minted}
+
+If a \meta{Function} reflects a function template, then the \verb@is_template@
+trait should inherit from \verb@true_type@
+
+\subsubsection{\texttt{linkage\_specifier}}
+
+A template class \verb@linkage_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the linkage specifier of the function reflected by
+the \meta{Function}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct linkage_specifier;
+
+template <>
+struct linkage_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{constexpr\_specifier}}
+
+A template class \verb@constexpr_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the constexpr specifier of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct constexpr_specifier;
+
+template <>
+struct constexpr_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+In case the reflected function does not have the \verb@constexpr@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{result\_type}}
+
+A template class \verb@result_type@ should be defined and should inherit from
+a \meta{Type} reflecting the return value type of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct result_type;
+
+template <>
+struct result_type<MetaFunction>
+ : MetaType
+{ };
+\end{minted}
+
+\subsubsection{\texttt{parameters}}
+
+A template class \verb@parameters@ should be defined and should inherit from
+a \concept{MetaobjectSequence} or \meta{Parameter}s reflecting the individual parameters
+of the function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct parameters;
+
+template <>
+struct parameters<MetaFunction>
+ : MetaobjectSequence<MetaParameter>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{noexcept\_specifier}}
+
+A template class \verb@noexcept_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the noexcept specifier of the reflected function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct noexcept_specifier;
+
+template <>
+struct noexcept_specifier<MetaFunction>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+In case the reflected function does not have the \verb@noexcept@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{exceptions}}
+
+A template class \verb@exceptions@ should be defined and should inherit from
+a \concept{MetaobjectSequence} of \meta{Type}s reflecting the individual exception types
+that the reflected function is allowed to throw:
+
+\begin{minted}{cpp}
+template <typename T>
+struct exceptions;
+
+template <>
+struct exceptions<MetaFunction>
+ : MetaobjectSequence<MetaType>
+{ };
+\end{minted}
+
+\subsubsection{\texttt{const\_specifier}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@const_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@const@ specifier of the reflected member function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct const_specifier;
+
+template <>
+struct const_specifier<MetaFunction>
+ : MetaSpecifier
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+
+In case the reflected member function does not have the \verb@const@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{virtual\_specifier}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@virtual_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@virtual@ specifier of the reflected member function:
+
+\begin{minted}{cpp}
+template <typename T>
+struct virtual_specifier;
+
+template <>
+struct virtual_specifier<MetaFunction>
+ : MetaSpecifier
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+
+In case the reflected member function does not have the \verb@virtual@ specifier,
+then the result should be a \meta{Specifier} reflecting the "none" specifier.
+
+\subsubsection{\texttt{is\_pure}}
+
+In case a \meta{Function} is also a \meta{ClassMember},
+a template class \verb@is_pure@ should be defined and should inherit from
+\verb@true_type@ if the reflected function is pure virtual or from \verb@false_type@
+otherwise:
+
+\begin{minted}{cpp}
+template <typename T>
+struct is_pure;
+
+struct is_pure<MetaFunction>
+ : std::integral_constant<bool, B>
+{
+	static_assert(is_class_member<MetaFunction>::value, "");
+};
+\end{minted}
+
+\subsubsection{\texttt{pointer}}
+
+If the \meta{Function} reflects a namespace-level function, then
+a template class \verb@pointer@ should be defined as follows:
+
+\begin{minted}{cpp}
+template <typename T>
+struct pointer;
+
+template <>
+struct pointer<MetaFunction>
+{
+	typedef _rv_t (*type)(_param_t...);
+
+	static type get(void);
+};
+\end{minted}
+
+The \verb@get@ static member function should return a pointer to the function
+reflected by the \meta{Function}.
+
+If the \meta{Function} is also a \meta{ClassMember}, then the definition of the
+\verb@pointer@ template class should be following:
+
+\begin{minted}{cpp}
+template <>
+struct pointer<MetaFunction>
+{
+	typedef _rv_t (_cls_t::*type)(_param_t...);
+
+	static type get(void);
+};
+\end{minted}
+

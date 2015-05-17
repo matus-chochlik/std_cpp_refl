@@ -1,0 +1,28 @@
+\section{Introduction}
+
+In this paper we propose to add native support for
+compile-time reflection to C++ by the means of compiler generated
+types providing basic metadata describing various program constructs.
+These metaobjects, together with some additions to the standard
+library can later be used to implement other third-party libraries
+providing both compile-time and run-time high-level
+reflection utilities.
+
+When finalized, the reflection facility providing compile-time metadata
+should be as complete as possible in order to be applicable in a wide
+range of scenarios and to allow to implement custom higher-level
+static and dynamic reflection software libraries and reflection-based
+utilities.
+
+However we recognize that implementing the whole proposed set of metaobjects
+all at once may be problematic and that a more gradual approach is necessary.
+Therefore\footnote{and to keep the number of pages of the main body of the proposal reasonable}
+in the main body of this paper we propose to add in the first phase
+only a subset of the metaobjects from N4111, which we assume to be essential
+and which provide a good starting point for future extensions.
+
+The appendices still contain the whole set of metaobjects including their
+full interfaces as currently envisioned\footnote{as previously described in N4111 with several
+important changes}. These are provided only to keep the bigger picture
+in mind, but are not part of the current proposal.
+

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf8" ?>
+<reflection>
+	<trait name="is_metaobject">
+		<param name="X"/>
+		<returns value="true_type"/>
+	</trait>
+
+	<concept name="StringConstant">
+		<returns><self/></returns>
+		<data name="value" type="const char*"/>
+	</concept>
+
+	<concept name="IntegralConstant">
+		<returns><self/></returns>
+		<data name="value" type="Int"/>
+	</concept>
+
+	<concept name="MetaobjectTag">
+		<returns><self/></returns>
+	</concept>
+
+	<concept name="SpecifierTag" future="true">
+		<returns><self/></returns>
+	</concept>
+
+	<concept name="Metaobject">
+		<returns><self/></returns>
+		<trait name="is_metaobject" result="true"/>
+		<trait name="has_name" result="false"/>
+		<trait name="has_scope" result="false"/>
+		<trait name="is_scope" result="false"/>
+		<trait name="has_position" result="false"/>
+		<trait name="is_class_member" result="false"/>
+		<trait name="has_template" result="false"/>
+		<trait name="is_template" result="false"/>
+		<mfunc name="category" result="MetaobjectTag"/>
+		<mfunc name="source_file" result="StringConstant"/>
+		<mfunc name="source_line" result="IntegralConstant"/>
+	</concept>
+
+	<concept name="MetaSpecifier" future="true">
+		<is_a base="Metaobject"/>
+		<mfunc name="category" result="SpecifierTag"/>
+		<mfunc name="keyword" result="StringConstant"/>
+	</concept>
+
+	<concept name="MetaNamed">
+		<is_a base="Metaobject"/>
+		<trait name="has_name" result="true"/>
+		<mfunc name="base_name" result="StringConstant"/>
+		<mfunc name="full_name" result="StringConstant"/>
+	</concept>
+
+	<concept name="MetaScoped">
+		<is_a base="Metaobject"/>
+		<trait name="has_scope" result="true"/>
+		<mfunc name="scope" result="MetaScope"/>
+	</concept>
+
+	<concept name="MetaNamedScoped">
+		<is_a base="MetaNamed"/>
+		<is_a base="MetaScoped"/>
+	</concept>
+
+	<concept name="MetaScope">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="is_scope" result="true"/>
+		<afunc name="members" result="MetaNamedScoped"/>
+	</concept>
+
+	<concept name="MetaPositional">
+		<is_a base="Metaobject"/>
+		<trait name="has_position" result="true"/>
+		<mfunc name="position" result="IntegralConstant"/>
+	</concept>
+
+	<concept name="MetaClassMember">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaTemplate"/>
+		<trait name="is_class_member" result="true"/>
+		<mfunc name="access_specifier" result="MetaSpecifier"/>
+	</concept>
+
+	<concept name="MetaGlobalScope">
+		<is_a base="MetaScope"/>
+	</concept>
+
+	<concept name="MetaNamespace">
+		<is_a base="MetaScope"/>
+	</concept>
+
+	<concept name="MetaType">
+		<is_a base="MetaNamedScoped"/>
+		<mfunc name="original_type" result="Unspecified"/>
+	</concept>
+
+	<concept name="MetaTypedef">
+		<is_a base="MetaType"/>
+		<can_be base="MetaClassMember"/>
+		<mfunc name="type" result="MetaType"/>
+	</concept>
+
+	<concept name="MetaClass">
+		<is_a base="MetaType"/>
+		<is_a base="MetaScope"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaInstantiation"/>
+		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
+		<afunc name="base_classes" result="MetaInheritance"/>
+	</concept>
+
+	<concept name="MetaEnum">
+		<is_a base="MetaType"/>
+		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
+		<afunc name="members" result="MetaConstant"/>
+	</concept>
+
+	<concept name="MetaEnumClass">
+		<is_a base="MetaType"/>
+		<is_a base="MetaScope"/>
+		<mfunc name="base_type" result="MetaType"/>
+		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
+		<afunc name="members" result="MetaEnumValue"/>
+	</concept>
+
+	<concept name="MetaEnumValue" future="true">
+		<is_a base="MetaConstant"/>
+		<is_a base="MetaNamed"/>
+		<can_be base="MetaNamedScoped"/>
+		
+	</concept>
+
+	<concept name="MetaVariable">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaClassMember"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaInstantiation"/>
+		<mfunc name="type" result="MetaType"/>
+		<mfunc name="pointer"/>
+		<mfunc name="storage_specifier" result="MetaSpecifier"/>
+	</concept>
+
+	<concept name="MetaOverloadedFunction" future="true">
+		<is_a base="MetaNamedScoped"/>
+		<afunc name="overloads" result="MetaFunction"/>
+	</concept>
+
+	<concept name="MetaFunction" future="true">
+		<is_a base="MetaNamedScoped"/>
+		<can_be base="MetaTemplate"/>
+		<can_be base="MetaClassMember"/>
+		<can_be base="MetaInstantiation"/>
+		<mfunc name="linkage_specifier" result="MetaSpecifier"/>
+		<mfunc name="constexpr_specifier" result="MetaSpecifier"/>
+		<mfunc name="result_type" result="MetaType"/>
+		<afunc name="parameters" result="MetaParameter"/>
+		<mfunc name="noexcept_specifier" result="MetaSpecifier"/>
+		<afunc name="exceptions" result="MetaType"/>
+		<mfunc name="const_specifier" result="MetaSpecifier"/>
+		<mfunc name="virtual_specifier" result="MetaSpecifier"/>
+		<mfunc name="override_specifier" result="MetaSpecifier"/>
+		<mfunc name="is_pure" result="IntegralConstant"/>
+		<mfunc name="pointer"/>
+	</concept>
+
+	<concept name="MetaParameter" future="true">
+		<is_a base="MetaNamedScoped"/>
+		<is_a base="MetaPositional"/>
+		<mfunc name="is_pack" result="IntegralConstant"/>
+	</concept>
+
+	<concept name="MetaInitializer" future="true">
+		<is_a base="MetaFunction"/>
+	</concept>
+
+	<concept name="MetaConstructor" future="true">
+		<is_a base="MetaFunction"/>
+		<can_be base="MetaClassMember"/>
+	</concept>
+
+	<concept name="MetaOperator" future="true">
+		<is_a base="MetaFunction"/>
+		<can_be base="MetaClassMember"/>
+	</concept>
+
+	<concept name="MetaTemplate" future="true">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="is_template" result="true"/>
+		<afunc name="template_parameters" result="MetaTemplateParameter"/>
+	</concept>
+
+	<concept name="MetaTemplateParameter" future="true">
+		<is_a base="MetaNamed"/>
+		<is_a base="MetaPositional"/>
+		<either>
+			<is_a base="MetaTypedef"/>
+			<is_a base="MetaConstant"/>
+		</either>
+		<mfunc name="is_pack" result="IntegralConstant"/>
+	</concept>
+
+	<concept name="MetaInstantiation" future="true">
+		<is_a base="MetaNamedScoped"/>
+		<trait name="has_template" result="true"/>
+		<mfunc name="template_" result="MetaTemplate"/>
+	</concept>
+
+	<concept name="MetaInheritance" future="true">
+		<is_a base="MetaScoped"/>
+		<is_a base="MetaPositional"/>
+		<mfunc name="inheritance_specifier" result="MetaSpecifier"/>
+		<mfunc name="access_specifier" result="MetaSpecifier"/>
+		<mfunc name="scope" result="MetaClass"/>
+		<mfunc name="base_class" result="MetaClass"/>
+	</concept>
+
+	<concept name="MetaConstant" future="true">
+		<is_a base="Metaobject"/>
+		<mfunc name="type" result="MetaType"/>
+		<mfunc name="value" result="IntegralConstant"/>
+	</concept>
+</reflection>

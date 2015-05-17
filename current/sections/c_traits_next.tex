@@ -1,0 +1,150 @@
+\subsection{Categorization and Traits}
+
+\subsubsection{Additional metaobject category tags}
+\label{metaobject-category-tags-next}
+
+In addition to category tags described in section~\ref{metaobject-category-tags}
+the following tag types should be added in the future
+to distiguish between other metaobject kinds:
+
+\begin{minted}{cpp}
+struct specifier_tag
+{
+	typedef specifier_tag type;
+};
+
+struct function_tag
+{
+	typedef function_tag type;
+};
+
+struct constructor_tag
+{
+	typedef constructor_tag type;
+};
+
+struct operator_tag
+{
+	typedef operator_tag type;
+};
+
+struct overloaded_function_tag
+{
+	typedef overloaded_function_tag type;
+};
+
+struct inheritance_tag
+{
+	typedef inheritance_tag type;
+};
+
+struct constant_tag
+{
+	typedef constant_tag type;
+};
+
+struct parameter_tag
+{
+	typedef parameter_tag type;
+};
+\end{minted}
+
+These tags should also be models of \verb@MetaobjectCategory@:
+
+\subsubsection{Specifier category tags}
+\label{specifier-category-tags}
+
+Similar to the \hyperref[metaobject-category-tags]{metaobject tag} types,
+a set of tag types should be added in the future
+to distinguish between various C++ specifiers:
+
+\begin{minted}{cpp}
+// indicates no specifier
+struct none_tag
+{
+	typedef none_tag type;
+};
+
+struct extern_tag
+{
+	typedef extern_tag type;
+};
+
+struct static_tag
+{
+	typedef static_tag type;
+};
+
+struct mutable_tag
+{
+	typedef mutable_tag type;
+};
+
+struct register_tag
+{
+	typedef register_tag type;
+};
+
+struct thread_local_tag
+{
+	typedef thread_local_tag type;
+};
+
+struct const_tag
+{
+	typedef const_tag type;
+};
+
+struct virtual_tag
+{
+	typedef virtual_tag type;
+};
+
+struct private_tag
+{
+	typedef private_tag type;
+};
+
+struct protected_tag
+{
+	typedef protected_tag type;
+};
+
+struct public_tag
+{
+	typedef public_tag type;
+};
+
+struct class_tag
+{
+	typedef class_tag type;
+};
+
+struct struct_tag
+{
+	typedef struct_tag type;
+};
+
+struct union_tag
+{
+	typedef union_tag type;
+};
+
+struct enum_tag
+{
+	typedef enum_tag type;
+};
+
+struct enum_class_tag
+{
+	typedef enum_class_tag type;
+};
+
+struct constexpr_tag
+{
+	typedef constexpr_tag type;
+};
+
+\end{minted}
+
+These tags are collectively referred-to as \verb@SpecifierCategory@ below.

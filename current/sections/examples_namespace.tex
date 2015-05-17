@@ -1,0 +1,39 @@
+\subsection{Namespace reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+// reflected namespace std
+typedef mirrored(std) meta_std;
+
+static_assert(is_metaobject<meta_std>(), "");
+
+// Is a MetaNamed
+static_assert(meta::has_name<meta_std>(), "");
+// Is a MetaScoped
+static_assert(meta::has_scope<meta_std>(), "");
+// Is a MetaScope
+static_assert(meta::is_scope<meta_std>(), "");
+// Is not a MetaClassMember
+static_assert(not(meta::is_class_member<meta_std>()), "");
+
+// Is a MetaNamespace
+static_assert(
+	is_base_of<
+		meta::namespace_tag,
+		meta::category<meta_std>
+	>(), ""
+);
+
+// The scope of namespace std is the global scope
+static_assert(
+	is_base_of<
+		meta_gs,
+		meta::scope<meta_std>
+	>(), ""
+);
+
+// The base and full name
+assert(strlen(meta::base_name<meta_std>()) == 3);
+assert(strcmp(meta::base_name<meta_std>(), "std") == 0);
+assert(strlen(meta::full_name<meta_std>()) == 3);
+assert(strcmp(meta::full_name<meta_std>(), "std") == 0);
+\end{minted}

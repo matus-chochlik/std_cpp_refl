@@ -1,0 +1,41 @@
+\subsection{MetaClass}
+
+In addition to the requirements defined in section~\ref{concept-MetaClass},
+\meta{Class} can possibly also inherit from 
+a \meta{Template} if it reflects a class template. 
+
+If a \meta{Class} reflects a class template, then the \verb@is_template@
+trait should inherit from \verb@true_type@
+
+\subsubsection{\texttt{elaborated\_type\_specifier}}
+
+A template class called \verb@elaborated_type_specifier@ should be defined and should inherit from
+a \meta{Specifier} reflecting the \verb@class@, \verb@struct@ or \verb@union@
+specifiers:
+
+\begin{minted}{cpp}
+template <typename T>
+struct elaborated_type_specifier;
+
+template <>
+struct elaborated_type_specifier<MetaClass>
+ : MetaSpecifier
+{ };
+\end{minted}
+
+\subsubsection{\texttt{base\_classes}}
+
+A template class \verb@base_classes@ should be defined and should inherit from
+a \concept{MetaobjectSequence} of \meta{Inheritance}s, each one of which reflects the inheritance
+of a single base class of the class reflected by the \meta{Class}:
+
+\begin{minted}{cpp}
+template <typename T>
+struct base_classes;
+
+template <>
+struct base_classes<MetaClass>
+ : MetaobjectSequence<MetaInheritance>
+{ };
+\end{minted}
+

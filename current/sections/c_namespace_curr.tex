@@ -1,0 +1,18 @@
+\subsection{MetaNamespace}
+\label{concept-MetaNamespace}
+
+\meta{Namespace} is a \meta{Scope} reflecting a namespace.
+
+In addition to the requirements inherited from \meta{Scope}, the following must
+be satisfied:
+
+The \verb@category@ template class specialization for a \meta{Namespace} should
+inherit from \verb@namespace_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct category<MetaNamespace>
+ : namespace_tag
+{ };
+\end{minted}
+

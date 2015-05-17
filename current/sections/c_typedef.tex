@@ -1,0 +1,55 @@
+\subsection{MetaTypedef}
+\label{concept-MetaTypedef}
+
+\meta{Typedef} is a \meta{Type} reflecting \verb@typedef@s.
+
+In addition to the requirements inherited from \meta{Type}, the following is required:
+
+The \verb@category@ template class specialization for a \meta{Typedef} should
+inherit from \verb@typedef_tag@:
+
+\begin{minted}{cpp}
+template <>
+struct category<MetaTypedef>
+ : typedef_tag
+{ };
+\end{minted}
+
+\subsubsection{\texttt{type}}
+
+A template class called \verb@type@ should be defined and should inherit from the \meta{Type}
+reflecting the "source" type of the typedef:
+
+\begin{minted}{cpp}
+template <typename T>
+struct type;
+
+template <>
+struct type<MetaTypedef>
+ : MetaType
+{ };
+\end{minted}
+
+For example if \verb@__meta_std_string@ is a \meta{Typedef} reflecting the \verb@std::string@
+typedef and \verb@__meta_std_basic_string_char@ is the \meta{Type} that reflects
+the \verb@std::basic_string<char>@ type, and \verb@std::string@ is defined as:
+
+\begin{minted}{cpp}
+namespace std {
+typedef basic_string<char> string;
+}
+\end{minted}
+
+then the specialization of \verb@type@ for \verb@__meta_std_string@ should be following:
+
+\begin{minted}{cpp}
+template <>
+struct type<__meta_std_string>
+ : __meta_std_basic_string_char
+{ };
+\end{minted}
+
+\textbf{Note:} If this feature proves to be too difficult to implement 
+at this point\footnote{since some compilers do not keep typedef information},
+it can be added later. We, however, think that leaving it out completely would
+seriously limit the utility of reflection in certain use cases.

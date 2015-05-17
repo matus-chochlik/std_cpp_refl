@@ -1,0 +1,69 @@
+\section{Identifier pasting}
+
+As a part of this proposal we suggest to consider adding a new functionality to the core language,
+allowing to specify identifiers as compile-time constant C-string literal expression, i.e. expressions
+evaluating into values of \verb@constexpr const char [N]@.
+
+This could be implemented either by using a new operator (or recycling an old one),
+or maybe by using generalized attributes.
+In the examples below the \verb@identifier@ operator is used, but we do not have
+any strong preference for the name of this operator.
+
+For example:
+
+\begin{minted}{cpp}
+
+identifier("int") identifier("main")(
+	int idenitifier("argc"),
+	const identifier("char")* identifier("argv")
+)
+{
+	using namespace identifier(base_name<mirrored(std)>::value);
+	for(int i=0; i<argc; ++i)
+	{
+		cout << argv[i] << endl;
+	}
+	return 0;
+}
+
+\end{minted}
+
+would be equivalent to
+
+\begin{minted}{cpp}
+int main(int argc, const char* argv)
+{
+	using namespace std;
+	return 0;
+}
+\end{minted}
+
+The content of the string literal passed as the argument to \verb@identifier@
+should be encoded in the source character set and subject to the same restrictions
+which are placed on identifiers.
+
+For example:
+
+\begin{minted}{cpp}
+
+class foo
+{
+	identifier("some-type#") x; // Error
+
+	double identifier("static"); // Error
+
+	float identifier("void"); // Error
+
+	long identifier("<bar>"); // Error
+
+	identifier("std::vector<std::unique_ptr<bar>>") v; // OK
+};
+
+\end{minted}
+
+The idea is to replace preprocessor token concatenation with much more
+flexible constexpr C++ expressions.
+Adding identifier pasting would allow to replace the \verb@named_mem_var@
+and \verb@named_typedef@ metafunctions which were in N4111 defined as part of
+the interface of \meta{Named} with a much more powerful feature.
+

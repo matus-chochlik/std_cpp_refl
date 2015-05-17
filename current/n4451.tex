@@ -1,0 +1,110 @@
+\documentclass[11pt,a4paper,oneside]{scrartcl}
+
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{chochlik@gmail.com}
+\newcommand{\docname}{Static reflection (rev. 3)}
+\newcommand{\docnum}{N4451}
+\newcommand{\docdate}{2015-04-11}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+\usepackage[titletoc]{appendix}
+
+\usepackage{listings}
+\usepackage{minted}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\docnum - \docname}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\graphicspath{{images/}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
+\tikzstyle{concept}=[
+	rectangle,	
+	very thick,
+	draw=red!80!black!80,
+	top color=white,
+	bottom color=red!20,
+	node distance=0.5em and 1.5em
+]
+\tikzstyle{inheritance}=[
+	->,
+	shorten >=1pt,
+	>=open triangle 90,
+	very thick
+]
+   
+
+\setcounter{tocdepth}{3} 
+
+\title{\docname}
+
+\author{\mchname (\mchmail)}
+
+\newcommand{\concept}[1]{\hyperref[concept-#1]{\em{#1}}}
+\newcommand{\meta}[1]{\concept{Meta#1}}
+
+\begin{document}
+
+\begin{tabular}{r l}
+Document number: & \docnum\\
+Date: & \docdate\\
+Project: & Programming Language C++, SG7, Reflection\\
+Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
+\end{tabular}
+
+\begin{center}
+\vskip 2em
+{\Huge \docname}
+\vskip 1em
+{\emph \mchname}
+\vskip 2em
+\end{center}
+
+\paragraph{Abstract}
+
+This paper is the follow-up to N3996 and N4111 and it is the third revision
+of the proposal to add static reflection to the C++ standard.
+During the presentation of N4111 concerns were expressed about the level-of-detail and scope
+of the presented proposal and possible dangers of giving non-expert language users
+a {\em too powerful} tool to use and the dangers of implementing it all at once.
+This paper aims to address these issues.
+Furthermore, the accompanying paper -- N4452 describes several use cases of reflection,
+which were called for during the presentation of N4111.
+
+\tableofcontents
+
+\input{sections/introduction.tex}
+\input{sections/design_prefs.tex}
+\input{sections/concepts_curr.tex}
+\input{sections/reflection_curr.tex}
+\input{sections/rationale.tex}
+%\input{sections/issues.tex}
+\input{sections/acknowledge.tex}
+\input{sections/references.tex}
+
+\begin{appendices}
+\newpage
+\appendix
+\part*{Appendix}
+\addcontentsline{toc}{part}{Appendix}
+
+\input{sections/concepts_next.tex}
+\input{sections/reflection_next.tex}
+\input{sections/library.tex}
+\input{sections/identifiers.tex}
+\input{sections/examples.tex}
+\end{appendices}
+
+\end{document}

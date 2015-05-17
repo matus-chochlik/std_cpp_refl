@@ -1,0 +1,10 @@
+\subsection{Basic traits}
+
+Usage of the \verb@is_metaobject@ trait on non-metaobjects:
+
+\begin{minted}[tabsize=4]{cpp}
+static_assert(not(is_metaobject<int>()), "");
+static_assert(not(is_metaobject<std::string>()), "");
+static_assert(not(is_metaobject<my_class>()), "");
+static_assert(not(meta::is_class_member<meta_gs>()), "");
+\end{minted}

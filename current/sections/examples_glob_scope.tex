@@ -1,0 +1,51 @@
+
+\subsection{Global scope reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+// reflected global scope
+typedef mirrored(::) meta_gs;
+
+static_assert(is_metaobject<meta_gs>(), "");
+
+// Is a MetaNamed
+static_assert(meta::has_name<meta_gs>(), "");
+// Is a MetaScoped
+static_assert(meta::has_scope<meta_gs>(), "");
+// Is a MetaScope
+static_assert(meta::is_scope<meta_gs>(), "");
+// Is not a MetaClassMember
+static_assert(not(meta::is_class_member<meta_gs>()), "");
+
+// Is a MetaGlobalScope
+static_assert(
+	is_base_of<
+		meta::global_scope_tag,
+		meta::category<meta_gs>
+	>(), ""
+);
+
+// Global scope is its own scope
+static_assert(
+	is_base_of<
+		meta_gs,
+		meta::scope<meta_gs>
+	>(), ""
+);
+
+// Empty base and full name
+assert(strlen(meta::base_name<meta_gs>()) == 0);
+assert(strcmp(meta::base_name<meta_gs>(), "") == 0);
+
+assert(strlen(meta::full_name<meta_gs>()) == 0);
+assert(strcmp(meta::full_name<meta_gs>(), "") == 0);
+
+// the sequence of members
+typedef meta::members<meta_gs>::type meta_gs_members;
+
+static_assert(
+	meta::size<meta_gs_members>() == 20, // YMMV
+	""
+);
+
+\end{minted}
+
