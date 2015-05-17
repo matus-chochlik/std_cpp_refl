@@ -1,4 +1,4 @@
 # the output documents
-input_tex = n4451
+input_tex = current
 
 include ../common.mk

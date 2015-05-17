@@ -26,6 +26,7 @@
 	<concept name="Metaobject">
 		<returns><self/></returns>
 		<trait name="is_metaobject" result="true"/>
+		<trait name="is_specifier" result="false"/>
 		<trait name="has_name" result="false"/>
 		<trait name="has_scope" result="false"/>
 		<trait name="is_scope" result="false"/>
@@ -40,6 +41,7 @@
 
 	<concept name="MetaSpecifier" future="true">
 		<is_a base="Metaobject"/>
+		<trait name="is_specifier" result="true"/>
 		<mfunc name="category" result="SpecifierTag"/>
 		<mfunc name="keyword" result="StringConstant"/>
 	</concept>
