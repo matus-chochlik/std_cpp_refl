@@ -43,10 +43,8 @@ concepts},
 tag types for metaobject classification and operators providing access to the metaobjects.
 
 Unless stated otherwise, all named templates proposed and described below should
-go into the \verb@std@ namespace. Alternatively, if any of the definitions
-proposed here would clash with existing members (or new members proposed elsewhere)
-of the \verb@std@ namespace, then they can be nested in a namespace like
-\verb@std::meta@ or \verb@std::mirror@.
+go into the \verb@std::meta@ nested namespace in order to contain reflection-related
+definitions and to help avoiding potential name clashes..
 
 Also note, that in the sections below, the examples use names for concrete
 metaobjects, like \verb@__meta_std_string@, etc. This convention
