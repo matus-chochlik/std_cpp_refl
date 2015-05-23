@@ -15,17 +15,17 @@ struct category<MetaTypedef>
 { };
 \end{minted}
 
-\subsubsection{\texttt{type}}
+\subsubsection{\texttt{decl\_type}}
 
-A template class called \verb@type@ should be defined and should inherit from the \meta{Type}
+A template class called \verb@decl_type@ should be defined and should inherit from the \meta{Type}
 reflecting the "source" type of the typedef:
 
 \begin{minted}{cpp}
 template <typename T>
-struct type;
+struct decl_type;
 
 template <>
-struct type<MetaTypedef>
+struct decl_type<MetaTypedef>
  : MetaType
 { };
 \end{minted}
@@ -40,11 +40,11 @@ typedef basic_string<char> string;
 }
 \end{minted}
 
-then the specialization of \verb@type@ for \verb@__meta_std_string@ should be following:
+then the specialization of \verb@decl_type@ for \verb@__meta_std_string@ should be following:
 
 \begin{minted}{cpp}
 template <>
-struct type<__meta_std_string>
+struct decl_type<__meta_std_string>
  : __meta_std_basic_string_char
 { };
 \end{minted}

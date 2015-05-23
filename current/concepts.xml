@@ -99,7 +99,7 @@
 	<concept name="MetaTypedef">
 		<is_a base="MetaType"/>
 		<can_be base="MetaClassMember"/>
-		<mfunc name="type" result="MetaType"/>
+		<mfunc name="decl_type" result="MetaType"/>
 	</concept>
 
 	<concept name="MetaClass">
@@ -137,7 +137,7 @@
 		<can_be base="MetaClassMember"/>
 		<can_be base="MetaTemplate"/>
 		<can_be base="MetaInstantiation"/>
-		<mfunc name="type" result="MetaType"/>
+		<mfunc name="decl_type" result="MetaType"/>
 		<mfunc name="pointer"/>
 		<mfunc name="storage_specifier" result="MetaSpecifier"/>
 	</concept>
@@ -218,7 +218,7 @@
 
 	<concept name="MetaConstant" future="true">
 		<is_a base="Metaobject"/>
-		<mfunc name="type" result="MetaType"/>
+		<mfunc name="decl_type" result="MetaType"/>
 		<mfunc name="value" result="IntegralConstant"/>
 	</concept>
 </reflection>

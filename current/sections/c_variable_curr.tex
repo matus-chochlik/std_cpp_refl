@@ -17,23 +17,23 @@ struct category<MetaVariable>
 { };
 \end{minted}
 
-\subsubsection{\texttt{type}}
+\subsubsection{\texttt{decl\_type}}
 
-A template class \verb@type@ should be added and should inherit
+A template class \verb@decl_type@ should be added and should inherit
 from a \meta{Type} reflecting the type of the variable:
 
 \begin{minted}{cpp}
 template <typename T>
-struct type;
+struct decl_type;
 
 template <>
-struct type<MetaVariable>
+struct decl_type<MetaVariable>
  : MetaType
 { };
 \end{minted}
 
 \texttt{Note:} if the type used in the declaration of the variable
-is a \verb@typedef@ then the specialization of \verb@type@ for
+is a \verb@typedef@ then the specialization of \verb@decl_type@ for
 a \meta{Variable} reflecting the said variable, should
 inherit from a \meta{Typedef}\footnote{in other words reflection
 should be aware of \texttt{typedef}s and unlike the "base-level" C++
@@ -50,9 +50,9 @@ defined as follows:
 template <>
 struct pointer<MetaVariable>
 {
-	typedef typename original_type<type<MetaVariable>>::type
+	typedef typename original_type<decl_type<MetaVariable>>::type
 		_mv_t;
-	typedef typename original_type<type<scope<MetaVariable>>>::type
+	typedef typename original_type<decl_type<scope<MetaVariable>>>::type
 		_cls_t;
 
 	typedef _mv_t _cls_t::* type;

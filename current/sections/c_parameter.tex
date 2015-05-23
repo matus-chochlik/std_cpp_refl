@@ -54,17 +54,17 @@ a \concept{MetaobjectSequence} of \meta{Parameter}s where some of the \meta{Para
 have the same name (the name of the pack template parameter)
 and \verb@is_pack@ inherits from \verb@true_type@.
 
-\subsubsection{\texttt{type}}
+\subsubsection{\texttt{decl\_type}}
 
-A template class \verb@type@ should be added and should inherit
+A template class \verb@decl_type@ should be added and should inherit
 from a \meta{Type} reflecting the type of the parameter:
 
 \begin{minted}{cpp}
 template <typename T>
-struct type;
+struct decl_type;
 
 template <>
-struct type<MetaParameter>
+struct decl_type<MetaParameter>
  : MetaType
 { };
 \end{minted}
@@ -80,7 +80,7 @@ struct pointer;
 template <>
 struct pointer<MetaParameter>
 {
-	typedef typename original_type<type<MetaParameter>>::type* type;
+	typedef typename original_type<decl_type<MetaParameter>>::type* type;
 
 	static type get(void);
 };

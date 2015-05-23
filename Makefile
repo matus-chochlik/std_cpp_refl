@@ -2,7 +2,7 @@
 blddir = $(PWD)/_bld
 outdir = $(PWD)/_out
 
-components = n4451 n4452 n4111 n3996 gcc-plugin doxy-tool
+components = current n4451 n4452 n4111 n3996 gcc-plugin doxy-tool
 
 all: $(components)
 

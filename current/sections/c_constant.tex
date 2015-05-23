@@ -16,17 +16,17 @@ struct category<MetaConstant>
 { };
 \end{minted}
 
-\subsubsection{\texttt{type}}
+\subsubsection{\texttt{decl\_type}}
 
-A template class \verb@type@ should be added and should inherit
+A template class \verb@decl_type@ should be added and should inherit
 from a \meta{Type} reflecting the type of the constant value
 
 \begin{minted}{cpp}
 template <typename T>
-struct type;
+struct decl_type;
 
 template <>
-struct type<MetaVariable>
+struct decl_type<MetaVariable>
  : MetaType
 { };
 \end{minted}
