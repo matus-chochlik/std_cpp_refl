@@ -31,6 +31,7 @@
 		<trait name="has_scope" result="false"/>
 		<trait name="is_scope" result="false"/>
 		<trait name="has_position" result="false"/>
+		<trait name="is_alias" result="false"/>
 		<trait name="is_class_member" result="false"/>
 		<trait name="has_template" result="false"/>
 		<trait name="is_template" result="false"/>

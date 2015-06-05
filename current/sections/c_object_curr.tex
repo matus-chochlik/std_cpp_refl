@@ -111,6 +111,14 @@ struct is_scope
 { };
 \end{minted}
 
+\verb@is_alias@ -- indicates that a \meta{object} is a \meta{Alias}:
+\begin{minted}{cpp}
+template <typename T>
+struct is_alias
+ : false_type
+{ };
+\end{minted}
+
 \verb@has_position@ -- indicates that a \meta{object} is a \meta{Positional}:
 \begin{minted}{cpp}
 template <typename T>
