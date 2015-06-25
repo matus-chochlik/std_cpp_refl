@@ -35,8 +35,8 @@ struct decl_type<MetaVariable>
 \texttt{Note:} if the type used in the declaration of the variable
 is a \verb@typedef@ then the specialization of \verb@decl_type@ for
 a \meta{Variable} reflecting the said variable, should
-inherit from a \meta{Typedef}\footnote{in other words reflection
-should be aware of \texttt{typedef}s and unlike the "base-level" C++
+inherit from a \meta{Alias}\footnote{in other words reflection
+should be aware of type aliases and unlike the "base-level" C++
 is should distinguish between a typedef and its underlying type}.
 
 \subsubsection{\texttt{pointer}}

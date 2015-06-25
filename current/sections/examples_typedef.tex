@@ -13,10 +13,7 @@ static_assert(not(meta::is_class_member<meta_size_t>()), "");
 
 // Is a MetaTypedef
 static_assert(
-	is_base_of<
-		meta::typedef_tag,
-		meta::category<meta_size_t>
-	>(), ""
+	meta::is_alias<meta_size_t>(), ""
 );
 
 // The scope of std::size_t is the namespace std
