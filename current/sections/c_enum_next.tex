@@ -18,21 +18,3 @@ struct elaborated_type_specifier<MetaEnum>
 { };
 \end{minted}
 
-\subsubsection{\texttt{members}}
-
-A template class \verb@members@ should be defined and should inherit from a
-\concept{MetaobjectSequence} containing \meta{NamedScoped} \meta{Constant} metaobjects
-reflecting all enumerated values of the base-level enum reflected by
-this \meta{Enum}. The \verb@scope@ of the enumeration values is however not the
-containing \verb@enum@, but the scope of that \verb@enum@.
-
-\begin{minted}{cpp}
-template <typename T>
-struct members;
-
-template <>
-struct members<MetaEnum>
- : MetaobjectSequence<MetaConstant>
-{ };
-\end{minted}
-
