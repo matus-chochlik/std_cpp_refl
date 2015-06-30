@@ -40,11 +40,11 @@ this \meta{Enum}. The \verb@scope@ of the enumeration values is however not the
 containing \verb@enum@, but the scope of that \verb@enum@.
 
 \begin{minted}{cpp}
-template <typename T>
+template <typename T, bool All=false>
 struct members;
 
-template <>
-struct members<MetaEnum>
+template <bool All>
+struct members<MetaEnum, All>
  : MetaobjectSequence<MetaConstant>
 { };
 \end{minted}
