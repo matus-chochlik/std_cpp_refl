@@ -1,0 +1,19 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:tags Tag types]
+
+To distiguish between various metaobject kinds a set of tag types indicating
+the metaobject category should be added:
+
+[import tags.hpp]
+
+[section:metaobject Metaobject category tags]
+
+A [concept MetaobjectCategory] is a concept modelled by the following
+concrete types:
+
+[reflexpr_metaobject_tags]
+[endsect]
+
+[endsect]
+

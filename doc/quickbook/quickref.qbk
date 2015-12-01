@@ -1,0 +1,76 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[chapter Quick reference
+	[quickbook 1.6]
+	[id reflexpr.quickref]
+]
+
+[section:intro Introduction]
+
+This section describes a set of metaobject concepts, their interfaces,
+tag types for metaobject classification and operators providing access
+to the metaobjects.
+
+Unless stated otherwise, all definitions are made inside of the
+top-level [^std] namespace or in namespaces nested inside
+of namespace [^std].
+
+The namespace-definition opening,
+
+``
+namespace std {
+``
+and closing,
+
+``
+} // namespace std
+``
+statements are assumed, but omitted for the sake of brevity from this reference.
+
+[heading:namespace_meta Namespace [^meta]]
+
+In order to avoid clashes with existing names in the [^std]
+namespace, most named definitions (like the
+[link reflexpr.quickref.traits metaobject traits]),
+should be placed in the namespace [^meta] nested inside namespace [^std].
+
+``
+namespace std {
+namespace meta {
+...
+} }
+``
+
+
+[endsect]
+
+
+[template concept[Name] [*['[Name]]]]
+
+[def __integral_constant '''<ulink url="http://en.cppreference.com/w/cpp/types/integral_constant">integral_constant</ulink>''']
+[def __is_same '''<ulink url="http://en.cppreference.com/w/cpp/types/is_same">is_same</ulink>''']
+[def __is_same_v '''<ulink url="http://en.cppreference.com/w/cpp/types/is_same">is_same_v</ulink>''']
+
+[def __meta [link reflexpr.quickref.intro.namespace_meta [^meta]]]
+[def __namespace_meta_begin namespace __meta {]
+[def __namespace_meta_end } // namespace meta]
+
+[def __is_metaobject [link reflexpr.quickref.traits.is_metaobject [^is_metaobject]]]
+[def __is_metaobject_v [link reflexpr.quickref.traits.is_metaobject [^is_metaobject_v]]]
+[def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
+[def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
+[def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
+[def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
+
+[def __namespace_tag [link reflexpr.quickref.tags.metaobject [^namespace_tag]]]
+[def __global_scope_tag [link reflexpr.quickref.tags.metaobject [^global_scope_tag]]]
+[def __type_tag [link reflexpr.quickref.tags.metaobject [^type_tag]]]
+[def __class_tag [link reflexpr.quickref.tags.metaobject [^class_tag]]]
+[def __enum_tag [link reflexpr.quickref.tags.metaobject [^enum_tag]]]
+
+[def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]
+[def __Metaobject [link reflexpr.quickref.metaobject ['Metaobject]]]
+
+[include quickref/tags.qbk]
+[include quickref/traits.qbk]
+[include quickref/metaobject.qbk]

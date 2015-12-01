@@ -1,0 +1,67 @@
+body
+{
+	font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
+}
+
+body > div.spirit-nav
+{
+	background-color: #F0F0F0;
+	border: solid #A0A0A0 1px;
+	overflow: hidden;
+
+	padding: 3px;
+}
+
+div.spirit-nav a img
+{
+	margin: 3px;
+}
+
+pre.programlisting
+{
+	margin-top: 0;
+	margin-bottom: 0;
+	border: solid #E0E0E0 1px;
+	background-color: #E8E8E4;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	overflow: hidden;
+}
+
+.programlisting .preprocessor
+{
+	font-weight: 600;
+	color: #303090;
+}
+.programlisting .keyword
+{
+	font-weight: 500;
+	color: #4040A0;
+}
+.programlisting .identifier
+{
+	font-weight: 400;
+	color: #101020;
+}
+.programlisting .string
+{
+	font-weight: 600;
+	color: #303080;
+}
+
+code.literal
+{
+	color: #101020;
+}
+
+div.calloutlist
+{
+	margin-left: 2em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	border: solid #E0E0E0 1px;
+	background-color: #E8E8E4;
+	overflow: hidden;
+}
+

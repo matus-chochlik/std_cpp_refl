@@ -1,0 +1,48 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:traits Traits and categorization]
+
+[section:is_metaobject [^is_metaobject]]
+
+In order to distinguish between regular types and metaobjects generated
+by the compiler, the [^__is_metaobject] trait should
+be added to the [^std] namespace as one of the type traits.
+
+[import traits.hpp]
+
+[reflexpr_is_metaobject]
+[endsect]
+
+The rest of the trait templates should be nested inside of the __meta namespace.
+
+[section:get_category [^get_category]]
+
+The [^get_category] template returns one of the __MetaobjectCategory tags
+indicating the category of the metaobject.
+
+[reflexpr_get_category]
+
+[heading:helpers Helpers]
+
+Furthermore the following helper templates should be defined for a more
+convenient use.
+
+[reflexpr_category_helpers_1]
+[reflexpr_category_helpers_2]
+[reflexpr_category_helpers_3]
+[reflexpr_category_helpers_4]
+[endsect]
+
+[section:has_name [^has_name]]
+
+[reflexpr_has_name]
+[endsect]
+
+[section:has_scope [^has_scope]]
+
+[reflexpr_has_scope]
+[endsect]
+
+
+[endsect]
+

@@ -1,0 +1,12 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[book Static reflection
+	[quickbook 1.6]
+	[id reflexpr]
+	[license '''<ulink url="http://creativecommons.org/licenses/by-sa/4.0/">'''[$https://i.creativecommons.org/l/by-sa/4.0/88x31.png]'''</ulink>''']
+
+]
+
+[include quickref.qbk]
+
+
