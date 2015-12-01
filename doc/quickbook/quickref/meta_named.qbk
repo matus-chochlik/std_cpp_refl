@@ -1,0 +1,15 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:meta_named MetaNamed]
+[import meta_named.hpp]
+
+[concept MetaNamed] is a __Metaobject reflecting program constructs, which have
+a name (are identified by an identifier) like namespaces, types, functions,
+variables, parameters, etc.
+In addition to the requirements inherited from __Metaobject, the following
+requirements must be satisfied:
+
+[reflexpr_meta_named]
+
+[endsect]
+

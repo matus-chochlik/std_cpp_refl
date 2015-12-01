@@ -60,8 +60,13 @@ div.calloutlist
 	margin-left: 2em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
-	border: solid #E0E0E0 1px;
-	background-color: #E8E8E4;
+	border: solid #D8D8D8 1px;
+	background-color: #E0E0E0;
 	overflow: hidden;
+}
+
+.calloutlist table
+{
+	font-size: 75%;
 }
 
