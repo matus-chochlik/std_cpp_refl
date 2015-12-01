@@ -44,46 +44,9 @@ namespace meta {
 
 [endsect]
 
-
 [template concept[Name] [*['[Name]]]]
 
-[def __integral_constant '''<ulink url="http://en.cppreference.com/w/cpp/types/integral_constant">integral_constant</ulink>''']
-[def __is_same '''<ulink url="http://en.cppreference.com/w/cpp/types/is_same">is_same</ulink>''']
-[def __is_same_v '''<ulink url="http://en.cppreference.com/w/cpp/types/is_same">is_same_v</ulink>''']
-
-[def __meta [link reflexpr.quickref.intro.namespace_meta [^meta]]]
-[def __namespace_meta_begin namespace __meta {]
-[def __namespace_meta_end } // namespace meta]
-
-[def __is_metaobject [link reflexpr.quickref.traits.is_metaobject [^is_metaobject]]]
-[def __is_metaobject_v [link reflexpr.quickref.traits.is_metaobject [^is_metaobject_v]]]
-[def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
-[def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
-[def __has_category [link reflexpr.quickref.traits.get_category.has_category [^has_category]]]
-[def __has_category_v [link reflexpr.quickref.traits.get_category.has_category [^has_category_v]]]
-[def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
-[def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
-[def __has_scope [link reflexpr.quickref.traits.has_scope [^has_scope]]]
-[def __has_scope_v [link reflexpr.quickref.traits.has_scope [^has_scope_v]]]
-[def __is_scope [link reflexpr.quickref.traits.is_scope [^is_scope]]]
-[def __is_scope_v [link reflexpr.quickref.traits.is_scope [^is_scope_v]]]
-[def __is_alias [link reflexpr.quickref.traits.is_alias [^is_alias]]]
-[def __is_alias_v [link reflexpr.quickref.traits.is_alias [^is_alias_v]]]
-
-[def __namespace_tag [link reflexpr.quickref.tags.metaobject [^namespace_tag]]]
-[def __global_scope_tag [link reflexpr.quickref.tags.metaobject [^global_scope_tag]]]
-[def __type_tag [link reflexpr.quickref.tags.metaobject [^type_tag]]]
-[def __class_tag [link reflexpr.quickref.tags.metaobject [^class_tag]]]
-[def __enum_tag [link reflexpr.quickref.tags.metaobject [^enum_tag]]]
-
-[def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]
-[def __Metaobject [link reflexpr.quickref.metaobject ['Metaobject]]]
-[def __MetaobjectSequence [link reflexpr.quickref.metaobject_sequence ['MetaobjectSequence]]]
-[def __MetaNamed [link reflexpr.quickref.meta_named ['MetaNamed]]]
-[def __MetaScoped [link reflexpr.quickref.meta_scoped ['MetaScoped]]]
-[def __MetaScope [link reflexpr.quickref.meta_scope ['MetaScope]]]
-[def __MetaAlias [link reflexpr.quickref.meta_alias ['MetaAlias]]]
-
+[include quickref/string_const.qbk]
 [include quickref/tags.qbk]
 [include quickref/traits.qbk]
 [include quickref/metaobject.qbk]

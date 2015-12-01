@@ -1,0 +1,139 @@
+digraph metaobjects {
+	overlap=false
+	rankdir=BT
+	ranksep=0.5
+	maxiter=100000
+
+	subgraph {
+		node [penwidth=1.8,style="filled",shape="box",fillcolor="#ffffa0"]
+		StringConstant
+		IntegralConstant
+		BooleanConstant
+	}
+
+	node [penwidth=2,style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
+	Metaobject 
+	MetaNamed
+	MetaScoped
+	MetaScope
+	MetaAlias
+	MetaNamespace
+	MetaNamespaceAlias [label="MetaNamespace\nAlias"]
+	MetaGlobalScope
+	MetaType
+	MetaTypeAlias [label="MetaType\nAlias"]
+	MetaClass
+
+	MetaobjectSequence [label="Metaobject\nSequence"]
+
+	node [penwidth=1,style="filled",shape="egg",fillcolor="#c0c0c0"]
+
+	subgraph {
+		rank=same
+		is_namespace
+		is_global_scope
+		is_type
+		is_class
+	}
+	subgraph {
+		rank=same
+		has_name
+		has_scope
+		is_scope
+		is_alias
+	}
+	subgraph {
+		source_file
+		source_line
+		source_column
+		source_file -> source_line [style="invisible",dir="none"]
+	}
+
+	is_namespace -> has_name [style="invisible",dir="none"]
+	has_name -> source_file [style="invisible",dir="none"]
+
+	get_name
+	get_scope
+	get_aliased
+	get_members
+	get_size
+	get
+
+	edge [penwidth=2,dir="both",arrowsize=1.5,arrowtail="onormal",arrowhead="none"]
+
+	Metaobject -> MetaNamed
+	Metaobject -> MetaScoped
+	Metaobject -> MetaAlias
+
+	MetaNamed -> MetaScope
+	MetaScoped -> MetaScope
+
+	MetaScope -> MetaNamespace
+	MetaNamespace -> MetaNamespaceAlias
+	MetaAlias -> MetaNamespaceAlias
+	MetaNamespace -> MetaGlobalScope
+
+	MetaNamed -> MetaType
+	MetaScoped -> MetaType
+	MetaType -> MetaTypeAlias
+	MetaAlias -> MetaTypeAlias
+
+	MetaType -> MetaClass
+	MetaScope -> MetaClass
+
+	edge [penwidth=1,arrowhead="none",arrowtail="none",style="solid"]
+	Metaobject -> is_namespace
+	Metaobject -> is_global_scope
+	Metaobject -> is_type
+	Metaobject -> is_class
+	Metaobject -> has_name
+	Metaobject -> has_scope
+	Metaobject -> is_scope
+	Metaobject -> is_alias
+
+	Metaobject -> source_file
+	Metaobject -> source_line
+	Metaobject -> source_column
+
+	MetaobjectSequence -> get
+	MetaobjectSequence -> get_size
+	MetaNamed -> get_name
+	MetaScoped -> get_scope
+	MetaScope -> get_members
+	MetaAlias -> get_aliased
+
+	MetaClass -> get_members [style="invisible",dir="none"]
+	MetaNamespace -> get_members [style="invisible",dir="none"]
+
+	edge [penwidth=1,arrowhead="vee",style="dashed"]
+	is_namespace -> BooleanConstant
+	is_global_scope -> BooleanConstant
+	is_type -> BooleanConstant
+	is_class -> BooleanConstant
+	has_name -> BooleanConstant
+	has_scope -> BooleanConstant
+	is_scope -> BooleanConstant
+	is_alias -> BooleanConstant
+
+	source_file -> StringConstant
+	source_line -> IntegralConstant
+	source_column -> IntegralConstant
+
+	get -> Metaobject
+	get_size -> IntegralConstant [constraint=false]
+	get_name -> StringConstant
+	get_scope -> MetaScope
+	get_members -> MetaobjectSequence
+	get_aliased -> MetaNamed
+
+	edge [penwidth=1,arrowhead="none",style="dotted"]
+	is_namespace -> MetaNamespace
+	is_global_scope -> MetaGlobalScope
+	is_type -> MetaType
+	is_class -> MetaClass
+	has_name -> MetaNamed
+	has_scope -> MetaScoped
+	is_scope -> MetaScope
+	is_alias -> MetaAlias
+
+}

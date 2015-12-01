@@ -8,7 +8,7 @@ __namespace_meta_begin
 static_assert(__has_name<MetaNamed>::value, "");
 
 template <typename T>
-struct base_name
+struct get_name
 {
 	static_assert(__has_name_v<T>, "T must be a MetaNamed"); /*<
 	Only applicable to __Metaobject(s).
@@ -29,10 +29,10 @@ struct base_name
 };
 
 template <typename T>
-using base_name_t = typename base_name<T>::type;
+using get_name_t = typename get_name<T>::type;
 
 template <typename T>
-constexpr auto& base_name_v = base_name<T>::value;
+constexpr auto& get_name_v = get_name<T>::value;
 
 __namespace_meta_end
 //]
