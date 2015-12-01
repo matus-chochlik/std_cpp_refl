@@ -13,7 +13,6 @@ struct get_members
 	static_assert(__is_scope<T>, "T must be a MetaScope");
 
 	typedef __MetaobjectSequence type;
-	// TODO: no members for a namespace right now
 };
 
 template <typename T>

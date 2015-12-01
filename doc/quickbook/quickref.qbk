@@ -78,6 +78,7 @@ namespace meta {
 
 [def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]
 [def __Metaobject [link reflexpr.quickref.metaobject ['Metaobject]]]
+[def __MetaobjectSequence [link reflexpr.quickref.metaobject_sequence ['MetaobjectSequence]]]
 [def __MetaNamed [link reflexpr.quickref.meta_named ['MetaNamed]]]
 [def __MetaScoped [link reflexpr.quickref.meta_scoped ['MetaScoped]]]
 [def __MetaScope [link reflexpr.quickref.meta_scope ['MetaScope]]]
@@ -86,6 +87,7 @@ namespace meta {
 [include quickref/tags.qbk]
 [include quickref/traits.qbk]
 [include quickref/metaobject.qbk]
+[include quickref/metaobject_seq.qbk]
 [include quickref/meta_named.qbk]
 [include quickref/meta_scoped.qbk]
 [include quickref/meta_scope.qbk]

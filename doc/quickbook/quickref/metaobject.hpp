@@ -87,6 +87,12 @@ struct source_line
 };
 
 template <typename T>
+using source_line_t = typename source_line<T>::type;
+
+template <typename T>
+constexpr unsigned source_line_v = source_line<T>::value;
+
+template <typename T>
 struct source_column
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
@@ -104,6 +110,12 @@ struct source_column
 	>*/
 	unsigned operator (void) const noexcept;
 };
+
+template <typename T>
+using source_column_t = typename source_column<T>::type;
+
+template <typename T>
+constexpr unsigned source_column_v = source_column<T>::value;
 
 __namespace_meta_end
 //]
