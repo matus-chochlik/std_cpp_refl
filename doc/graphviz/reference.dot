@@ -23,6 +23,8 @@ digraph metaobjects {
 	MetaType
 	MetaTypeAlias [label="MetaType\nAlias"]
 	MetaClass
+	MetaEnum
+	MetaEnumClass
 
 	MetaobjectSequence [label="Metaobject\nSequence"]
 
@@ -78,8 +80,15 @@ digraph metaobjects {
 	MetaType -> MetaTypeAlias
 	MetaAlias -> MetaTypeAlias
 
+	MetaType -> MetaScope [style="invisible",dir="none"]
+
 	MetaType -> MetaClass
 	MetaScope -> MetaClass
+
+	MetaType -> MetaEnum
+
+	MetaType -> MetaEnumClass
+	MetaScope -> MetaEnumClass
 
 	edge [penwidth=1,arrowhead="none",arrowtail="none",style="solid"]
 	Metaobject -> is_namespace
@@ -95,7 +104,7 @@ digraph metaobjects {
 	Metaobject -> source_line
 	Metaobject -> source_column
 
-	MetaobjectSequence -> get
+	MetaobjectSequence -> get [constraint=false]
 	MetaobjectSequence -> get_size
 	MetaNamed -> get_name
 	MetaScoped -> get_scope
