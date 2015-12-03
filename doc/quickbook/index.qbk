@@ -36,6 +36,8 @@
 [def __class_tag [link reflexpr.quickref.tags.metaobject [^class_tag]]]
 [def __enum_tag [link reflexpr.quickref.tags.metaobject [^enum_tag]]]
 
+[def __reflexpr [link reflexpr.quickref.reflexpr [^reflexpr]]]
+
 [def __StringConstant [link reflexpr.quickref.string_constant ['StringConstant]]]
 
 [def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]

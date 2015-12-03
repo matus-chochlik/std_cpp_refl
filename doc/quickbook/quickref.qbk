@@ -55,3 +55,5 @@ namespace meta {
 [include quickref/meta_scoped.qbk]
 [include quickref/meta_scope.qbk]
 [include quickref/meta_alias.qbk]
+
+[include quickref/reflexpr.qbk]
