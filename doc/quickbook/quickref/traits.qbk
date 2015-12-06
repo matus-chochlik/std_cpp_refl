@@ -72,7 +72,7 @@ Indicates if __Metaobject is a __MetaScope.
 
 [section:is_alias [^is_alias]]
 
-Indicates if __Metaobject is a __MetaScope.
+Indicates if __Metaobject is a __MetaAlias.
 
 [reflexpr_is_alias]
 [endsect]

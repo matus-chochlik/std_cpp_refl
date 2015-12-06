@@ -3,8 +3,8 @@
 [section:meta_scope MetaScope]
 [import meta_scope.hpp]
 
-[concept MetaScope] is a __MetaNamed and __MetaScoped reflecting scopes
-like the global scope, namespaces, classes, etc.
+[concept MetaScope] is a __MetaNamed and possibly a __MetaScoped reflecting
+scopes like the global scope, namespaces, classes, etc.
 
 In addition to the requirements inherited from __MetaNamed and __MetaScoped,
 the following is required:

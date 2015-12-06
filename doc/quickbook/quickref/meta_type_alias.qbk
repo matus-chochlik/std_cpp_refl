@@ -1,0 +1,12 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:meta_type_alias MetaTypeAlias]
+[import meta_type_alias.hpp]
+
+[concept MetaTypeAlias] is a __MetaType and __MetaAlias reflecting type aliases.
+As a part of the inherited requirements, the following must be satisfied:
+
+[reflexpr_meta_type_alias]
+
+[endsect]
+

@@ -1,0 +1,14 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:meta_global_scope MetaGlobalScope]
+[import meta_global_scope.hpp]
+
+[concept MetaGlobalScope] is a __MetaNamed __MetaScope reflecting the global
+scope namespace.
+Unlike a __MetaNamespace [concept MetaGlobalScope] does not have a scope.
+In addition to the inherited requirements, the following must be satisfied:
+
+[reflexpr_meta_global_scope]
+
+[endsect]
+

@@ -17,10 +17,16 @@
 
 [def __is_metaobject [link reflexpr.quickref.traits.is_metaobject [^is_metaobject]]]
 [def __is_metaobject_v [link reflexpr.quickref.traits.is_metaobject [^is_metaobject_v]]]
+
 [def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
 [def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
 [def __has_category [link reflexpr.quickref.traits.get_category.has_category [^has_category]]]
 [def __has_category_v [link reflexpr.quickref.traits.get_category.has_category [^has_category_v]]]
+[def __is_namespace [link reflexpr.quickref.traits.get_category.is_namespace [^is_namespace]]]
+[def __is_global_scope [link reflexpr.quickref.traits.get_category.is_global_scope [^is_global_scope]]]
+[def __is_type [link reflexpr.quickref.traits.get_category.is_type [^is_type]]]
+[def __is_class [link reflexpr.quickref.traits.get_category.is_class [^is_class]]]
+
 [def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
 [def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
 [def __has_scope [link reflexpr.quickref.traits.has_scope [^has_scope]]]
@@ -47,6 +53,13 @@
 [def __MetaScoped [link reflexpr.quickref.meta_scoped ['MetaScoped]]]
 [def __MetaScope [link reflexpr.quickref.meta_scope ['MetaScope]]]
 [def __MetaAlias [link reflexpr.quickref.meta_alias ['MetaAlias]]]
+
+[def __MetaNamespace [link reflexpr.quickref.meta_namespace ['MetaNamespace]]]
+[def __MetaNamespaceAlias [link reflexpr.quickref.meta_namespace_alias ['MetaNamespaceAlias]]]
+[def __MetaGlobalScope [link reflexpr.quickref.meta_global_scope ['MetaGlobalScope]]]
+[def __MetaType [link reflexpr.quickref.meta_type ['MetaType]]]
+[def __MetaTypeAlias [link reflexpr.quickref.meta_type_alias ['MetaTypeAlias]]]
+[def __MetaClass [link reflexpr.quickref.meta_class ['MetaClass]]]
 
 [include quickref.qbk]
 

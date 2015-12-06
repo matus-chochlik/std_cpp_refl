@@ -1,0 +1,12 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:meta_namespace MetaNamespace]
+[import meta_namespace.hpp]
+
+[concept MetaNamespace] is a __MetaNamed __MetaScope reflecting namespaces.
+In addition to the inherited requirements, the following must be satisfied:
+
+[reflexpr_meta_namespace]
+
+[endsect]
+

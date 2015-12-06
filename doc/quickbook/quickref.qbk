@@ -29,7 +29,7 @@ statements are assumed, but omitted for the sake of brevity from this reference.
 
 [heading:namespace_meta Namespace [^meta]]
 
-In order to avoid clashes with existing names in the [^std]
+In order to avoid conflicts with existing names in the [^std]
 namespace, most named definitions (like the
 [link reflexpr.quickref.traits metaobject traits]),
 should be placed in the namespace [^meta] nested inside namespace [^std].
@@ -55,5 +55,11 @@ namespace meta {
 [include quickref/meta_scoped.qbk]
 [include quickref/meta_scope.qbk]
 [include quickref/meta_alias.qbk]
+
+[include quickref/meta_global_scope.qbk]
+[include quickref/meta_namespace.qbk]
+[include quickref/meta_type.qbk]
+[include quickref/meta_type_alias.qbk]
+[include quickref/meta_class.qbk]
 
 [include quickref/reflexpr.qbk]

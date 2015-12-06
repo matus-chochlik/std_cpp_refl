@@ -58,6 +58,7 @@ digraph metaobjects {
 	get_scope
 	get_aliased
 	get_members
+	get_all_members
 	get_size
 	get
 
@@ -81,6 +82,7 @@ digraph metaobjects {
 	MetaAlias -> MetaTypeAlias
 
 	MetaType -> MetaScope [style="invisible",dir="none"]
+	MetaNamed -> MetaScoped [style="invisible",dir="none"]
 
 	MetaType -> MetaClass
 	MetaScope -> MetaClass
@@ -109,10 +111,13 @@ digraph metaobjects {
 	MetaNamed -> get_name
 	MetaScoped -> get_scope
 	MetaScope -> get_members
+	MetaScope -> get_all_members
 	MetaAlias -> get_aliased
 
 	MetaClass -> get_members [style="invisible",dir="none"]
 	MetaNamespace -> get_members [style="invisible",dir="none"]
+	get_members -> get_all_members [style="invisible",dir="none"]
+	get_name -> get_scope [style="invisible",dir="none"]
 
 	edge [penwidth=1,arrowhead="vee",style="dashed"]
 	is_namespace -> BooleanConstant
@@ -133,6 +138,7 @@ digraph metaobjects {
 	get_name -> StringConstant
 	get_scope -> MetaScope
 	get_members -> MetaobjectSequence
+	get_all_members -> MetaobjectSequence
 	get_aliased -> MetaNamed
 
 	edge [penwidth=1,arrowhead="none",style="dotted"]
