@@ -58,6 +58,7 @@ namespace meta {
 
 [include quickref/meta_global_scope.qbk]
 [include quickref/meta_namespace.qbk]
+[include quickref/meta_namespace_alias.qbk]
 [include quickref/meta_type.qbk]
 [include quickref/meta_type_alias.qbk]
 [include quickref/meta_class.qbk]
