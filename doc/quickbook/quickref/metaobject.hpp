@@ -4,8 +4,6 @@
 
 //[reflexpr_metaobject
 
-struct Metaobject { };
-
 template <typename T>
 struct __is_metaobject;
 

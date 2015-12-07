@@ -185,6 +185,50 @@ constexpr bool is_enum_v = is_enum<T>::value;
 
 __namespace_meta_end
 //]
+//[reflexpr_is_enum_class
+__namespace_meta_begin
+
+template <typename T>
+using is_enum_class = __has_category<T, __enum_class_tag>;
+
+template <typename T>
+using is_enum_class_t = typename is_enum_class<T>::type;
+
+template <typename T>
+constexpr bool is_enum_class_v = is_enum_class<T>::value;
+
+__namespace_meta_end
+//]
+
+//[reflexpr_is_sequence
+__namespace_meta_begin
+
+template <typename T>
+struct is_sequence
+{
+	static_assert(__is_metaobject_v<T>, "T must be a Metaobject"); /*<
+	Only applicable to __Metaobject(s).
+	>*/
+
+	typedef bool value_type;
+	static constexpr const bool value = ... /*<
+	[^true] if [^T] is a __MetaobjectSequence , [^false] otherwise.
+	>*/;
+
+	typedef integral_constant<value_type, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+};
+
+template <typename T>
+using is_sequence_t = typename is_sequence<T>::type;
+
+template <typename T>
+constexpr bool is_sequence_v = is_sequence<T>::value;
+
+__namespace_meta_end
+//]
 
 //[reflexpr_has_name
 __namespace_meta_begin

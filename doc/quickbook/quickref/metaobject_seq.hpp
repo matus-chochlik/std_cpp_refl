@@ -4,19 +4,18 @@
 
 //[reflexpr_metaobject_sequence
 
-struct MetaobjectSequence { };
-
 __namespace_meta_begin
 
 template <typename T>
 struct get_size
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
+	static_assert(__is_sequence_v<T>, "T must be a MetaobjectSequence");
 
 	typedef unsigned value_type;
 
 	static constexpr size_t value = ... /*<
-	The path to the source file column.
+	The number of elements in the sequence.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -37,6 +36,9 @@ constexpr size_t get_size_v = get_size<T>::value;
 template <typename T, size_t N>
 struct get
 {
+	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
+	static_assert(__is_sequence_v<T>, "T must be a MetaobjectSequence");
+
 	typedef __Metaobject type;
 };
 

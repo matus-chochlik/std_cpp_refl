@@ -49,6 +49,13 @@ convenient use.
 
 [endsect]
 
+[section:is_sequence [^is_sequence]]
+
+Indicates if __Metaobject is a __MetaobjectSequence.
+
+[reflexpr_is_sequence]
+[endsect]
+
 [section:has_name [^has_name]]
 
 Indicates if __Metaobject is a __MetaNamed.

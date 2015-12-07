@@ -27,6 +27,8 @@
 [def __is_type [link reflexpr.quickref.traits.get_category.is_type [^is_type]]]
 [def __is_class [link reflexpr.quickref.traits.get_category.is_class [^is_class]]]
 
+[def __is_sequence [link reflexpr.quickref.traits.is_sequence [^is_sequence]]]
+[def __is_sequence_v [link reflexpr.quickref.traits.is_sequence [^is_sequence_v]]]
 [def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
 [def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
 [def __has_scope [link reflexpr.quickref.traits.has_scope [^has_scope]]]
