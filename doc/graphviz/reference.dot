@@ -30,6 +30,8 @@ digraph metaobjects {
 
 	node [penwidth=1,style="filled",shape="egg",fillcolor="#c0c0c0"]
 
+	is_sequence
+
 	subgraph {
 		rank=same
 		is_namespace
@@ -93,6 +95,7 @@ digraph metaobjects {
 	MetaScope -> MetaEnumClass
 
 	edge [penwidth=1,arrowhead="none",arrowtail="none",style="solid"]
+	Metaobject -> is_sequence
 	Metaobject -> is_namespace
 	Metaobject -> is_global_scope
 	Metaobject -> is_type
@@ -120,6 +123,7 @@ digraph metaobjects {
 	get_name -> get_scope [style="invisible",dir="none"]
 
 	edge [penwidth=1,arrowhead="vee",style="dashed"]
+	is_sequence -> BooleanConstant
 	is_namespace -> BooleanConstant
 	is_global_scope -> BooleanConstant
 	is_type -> BooleanConstant
@@ -142,6 +146,7 @@ digraph metaobjects {
 	get_aliased -> MetaNamed
 
 	edge [penwidth=1,arrowhead="none",style="dotted"]
+	is_sequence -> MetaobjectSequence
 	is_namespace -> MetaNamespace
 	is_global_scope -> MetaGlobalScope
 	is_type -> MetaType
