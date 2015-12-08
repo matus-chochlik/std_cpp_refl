@@ -41,8 +41,9 @@ template <typename T>
 struct source_file
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject"); /*<
-	Only applicable to __Metaobject(s).
+	Only applicable to __Metaobject(s) but not to __MetaobjectSequence(s).
 	>*/
+	static_assert(!__is_sequence_v<T>,"T must not be a MetaobjectSequence");
 
 	typedef const char value_type[N+1];
 
@@ -69,6 +70,7 @@ template <typename T>
 struct source_line
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
+	static_assert(!__is_sequence_v<T>,"T must not be a MetaobjectSequence");
 
 	typedef unsigned value_type;
 
@@ -94,6 +96,7 @@ template <typename T>
 struct source_column
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
+	static_assert(!__is_sequence_v<T>,"T must not be a MetaobjectSequence");
 
 	typedef unsigned value_type;
 

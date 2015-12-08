@@ -43,7 +43,7 @@ struct get
 };
 
 template <typename T, size_t N>
-using get_t = typename get<T>::type;
+using get_t = typename get<T, N>::type;
 
 __namespace_meta_end
 //]
