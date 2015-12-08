@@ -59,8 +59,9 @@ digraph metaobjects {
 	get_name
 	get_scope
 	get_aliased
-	get_members
-	get_all_members
+	get_data_members
+	get_all_data_members
+	get_enum_members
 	get_size
 	get
 
@@ -113,13 +114,15 @@ digraph metaobjects {
 	MetaobjectSequence -> get_size
 	MetaNamed -> get_name
 	MetaScoped -> get_scope
-	MetaScope -> get_members
-	MetaScope -> get_all_members
 	MetaAlias -> get_aliased
 
-	MetaClass -> get_members [style="invisible",dir="none"]
-	MetaNamespace -> get_members [style="invisible",dir="none"]
-	get_members -> get_all_members [style="invisible",dir="none"]
+	MetaClass -> get_data_members
+	MetaClass -> get_all_data_members
+	get_data_members -> get_all_data_members [style="invisible",dir="none"]
+
+	MetaEnum -> get_enum_members
+	MetaEnumClass -> get_enum_members
+
 	get_name -> get_scope [style="invisible",dir="none"]
 
 	edge [penwidth=1,arrowhead="vee",style="dashed"]
@@ -141,8 +144,9 @@ digraph metaobjects {
 	get_size -> IntegralConstant [constraint=false]
 	get_name -> StringConstant
 	get_scope -> MetaScope
-	get_members -> MetaobjectSequence
-	get_all_members -> MetaobjectSequence
+	get_data_members -> MetaobjectSequence
+	get_all_data_members -> MetaobjectSequence
+	get_enum_members -> MetaobjectSequence
 	get_aliased -> MetaNamed
 
 	edge [penwidth=1,arrowhead="none",style="dotted"]
