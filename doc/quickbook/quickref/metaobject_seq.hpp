@@ -34,7 +34,7 @@ constexpr size_t get_size_v = get_size<T>::value;
 
 
 template <typename T, size_t N>
-struct get
+struct get_element
 {
 	static_assert(__is_metaobject_v<T>, "T must be a Metaobject");
 	static_assert(__is_sequence_v<T>, "T must be a MetaobjectSequence");
@@ -43,7 +43,7 @@ struct get
 };
 
 template <typename T, size_t N>
-using get_t = typename get<T, N>::type;
+using get_element_t = typename get_element<T, N>::type;
 
 __namespace_meta_end
 //]

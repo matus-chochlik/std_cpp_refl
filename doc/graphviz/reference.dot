@@ -63,7 +63,7 @@ digraph metaobjects {
 	get_all_data_members
 	get_enum_members
 	get_size
-	get
+	get_element
 
 	edge [penwidth=2,dir="both",arrowsize=1.5,arrowtail="onormal",arrowhead="none"]
 
@@ -110,7 +110,7 @@ digraph metaobjects {
 	Metaobject -> source_line
 	Metaobject -> source_column
 
-	MetaobjectSequence -> get [constraint=false]
+	MetaobjectSequence -> get_element [constraint=false]
 	MetaobjectSequence -> get_size
 	MetaNamed -> get_name
 	MetaScoped -> get_scope
@@ -140,7 +140,7 @@ digraph metaobjects {
 	source_line -> IntegralConstant
 	source_column -> IntegralConstant
 
-	get -> Metaobject
+	get_element -> Metaobject
 	get_size -> IntegralConstant [constraint=false]
 	get_name -> StringConstant
 	get_scope -> MetaScope

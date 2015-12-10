@@ -38,6 +38,9 @@
 [def __is_alias [link reflexpr.quickref.traits.is_alias [^is_alias]]]
 [def __is_alias_v [link reflexpr.quickref.traits.is_alias [^is_alias_v]]]
 
+[def __get_size [link reflexpr.quickref.metaobject_seq [^get_size]]]
+[def __get_element [link reflexpr.quickref.metaobject_seq [^get_element]]]
+
 [def __namespace_tag [link reflexpr.quickref.tags.metaobject [^namespace_tag]]]
 [def __global_scope_tag [link reflexpr.quickref.tags.metaobject [^global_scope_tag]]]
 [def __type_tag [link reflexpr.quickref.tags.metaobject [^type_tag]]]
