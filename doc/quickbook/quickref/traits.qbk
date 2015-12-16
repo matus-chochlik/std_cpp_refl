@@ -41,6 +41,9 @@ convenient use.
 [heading:is_type [^is_type]]
 [reflexpr_is_type]
 
+[heading:is_variable [^is_variable]]
+[reflexpr_is_variable]
+
 [heading:is_class [^is_class]]
 [reflexpr_is_class]
 

@@ -20,6 +20,9 @@ Indicates that the metaobject is a __MetaClass
 struct enum_tag { }; /*<
 Indicates that the metaobject is a __MetaEnum
 >*/
+struct variable_tag { }; /*<
+Indicates that the metaobject is a __MetaVariable
+>*/
 
 __namespace_meta_end
 //]

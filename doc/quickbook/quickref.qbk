@@ -61,6 +61,7 @@ namespace meta {
 [include quickref/meta_namespace_alias.qbk]
 [include quickref/meta_type.qbk]
 [include quickref/meta_type_alias.qbk]
+[include quickref/meta_variable.qbk]
 [include quickref/meta_class.qbk]
 
 [include quickref/reflexpr.qbk]

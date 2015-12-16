@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf8"?>
+<concepts>
+	<baseobject kind="type" name="Type"/>
+	<baseobject kind="type" name="MetaobjectCategory" label="Metaobject\nCategory"/>
+
+	<baseobject kind="tag" name="global_scope_tag"/>
+	<baseobject kind="tag" name="namespace_tag"/>
+	<baseobject kind="tag" name="type_tag"/>
+	<baseobject kind="tag" name="enum_tag"/>
+	<baseobject kind="tag" name="class_tag"/>
+
+	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
+	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
+	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
+
+	<metaobject name="Metaobject"/>
+
+	<operation name="get_category" result="MetaobjectCategory">
+		<argument type="Metaobject"/>
+	</operation>
+
+	<trait name="is_sequence" indicates="MetaobjectSequence" uses="get_category"/>
+	<trait name="is_specifier" indicates="MetaSpecifier" uses="get_category"/>
+
+	<trait name="is_namespace" indicates="MetaNamespace" uses="get_category"/>
+	<trait name="is_global_scope" indicates="MetaGlobalScope" uses="get_category"/>
+	<trait name="is_type" indicates="MetaType" uses="get_category"/>
+	<trait name="is_class" indicates="MetaClass" uses="get_category"/>
+	<trait name="is_enum" indicates="MetaEnum" uses="get_category"/>
+	<trait name="is_variable" indicates="MetaVariable" uses="get_category"/>
+
+	<trait name="has_name" indicates="MetaNamed"/>
+	<trait name="has_type" indicates="MetaTyped"/>
+	<trait name="has_scope" indicates="MetaScoped"/>
+	<trait name="is_scope" indicates="MetaScope"/>
+	<trait name="is_alias" indicates="MetaAlias"/>
+
+	<operation name="source_file" result="StringConstant">
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
+
+	<operation name="source_line" result="IntegralConstant">
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
+
+	<operation name="source_column" result="IntegralConstant">
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
+
+	<metaobject name="MetaobjectSequence" label="Metaobject\nSequence">
+		<generalization name="Metaobject"/>
+	</metaobject>
+
+	<operation name="get_size" result="IntegralConstant">
+		<argument type="MetaobjectSequence"/>
+	</operation>
+
+	<operation name="get_element" result="Metaobject">
+		<argument type="MetaobjectSequence"/>
+		<argument type="IntegralConstant" name="Index"/>
+	</operation>
+
+	<metaobject name="MetaSpecifier">
+		<generalization name="Metaobject"/>
+	</metaobject>
+
+	<operation name="get_keyword" result="StringConstant">
+		<argument type="MetaSpecifier"/>
+	</operation>
+
+	<metaobject name="MetaNamed">
+		<generalization name="Metaobject"/>
+	</metaobject>
+
+	<operation name="get_name" result="StringConstant">
+		<argument type="MetaNamed"/>
+	</operation>
+
+	<metaobject name="MetaTyped">
+		<generalization name="Metaobject"/>
+	</metaobject>
+
+	<operation name="get_type" result="MetaType">
+		<argument type="MetaTyped"/>
+	</operation>
+
+	<metaobject name="MetaScoped">
+		<generalization name="Metaobject"/>
+	</metaobject>
+
+	<operation name="get_scope" result="MetaScope">
+		<argument type="MetaScoped"/>
+	</operation>
+
+	<metaobject name="MetaScope">
+		<generalization name="MetaNamed"/>
+		<generalization name="MetaScoped" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaAlias">
+		<generalization name="MetaNamed"/>
+	</metaobject>
+
+	<operation name="get_aliased" result="MetaNamed">
+		<argument type="MetaAlias"/>
+	</operation>
+
+	<metaobject name="MetaGlobalScope" label="Meta\nGlobal\nScope">
+		<generalization name="MetaNamed"/>
+		<generalization name="MetaScope"/>
+	</metaobject>
+
+	<metaobject name="MetaNamespace">
+		<generalization name="MetaNamed"/>
+		<generalization name="MetaScope"/>
+		<generalization name="MetaScoped"/>
+	</metaobject>
+
+	<metaobject name="MetaNamespaceAlias" label="Meta\nNamespace\nAlias">
+		<generalization name="MetaNamespace"/>
+		<generalization name="MetaAlias"/>
+	</metaobject>
+
+	<metaobject name="MetaType">
+		<generalization name="MetaNamed"/>
+		<generalization name="MetaScoped"/>
+	</metaobject>
+
+	<operation name="get_reflected_type" result="Type">
+		<argument type="MetaType"/>
+	</operation>
+
+	<metaobject name="MetaTypeAlias" label="MetaType\nAlias">
+		<generalization name="MetaType"/>
+		<generalization name="MetaAlias"/>
+	</metaobject>
+
+	<operation name="get_typedef_type" result="MetaType">
+		<argument type="MetaTypeAlias"/>
+	</operation>
+
+	<metaobject name="MetaClass">
+		<generalization name="MetaType"/>
+		<generalization name="MetaScope"/>
+	</metaobject>
+
+	<metaobject name="MetaEnum">
+		<generalization name="MetaType"/>
+		<generalization name="MetaScope" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaVariable">
+		<generalization name="MetaNamed"/>
+		<generalization name="MetaTyped"/>
+		<generalization name="MetaScoped" optional="true"/>
+	</metaobject>
+</concepts>

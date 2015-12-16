@@ -2,7 +2,7 @@ digraph metaobjects {
 	overlap=false
 	rankdir=BT
 	ranksep=0.5
-	maxiter=100000
+	maxiter=1000000
 
 	subgraph {
 		node [penwidth=1.8,style="filled",shape="box",fillcolor="#ffffa0"]
@@ -11,8 +11,13 @@ digraph metaobjects {
 		BooleanConstant
 	}
 
+	node [penwidth=1.8,style="filled",shape="box",fillcolor="#a0a0a0"]
+	Type
+	MetaobjectCategory
+
 	node [penwidth=2,style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 	Metaobject 
+	MetaSpecifier
 	MetaNamed
 	MetaScoped
 	MetaScope
@@ -22,6 +27,8 @@ digraph metaobjects {
 	MetaGlobalScope
 	MetaType
 	MetaTypeAlias [label="MetaType\nAlias"]
+	MetaTyped
+	MetaVariable
 	MetaClass
 	MetaEnum
 	MetaEnumClass
@@ -30,17 +37,17 @@ digraph metaobjects {
 
 	node [penwidth=1,style="filled",shape="egg",fillcolor="#c0c0c0"]
 
+	get_category
 	is_sequence
+	is_specifier
 
 	subgraph {
-		rank=same
 		is_namespace
 		is_global_scope
 		is_type
 		is_class
 	}
 	subgraph {
-		rank=same
 		has_name
 		has_scope
 		is_scope
@@ -53,26 +60,39 @@ digraph metaobjects {
 		source_file -> source_line [style="invisible",dir="none"]
 	}
 
-	is_namespace -> has_name [style="invisible",dir="none"]
-	has_name -> source_file [style="invisible",dir="none"]
-
 	get_name
+	get_keyword
 	get_scope
 	get_aliased
 	get_data_members
 	get_all_data_members
 	get_enum_members
+	get_reflected_type
+	get_type
+	get_typedef_type
 	get_size
 	get_element
 
+	is_namespace -> has_name [style="invisible",dir="none"]
+	has_name -> source_file [style="invisible",dir="none"]
+
 	edge [penwidth=2,dir="both",arrowsize=1.5,arrowtail="onormal",arrowhead="none"]
 
+	Type -> MetaobjectCategory
+
+	Metaobject -> MetaobjectSequence
+
+	Metaobject -> MetaSpecifier
 	Metaobject -> MetaNamed
 	Metaobject -> MetaScoped
+	Metaobject -> MetaTyped
 	Metaobject -> MetaAlias
 
 	MetaNamed -> MetaScope
 	MetaScoped -> MetaScope
+
+	MetaNamed -> MetaVariable
+	MetaTyped -> MetaVariable
 
 	MetaScope -> MetaNamespace
 	MetaNamespace -> MetaNamespaceAlias
@@ -96,13 +116,16 @@ digraph metaobjects {
 	MetaScope -> MetaEnumClass
 
 	edge [penwidth=1,arrowhead="none",arrowtail="none",style="solid"]
+	Metaobject -> get_category
 	Metaobject -> is_sequence
+	Metaobject -> is_specifier
 	Metaobject -> is_namespace
 	Metaobject -> is_global_scope
 	Metaobject -> is_type
 	Metaobject -> is_class
 	Metaobject -> has_name
 	Metaobject -> has_scope
+	Metaobject -> has_type
 	Metaobject -> is_scope
 	Metaobject -> is_alias
 
@@ -112,9 +135,13 @@ digraph metaobjects {
 
 	MetaobjectSequence -> get_element [constraint=false]
 	MetaobjectSequence -> get_size
+	MetaSpecifier -> get_keyword
 	MetaNamed -> get_name
 	MetaScoped -> get_scope
+	MetaTyped -> get_type
+	MetaType -> get_reflected_type
 	MetaAlias -> get_aliased
+	MetaTypeAlias -> get_typedef_type
 
 	MetaClass -> get_data_members
 	MetaClass -> get_all_data_members
@@ -126,13 +153,17 @@ digraph metaobjects {
 	get_name -> get_scope [style="invisible",dir="none"]
 
 	edge [penwidth=1,arrowhead="vee",style="dashed"]
+
+	get_category -> MetaobjectCategory
 	is_sequence -> BooleanConstant
+	is_specifier -> BooleanConstant
 	is_namespace -> BooleanConstant
 	is_global_scope -> BooleanConstant
 	is_type -> BooleanConstant
 	is_class -> BooleanConstant
 	has_name -> BooleanConstant
 	has_scope -> BooleanConstant
+	has_type -> BooleanConstant
 	is_scope -> BooleanConstant
 	is_alias -> BooleanConstant
 
@@ -142,8 +173,12 @@ digraph metaobjects {
 
 	get_element -> Metaobject
 	get_size -> IntegralConstant [constraint=false]
+	get_keyword -> StringConstant
 	get_name -> StringConstant
 	get_scope -> MetaScope
+	get_reflected_type -> Type
+	get_type -> MetaType
+	get_typedef_type -> MetaType
 	get_data_members -> MetaobjectSequence
 	get_all_data_members -> MetaobjectSequence
 	get_enum_members -> MetaobjectSequence
@@ -151,12 +186,14 @@ digraph metaobjects {
 
 	edge [penwidth=1,arrowhead="none",style="dotted"]
 	is_sequence -> MetaobjectSequence
+	is_specifier -> MetaSpecifier
 	is_namespace -> MetaNamespace
 	is_global_scope -> MetaGlobalScope
 	is_type -> MetaType
 	is_class -> MetaClass
 	has_name -> MetaNamed
 	has_scope -> MetaScoped
+	has_type -> MetaTyped
 	is_scope -> MetaScope
 	is_alias -> MetaAlias
 
