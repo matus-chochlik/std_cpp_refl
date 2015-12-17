@@ -10,8 +10,8 @@ all: $(SVG_IMAGES)
 	$(GRAPHVIZ) -Tsvg -o $@ $<
 
 
-./%.dot: ./%-dot.xsl concepts.xml
-	$(XSLTPROC) --output $@ $< concepts.xml
+./%.dot: ./%-dot.xsl ../concepts.xml
+	$(XSLTPROC) --output $@ $< ../concepts.xml
 	less $@
 
 clean:
