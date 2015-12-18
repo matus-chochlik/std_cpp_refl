@@ -18,6 +18,8 @@ digraph <xsl:value-of select="$metaobject"/> {
 
 	node [penwidth=2]
 
+	Overview [style="filled",shape="note",fillcolor="WHEAT",URL="overview.svg"];
+
 	<!-- generic types -->
 	node [style="filled",shape="box",fillcolor="#a0a0a0"]
 <xsl:for-each select="baseobject[@kind='type']">
@@ -69,10 +71,29 @@ digraph <xsl:value-of select="$metaobject"/> {
 	</xsl:for-each>
 </xsl:for-each>
 
+<xsl:for-each select="metaobject[@name=$metaobject]/generalization">
+	<xsl:variable name="gen_name" select="@name"/>
+	<xsl:for-each select="/concepts/metaobject[@name=$gen_name]">
+		<xsl:if test="preceding-sibling::metaobject[generalization/@name=$gen_name]">
+		edge [style="invisible",dir="forward"]
+		<xsl:value-of select="preceding-sibling::metaobject[generalization/@name=$gen_name][1]/@name"/> -> <xsl:value-of select="@name"/>;
+		</xsl:if>
+	</xsl:for-each>
+</xsl:for-each>
+
 	<!-- metaobject's specializations -->
 <xsl:for-each select="metaobject[generalization[@name=$metaobject]]">
 	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
-	<xsl:value-of select="$metaobject"/> -> <xsl:value-of select="@name"/>;
+	<xsl:variable name="optional" select="generalization[@name=$metaobject]/@optional='true'"/>
+	<xsl:value-of select="$metaobject"/> -> <xsl:value-of select="@name"/>
+	<xsl:if test="$optional">[style="dashed"]</xsl:if>;
+</xsl:for-each>
+
+<xsl:for-each select="metaobject[generalization[@name=$metaobject]]">
+		<xsl:if test="preceding-sibling::metaobject[generalization/@name=$metaobject]">
+		edge [style="invisible",dir="forward"]
+		<xsl:value-of select="preceding-sibling::metaobject[generalization/@name=$metaobject][1]/@name"/> -> <xsl:value-of select="@name"/>;
+		</xsl:if>
 </xsl:for-each>
 
 	<!-- related metaobjects -->
@@ -102,7 +123,7 @@ digraph <xsl:value-of select="$metaobject"/> {
 
 	<!-- operations -->
 <xsl:for-each select="operation[@result=$metaobject or argument[@type=$metaobject]]">
-	<xsl:value-of select="@name"/>;
+	<xsl:value-of select="@name"/> [URL="operation-<xsl:value-of select="@name"/>.svg"];
 </xsl:for-each>
 
 	edge [style="dashed",dir="forward"]

@@ -5,7 +5,7 @@
 	xmlns:exsl="http://exslt.org/common"
 	extension-element-prefixes="str exsl"
 >
-<xsl:param name="trait"/>
+<xsl:param name="operation"/>
 <xsl:output method="text"/>
 
 <xsl:template name="list-specializations">
@@ -37,7 +37,6 @@
 		edge [style="invisible",dir="forward"]
 		<xsl:value-of select="preceding-sibling::metaobject[generalization/@name=$parent][1]/@name"/> -> <xsl:value-of select="@name"/>;
 		</xsl:if>
-		</xsl:if>
 
 		<xsl:call-template name="process-specializations">
 			<xsl:with-param name="parent" select="@name"/>
@@ -50,11 +49,12 @@
 				</xsl:for-each>
 			</xsl:with-param>
 		</xsl:call-template>
+		</xsl:if>
 	</xsl:for-each>
 </xsl:template>
 
 <xsl:template match="/concepts">
-digraph <xsl:value-of select="$trait"/> {
+digraph <xsl:value-of select="$operation"/> {
 	overlap=false
 	rankdir=BT
 	ranksep=0.4
@@ -67,21 +67,41 @@ digraph <xsl:value-of select="$trait"/> {
 
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 	<!-- the trait -->
-<xsl:for-each select="trait[@name=$trait]">
-	<xsl:value-of select="@name"/>[URL="traits.svg"];
+<xsl:for-each select="operation[@name=$operation]">
+	<xsl:value-of select="@name"/>[URL="operations.svg"];
 </xsl:for-each>
-
-<xsl:variable name="mo_name" select="trait[@name=$trait]/@indicates"/>
 
 	edge [arrowsize=1.5]
 	edge [penwidth=2]
-	edge [style="dotted",arrowhead="none"]
+	edge [style="dotted"]
+
+<xsl:for-each select="operation[@name=$operation]">
+	<xsl:variable name="obj_name" select="@result"/>
+
+	node [penwidth=1.8,style="filled",shape="box",fillcolor="#a0a0a0"]
+	<xsl:for-each select="/concepts/baseobject[@name=$obj_name]">
+		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+		edge [dir="both",arrowhead="none",arrowtail="vee"]
+		<xsl:value-of select="@name"/> -> <xsl:value-of select="$operation"/>;
+	</xsl:for-each>
+
 	node [style="rounded,filled",shape="box",fillcolor="#90cc90"]
+	<xsl:for-each select="/concepts/metaobject[@name=$obj_name]">
+		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+		edge [dir="both",arrowhead="none",arrowtail="vee"]
+		<xsl:value-of select="@name"/> -> <xsl:value-of select="$operation"/>;
+	</xsl:for-each>
+</xsl:for-each>
+
+	edge [dir="forward",arrowhead="none"]
+
+<xsl:for-each select="operation[@name=$operation]/argument">
+	<xsl:variable name="mo_name" select="@type"/>
 
 	<!-- the metaobject -->
-	<xsl:for-each select="metaobject[@name=$mo_name]">
+	<xsl:for-each select="/concepts/metaobject[@name=$mo_name]">
 		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
-		<xsl:value-of select="$trait"/> -> <xsl:value-of select="@name"/>;
+		<xsl:value-of select="$operation"/> -> <xsl:value-of select="@name"/>;
 
 		<!-- metaobject's specializations -->
 		node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]
@@ -90,6 +110,7 @@ digraph <xsl:value-of select="$trait"/> {
 			<xsl:with-param name="parent" select="$mo_name"/>
 		</xsl:call-template>
 	</xsl:for-each>
+</xsl:for-each>
 }
 </xsl:template>
 

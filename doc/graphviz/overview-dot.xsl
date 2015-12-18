@@ -15,8 +15,10 @@ digraph Reflection {
 	fontName="Courier"
 	maxiter=1000000
 
+	node [penwidth=2]
+
 	<!-- generic types -->
-	node [penwidth=1.8,style="filled",shape="box",fillcolor="#a0a0a0"]
+	node [style="filled",shape="box",fillcolor="#a0a0a0"]
 <xsl:for-each select="baseobject[@kind='type']">
 
 	<xsl:value-of select="@name"/>
@@ -24,23 +26,22 @@ digraph Reflection {
 </xsl:for-each>
 
 	<!-- compile-time constant types -->
-	node [penwidth=1.8,style="filled",shape="box",fillcolor="#ffffa0"]
+	node [style="filled",shape="box",fillcolor="#ffffa0"]
 <xsl:for-each select="baseobject[@kind='const']">
 	<xsl:value-of select="@name"/>
 	<xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
 </xsl:for-each>
 
 	<!-- metaobjects -->
-	node [penwidth=2,style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
+	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 <xsl:for-each select="metaobject">
-	<xsl:value-of select="@name"/>
-	<xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
+	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- operations / traits -->
-	node [penwidth=1,style="filled",shape="egg",fillcolor="#c0c0c0"]
+	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 <xsl:for-each select="trait|operation">
-	<xsl:value-of select="@name"/>;
+	<xsl:value-of select="@name"/>[URL="<xsl:value-of select="name()"/>-<xsl:value-of select="@name"/>.svg"];
 </xsl:for-each>
 
 	<!-- generalizations -->

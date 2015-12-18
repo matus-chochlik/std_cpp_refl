@@ -42,14 +42,13 @@ digraph Reflection {
 	<!-- metaobjects -->
 	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 <xsl:for-each select="metaobject">
-	<xsl:value-of select="@name"/>
-	<xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
+	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- operations -->
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 <xsl:for-each select="operation">
-	<xsl:value-of select="@name"/>;
+	<xsl:value-of select="@name"/>[URL="operation-<xsl:value-of select="@name"/>.svg"];
 </xsl:for-each>
 
 	<!-- generalizations -->
