@@ -1,18 +1,34 @@
 XSLTPROC = xsltproc
 GRAPHVIZ = dot
 
-DIAGRAMS = overview hierarchy traits operations
-SVG_IMAGES = $(foreach I, $(DIAGRAMS), ./$I.svg)
+sinclude tmp/concepts.mk
+sinclude tmp/traits.mk
 
-all: $(SVG_IMAGES)
+DIAGRAMS = overview hierarchy traits operations \
+	$(foreach C, $(CONCEPTS), concept-$(C)) \
+	$(foreach T, $(TRAITS), trait-$(T))
 
-./%.svg: ./%.dot
+all: diagrams
+
+diagrams: $(foreach I, $(DIAGRAMS), ./out/$I.svg)
+
+./out/%.svg: ./tmp/%.dot | out
 	$(GRAPHVIZ) -Tsvg -o $@ $<
 
+./tmp/%.dot: ./%-dot.xsl ../concepts.xml | tmp
+	$(XSLTPROC) --output $@ $^
 
-./%.dot: ./%-dot.xsl ../concepts.xml
-	$(XSLTPROC) --output $@ $< ../concepts.xml
-	less $@
+./tmp/concept-%.dot: ./concept-dot.xsl ../concepts.xml | tmp
+	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
+
+./tmp/trait-%.dot: ./trait-dot.xsl ../concepts.xml | tmp
+	$(XSLTPROC) --stringparam trait $* --output $@ $^
+
+./tmp/%.mk: ./%-mk.xsl ../concepts.xml | tmp
+	$(XSLTPROC) --output $@ $^
+
+out tmp:
+	mkdir -p $@
 
 clean:
-	rm -f $(SVG_IMAGES)
+	rm -rf out tmp

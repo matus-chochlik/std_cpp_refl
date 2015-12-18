@@ -20,8 +20,7 @@ digraph Reflection {
 	<!-- metaobjects -->
 	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 <xsl:for-each select="metaobject">
-	<xsl:value-of select="@name"/>
-	<xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
+	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- generalizations -->
@@ -30,7 +29,8 @@ digraph Reflection {
 	edge [penwidth=2]
 	edge [dir="both",arrowtail="onormal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>;
+	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>
+	<xsl:if test="@optional='true'">[style="dashed"]</xsl:if>;
 </xsl:for-each>
 
 	edge [style="invisible",dir="forward",arrowhead="none"]

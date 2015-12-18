@@ -156,6 +156,10 @@
 		<generalization name="MetaScope"/>
 	</metaobject>
 
+	<operation name="get_data_members" result="MetaobjectSequence">
+		<argument type="MetaClass"/>
+	</operation>
+
 	<metaobject name="MetaEnum">
 		<generalization name="MetaType"/>
 		<generalization name="MetaScope" optional="true"/>

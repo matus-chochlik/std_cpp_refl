@@ -58,7 +58,8 @@ digraph Reflection {
 	edge [penwidth=0.3]
 	edge [dir="both",arrowtail="onormal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>;
+	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>
+	<xsl:if test="@optional='true'">[style="dashed"]</xsl:if>;
 </xsl:for-each>
 
 	<!-- Node -> operation -->
