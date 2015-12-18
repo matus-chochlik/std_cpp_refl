@@ -1,7 +1,7 @@
 XSLTPROC = xsltproc
 GRAPHVIZ = dot
 
-DIAGRAMS = overview traits
+DIAGRAMS = overview hierarchy traits operations
 SVG_IMAGES = $(foreach I, $(DIAGRAMS), ./$I.svg)
 
 all: $(SVG_IMAGES)

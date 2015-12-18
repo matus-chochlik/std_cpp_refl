@@ -16,17 +16,21 @@ digraph Reflection {
 	fontName="Courier"
 	maxiter=1000000
 
-	edge [penwidth=2]
+	node [penwidth=2]
+	edge [penwidth=3]
 
 <xsl:for-each select="metaobject">
 	<xsl:variable name="mo_name" select="@name"/>
 	<xsl:variable name="mo_pos" select="position()"/>
 	subgraph cluster_<xsl:value-of select="@name"/> {
 	penwidth=0
-	<xsl:value-of select="@name"/> [penwidth=2,style="rounded,filled",shape="box",fillcolor="#a0ffa0"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>]
+	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
+	<xsl:value-of select="@name"/><xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
 
+	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
+	edge [style="dashed",dir="forward",arrowhead="none"]
 	<xsl:for-each select="/concepts/trait[@indicates=$mo_name]">
-	<xsl:value-of select="@name"/> [penwidth=1,style="filled",shape="egg",fillcolor="#c0c0c0"]
+	<xsl:value-of select="@name"/>;
 	<xsl:choose>
 		<xsl:when test="($mo_pos mod 4) = 0">
 			<xsl:value-of select="@name"/> -> <xsl:value-of select="@indicates"/>
@@ -34,10 +38,17 @@ digraph Reflection {
 		<xsl:otherwise>
 			<xsl:value-of select="@indicates"/> -> <xsl:value-of select="@name"/>
 		</xsl:otherwise>
-	</xsl:choose> [style="dotted",dir="forward",arrowhead="none",constraint="<xsl:value-of select="($mo_pos mod 2) = 0"/>"]
+	</xsl:choose> [constraint="<xsl:value-of select="($mo_pos mod 2) = 0"/>"]
 	</xsl:for-each>
 
 	}
+</xsl:for-each>
+
+	edge [penwidth=0.3]
+	edge [style="solid",dir="both",arrowhead="none",arrowtail="onormal"]
+
+<xsl:for-each select="*/generalization">
+	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>;
 </xsl:for-each>
 
 	edge [style="invisible",dir="forward",arrowhead="none"]
@@ -56,12 +67,6 @@ digraph Reflection {
 	<xsl:for-each select="preceding-sibling::metaobject[1]">
 	<xsl:value-of select="@name"/> -> <xsl:value-of select="$this"/>;
 	</xsl:for-each>
-</xsl:for-each>
-
-	edge [penwidth=2,style="solid",dir="both",arrowhead="none",arrowtail="onormal"]
-
-<xsl:for-each select="*/generalization">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>;
 </xsl:for-each>
 
 }
