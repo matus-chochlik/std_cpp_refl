@@ -1,3 +1,7 @@
 /_bld
 /_out
+doc/graphviz/out
+doc/graphviz/tmp
+doc/quickbook/bin
+doc/quickbook/html
 .*.swp

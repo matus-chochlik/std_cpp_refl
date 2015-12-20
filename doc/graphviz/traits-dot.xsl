@@ -8,9 +8,9 @@
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-digraph Reflection {
+digraph Traits {
 	overlap=false
-	rankdir=BT
+	rankdir=LR
 	ranksep=0.5
 	clusterrank="local"
 	fontName="Courier"
@@ -44,6 +44,7 @@ digraph Reflection {
 	}
 </xsl:for-each>
 
+	edge [constraint="true"]
 	edge [penwidth=0.3]
 	edge [style="solid",dir="both",arrowhead="none",arrowtail="onormal"]
 

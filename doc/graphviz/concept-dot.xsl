@@ -18,8 +18,6 @@ digraph <xsl:value-of select="$metaobject"/> {
 
 	node [penwidth=2]
 
-	Overview [style="filled",shape="note",fillcolor="WHEAT",URL="overview.svg"];
-
 	<!-- generic types -->
 	node [style="filled",shape="box",fillcolor="#a0a0a0"]
 <xsl:for-each select="baseobject[@kind='type']">
@@ -153,6 +151,12 @@ digraph <xsl:value-of select="$metaobject"/> {
 	<xsl:for-each select="argument[@type != $metaobject]">
 		<xsl:value-of select="@type"/> -> <xsl:value-of select="../@name"/>;
 	</xsl:for-each>
+</xsl:for-each>
+
+<xsl:for-each select="operation[argument[@type=$metaobject]]">
+		<xsl:if test="preceding-sibling::operation[argument[@type=$metaobject]]">
+		<xsl:value-of select="@name"/> -> <xsl:value-of select="preceding-sibling::operation[argument[@type=$metaobject]][1]/@name"/> [style="invis",dir="forward"];
+		</xsl:if>
 </xsl:for-each>
 
 }

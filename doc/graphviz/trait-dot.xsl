@@ -63,8 +63,6 @@ digraph <xsl:value-of select="$trait"/> {
 
 	node [penwidth=2]
 
-	Overview [style="filled",shape="note",fillcolor="WHEAT",URL="overview.svg"];
-
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 	<!-- the trait -->
 <xsl:for-each select="trait[@name=$trait]">
@@ -76,7 +74,7 @@ digraph <xsl:value-of select="$trait"/> {
 	edge [arrowsize=1.5]
 	edge [penwidth=2]
 	edge [style="dotted",arrowhead="none"]
-	node [style="rounded,filled",shape="box",fillcolor="#90cc90"]
+	node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]
 
 	<!-- the metaobject -->
 	<xsl:for-each select="metaobject[@name=$mo_name]">
@@ -84,8 +82,6 @@ digraph <xsl:value-of select="$trait"/> {
 		<xsl:value-of select="$trait"/> -> <xsl:value-of select="@name"/>;
 
 		<!-- metaobject's specializations -->
-		node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]
-
 		<xsl:call-template name="process-specializations">
 			<xsl:with-param name="parent" select="$mo_name"/>
 		</xsl:call-template>

@@ -11,7 +11,7 @@
 digraph Reflection {
 	overlap=false
 	rankdir=BT
-	ranksep=0.5
+	ranksep=0.25
 	fontName="Courier"
 	maxiter=1000000
 
@@ -75,18 +75,18 @@ digraph Reflection {
 	<!-- trait -> indicates -->
 	edge [penwidth=1,arrowhead="none",style="dotted"]
 <xsl:for-each select="trait[@indicates]">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="@indicates"/>;
+	<xsl:value-of select="@name"/> -> <xsl:value-of select="@indicates"/> [constraint="false"];
+	{ rank=same; <xsl:value-of select="@name"/>, <xsl:value-of select="@indicates"/> }
 </xsl:for-each>
 
-	<!-- trait ordering -->
-	edge [style="invisible"]
-<xsl:for-each select="*/generalization">
-	<xsl:variable name="base" select="@name"/>
-	<xsl:variable name="derived" select="../@name"/>
-	<xsl:if test="/concepts/trait[@indicates=$base] and /concepts/trait[@indicates=$derived]">
-	<xsl:value-of select="/concepts/trait[@indicates=$derived]/@name"/> -> <xsl:value-of select="/concepts/trait[@indicates=$base]/@name"/>;
-	</xsl:if>
+	edge [style="invisible",dir="forward"]
+
+<xsl:for-each select="metaobject">
+		<xsl:if test="preceding-sibling::metaobject">
+		<xsl:value-of select="preceding-sibling::metaobject[1]/@name"/> -> <xsl:value-of select="@name"/>;
+		</xsl:if>
 </xsl:for-each>
+
 }
 </xsl:template>
 
