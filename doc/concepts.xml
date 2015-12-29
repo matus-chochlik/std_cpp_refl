@@ -34,8 +34,12 @@
 	<trait name="has_scope" indicates="MetaScoped"/>
 	<trait name="is_scope" indicates="MetaScope"/>
 	<trait name="is_alias" indicates="MetaAlias"/>
+	<trait name="is_class_member" indicates="MetaClassMember"/>
 
-	<operation name="source_file" result="StringConstant">
+	<operation name="source_file"
+		brief="Source file path of the declaration of the $(reflected)."
+		result="StringConstant"
+	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
 			<except if="is_sequence"/>
@@ -43,7 +47,11 @@
 		</argument>
 	</operation>
 
-	<operation name="source_line" result="IntegralConstant">
+	<operation name="source_line"
+		result="IntegralConstant"
+		integer="unsigned"
+		brief="Source file line of the declaration of the reflected $(reflected)."
+	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
 			<except if="is_sequence"/>
@@ -51,7 +59,11 @@
 		</argument>
 	</operation>
 
-	<operation name="source_column" result="IntegralConstant">
+	<operation name="source_column"
+		result="IntegralConstant"
+		integer="unsigned"
+		brief="Source file column of the declaration of the reflected $(reflected)."
+	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
 			<except if="is_sequence"/>
@@ -59,11 +71,17 @@
 		</argument>
 	</operation>
 
-	<metaobject name="MetaobjectSequence" label="Metaobject\nSequence">
+	<metaobject name="MetaobjectSequence"
+		label="Metaobject\nSequence"
+	>
 		<generalization name="Metaobject"/>
 	</metaobject>
 
-	<operation name="get_size" result="IntegralConstant">
+	<operation name="get_size"
+		result="IntegralConstant"
+		integer="size_t"
+		brief="Number of elements in the sequence."
+	>
 		<argument type="MetaobjectSequence"/>
 	</operation>
 
@@ -72,23 +90,35 @@
 		<argument type="IntegralConstant" name="Index"/>
 	</operation>
 
-	<metaobject name="MetaSpecifier">
+	<metaobject name="MetaSpecifier"
+		reflects="specifier"
+	>
 		<generalization name="Metaobject"/>
 	</metaobject>
 
-	<operation name="get_keyword" result="StringConstant">
+	<operation name="get_keyword"
+		result="StringConstant"
+		brief="the keyword"
+	>
 		<argument type="MetaSpecifier"/>
 	</operation>
 
-	<metaobject name="MetaNamed">
+	<metaobject name="MetaNamed"
+		reflects="named declaration"
+	>
 		<generalization name="Metaobject"/>
 	</metaobject>
 
-	<operation name="get_name" result="StringConstant">
+	<operation name="get_name"
+		result="StringConstant"
+		brief="the basic name"
+	>
 		<argument type="MetaNamed"/>
 	</operation>
 
-	<metaobject name="MetaTyped">
+	<metaobject name="MetaTyped"
+		reflectd="base-level construct with a type"
+	>
 		<generalization name="Metaobject"/>
 	</metaobject>
 
@@ -96,7 +126,9 @@
 		<argument type="MetaTyped"/>
 	</operation>
 
-	<metaobject name="MetaScoped">
+	<metaobject name="MetaScoped"
+		reflects="scoped declaration"
+	>
 		<generalization name="Metaobject"/>
 	</metaobject>
 
@@ -104,12 +136,16 @@
 		<argument type="MetaScoped"/>
 	</operation>
 
-	<metaobject name="MetaScope">
+	<metaobject name="MetaScope"
+		reflects="scope"
+	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScoped" optional="true"/>
 	</metaobject>
 
-	<metaobject name="MetaAlias">
+	<metaobject name="MetaAlias"
+		reflects="alias"
+	>
 		<generalization name="MetaNamed"/>
 	</metaobject>
 
@@ -117,23 +153,33 @@
 		<argument type="MetaAlias"/>
 	</operation>
 
-	<metaobject name="MetaGlobalScope" label="Meta\nGlobal\nScope">
+	<metaobject name="MetaGlobalScope"
+		reflects="global scope"
+		label="Meta\nGlobal\nScope"
+	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScope"/>
 	</metaobject>
 
-	<metaobject name="MetaNamespace">
+	<metaobject name="MetaNamespace"
+		reflects="namespace"
+	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScope"/>
 		<generalization name="MetaScoped"/>
 	</metaobject>
 
-	<metaobject name="MetaNamespaceAlias" label="Meta\nNamespace\nAlias">
+	<metaobject name="MetaNamespaceAlias"
+		reflects="namespace alias"
+		label="Meta\nNamespace\nAlias"
+	>
 		<generalization name="MetaNamespace"/>
 		<generalization name="MetaAlias"/>
 	</metaobject>
 
-	<metaobject name="MetaType">
+	<metaobject name="MetaType"
+		reflects="type"
+	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScoped"/>
 	</metaobject>
@@ -160,14 +206,24 @@
 		<argument type="MetaClass"/>
 	</operation>
 
-	<metaobject name="MetaEnum">
+	<metaobject name="MetaEnum"
+		reflects="enumeration"
+	>
 		<generalization name="MetaType"/>
 		<generalization name="MetaScope" optional="true"/>
 	</metaobject>
 
-	<metaobject name="MetaVariable">
+	<metaobject name="MetaVariable"
+		reflects="variable"
+	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaTyped"/>
 		<generalization name="MetaScoped" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaClassMember"
+		reflects="class member"
+	>
+		<generalization name="MetaScoped"/>
 	</metaobject>
 </concepts>

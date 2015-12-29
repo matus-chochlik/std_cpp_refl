@@ -1,15 +1,32 @@
-.PHONY: all
+XSLTPROC = xsltproc
+BJAM = bjam
 
-all: html/index.html html/boostbook.css
+sinclude ./tmp/concepts.mk
 
-.PHONY: clean
+CONCEPT_HPPS = $(foreach C, $(CONCEPTS), ./quickref/$(C).hpp)
+
+all: ./html/index.html ./html/boostbook.css
 
 clean:
-	rm -r bin/ html/
+	rm -r bin/ html/ tmp/ out/
 
-html/index.html: index.qbk
-	bjam
+.PHONY: all clean
 
-html/%.css: %.css
+concept_hpps: $(CONCEPT_HPPS)
+
+./html/index.html: index.qbk concept_hpps | html
+	$(BJAM)
+
+./html/%.css: %.css | html
 	cp $< $@
+
+./quickref/%.hpp: ./xsl/concept-hpp.xsl ../concepts.xml
+	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
+	git add $@
+
+./tmp/%.mk: ./xsl/%-mk.xsl ../concepts.xml | tmp
+	$(XSLTPROC) --output $@ $^
+
+out tmp html bin:
+	mkdir -p $@
 
