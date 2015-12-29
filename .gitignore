@@ -4,4 +4,5 @@ doc/graphviz/out
 doc/graphviz/tmp
 doc/quickbook/bin
 doc/quickbook/html
+doc/quickbook/tmp
 .*.swp

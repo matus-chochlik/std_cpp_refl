@@ -32,7 +32,7 @@ struct __source_file<MetaSpecifier>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the specifier.
+	Source file path of the declaration of a specifier reflected by this MetaSpecifier.
 	>*/;
 
 	typedef __StringConstant type;
@@ -48,7 +48,7 @@ struct __source_line<MetaSpecifier>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected specifier.
+	Source file line of the declaration of a specifier reflected by this MetaSpecifier.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -64,7 +64,7 @@ struct __source_column<MetaSpecifier>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected specifier.
+	Source file column of the declaration of a specifier reflected by this MetaSpecifier.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

@@ -88,7 +88,7 @@ struct __source_file<MetaEnum>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the enumeration.
+	Source file path of the declaration of an enumeration reflected by this MetaEnum.
 	>*/;
 
 	typedef __StringConstant type;
@@ -104,7 +104,7 @@ struct __source_line<MetaEnum>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected enumeration.
+	Source file line of the declaration of an enumeration reflected by this MetaEnum.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -120,7 +120,7 @@ struct __source_column<MetaEnum>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected enumeration.
+	Source file column of the declaration of an enumeration reflected by this MetaEnum.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

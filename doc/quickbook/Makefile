@@ -4,6 +4,7 @@ BJAM = bjam
 sinclude ./tmp/concepts.mk
 
 CONCEPT_HPPS = $(foreach C, $(CONCEPTS), ./quickref/$(C).hpp)
+CONCEPT_QBKS = $(foreach C, $(CONCEPTS), ./quickref/$(C).qbk)
 
 all: ./html/index.html ./html/boostbook.css
 
@@ -12,13 +13,15 @@ clean:
 
 .PHONY: all clean
 
-concept_hpps: $(CONCEPT_HPPS)
-
-./html/index.html: index.qbk concept_hpps | html
+./html/index.html: index.qbk $(CONCEPT_QBKS) | html
 	$(BJAM)
 
 ./html/%.css: %.css | html
 	cp $< $@
+
+./quickref/%.qbk: ./xsl/concept-qbk.xsl ../concepts.xml | ./quickref/%.hpp
+	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
+	git add $@
 
 ./quickref/%.hpp: ./xsl/concept-hpp.xsl ../concepts.xml
 	$(XSLTPROC) --stringparam metaobject $* --output $@ $^

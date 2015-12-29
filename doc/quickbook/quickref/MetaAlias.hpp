@@ -46,7 +46,7 @@ struct __source_file<MetaAlias>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the alias.
+	Source file path of the declaration of a type or namespace alias reflected by this MetaAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -62,7 +62,7 @@ struct __source_line<MetaAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected alias.
+	Source file line of the declaration of a type or namespace alias reflected by this MetaAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -78,7 +78,7 @@ struct __source_column<MetaAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected alias.
+	Source file column of the declaration of a type or namespace alias reflected by this MetaAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

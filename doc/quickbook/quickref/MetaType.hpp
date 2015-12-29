@@ -60,7 +60,7 @@ struct __source_file<MetaType>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the type.
+	Source file path of the declaration of a type reflected by this MetaType.
 	>*/;
 
 	typedef __StringConstant type;
@@ -76,7 +76,7 @@ struct __source_line<MetaType>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected type.
+	Source file line of the declaration of a type reflected by this MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -92,7 +92,7 @@ struct __source_column<MetaType>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected type.
+	Source file column of the declaration of a type reflected by this MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

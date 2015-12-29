@@ -90,7 +90,7 @@ struct __source_file<MetaNamespaceAlias>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the namespace alias.
+	Source file path of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -106,7 +106,7 @@ struct __source_line<MetaNamespaceAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected namespace alias.
+	Source file line of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -122,7 +122,7 @@ struct __source_column<MetaNamespaceAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected namespace alias.
+	Source file column of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

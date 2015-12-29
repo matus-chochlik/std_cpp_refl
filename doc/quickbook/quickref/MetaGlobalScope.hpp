@@ -74,7 +74,7 @@ struct __source_file<MetaGlobalScope>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the global scope.
+	Source file path of the declaration of the global scope reflected by this MetaGlobalScope.
 	>*/;
 
 	typedef __StringConstant type;
@@ -90,7 +90,7 @@ struct __source_line<MetaGlobalScope>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the reflected global scope.
+	Source file line of the declaration of the global scope reflected by this MetaGlobalScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -106,7 +106,7 @@ struct __source_column<MetaGlobalScope>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the reflected global scope.
+	Source file column of the declaration of the global scope reflected by this MetaGlobalScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;

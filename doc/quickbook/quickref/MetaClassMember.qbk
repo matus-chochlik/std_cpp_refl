@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaClassMember MetaClassMember]
+[import MetaClassMember.hpp]
+
+[concept MetaClassMember] is  a __MetaScoped reflecting class member.
+
+[reflexpr_MetaClassMember]
+
+[endsect]

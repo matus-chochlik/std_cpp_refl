@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaType MetaType]
+[import MetaType.hpp]
+
+[concept MetaType] is  a __MetaNamed and  a __MetaScoped reflecting a type.
+
+[reflexpr_MetaType]
+
+[endsect]

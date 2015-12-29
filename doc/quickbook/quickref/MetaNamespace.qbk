@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaNamespace MetaNamespace]
+[import MetaNamespace.hpp]
+
+[concept MetaNamespace] is  a __MetaNamed,  a __MetaScope and  a __MetaScoped reflecting a namespace.
+
+[reflexpr_MetaNamespace]
+
+[endsect]

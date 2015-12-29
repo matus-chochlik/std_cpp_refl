@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaTypeAlias MetaTypeAlias]
+[import MetaTypeAlias.hpp]
+
+[concept MetaTypeAlias] is  a __MetaType and  a __MetaAlias reflecting a type alias or typedef.
+
+[reflexpr_MetaTypeAlias]
+
+[endsect]

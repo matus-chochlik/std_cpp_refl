@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaobjectSequence MetaobjectSequence]
+[import MetaobjectSequence.hpp]
+
+[concept MetaobjectSequence] is  a __Metaobject an ordered sequence of metaobjects..
+
+[reflexpr_MetaobjectSequence]
+
+[endsect]

@@ -13,7 +13,10 @@
 	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
 
-	<metaobject name="Metaobject"/>
+	<metaobject name="Metaobject"
+		is_a="a concept modelled by stateless anonymous types generated
+by the compiler which allow access to metadata reflecting specific program features"
+	/>
 
 	<operation name="get_category" result="MetaobjectCategory">
 		<argument type="Metaobject"/>
@@ -37,7 +40,7 @@
 	<trait name="is_class_member" indicates="MetaClassMember"/>
 
 	<operation name="source_file"
-		brief="Source file path of the declaration of the $(reflected)."
+		brief="Source file path of the declaration of $(reflected) reflected by this $(operand)."
 		result="StringConstant"
 	>
 		<group name="SourceInfo"/>
@@ -50,7 +53,7 @@
 	<operation name="source_line"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="Source file line of the declaration of the reflected $(reflected)."
+		brief="Source file line of the declaration of $(reflected) reflected by this $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
@@ -62,7 +65,7 @@
 	<operation name="source_column"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="Source file column of the declaration of the reflected $(reflected)."
+		brief="Source file column of the declaration of $(reflected) reflected by this $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
@@ -73,6 +76,7 @@
 
 	<metaobject name="MetaobjectSequence"
 		label="Metaobject\nSequence"
+		is_a="an ordered sequence of metaobjects."
 	>
 		<generalization name="Metaobject"/>
 	</metaobject>
@@ -91,7 +95,7 @@
 	</operation>
 
 	<metaobject name="MetaSpecifier"
-		reflects="specifier"
+		reflects="a specifier"
 	>
 		<generalization name="Metaobject"/>
 	</metaobject>
@@ -104,7 +108,7 @@
 	</operation>
 
 	<metaobject name="MetaNamed"
-		reflects="named declaration"
+		reflects="a named declaration"
 	>
 		<generalization name="Metaobject"/>
 	</metaobject>
@@ -127,7 +131,7 @@
 	</operation>
 
 	<metaobject name="MetaScoped"
-		reflects="scoped declaration"
+		reflects="a scoped declaration"
 	>
 		<generalization name="Metaobject"/>
 	</metaobject>
@@ -137,14 +141,14 @@
 	</operation>
 
 	<metaobject name="MetaScope"
-		reflects="scope"
+		reflects="a scope"
 	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScoped" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
-		reflects="alias"
+		reflects="a type or namespace alias"
 	>
 		<generalization name="MetaNamed"/>
 	</metaobject>
@@ -154,7 +158,7 @@
 	</operation>
 
 	<metaobject name="MetaGlobalScope"
-		reflects="global scope"
+		reflects="the global scope"
 		label="Meta\nGlobal\nScope"
 	>
 		<generalization name="MetaNamed"/>
@@ -162,7 +166,7 @@
 	</metaobject>
 
 	<metaobject name="MetaNamespace"
-		reflects="namespace"
+		reflects="a namespace"
 	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScope"/>
@@ -170,7 +174,7 @@
 	</metaobject>
 
 	<metaobject name="MetaNamespaceAlias"
-		reflects="namespace alias"
+		reflects="a namespace alias"
 		label="Meta\nNamespace\nAlias"
 	>
 		<generalization name="MetaNamespace"/>
@@ -178,7 +182,7 @@
 	</metaobject>
 
 	<metaobject name="MetaType"
-		reflects="type"
+		reflects="a type"
 	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaScoped"/>
@@ -188,7 +192,10 @@
 		<argument type="MetaType"/>
 	</operation>
 
-	<metaobject name="MetaTypeAlias" label="MetaType\nAlias">
+	<metaobject name="MetaTypeAlias"
+		label="MetaType\nAlias"
+		reflects="a type alias or typedef"
+	>
 		<generalization name="MetaType"/>
 		<generalization name="MetaAlias"/>
 	</metaobject>
@@ -197,7 +204,9 @@
 		<argument type="MetaTypeAlias"/>
 	</operation>
 
-	<metaobject name="MetaClass">
+	<metaobject name="MetaClass"
+		reflects="a class"
+	>
 		<generalization name="MetaType"/>
 		<generalization name="MetaScope"/>
 	</metaobject>
@@ -207,14 +216,14 @@
 	</operation>
 
 	<metaobject name="MetaEnum"
-		reflects="enumeration"
+		reflects="an enumeration"
 	>
 		<generalization name="MetaType"/>
 		<generalization name="MetaScope" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaVariable"
-		reflects="variable"
+		reflects="a variable"
 	>
 		<generalization name="MetaNamed"/>
 		<generalization name="MetaTyped"/>
