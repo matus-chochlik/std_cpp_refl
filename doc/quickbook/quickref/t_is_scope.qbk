@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_scope is_scope]
+[import t_is_scope.hpp]
+
+The [^is_scope] trait indicates that
+the tested metaobject is a [concept MetaScope].
+
+[meta_is_scope]
+
+[endsect]

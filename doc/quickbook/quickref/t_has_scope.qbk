@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:has_scope has_scope]
+[import t_has_scope.hpp]
+
+The [^has_scope] trait indicates that
+the tested metaobject is a [concept MetaScoped].
+
+[meta_has_scope]
+
+[endsect]

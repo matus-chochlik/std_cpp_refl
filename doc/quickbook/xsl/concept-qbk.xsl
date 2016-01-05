@@ -13,7 +13,7 @@
 <xsl:for-each select="metaobject[@name=$metaobject]">
 
 [section:<xsl:value-of select="@name"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>]
-[import <xsl:value-of select="@name"/>.hpp]
+[import c_<xsl:value-of select="@name"/>.hpp]
 
 [concept <xsl:value-of select="@name"/><xsl:text>] is </xsl:text>
 

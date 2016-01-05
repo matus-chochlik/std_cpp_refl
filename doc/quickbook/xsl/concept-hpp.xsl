@@ -65,7 +65,7 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:value-of select="$metaobject"/>&
 	typedef bool value_type;
 	static constexpr const bool value = true;
 
-	typedef __integral_constant&lt;value_type, value&gt; type;
+	typedef __integral_constant&lt;bool, value&gt; type;
 
 	operator value_type (void) const noexcept;
 	value_type operator(void) const noexcept;

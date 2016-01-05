@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_namespace is_namespace]
+[import t_is_namespace.hpp]
+
+The [^is_namespace] trait indicates that
+the tested metaobject is a [concept MetaNamespace].
+
+[meta_is_namespace]
+
+[endsect]

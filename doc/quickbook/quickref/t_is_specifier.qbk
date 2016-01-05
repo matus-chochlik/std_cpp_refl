@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_specifier is_specifier]
+[import t_is_specifier.hpp]
+
+The [^is_specifier] trait indicates that
+the tested metaobject is a [concept MetaSpecifier].
+
+[meta_is_specifier]
+
+[endsect]

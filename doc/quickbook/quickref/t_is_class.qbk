@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_class is_class]
+[import t_is_class.hpp]
+
+The [^is_class] trait indicates that
+the tested metaobject is a [concept MetaClass].
+
+[meta_is_class]
+
+[endsect]

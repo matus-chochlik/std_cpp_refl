@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_sequence is_sequence]
+[import t_is_sequence.hpp]
+
+The [^is_sequence] trait indicates that
+the tested metaobject is a [concept MetaobjectSequence].
+
+[meta_is_sequence]
+
+[endsect]

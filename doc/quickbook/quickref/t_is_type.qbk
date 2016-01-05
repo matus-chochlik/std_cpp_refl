@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_type is_type]
+[import t_is_type.hpp]
+
+The [^is_type] trait indicates that
+the tested metaobject is a [concept MetaType].
+
+[meta_is_type]
+
+[endsect]

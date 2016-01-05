@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_alias is_alias]
+[import t_is_alias.hpp]
+
+The [^is_alias] trait indicates that
+the tested metaobject is a [concept MetaAlias].
+
+[meta_is_alias]
+
+[endsect]

@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_class_member is_class_member]
+[import t_is_class_member.hpp]
+
+The [^is_class_member] trait indicates that
+the tested metaobject is a [concept MetaClassMember].
+
+[meta_is_class_member]
+
+[endsect]

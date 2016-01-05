@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaClass MetaClass]
+[import c_MetaClass.hpp]
+
+[concept MetaClass] is  a __MetaType and  a __MetaScope reflecting a class.
+
+[reflexpr_MetaClass]
+
+[endsect]

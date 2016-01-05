@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaEnum MetaEnum]
+[import c_MetaEnum.hpp]
+
+[concept MetaEnum] is  a __MetaType and possibly a __MetaScope reflecting an enumeration.
+
+[reflexpr_MetaEnum]
+
+[endsect]

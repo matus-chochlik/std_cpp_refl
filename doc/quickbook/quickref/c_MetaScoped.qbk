@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaScoped MetaScoped]
+[import c_MetaScoped.hpp]
+
+[concept MetaScoped] is  a __Metaobject reflecting a scoped declaration.
+
+[reflexpr_MetaScoped]
+
+[endsect]

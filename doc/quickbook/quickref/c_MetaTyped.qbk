@@ -1,0 +1,12 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaTyped MetaTyped]
+[import c_MetaTyped.hpp]
+
+[concept MetaTyped] is  a __Metaobject
+
+[reflexpr_MetaTyped]
+
+[endsect]

@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:has_name has_name]
+[import t_has_name.hpp]
+
+The [^has_name] trait indicates that
+the tested metaobject is a [concept MetaNamed].
+
+[meta_has_name]
+
+[endsect]
