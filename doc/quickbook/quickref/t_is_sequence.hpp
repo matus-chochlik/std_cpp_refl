@@ -14,7 +14,7 @@ struct is_sequence
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaobjectSequence]
+	[^true] if [^T] is a __MetaobjectSequence
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_sequence_t = typename is_sequence<T>::type;
 
 template <typename T>
 constexpr bool is_sequence_v = is_sequence<T>::value;
-
 
 
 __namespace_meta_end

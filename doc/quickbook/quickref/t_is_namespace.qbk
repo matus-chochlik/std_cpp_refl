@@ -6,7 +6,7 @@
 [import t_is_namespace.hpp]
 
 The [^is_namespace] trait indicates that
-the tested metaobject is a [concept MetaNamespace].
+the tested metaobject is a __MetaNamespace.
 
 [meta_is_namespace]
 

@@ -62,13 +62,7 @@ struct __is_global_scope<MetaGlobalScope>
 };
 
 template <>
-struct __get_category<MetaGlobalScope>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaGlobalScope>
+struct source_file<MetaGlobalScope>
 {
 	
 	typedef const char value_type[N+1];
@@ -85,7 +79,7 @@ struct __source_file<MetaGlobalScope>
 };
 
 template <>
-struct __source_line<MetaGlobalScope>
+struct source_line<MetaGlobalScope>
 {
 	
 	typedef unsigned value_type;
@@ -101,7 +95,7 @@ struct __source_line<MetaGlobalScope>
 };
 
 template <>
-struct __source_column<MetaGlobalScope>
+struct source_column<MetaGlobalScope>
 {
 	
 	typedef unsigned value_type;
@@ -117,7 +111,7 @@ struct __source_column<MetaGlobalScope>
 };
 
 template <>
-struct __get_name<MetaGlobalScope>
+struct get_name<MetaGlobalScope>
 {
 	
 	typedef const char value_type[N+1];
@@ -134,7 +128,7 @@ struct __get_name<MetaGlobalScope>
 };
 
 template <>
-struct __get_scope<MetaGlobalScope>
+struct get_scope<MetaGlobalScope>
 {
 	 typedef __MetaScope type;
 };

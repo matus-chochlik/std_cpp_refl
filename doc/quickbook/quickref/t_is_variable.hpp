@@ -14,7 +14,7 @@ struct is_variable
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaVariable]
+	[^true] if [^T] is a __MetaVariable
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_variable_t = typename is_variable<T>::type;
 
 template <typename T>
 constexpr bool is_variable_v = is_variable<T>::value;
-
 
 
 __namespace_meta_end

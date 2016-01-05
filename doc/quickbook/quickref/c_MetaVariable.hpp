@@ -62,13 +62,7 @@ struct __is_variable<MetaVariable>
 };
 
 template <>
-struct __get_category<MetaVariable>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaVariable>
+struct source_file<MetaVariable>
 {
 	
 	typedef const char value_type[N+1];
@@ -85,7 +79,7 @@ struct __source_file<MetaVariable>
 };
 
 template <>
-struct __source_line<MetaVariable>
+struct source_line<MetaVariable>
 {
 	
 	typedef unsigned value_type;
@@ -101,7 +95,7 @@ struct __source_line<MetaVariable>
 };
 
 template <>
-struct __source_column<MetaVariable>
+struct source_column<MetaVariable>
 {
 	
 	typedef unsigned value_type;
@@ -117,7 +111,7 @@ struct __source_column<MetaVariable>
 };
 
 template <>
-struct __get_name<MetaVariable>
+struct get_name<MetaVariable>
 {
 	
 	typedef const char value_type[N+1];
@@ -134,13 +128,13 @@ struct __get_name<MetaVariable>
 };
 
 template <>
-struct __get_type<MetaVariable>
+struct get_type<MetaVariable>
 {
 	 typedef __MetaType type;
 };
 
 template <>
-struct __get_scope<MetaVariable>
+struct get_scope<MetaVariable>
 {
 	 typedef __MetaScope type;
 };

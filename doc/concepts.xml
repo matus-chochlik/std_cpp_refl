@@ -18,9 +18,11 @@
 by the compiler which allow access to metadata reflecting specific program features"
 	/>
 
+	<unused>
 	<operation name="get_category" result="MetaobjectCategory">
 		<argument type="Metaobject"/>
 	</operation>
+	</unused>
 
 	<trait name="is_sequence" indicates="MetaobjectSequence" uses="get_category"/>
 	<trait name="is_specifier" indicates="MetaSpecifier" uses="get_category"/>
@@ -91,7 +93,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_element" result="Metaobject">
 		<argument type="MetaobjectSequence"/>
-		<argument type="IntegralConstant" name="Index"/>
+		<argument type="size_t" name="Index"/>
 	</operation>
 
 	<metaobject name="MetaSpecifier"

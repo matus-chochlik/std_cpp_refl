@@ -14,7 +14,7 @@ struct is_class
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaClass]
+	[^true] if [^T] is a __MetaClass
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_class_t = typename is_class<T>::type;
 
 template <typename T>
 constexpr bool is_class_v = is_class<T>::value;
-
 
 
 __namespace_meta_end

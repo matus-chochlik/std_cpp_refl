@@ -34,13 +34,7 @@ struct __is_alias<MetaAlias>
 };
 
 template <>
-struct __get_category<MetaAlias>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaAlias>
+struct source_file<MetaAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -57,7 +51,7 @@ struct __source_file<MetaAlias>
 };
 
 template <>
-struct __source_line<MetaAlias>
+struct source_line<MetaAlias>
 {
 	
 	typedef unsigned value_type;
@@ -73,7 +67,7 @@ struct __source_line<MetaAlias>
 };
 
 template <>
-struct __source_column<MetaAlias>
+struct source_column<MetaAlias>
 {
 	
 	typedef unsigned value_type;
@@ -89,7 +83,7 @@ struct __source_column<MetaAlias>
 };
 
 template <>
-struct __get_name<MetaAlias>
+struct get_name<MetaAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -106,7 +100,7 @@ struct __get_name<MetaAlias>
 };
 
 template <>
-struct __get_aliased<MetaAlias>
+struct get_aliased<MetaAlias>
 {
 	 typedef __MetaNamed type;
 };

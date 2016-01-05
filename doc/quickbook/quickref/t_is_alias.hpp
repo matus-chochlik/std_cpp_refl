@@ -14,7 +14,7 @@ struct is_alias
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaAlias]
+	[^true] if [^T] is a __MetaAlias
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_alias_t = typename is_alias<T>::type;
 
 template <typename T>
 constexpr bool is_alias_v = is_alias<T>::value;
-
 
 
 __namespace_meta_end

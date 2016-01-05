@@ -14,7 +14,7 @@ struct is_global_scope
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaGlobalScope]
+	[^true] if [^T] is a __MetaGlobalScope
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_global_scope_t = typename is_global_scope<T>::type;
 
 template <typename T>
 constexpr bool is_global_scope_v = is_global_scope<T>::value;
-
 
 
 __namespace_meta_end

@@ -14,7 +14,7 @@ struct is_enum
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaEnum]
+	[^true] if [^T] is a __MetaEnum
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_enum_t = typename is_enum<T>::type;
 
 template <typename T>
 constexpr bool is_enum_v = is_enum<T>::value;
-
 
 
 __namespace_meta_end

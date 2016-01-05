@@ -6,7 +6,7 @@
 [import t_is_enum.hpp]
 
 The [^is_enum] trait indicates that
-the tested metaobject is a [concept MetaEnum].
+the tested metaobject is a __MetaEnum.
 
 [meta_is_enum]
 

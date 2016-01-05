@@ -14,7 +14,7 @@ struct is_class_member
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaClassMember]
+	[^true] if [^T] is a __MetaClassMember
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_class_member_t = typename is_class_member<T>::type;
 
 template <typename T>
 constexpr bool is_class_member_v = is_class_member<T>::value;
-
 
 
 __namespace_meta_end

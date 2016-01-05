@@ -48,13 +48,7 @@ struct __is_scope<MetaScope>
 };
 
 template <>
-struct __get_category<MetaScope>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaScope>
+struct source_file<MetaScope>
 {
 	
 	typedef const char value_type[N+1];
@@ -71,7 +65,7 @@ struct __source_file<MetaScope>
 };
 
 template <>
-struct __source_line<MetaScope>
+struct source_line<MetaScope>
 {
 	
 	typedef unsigned value_type;
@@ -87,7 +81,7 @@ struct __source_line<MetaScope>
 };
 
 template <>
-struct __source_column<MetaScope>
+struct source_column<MetaScope>
 {
 	
 	typedef unsigned value_type;
@@ -103,7 +97,7 @@ struct __source_column<MetaScope>
 };
 
 template <>
-struct __get_name<MetaScope>
+struct get_name<MetaScope>
 {
 	
 	typedef const char value_type[N+1];
@@ -120,7 +114,7 @@ struct __get_name<MetaScope>
 };
 
 template <>
-struct __get_scope<MetaScope>
+struct get_scope<MetaScope>
 {
 	 typedef __MetaScope type;
 };

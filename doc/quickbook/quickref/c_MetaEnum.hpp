@@ -76,13 +76,7 @@ struct __is_enum<MetaEnum>
 };
 
 template <>
-struct __get_category<MetaEnum>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaEnum>
+struct source_file<MetaEnum>
 {
 	
 	typedef const char value_type[N+1];
@@ -99,7 +93,7 @@ struct __source_file<MetaEnum>
 };
 
 template <>
-struct __source_line<MetaEnum>
+struct source_line<MetaEnum>
 {
 	
 	typedef unsigned value_type;
@@ -115,7 +109,7 @@ struct __source_line<MetaEnum>
 };
 
 template <>
-struct __source_column<MetaEnum>
+struct source_column<MetaEnum>
 {
 	
 	typedef unsigned value_type;
@@ -131,7 +125,7 @@ struct __source_column<MetaEnum>
 };
 
 template <>
-struct __get_name<MetaEnum>
+struct get_name<MetaEnum>
 {
 	
 	typedef const char value_type[N+1];
@@ -148,13 +142,13 @@ struct __get_name<MetaEnum>
 };
 
 template <>
-struct __get_scope<MetaEnum>
+struct get_scope<MetaEnum>
 {
 	 typedef __MetaScope type;
 };
 
 template <>
-struct __get_reflected_type<MetaEnum>
+struct get_reflected_type<MetaEnum>
 {
 	 typedef __Type type;
 };

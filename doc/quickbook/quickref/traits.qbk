@@ -2,7 +2,7 @@
 
 [section:traits Traits and categorization]
 
-[section:is_metaobject [^is_metaobject]]
+[section:is_metaobject is_metaobject]
 
 In order to distinguish between regular types and metaobjects generated
 by the compiler, the [^__is_metaobject] trait should
@@ -15,6 +15,7 @@ be added to the [^std] namespace as one of the type traits.
 
 The rest of the trait templates should be nested inside of the __meta namespace.
 
+[/TODO
 [section:get_category get_category]
 
 The [^get_category] template returns one of the __MetaobjectCategory tags
@@ -33,7 +34,8 @@ convenient use.
 [reflexpr_has_category_4]
 
 [endsect]
+]
 
-[include traits_incl.qbk]
+[include traits-incl.qbk]
 [endsect]
 

@@ -6,7 +6,7 @@
 [import t_is_variable.hpp]
 
 The [^is_variable] trait indicates that
-the tested metaobject is a [concept MetaVariable].
+the tested metaobject is a __MetaVariable.
 
 [meta_is_variable]
 

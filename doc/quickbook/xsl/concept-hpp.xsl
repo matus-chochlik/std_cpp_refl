@@ -78,11 +78,18 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:value-of select="$metaobject"/>&
 <xsl:param name="operation_mo"/>
 
 <xsl:for-each select="/concepts/operation[argument[@type=$operation_mo]]">
-template &lt;&gt;
-struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
+template &lt;<xsl:for-each select="argument">
+<xsl:variable name="arg_type" select="@type"/>
+	<xsl:if test="not(/concepts/metaobject[@name=$arg_type])">
+	<xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>
+	</xsl:if>
+</xsl:for-each>&gt;
+struct <xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
+<xsl:variable name="arg_type" select="@type"/>
 <xsl:if test="position() != 1">, </xsl:if>
 <xsl:choose>
 <xsl:when test="@type = $operation_mo"><xsl:value-of select="$metaobject"/></xsl:when>
+<xsl:when test="not(/concepts/metaobject[@name=$arg_type])"><xsl:value-of select="@name"/></xsl:when>
 <xsl:otherwise>__<xsl:value-of select="@type"/></xsl:otherwise>
 </xsl:choose>
 </xsl:for-each>&gt;

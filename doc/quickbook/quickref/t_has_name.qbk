@@ -6,7 +6,7 @@
 [import t_has_name.hpp]
 
 The [^has_name] trait indicates that
-the tested metaobject is a [concept MetaNamed].
+the tested metaobject is a __MetaNamed.
 
 [meta_has_name]
 

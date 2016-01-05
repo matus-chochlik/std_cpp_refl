@@ -78,13 +78,7 @@ Inherited from __MetaAlias.
 };
 
 template <>
-struct __get_category<MetaNamespaceAlias>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaNamespaceAlias>
+struct source_file<MetaNamespaceAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -101,7 +95,7 @@ struct __source_file<MetaNamespaceAlias>
 };
 
 template <>
-struct __source_line<MetaNamespaceAlias>
+struct source_line<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;
@@ -117,7 +111,7 @@ struct __source_line<MetaNamespaceAlias>
 };
 
 template <>
-struct __source_column<MetaNamespaceAlias>
+struct source_column<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;
@@ -133,7 +127,7 @@ struct __source_column<MetaNamespaceAlias>
 };
 
 template <>
-struct __get_name<MetaNamespaceAlias>
+struct get_name<MetaNamespaceAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -150,13 +144,13 @@ struct __get_name<MetaNamespaceAlias>
 };
 
 template <>
-struct __get_scope<MetaNamespaceAlias>
+struct get_scope<MetaNamespaceAlias>
 {
 	 typedef __MetaScope type;
 };
 
 template <>
-struct __get_aliased<MetaNamespaceAlias>
+struct get_aliased<MetaNamespaceAlias>
 {
 	 typedef __MetaNamed type;
 };

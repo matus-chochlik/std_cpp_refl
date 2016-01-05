@@ -6,7 +6,7 @@
 [import t_is_class_member.hpp]
 
 The [^is_class_member] trait indicates that
-the tested metaobject is a [concept MetaClassMember].
+the tested metaobject is a __MetaClassMember.
 
 [meta_is_class_member]
 

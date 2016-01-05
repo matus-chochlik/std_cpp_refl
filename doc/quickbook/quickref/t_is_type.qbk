@@ -6,7 +6,7 @@
 [import t_is_type.hpp]
 
 The [^is_type] trait indicates that
-the tested metaobject is a [concept MetaType].
+the tested metaobject is a __MetaType.
 
 [meta_is_type]
 

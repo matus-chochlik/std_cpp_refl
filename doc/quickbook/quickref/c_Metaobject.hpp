@@ -8,13 +8,7 @@ __namespace_meta_begin
 
 
 template <>
-struct __get_category<Metaobject>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<Metaobject>
+struct source_file<Metaobject>
 {
 	
 	typedef const char value_type[N+1];
@@ -31,7 +25,7 @@ struct __source_file<Metaobject>
 };
 
 template <>
-struct __source_line<Metaobject>
+struct source_line<Metaobject>
 {
 	
 	typedef unsigned value_type;
@@ -47,7 +41,7 @@ struct __source_line<Metaobject>
 };
 
 template <>
-struct __source_column<Metaobject>
+struct source_column<Metaobject>
 {
 	
 	typedef unsigned value_type;

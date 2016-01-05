@@ -20,13 +20,7 @@ struct __is_sequence<MetaobjectSequence>
 };
 
 template <>
-struct __get_category<MetaobjectSequence>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaobjectSequence>
+struct source_file<MetaobjectSequence>
 {
 	
 	typedef const char value_type[N+1];
@@ -43,7 +37,7 @@ struct __source_file<MetaobjectSequence>
 };
 
 template <>
-struct __source_line<MetaobjectSequence>
+struct source_line<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;
@@ -59,7 +53,7 @@ struct __source_line<MetaobjectSequence>
 };
 
 template <>
-struct __source_column<MetaobjectSequence>
+struct source_column<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;
@@ -75,7 +69,7 @@ struct __source_column<MetaobjectSequence>
 };
 
 template <>
-struct __get_size<MetaobjectSequence>
+struct get_size<MetaobjectSequence>
 {
 	
 	typedef size_t value_type;
@@ -90,8 +84,8 @@ struct __get_size<MetaobjectSequence>
 	
 };
 
-template <>
-struct __get_element<MetaobjectSequence, __IntegralConstant>
+template <size_t Index>
+struct get_element<MetaobjectSequence, Index>
 {
 	 typedef __Metaobject type;
 };

@@ -14,7 +14,7 @@ struct is_namespace
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaNamespace]
+	[^true] if [^T] is a __MetaNamespace
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_namespace_t = typename is_namespace<T>::type;
 
 template <typename T>
 constexpr bool is_namespace_v = is_namespace<T>::value;
-
 
 
 __namespace_meta_end

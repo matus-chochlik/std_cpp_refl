@@ -76,13 +76,7 @@ struct __is_class<MetaClass>
 };
 
 template <>
-struct __get_category<MetaClass>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaClass>
+struct source_file<MetaClass>
 {
 	
 	typedef const char value_type[N+1];
@@ -99,7 +93,7 @@ struct __source_file<MetaClass>
 };
 
 template <>
-struct __source_line<MetaClass>
+struct source_line<MetaClass>
 {
 	
 	typedef unsigned value_type;
@@ -115,7 +109,7 @@ struct __source_line<MetaClass>
 };
 
 template <>
-struct __source_column<MetaClass>
+struct source_column<MetaClass>
 {
 	
 	typedef unsigned value_type;
@@ -131,7 +125,7 @@ struct __source_column<MetaClass>
 };
 
 template <>
-struct __get_name<MetaClass>
+struct get_name<MetaClass>
 {
 	
 	typedef const char value_type[N+1];
@@ -148,19 +142,19 @@ struct __get_name<MetaClass>
 };
 
 template <>
-struct __get_scope<MetaClass>
+struct get_scope<MetaClass>
 {
 	 typedef __MetaScope type;
 };
 
 template <>
-struct __get_reflected_type<MetaClass>
+struct get_reflected_type<MetaClass>
 {
 	 typedef __Type type;
 };
 
 template <>
-struct __get_data_members<MetaClass>
+struct get_data_members<MetaClass>
 {
 	 typedef __MetaobjectSequence type;
 };

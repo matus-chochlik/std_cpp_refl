@@ -34,13 +34,7 @@ struct __is_class_member<MetaClassMember>
 };
 
 template <>
-struct __get_category<MetaClassMember>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaClassMember>
+struct source_file<MetaClassMember>
 {
 	
 	typedef const char value_type[N+1];
@@ -57,7 +51,7 @@ struct __source_file<MetaClassMember>
 };
 
 template <>
-struct __source_line<MetaClassMember>
+struct source_line<MetaClassMember>
 {
 	
 	typedef unsigned value_type;
@@ -73,7 +67,7 @@ struct __source_line<MetaClassMember>
 };
 
 template <>
-struct __source_column<MetaClassMember>
+struct source_column<MetaClassMember>
 {
 	
 	typedef unsigned value_type;
@@ -89,7 +83,7 @@ struct __source_column<MetaClassMember>
 };
 
 template <>
-struct __get_scope<MetaClassMember>
+struct get_scope<MetaClassMember>
 {
 	 typedef __MetaScope type;
 };

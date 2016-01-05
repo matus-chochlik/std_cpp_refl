@@ -16,7 +16,7 @@
 [import t_<xsl:value-of select="@name"/>.hpp]
 
 The [^<xsl:value-of select="@name"/><xsl:text>] trait indicates that</xsl:text>
-the tested metaobject is a [concept <xsl:value-of select="@indicates"/>].
+the tested metaobject is a __<xsl:value-of select="@indicates"/>.
 
 [meta_<xsl:value-of select="@name"/>]
 

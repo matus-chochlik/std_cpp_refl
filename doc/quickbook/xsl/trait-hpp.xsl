@@ -24,7 +24,7 @@ struct <xsl:value-of select="@name"/>
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*&lt;
-	[^true] if [^X] is a [concept <xsl:value-of select="@indicates"/>]
+	[^true] if [^T] is a __<xsl:value-of select="@indicates"/>
 	[^false] otherwise.
 	&gt;*/;
 
@@ -39,7 +39,6 @@ using <xsl:value-of select="@name"/>_t = typename <xsl:value-of select="@name"/>
 
 template &lt;typename T&gt;
 constexpr bool <xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>&lt;T&gt;::value;
-
 </xsl:for-each>
 
 __namespace_meta_end

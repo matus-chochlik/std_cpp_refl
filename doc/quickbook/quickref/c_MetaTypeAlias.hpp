@@ -64,13 +64,7 @@ Inherited from __MetaAlias.
 };
 
 template <>
-struct __get_category<MetaTypeAlias>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaTypeAlias>
+struct source_file<MetaTypeAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -87,7 +81,7 @@ struct __source_file<MetaTypeAlias>
 };
 
 template <>
-struct __source_line<MetaTypeAlias>
+struct source_line<MetaTypeAlias>
 {
 	
 	typedef unsigned value_type;
@@ -103,7 +97,7 @@ struct __source_line<MetaTypeAlias>
 };
 
 template <>
-struct __source_column<MetaTypeAlias>
+struct source_column<MetaTypeAlias>
 {
 	
 	typedef unsigned value_type;
@@ -119,7 +113,7 @@ struct __source_column<MetaTypeAlias>
 };
 
 template <>
-struct __get_name<MetaTypeAlias>
+struct get_name<MetaTypeAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -136,25 +130,25 @@ struct __get_name<MetaTypeAlias>
 };
 
 template <>
-struct __get_scope<MetaTypeAlias>
+struct get_scope<MetaTypeAlias>
 {
 	 typedef __MetaScope type;
 };
 
 template <>
-struct __get_reflected_type<MetaTypeAlias>
+struct get_reflected_type<MetaTypeAlias>
 {
 	 typedef __Type type;
 };
 
 template <>
-struct __get_aliased<MetaTypeAlias>
+struct get_aliased<MetaTypeAlias>
 {
 	 typedef __MetaNamed type;
 };
 
 template <>
-struct __get_typedef_type<MetaTypeAlias>
+struct get_typedef_type<MetaTypeAlias>
 {
 	 typedef __MetaType type;
 };

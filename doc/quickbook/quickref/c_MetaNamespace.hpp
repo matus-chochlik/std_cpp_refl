@@ -62,13 +62,7 @@ struct __is_namespace<MetaNamespace>
 };
 
 template <>
-struct __get_category<MetaNamespace>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaNamespace>
+struct source_file<MetaNamespace>
 {
 	
 	typedef const char value_type[N+1];
@@ -85,7 +79,7 @@ struct __source_file<MetaNamespace>
 };
 
 template <>
-struct __source_line<MetaNamespace>
+struct source_line<MetaNamespace>
 {
 	
 	typedef unsigned value_type;
@@ -101,7 +95,7 @@ struct __source_line<MetaNamespace>
 };
 
 template <>
-struct __source_column<MetaNamespace>
+struct source_column<MetaNamespace>
 {
 	
 	typedef unsigned value_type;
@@ -117,7 +111,7 @@ struct __source_column<MetaNamespace>
 };
 
 template <>
-struct __get_name<MetaNamespace>
+struct get_name<MetaNamespace>
 {
 	
 	typedef const char value_type[N+1];
@@ -134,7 +128,7 @@ struct __get_name<MetaNamespace>
 };
 
 template <>
-struct __get_scope<MetaNamespace>
+struct get_scope<MetaNamespace>
 {
 	 typedef __MetaScope type;
 };

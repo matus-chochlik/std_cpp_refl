@@ -23,18 +23,25 @@ _trait_hpps: $(TRAIT_HPPS)
 
 ./html/index.html: \
 	index.qbk \
-	./quickref/concepts_incl.qbk \
-	./quickref/traits_incl.qbk \
+	./quickref/concepts-incl.qbk \
+	./index/concepts-incl.qbk \
+	./quickref/traits-incl.qbk \
+	./index/traits-incl.qbk \
 	_concept_qbks _trait_qbks | html
 	$(BJAM)
 
 ./html/%.css: %.css | html
 	cp $< $@
 
-./quickref/concepts_incl.qbk: | $(CONCEPT_QBKS)
-./quickref/traits_incl.qbk: | $(TRAIT_QBKS)
+./quickref/concepts-incl.qbk: | $(CONCEPT_QBKS)
+./quickref/traits-incl.qbk: | $(TRAIT_QBKS)
+./index/traits-incl.qbk: | $(TRAIT_QBKS)
 
-./quickref/%_incl.qbk: ./xsl/%-qbk.xsl ../concepts.xml
+./index/%-incl.qbk: ./xsl/%-index-qbk.xsl ../concepts.xml
+	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
+	git add $@
+
+./quickref/%-incl.qbk: ./xsl/%-qbk.xsl ../concepts.xml
 	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
 	git add $@
 

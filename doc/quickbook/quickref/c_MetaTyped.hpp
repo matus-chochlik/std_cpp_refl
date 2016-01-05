@@ -20,13 +20,7 @@ struct __has_type<MetaTyped>
 };
 
 template <>
-struct __get_category<MetaTyped>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaTyped>
+struct source_file<MetaTyped>
 {
 	
 	typedef const char value_type[N+1];
@@ -43,7 +37,7 @@ struct __source_file<MetaTyped>
 };
 
 template <>
-struct __source_line<MetaTyped>
+struct source_line<MetaTyped>
 {
 	
 	typedef unsigned value_type;
@@ -59,7 +53,7 @@ struct __source_line<MetaTyped>
 };
 
 template <>
-struct __source_column<MetaTyped>
+struct source_column<MetaTyped>
 {
 	
 	typedef unsigned value_type;
@@ -75,7 +69,7 @@ struct __source_column<MetaTyped>
 };
 
 template <>
-struct __get_type<MetaTyped>
+struct get_type<MetaTyped>
 {
 	 typedef __MetaType type;
 };

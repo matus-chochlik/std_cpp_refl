@@ -14,7 +14,7 @@ struct is_specifier
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaSpecifier]
+	[^true] if [^T] is a __MetaSpecifier
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using is_specifier_t = typename is_specifier<T>::type;
 
 template <typename T>
 constexpr bool is_specifier_v = is_specifier<T>::value;
-
 
 
 __namespace_meta_end

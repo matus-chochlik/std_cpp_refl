@@ -20,13 +20,7 @@ struct __is_specifier<MetaSpecifier>
 };
 
 template <>
-struct __get_category<MetaSpecifier>
-{
-	 typedef __MetaobjectCategory type;
-};
-
-template <>
-struct __source_file<MetaSpecifier>
+struct source_file<MetaSpecifier>
 {
 	
 	typedef const char value_type[N+1];
@@ -43,7 +37,7 @@ struct __source_file<MetaSpecifier>
 };
 
 template <>
-struct __source_line<MetaSpecifier>
+struct source_line<MetaSpecifier>
 {
 	
 	typedef unsigned value_type;
@@ -59,7 +53,7 @@ struct __source_line<MetaSpecifier>
 };
 
 template <>
-struct __source_column<MetaSpecifier>
+struct source_column<MetaSpecifier>
 {
 	
 	typedef unsigned value_type;
@@ -75,7 +69,7 @@ struct __source_column<MetaSpecifier>
 };
 
 template <>
-struct __get_keyword<MetaSpecifier>
+struct get_keyword<MetaSpecifier>
 {
 	
 	typedef const char value_type[N+1];

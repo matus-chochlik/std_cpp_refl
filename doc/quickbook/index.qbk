@@ -15,17 +15,67 @@
 [def __namespace_meta_begin namespace __meta {]
 [def __namespace_meta_end } // namespace meta]
 
+[/Traits]
 [def __is_metaobject [link reflexpr.quickref.traits.is_metaobject [^is_metaobject]]]
+[def __is_metaobject_t [link reflexpr.quickref.traits.is_metaobject [^is_metaobject_t]]]
 [def __is_metaobject_v [link reflexpr.quickref.traits.is_metaobject [^is_metaobject_v]]]
 
+[def __is_sequence [link reflexpr.quickref.traits.is_sequence [^is_sequence]]]
+[def __is_sequence_t [link reflexpr.quickref.traits.is_sequence [^is_sequence_t]]]
+[def __is_sequence_v [link reflexpr.quickref.traits.is_sequence [^is_sequence_v]]]
+
+[def __is_specifier [link reflexpr.quickref.traits.is_specifier [^is_specifier]]]
+[def __is_specifier_t [link reflexpr.quickref.traits.is_specifier [^is_specifier_t]]]
+[def __is_specifier_v [link reflexpr.quickref.traits.is_specifier [^is_specifier_v]]]
+
+[def __is_namespace [link reflexpr.quickref.traits.is_namespace [^is_namespace]]]
+[def __is_namespace_t [link reflexpr.quickref.traits.is_namespace [^is_namespace_t]]]
+[def __is_namespace_v [link reflexpr.quickref.traits.is_namespace [^is_namespace_v]]]
+
+[def __is_global_scope [link reflexpr.quickref.traits.is_global_scope [^is_global_scope]]]
+[def __is_global_scope_t [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_t]]]
+[def __is_global_scope_v [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_v]]]
+
+[def __is_type [link reflexpr.quickref.traits.is_type [^is_type]]]
+[def __is_type_t [link reflexpr.quickref.traits.is_type [^is_type_t]]]
+[def __is_type_v [link reflexpr.quickref.traits.is_type [^is_type_v]]]
+
+[def __is_class [link reflexpr.quickref.traits.is_class [^is_class]]]
+[def __is_class_t [link reflexpr.quickref.traits.is_class [^is_class_t]]]
+[def __is_class_v [link reflexpr.quickref.traits.is_class [^is_class_v]]]
+
+[def __is_enum [link reflexpr.quickref.traits.is_enum [^is_enum]]]
+[def __is_enum_t [link reflexpr.quickref.traits.is_enum [^is_enum_t]]]
+[def __is_enum_v [link reflexpr.quickref.traits.is_enum [^is_enum_v]]]
+
+[def __is_variable [link reflexpr.quickref.traits.is_variable [^is_variable]]]
+[def __is_variable_t [link reflexpr.quickref.traits.is_variable [^is_variable_t]]]
+[def __is_variable_v [link reflexpr.quickref.traits.is_variable [^is_variable_v]]]
+
+[def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
+[def __has_name_t [link reflexpr.quickref.traits.has_name [^has_name_t]]]
+[def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
+
+[def __has_type [link reflexpr.quickref.traits.has_type [^has_type]]]
+[def __has_type_t [link reflexpr.quickref.traits.has_type [^has_type_t]]]
+[def __has_type_v [link reflexpr.quickref.traits.has_type [^has_type_v]]]
+
+[def __has_scope [link reflexpr.quickref.traits.has_scope [^has_scope]]]
+[def __has_scope_t [link reflexpr.quickref.traits.has_scope [^has_scope_t]]]
+[def __has_scope_v [link reflexpr.quickref.traits.has_scope [^has_scope_v]]]
+
+[def __is_scope [link reflexpr.quickref.traits.is_scope [^is_scope]]]
+[def __is_scope_t [link reflexpr.quickref.traits.is_scope [^is_scope_t]]]
+[def __is_scope_v [link reflexpr.quickref.traits.is_scope [^is_scope_v]]]
+
+[def __is_alias [link reflexpr.quickref.traits.is_alias [^is_alias]]]
+[/Categorizaton]
 [def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
 [def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
 [def __has_category [link reflexpr.quickref.traits.get_category.has_category [^has_category]]]
 [def __has_category_v [link reflexpr.quickref.traits.get_category.has_category [^has_category_v]]]
 
-[def __get_size [link reflexpr.quickref.metaobject_seq [^get_size]]]
-[def __get_element [link reflexpr.quickref.metaobject_seq [^get_element]]]
-
+[def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]
 [def __namespace_tag [link reflexpr.quickref.tags.metaobject [^namespace_tag]]]
 [def __global_scope_tag [link reflexpr.quickref.tags.metaobject [^global_scope_tag]]]
 [def __type_tag [link reflexpr.quickref.tags.metaobject [^type_tag]]]
@@ -33,11 +83,30 @@
 [def __enum_tag [link reflexpr.quickref.tags.metaobject [^enum_tag]]]
 [def __variable_tag [link reflexpr.quickref.tags.metaobject [^variable_tag]]]
 
+[/Other concepts]
+[def __StringConstant [link reflexpr.quickref.string_constant ['StringConstant]]]
+[/Metaobject concepts]
+[def __Metaobject [link reflexpr.quickref.Metaobject [^Metaobject]]]
+[def __MetaobjectSequence [link reflexpr.quickref.MetaobjectSequence [^MetaobjectSequence]]]
+[def __MetaSpecifier [link reflexpr.quickref.MetaSpecifier [^MetaSpecifier]]]
+[def __MetaNamed [link reflexpr.quickref.MetaNamed [^MetaNamed]]]
+[def __MetaTyped [link reflexpr.quickref.MetaTyped [^MetaTyped]]]
+[def __MetaScoped [link reflexpr.quickref.MetaScoped [^MetaScoped]]]
+[def __MetaScope [link reflexpr.quickref.MetaScope [^MetaScope]]]
+[def __MetaAlias [link reflexpr.quickref.MetaAlias [^MetaAlias]]]
+[def __MetaGlobalScope [link reflexpr.quickref.MetaGlobalScope [^MetaGlobalScope]]]
+[def __MetaNamespace [link reflexpr.quickref.MetaNamespace [^MetaNamespace]]]
+[def __MetaNamespaceAlias [link reflexpr.quickref.MetaNamespaceAlias [^MetaNamespaceAlias]]]
+[def __MetaType [link reflexpr.quickref.MetaType [^MetaType]]]
+[def __MetaTypeAlias [link reflexpr.quickref.MetaTypeAlias [^MetaTypeAlias]]]
+[def __MetaClass [link reflexpr.quickref.MetaClass [^MetaClass]]]
+[def __MetaEnum [link reflexpr.quickref.MetaEnum [^MetaEnum]]]
+[def __MetaVariable [link reflexpr.quickref.MetaVariable [^MetaVariable]]]
+[def __MetaClassMember [link reflexpr.quickref.MetaClassMember [^MetaClassMember]]]
+
+[/The reflection operator]
 [def __reflexpr [link reflexpr.quickref.reflexpr [^reflexpr]]]
 
-[def __StringConstant [link reflexpr.quickref.string_constant ['StringConstant]]]
-
-[def __MetaobjectCategory [link reflexpr.quickref.tags.metaobject ['MetaobjectCategory]]]
 
 [include quickref.qbk]
 

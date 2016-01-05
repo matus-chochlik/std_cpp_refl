@@ -14,7 +14,7 @@ struct has_type
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaTyped]
+	[^true] if [^T] is a __MetaTyped
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using has_type_t = typename has_type<T>::type;
 
 template <typename T>
 constexpr bool has_type_v = has_type<T>::value;
-
 
 
 __namespace_meta_end

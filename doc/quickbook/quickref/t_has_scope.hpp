@@ -14,7 +14,7 @@ struct has_scope
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^X] is a [concept MetaScoped]
+	[^true] if [^T] is a __MetaScoped
 	[^false] otherwise.
 	>*/;
 
@@ -29,7 +29,6 @@ using has_scope_t = typename has_scope<T>::type;
 
 template <typename T>
 constexpr bool has_scope_v = has_scope<T>::value;
-
 
 
 __namespace_meta_end
