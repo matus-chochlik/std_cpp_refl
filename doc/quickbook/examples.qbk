@@ -1,0 +1,15 @@
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[chapter Examples of usage
+	[quickbook 1.6]
+	[id reflexpr.examples]
+]
+
+[section:intro Introduction]
+
+This section contains several examples (cross-referenced with the documentation)
+of the usage of the [^__reflexpr] operator and the resulting metaobjects.
+
+[include examples/source_info.qbk]
+
+[endsect]

@@ -5,8 +5,15 @@
 [section:MetaTyped MetaTyped]
 [import c_MetaTyped.hpp]
 
-[concept MetaTyped] is  a __Metaobject
+[concept MetaTyped] is  a __Metaobject reflecting base-level construct with a type.
 
-[reflexpr_MetaTyped]
+[reflexpr_MetaTyped_begin]
+[heading Traits]
+[reflexpr_MetaTyped_inherited_traits]
+[reflexpr_MetaTyped_traits]
+[heading Operations]
+[reflexpr_MetaTyped_inherited_operations]
+[reflexpr_MetaTyped_operations]
+[reflexpr_MetaTyped_end]
 
 [endsect]

@@ -1,0 +1,28 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[include o_source_file.qbk]
+
+[include o_source_line.qbk]
+
+[include o_source_column.qbk]
+
+[include o_get_size.qbk]
+
+[include o_get_element.qbk]
+
+[include o_get_keyword.qbk]
+
+[include o_get_name.qbk]
+
+[include o_get_type.qbk]
+
+[include o_get_scope.qbk]
+
+[include o_get_aliased.qbk]
+
+[include o_get_reflected_type.qbk]
+
+[include o_get_typedef_type.qbk]
+
+[include o_get_data_members.qbk]

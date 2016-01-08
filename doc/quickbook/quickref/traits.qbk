@@ -13,7 +13,8 @@ be added to the [^std] namespace as one of the type traits.
 [reflexpr_is_metaobject]
 [endsect]
 
-The rest of the trait templates should be nested inside of the __meta namespace.
+The rest of the trait templates are applicable only to metaobjects and
+should be nested inside of the __meta namespace.
 
 [/TODO
 [section:get_category get_category]

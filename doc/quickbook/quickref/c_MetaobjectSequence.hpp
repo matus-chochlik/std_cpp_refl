@@ -3,9 +3,13 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaobjectSequence
+//[reflexpr_MetaobjectSequence_begin
 __namespace_meta_begin
+//]
+//[reflexpr_MetaobjectSequence_inherited_traits
 
+//]
+//[reflexpr_MetaobjectSequence_traits
 
 template <>
 struct __is_sequence<MetaobjectSequence>
@@ -19,14 +23,17 @@ struct __is_sequence<MetaobjectSequence>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaobjectSequence_inherited_operations
+
 template <>
-struct source_file<MetaobjectSequence>
+struct __source_file<MetaobjectSequence>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of  reflected by this MetaobjectSequence.
+	Source file path of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
 	typedef __StringConstant type;
@@ -37,12 +44,12 @@ struct source_file<MetaobjectSequence>
 };
 
 template <>
-struct source_line<MetaobjectSequence>
+struct __source_line<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of  reflected by this MetaobjectSequence.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -53,12 +60,12 @@ struct source_line<MetaobjectSequence>
 };
 
 template <>
-struct source_column<MetaobjectSequence>
+struct __source_column<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of  reflected by this MetaobjectSequence.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -68,12 +75,15 @@ struct source_column<MetaobjectSequence>
 	
 };
 
+//]
+//[reflexpr_MetaobjectSequence_operations
+
 template <>
-struct get_size<MetaobjectSequence>
+struct __get_size<MetaobjectSequence>
 {
 	
 	typedef size_t value_type;
-	static constexpr const size_t value = /*<
+	static constexpr const size_t value = ... /*<
 	Number of elements in the sequence.
 	>*/;
 
@@ -85,11 +95,16 @@ struct get_size<MetaobjectSequence>
 };
 
 template <size_t Index>
-struct get_element<MetaobjectSequence, Index>
+struct __get_element<MetaobjectSequence, Index>
 {
-	 typedef __Metaobject type;
+	
+	typedef __Metaobject type; /*<
+	The i-th element in a MetaobjectSequence
+	>*/
+	
 };
 
-
+//]
+//[reflexpr_MetaobjectSequence_end
 __namespace_meta_end
 //]

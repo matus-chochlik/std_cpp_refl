@@ -3,9 +3,13 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaSpecifier
+//[reflexpr_MetaSpecifier_begin
 __namespace_meta_begin
+//]
+//[reflexpr_MetaSpecifier_inherited_traits
 
+//]
+//[reflexpr_MetaSpecifier_traits
 
 template <>
 struct __is_specifier<MetaSpecifier>
@@ -19,14 +23,17 @@ struct __is_specifier<MetaSpecifier>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaSpecifier_inherited_operations
+
 template <>
-struct source_file<MetaSpecifier>
+struct __source_file<MetaSpecifier>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a specifier reflected by this MetaSpecifier.
+	Source file path of the declaration of a specifier reflected by a MetaSpecifier.
 	>*/;
 
 	typedef __StringConstant type;
@@ -37,12 +44,12 @@ struct source_file<MetaSpecifier>
 };
 
 template <>
-struct source_line<MetaSpecifier>
+struct __source_line<MetaSpecifier>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a specifier reflected by this MetaSpecifier.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a specifier reflected by a MetaSpecifier.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -53,12 +60,12 @@ struct source_line<MetaSpecifier>
 };
 
 template <>
-struct source_column<MetaSpecifier>
+struct __source_column<MetaSpecifier>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a specifier reflected by this MetaSpecifier.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a specifier reflected by a MetaSpecifier.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -68,14 +75,17 @@ struct source_column<MetaSpecifier>
 	
 };
 
+//]
+//[reflexpr_MetaSpecifier_operations
+
 template <>
-struct get_keyword<MetaSpecifier>
+struct __get_keyword<MetaSpecifier>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the keyword
+	The keyword of the specifier reflected by a MetaSpecifier.
 	>*/;
 
 	typedef __StringConstant type;
@@ -85,6 +95,7 @@ struct get_keyword<MetaSpecifier>
 	
 };
 
-
+//]
+//[reflexpr_MetaSpecifier_end
 __namespace_meta_end
 //]

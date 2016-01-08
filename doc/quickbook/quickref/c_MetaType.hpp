@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaType
+//[reflexpr_MetaType_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaType_inherited_traits
 
 template <>
 struct __has_name<MetaType> /*<
@@ -35,6 +36,9 @@ Inherited from __MetaScoped.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaType_traits
+
 template <>
 struct __is_type<MetaType>
 {
@@ -47,14 +51,17 @@ struct __is_type<MetaType>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaType_inherited_operations
+
 template <>
-struct source_file<MetaType>
+struct __source_file<MetaType>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a type reflected by this MetaType.
+	Source file path of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __StringConstant type;
@@ -65,12 +72,12 @@ struct source_file<MetaType>
 };
 
 template <>
-struct source_line<MetaType>
+struct __source_line<MetaType>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a type reflected by this MetaType.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -81,12 +88,12 @@ struct source_line<MetaType>
 };
 
 template <>
-struct source_column<MetaType>
+struct __source_column<MetaType>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a type reflected by this MetaType.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -97,13 +104,13 @@ struct source_column<MetaType>
 };
 
 template <>
-struct get_name<MetaType>
+struct __get_name<MetaType>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a type reflected by a MetaType.
 	>*/;
 
 	typedef __StringConstant type;
@@ -114,17 +121,29 @@ struct get_name<MetaType>
 };
 
 template <>
-struct get_scope<MetaType>
+struct __get_scope<MetaType>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a type reflected by a MetaType.
+	>*/
+	
 };
+
+//]
+//[reflexpr_MetaType_operations
 
 template <>
-struct get_reflected_type<MetaType>
+struct __get_reflected_type<MetaType>
 {
-	 typedef __Type type;
+	
+	typedef __Type type; /*<
+	The the base-level type reflected by a MetaType.
+	>*/
+	
 };
 
-
+//]
+//[reflexpr_MetaType_end
 __namespace_meta_end
 //]

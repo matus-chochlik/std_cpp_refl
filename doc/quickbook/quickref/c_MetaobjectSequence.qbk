@@ -5,8 +5,15 @@
 [section:MetaobjectSequence MetaobjectSequence]
 [import c_MetaobjectSequence.hpp]
 
-[concept MetaobjectSequence] is  a __Metaobject an ordered sequence of metaobjects..
+[concept MetaobjectSequence] is an ordered sequence of metaobjects.
 
-[reflexpr_MetaobjectSequence]
+[reflexpr_MetaobjectSequence_begin]
+[heading Traits]
+[reflexpr_MetaobjectSequence_inherited_traits]
+[reflexpr_MetaobjectSequence_traits]
+[heading Operations]
+[reflexpr_MetaobjectSequence_inherited_operations]
+[reflexpr_MetaobjectSequence_operations]
+[reflexpr_MetaobjectSequence_end]
 
 [endsect]

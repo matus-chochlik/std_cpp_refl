@@ -69,6 +69,13 @@
 [def __is_scope_v [link reflexpr.quickref.traits.is_scope [^is_scope_v]]]
 
 [def __is_alias [link reflexpr.quickref.traits.is_alias [^is_alias]]]
+[def __is_alias_t [link reflexpr.quickref.traits.is_alias [^is_alias_t]]]
+[def __is_alias_v [link reflexpr.quickref.traits.is_alias [^is_alias_v]]]
+
+[def __is_class_member [link reflexpr.quickref.traits.is_class_member [^is_class_member]]]
+[def __is_class_member_t [link reflexpr.quickref.traits.is_class_member [^is_class_member_t]]]
+[def __is_class_member_v [link reflexpr.quickref.traits.is_class_member [^is_class_member_v]]]
+
 [/Categorizaton]
 [def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
 [def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
@@ -83,6 +90,60 @@
 [def __enum_tag [link reflexpr.quickref.tags.metaobject [^enum_tag]]]
 [def __variable_tag [link reflexpr.quickref.tags.metaobject [^variable_tag]]]
 
+
+[/Operations]
+
+[def __source_file [link reflexpr.quickref.operations.source_file [^source_file]]]
+[def __source_file_t [link reflexpr.quickref.operations.source_file [^source_file_t]]]
+[def __source_file_v [link reflexpr.quickref.operations.source_file [^source_file_v]]]
+
+[def __source_line [link reflexpr.quickref.operations.source_line [^source_line]]]
+[def __source_line_t [link reflexpr.quickref.operations.source_line [^source_line_t]]]
+[def __source_line_v [link reflexpr.quickref.operations.source_line [^source_line_v]]]
+
+[def __source_column [link reflexpr.quickref.operations.source_column [^source_column]]]
+[def __source_column_t [link reflexpr.quickref.operations.source_column [^source_column_t]]]
+[def __source_column_v [link reflexpr.quickref.operations.source_column [^source_column_v]]]
+
+[def __get_size [link reflexpr.quickref.operations.get_size [^get_size]]]
+[def __get_size_t [link reflexpr.quickref.operations.get_size [^get_size_t]]]
+[def __get_size_v [link reflexpr.quickref.operations.get_size [^get_size_v]]]
+
+[def __get_element [link reflexpr.quickref.operations.get_element [^get_element]]]
+[def __get_element_t [link reflexpr.quickref.operations.get_element [^get_element_t]]]
+[def __get_element_v [link reflexpr.quickref.operations.get_element [^get_element_v]]]
+
+[def __get_keyword [link reflexpr.quickref.operations.get_keyword [^get_keyword]]]
+[def __get_keyword_t [link reflexpr.quickref.operations.get_keyword [^get_keyword_t]]]
+[def __get_keyword_v [link reflexpr.quickref.operations.get_keyword [^get_keyword_v]]]
+
+[def __get_name [link reflexpr.quickref.operations.get_name [^get_name]]]
+[def __get_name_t [link reflexpr.quickref.operations.get_name [^get_name_t]]]
+[def __get_name_v [link reflexpr.quickref.operations.get_name [^get_name_v]]]
+
+[def __get_type [link reflexpr.quickref.operations.get_type [^get_type]]]
+[def __get_type_t [link reflexpr.quickref.operations.get_type [^get_type_t]]]
+[def __get_type_v [link reflexpr.quickref.operations.get_type [^get_type_v]]]
+
+[def __get_scope [link reflexpr.quickref.operations.get_scope [^get_scope]]]
+[def __get_scope_t [link reflexpr.quickref.operations.get_scope [^get_scope_t]]]
+[def __get_scope_v [link reflexpr.quickref.operations.get_scope [^get_scope_v]]]
+
+[def __get_aliased [link reflexpr.quickref.operations.get_aliased [^get_aliased]]]
+[def __get_aliased_t [link reflexpr.quickref.operations.get_aliased [^get_aliased_t]]]
+[def __get_aliased_v [link reflexpr.quickref.operations.get_aliased [^get_aliased_v]]]
+
+[def __get_reflected_type [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type]]]
+[def __get_reflected_type_t [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_t]]]
+[def __get_reflected_type_v [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_v]]]
+
+[def __get_typedef_type [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type]]]
+[def __get_typedef_type_t [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_t]]]
+[def __get_typedef_type_v [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_v]]]
+
+[def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
+[def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]
+[def __get_data_members_v [link reflexpr.quickref.operations.get_data_members [^get_data_members_v]]]
 [/Other concepts]
 [def __StringConstant [link reflexpr.quickref.string_constant ['StringConstant]]]
 [/Metaobject concepts]
@@ -107,7 +168,10 @@
 [/The reflection operator]
 [def __reflexpr [link reflexpr.quickref.reflexpr [^reflexpr]]]
 
+[def __reflexpr_header [link reflexpr.quickref.reflexpr.header [^<reflexpr>]]]
+
 
 [include quickref.qbk]
-
+[include examples.qbk]
+[include implementation.qbk]
 

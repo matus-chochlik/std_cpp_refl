@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaTypeAlias
+//[reflexpr_MetaTypeAlias_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaTypeAlias_inherited_traits
 
 template <>
 struct __has_name<MetaTypeAlias> /*<
@@ -63,14 +64,20 @@ Inherited from __MetaAlias.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaTypeAlias_traits
+
+//]
+//[reflexpr_MetaTypeAlias_inherited_operations
+
 template <>
-struct source_file<MetaTypeAlias>
+struct __source_file<MetaTypeAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a type alias or typedef reflected by this MetaTypeAlias.
+	Source file path of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -81,12 +88,12 @@ struct source_file<MetaTypeAlias>
 };
 
 template <>
-struct source_line<MetaTypeAlias>
+struct __source_line<MetaTypeAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a type alias or typedef reflected by this MetaTypeAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -97,12 +104,12 @@ struct source_line<MetaTypeAlias>
 };
 
 template <>
-struct source_column<MetaTypeAlias>
+struct __source_column<MetaTypeAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a type alias or typedef reflected by this MetaTypeAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -113,13 +120,13 @@ struct source_column<MetaTypeAlias>
 };
 
 template <>
-struct get_name<MetaTypeAlias>
+struct __get_name<MetaTypeAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -130,29 +137,49 @@ struct get_name<MetaTypeAlias>
 };
 
 template <>
-struct get_scope<MetaTypeAlias>
+struct __get_scope<MetaTypeAlias>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a type alias or typedef reflected by a MetaTypeAlias.
+	>*/
+	
 };
 
 template <>
-struct get_reflected_type<MetaTypeAlias>
+struct __get_reflected_type<MetaTypeAlias>
 {
-	 typedef __Type type;
+	
+	typedef __Type type; /*<
+	The the base-level type reflected by a MetaTypeAlias.
+	>*/
+	
 };
 
 template <>
-struct get_aliased<MetaTypeAlias>
+struct __get_aliased<MetaTypeAlias>
 {
-	 typedef __MetaNamed type;
+	
+	typedef __MetaNamed type; /*<
+	The MetaNamed reflecting the original declaration of a type alias or typedef reflected by a MetaTypeAlias.
+	>*/
+	
 };
+
+//]
+//[reflexpr_MetaTypeAlias_operations
 
 template <>
-struct get_typedef_type<MetaTypeAlias>
+struct __get_typedef_type<MetaTypeAlias>
 {
-	 typedef __MetaType type;
+	
+	typedef __MetaType type; /*<
+	The MetaType reflecting the original declaration of a type reflected by a MetaTypeAlias.
+	>*/
+	
 };
 
-
+//]
+//[reflexpr_MetaTypeAlias_end
 __namespace_meta_end
 //]

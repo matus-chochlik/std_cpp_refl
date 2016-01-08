@@ -3,18 +3,28 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_Metaobject
+//[reflexpr_Metaobject_begin
 __namespace_meta_begin
+//]
+//[reflexpr_Metaobject_inherited_traits
 
+//]
+//[reflexpr_Metaobject_traits
+
+//]
+//[reflexpr_Metaobject_inherited_operations
+
+//]
+//[reflexpr_Metaobject_operations
 
 template <>
-struct source_file<Metaobject>
+struct __source_file<Metaobject>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of  reflected by this Metaobject.
+	Source file path of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __StringConstant type;
@@ -25,12 +35,12 @@ struct source_file<Metaobject>
 };
 
 template <>
-struct source_line<Metaobject>
+struct __source_line<Metaobject>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of  reflected by this Metaobject.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -41,12 +51,12 @@ struct source_line<Metaobject>
 };
 
 template <>
-struct source_column<Metaobject>
+struct __source_column<Metaobject>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of  reflected by this Metaobject.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -56,6 +66,7 @@ struct source_column<Metaobject>
 	
 };
 
-
+//]
+//[reflexpr_Metaobject_end
 __namespace_meta_end
 //]

@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaAlias
+//[reflexpr_MetaAlias_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaAlias_inherited_traits
 
 template <>
 struct __has_name<MetaAlias> /*<
@@ -21,6 +22,9 @@ Inherited from __MetaNamed.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaAlias_traits
+
 template <>
 struct __is_alias<MetaAlias>
 {
@@ -33,14 +37,17 @@ struct __is_alias<MetaAlias>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaAlias_inherited_operations
+
 template <>
-struct source_file<MetaAlias>
+struct __source_file<MetaAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a type or namespace alias reflected by this MetaAlias.
+	Source file path of the declaration of a type or namespace alias reflected by a MetaAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -51,12 +58,12 @@ struct source_file<MetaAlias>
 };
 
 template <>
-struct source_line<MetaAlias>
+struct __source_line<MetaAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a type or namespace alias reflected by this MetaAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a type or namespace alias reflected by a MetaAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -67,12 +74,12 @@ struct source_line<MetaAlias>
 };
 
 template <>
-struct source_column<MetaAlias>
+struct __source_column<MetaAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a type or namespace alias reflected by this MetaAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a type or namespace alias reflected by a MetaAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -83,13 +90,13 @@ struct source_column<MetaAlias>
 };
 
 template <>
-struct get_name<MetaAlias>
+struct __get_name<MetaAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a type or namespace alias reflected by a MetaAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -99,12 +106,20 @@ struct get_name<MetaAlias>
 	
 };
 
+//]
+//[reflexpr_MetaAlias_operations
+
 template <>
-struct get_aliased<MetaAlias>
+struct __get_aliased<MetaAlias>
 {
-	 typedef __MetaNamed type;
+	
+	typedef __MetaNamed type; /*<
+	The MetaNamed reflecting the original declaration of a type or namespace alias reflected by a MetaAlias.
+	>*/
+	
 };
 
-
+//]
+//[reflexpr_MetaAlias_end
 __namespace_meta_end
 //]

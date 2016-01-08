@@ -7,6 +7,13 @@
 
 [concept MetaNamespaceAlias] is  a __MetaNamespace and  a __MetaAlias reflecting a namespace alias.
 
-[reflexpr_MetaNamespaceAlias]
+[reflexpr_MetaNamespaceAlias_begin]
+[heading Traits]
+[reflexpr_MetaNamespaceAlias_inherited_traits]
+[reflexpr_MetaNamespaceAlias_traits]
+[heading Operations]
+[reflexpr_MetaNamespaceAlias_inherited_operations]
+[reflexpr_MetaNamespaceAlias_operations]
+[reflexpr_MetaNamespaceAlias_end]
 
 [endsect]

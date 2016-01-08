@@ -7,6 +7,13 @@
 
 [concept MetaNamed] is  a __Metaobject reflecting a named declaration.
 
-[reflexpr_MetaNamed]
+[reflexpr_MetaNamed_begin]
+[heading Traits]
+[reflexpr_MetaNamed_inherited_traits]
+[reflexpr_MetaNamed_traits]
+[heading Operations]
+[reflexpr_MetaNamed_inherited_operations]
+[reflexpr_MetaNamed_operations]
+[reflexpr_MetaNamed_end]
 
 [endsect]

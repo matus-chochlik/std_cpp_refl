@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaNamespaceAlias
+//[reflexpr_MetaNamespaceAlias_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaNamespaceAlias_inherited_traits
 
 template <>
 struct __has_name<MetaNamespaceAlias> /*<
@@ -77,14 +78,20 @@ Inherited from __MetaAlias.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaNamespaceAlias_traits
+
+//]
+//[reflexpr_MetaNamespaceAlias_inherited_operations
+
 template <>
-struct source_file<MetaNamespaceAlias>
+struct __source_file<MetaNamespaceAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
+	Source file path of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -95,12 +102,12 @@ struct source_file<MetaNamespaceAlias>
 };
 
 template <>
-struct source_line<MetaNamespaceAlias>
+struct __source_line<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -111,12 +118,12 @@ struct source_line<MetaNamespaceAlias>
 };
 
 template <>
-struct source_column<MetaNamespaceAlias>
+struct __source_column<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a namespace alias reflected by this MetaNamespaceAlias.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -127,13 +134,13 @@ struct source_column<MetaNamespaceAlias>
 };
 
 template <>
-struct get_name<MetaNamespaceAlias>
+struct __get_name<MetaNamespaceAlias>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -144,17 +151,29 @@ struct get_name<MetaNamespaceAlias>
 };
 
 template <>
-struct get_scope<MetaNamespaceAlias>
+struct __get_scope<MetaNamespaceAlias>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a namespace alias reflected by a MetaNamespaceAlias.
+	>*/
+	
 };
 
 template <>
-struct get_aliased<MetaNamespaceAlias>
+struct __get_aliased<MetaNamespaceAlias>
 {
-	 typedef __MetaNamed type;
+	
+	typedef __MetaNamed type; /*<
+	The MetaNamed reflecting the original declaration of a namespace alias reflected by a MetaNamespaceAlias.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaNamespaceAlias_operations
 
+//]
+//[reflexpr_MetaNamespaceAlias_end
 __namespace_meta_end
 //]

@@ -1,0 +1,10 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:get_reflected_type get_reflected_type]
+[import o_get_reflected_type.hpp]
+
+[meta_get_reflected_type]
+
+[endsect]

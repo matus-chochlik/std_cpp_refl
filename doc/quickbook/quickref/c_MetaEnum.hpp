@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaEnum
+//[reflexpr_MetaEnum_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaEnum_inherited_traits
 
 template <>
 struct __has_name<MetaEnum> /*<
@@ -63,6 +64,9 @@ Inherited from __MetaScope.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaEnum_traits
+
 template <>
 struct __is_enum<MetaEnum>
 {
@@ -75,14 +79,17 @@ struct __is_enum<MetaEnum>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaEnum_inherited_operations
+
 template <>
-struct source_file<MetaEnum>
+struct __source_file<MetaEnum>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of an enumeration reflected by this MetaEnum.
+	Source file path of the declaration of an enumeration reflected by a MetaEnum.
 	>*/;
 
 	typedef __StringConstant type;
@@ -93,12 +100,12 @@ struct source_file<MetaEnum>
 };
 
 template <>
-struct source_line<MetaEnum>
+struct __source_line<MetaEnum>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of an enumeration reflected by this MetaEnum.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of an enumeration reflected by a MetaEnum.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -109,12 +116,12 @@ struct source_line<MetaEnum>
 };
 
 template <>
-struct source_column<MetaEnum>
+struct __source_column<MetaEnum>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of an enumeration reflected by this MetaEnum.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of an enumeration reflected by a MetaEnum.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -125,13 +132,13 @@ struct source_column<MetaEnum>
 };
 
 template <>
-struct get_name<MetaEnum>
+struct __get_name<MetaEnum>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the an enumeration reflected by a MetaEnum.
 	>*/;
 
 	typedef __StringConstant type;
@@ -142,17 +149,29 @@ struct get_name<MetaEnum>
 };
 
 template <>
-struct get_scope<MetaEnum>
+struct __get_scope<MetaEnum>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of an enumeration reflected by a MetaEnum.
+	>*/
+	
 };
 
 template <>
-struct get_reflected_type<MetaEnum>
+struct __get_reflected_type<MetaEnum>
 {
-	 typedef __Type type;
+	
+	typedef __Type type; /*<
+	The the base-level type reflected by a MetaEnum.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaEnum_operations
 
+//]
+//[reflexpr_MetaEnum_end
 __namespace_meta_end
 //]

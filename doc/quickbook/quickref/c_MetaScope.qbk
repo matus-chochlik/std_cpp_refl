@@ -7,6 +7,13 @@
 
 [concept MetaScope] is  a __MetaNamed and possibly a __MetaScoped reflecting a scope.
 
-[reflexpr_MetaScope]
+[reflexpr_MetaScope_begin]
+[heading Traits]
+[reflexpr_MetaScope_inherited_traits]
+[reflexpr_MetaScope_traits]
+[heading Operations]
+[reflexpr_MetaScope_inherited_operations]
+[reflexpr_MetaScope_operations]
+[reflexpr_MetaScope_end]
 
 [endsect]

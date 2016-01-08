@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaScope
+//[reflexpr_MetaScope_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaScope_inherited_traits
 
 template <>
 struct __has_name<MetaScope> /*<
@@ -35,6 +36,9 @@ Inherited from __MetaScoped.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaScope_traits
+
 template <>
 struct __is_scope<MetaScope>
 {
@@ -47,14 +51,17 @@ struct __is_scope<MetaScope>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaScope_inherited_operations
+
 template <>
-struct source_file<MetaScope>
+struct __source_file<MetaScope>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a scope reflected by this MetaScope.
+	Source file path of the declaration of a scope reflected by a MetaScope.
 	>*/;
 
 	typedef __StringConstant type;
@@ -65,12 +72,12 @@ struct source_file<MetaScope>
 };
 
 template <>
-struct source_line<MetaScope>
+struct __source_line<MetaScope>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a scope reflected by this MetaScope.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a scope reflected by a MetaScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -81,12 +88,12 @@ struct source_line<MetaScope>
 };
 
 template <>
-struct source_column<MetaScope>
+struct __source_column<MetaScope>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a scope reflected by this MetaScope.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a scope reflected by a MetaScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -97,13 +104,13 @@ struct source_column<MetaScope>
 };
 
 template <>
-struct get_name<MetaScope>
+struct __get_name<MetaScope>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a scope reflected by a MetaScope.
 	>*/;
 
 	typedef __StringConstant type;
@@ -114,11 +121,19 @@ struct get_name<MetaScope>
 };
 
 template <>
-struct get_scope<MetaScope>
+struct __get_scope<MetaScope>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a scope reflected by a MetaScope.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaScope_operations
 
+//]
+//[reflexpr_MetaScope_end
 __namespace_meta_end
 //]

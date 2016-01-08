@@ -1,0 +1,9 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:source_info Source information]
+
+[import source_info.hpp]
+[example_source_info]
+
+[endsect]

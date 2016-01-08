@@ -4,9 +4,21 @@
 [import reflexpr.hpp]
 
 The [^reflexpr] operator can be used to obtain metaobjects reflecting various
-program constructs:
+program constructs.
 
-[heading:usage Examples of usage]
+[heading:header Required header file]
+
+The standard [^<reflexpr>] header [*must] be included before the [^reflexpr]
+operator can be used.
+[note In the experimental [link reflexpr.implementation clang implementation],
+the header is called [^"reflexpr.hpp"].
+]
+
+[heading:usage Usage]
+
+Currently the following expressions may appear as operands of the operator.
+In the future the set of expressions may be extended to include variables,
+overloaded functions, constructors, templates, etc.
 
 [reflexpr_usage]
 

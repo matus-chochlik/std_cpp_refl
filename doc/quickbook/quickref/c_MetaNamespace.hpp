@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaNamespace
+//[reflexpr_MetaNamespace_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaNamespace_inherited_traits
 
 template <>
 struct __has_name<MetaNamespace> /*<
@@ -49,6 +50,9 @@ Inherited from __MetaScope.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaNamespace_traits
+
 template <>
 struct __is_namespace<MetaNamespace>
 {
@@ -61,14 +65,17 @@ struct __is_namespace<MetaNamespace>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaNamespace_inherited_operations
+
 template <>
-struct source_file<MetaNamespace>
+struct __source_file<MetaNamespace>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a namespace reflected by this MetaNamespace.
+	Source file path of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __StringConstant type;
@@ -79,12 +86,12 @@ struct source_file<MetaNamespace>
 };
 
 template <>
-struct source_line<MetaNamespace>
+struct __source_line<MetaNamespace>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a namespace reflected by this MetaNamespace.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -95,12 +102,12 @@ struct source_line<MetaNamespace>
 };
 
 template <>
-struct source_column<MetaNamespace>
+struct __source_column<MetaNamespace>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a namespace reflected by this MetaNamespace.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -111,13 +118,13 @@ struct source_column<MetaNamespace>
 };
 
 template <>
-struct get_name<MetaNamespace>
+struct __get_name<MetaNamespace>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __StringConstant type;
@@ -128,11 +135,19 @@ struct get_name<MetaNamespace>
 };
 
 template <>
-struct get_scope<MetaNamespace>
+struct __get_scope<MetaNamespace>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a namespace reflected by a MetaNamespace.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaNamespace_operations
 
+//]
+//[reflexpr_MetaNamespace_end
 __namespace_meta_end
 //]

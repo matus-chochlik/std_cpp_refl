@@ -7,6 +7,13 @@
 
 [concept MetaSpecifier] is  a __Metaobject reflecting a specifier.
 
-[reflexpr_MetaSpecifier]
+[reflexpr_MetaSpecifier_begin]
+[heading Traits]
+[reflexpr_MetaSpecifier_inherited_traits]
+[reflexpr_MetaSpecifier_traits]
+[heading Operations]
+[reflexpr_MetaSpecifier_inherited_operations]
+[reflexpr_MetaSpecifier_operations]
+[reflexpr_MetaSpecifier_end]
 
 [endsect]

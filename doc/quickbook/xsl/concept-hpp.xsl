@@ -84,7 +84,7 @@ template &lt;<xsl:for-each select="argument">
 	<xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>
 	</xsl:if>
 </xsl:for-each>&gt;
-struct <xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
+struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 <xsl:variable name="arg_type" select="@type"/>
 <xsl:if test="position() != 1">, </xsl:if>
 <xsl:choose>
@@ -97,7 +97,7 @@ struct <xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 	<xsl:choose>
 	<xsl:when test="@result='IntegralConstant'">
 	typedef <xsl:value-of select="@integer"/> value_type;
-	static constexpr const <xsl:value-of select="@integer"/> value = /*&lt;
+	static constexpr const <xsl:value-of select="@integer"/> value = ... /*&lt;
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="@brief"/>
 		<xsl:with-param name="operand" select="$metaobject"/>
@@ -126,7 +126,14 @@ struct <xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 	const char* operator (void) const noexcept;
 	</xsl:when>
 
-	<xsl:otherwise> typedef __<xsl:value-of select="@result"/> type;</xsl:otherwise>
+	<xsl:otherwise>
+	typedef __<xsl:value-of select="@result"/> type; /*&lt;
+	<xsl:call-template name="expand-variables">
+		<xsl:with-param name="text" select="@brief"/>
+		<xsl:with-param name="operand" select="$metaobject"/>
+	</xsl:call-template>
+	&gt;*/
+	</xsl:otherwise>
 	</xsl:choose>
 };
 </xsl:for-each>
@@ -194,25 +201,30 @@ struct <xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_<xsl:value-of select="$metaobject"/>
+//[reflexpr_<xsl:value-of select="$metaobject"/>_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_<xsl:value-of select="$metaobject"/>_inherited_traits
 <xsl:call-template name="inherited-traits">
 <xsl:with-param name="child" select="$metaobject"/>
 </xsl:call-template>
-
+//]
+//[reflexpr_<xsl:value-of select="$metaobject"/>_traits
 <xsl:call-template name="trait">
 <xsl:with-param name="trait_mo" select="$metaobject"/>
 </xsl:call-template>
-
+//]
+//[reflexpr_<xsl:value-of select="$metaobject"/>_inherited_operations
 <xsl:call-template name="inherited-operations">
 <xsl:with-param name="child" select="$metaobject"/>
 </xsl:call-template>
-
+//]
+//[reflexpr_<xsl:value-of select="$metaobject"/>_operations
 <xsl:call-template name="operations">
 <xsl:with-param name="operation_mo" select="$metaobject"/>
 </xsl:call-template>
-
+//]
+//[reflexpr_<xsl:value-of select="$metaobject"/>_end
 __namespace_meta_end
 //]
 </xsl:template>

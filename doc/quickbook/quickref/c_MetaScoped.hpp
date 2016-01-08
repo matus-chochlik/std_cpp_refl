@@ -3,9 +3,13 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaScoped
+//[reflexpr_MetaScoped_begin
 __namespace_meta_begin
+//]
+//[reflexpr_MetaScoped_inherited_traits
 
+//]
+//[reflexpr_MetaScoped_traits
 
 template <>
 struct __has_scope<MetaScoped>
@@ -19,14 +23,17 @@ struct __has_scope<MetaScoped>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaScoped_inherited_operations
+
 template <>
-struct source_file<MetaScoped>
+struct __source_file<MetaScoped>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a scoped declaration reflected by this MetaScoped.
+	Source file path of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
 	typedef __StringConstant type;
@@ -37,12 +44,12 @@ struct source_file<MetaScoped>
 };
 
 template <>
-struct source_line<MetaScoped>
+struct __source_line<MetaScoped>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a scoped declaration reflected by this MetaScoped.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -53,12 +60,12 @@ struct source_line<MetaScoped>
 };
 
 template <>
-struct source_column<MetaScoped>
+struct __source_column<MetaScoped>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a scoped declaration reflected by this MetaScoped.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -68,12 +75,20 @@ struct source_column<MetaScoped>
 	
 };
 
+//]
+//[reflexpr_MetaScoped_operations
+
 template <>
-struct get_scope<MetaScoped>
+struct __get_scope<MetaScoped>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
+	>*/
+	
 };
 
-
+//]
+//[reflexpr_MetaScoped_end
 __namespace_meta_end
 //]

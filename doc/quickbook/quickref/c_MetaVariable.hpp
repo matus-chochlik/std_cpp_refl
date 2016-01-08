@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaVariable
+//[reflexpr_MetaVariable_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaVariable_inherited_traits
 
 template <>
 struct __has_name<MetaVariable> /*<
@@ -49,6 +50,9 @@ Inherited from __MetaScoped.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaVariable_traits
+
 template <>
 struct __is_variable<MetaVariable>
 {
@@ -61,14 +65,17 @@ struct __is_variable<MetaVariable>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaVariable_inherited_operations
+
 template <>
-struct source_file<MetaVariable>
+struct __source_file<MetaVariable>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a variable reflected by this MetaVariable.
+	Source file path of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __StringConstant type;
@@ -79,12 +86,12 @@ struct source_file<MetaVariable>
 };
 
 template <>
-struct source_line<MetaVariable>
+struct __source_line<MetaVariable>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of a variable reflected by this MetaVariable.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -95,12 +102,12 @@ struct source_line<MetaVariable>
 };
 
 template <>
-struct source_column<MetaVariable>
+struct __source_column<MetaVariable>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of a variable reflected by this MetaVariable.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -111,13 +118,13 @@ struct source_column<MetaVariable>
 };
 
 template <>
-struct get_name<MetaVariable>
+struct __get_name<MetaVariable>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __StringConstant type;
@@ -128,17 +135,29 @@ struct get_name<MetaVariable>
 };
 
 template <>
-struct get_type<MetaVariable>
+struct __get_type<MetaVariable>
 {
-	 typedef __MetaType type;
+	
+	typedef __MetaType type; /*<
+	The MetaType reflecting the type of a variable reflected by a MetaVariable.
+	>*/
+	
 };
 
 template <>
-struct get_scope<MetaVariable>
+struct __get_scope<MetaVariable>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of a variable reflected by a MetaVariable.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaVariable_operations
 
+//]
+//[reflexpr_MetaVariable_end
 __namespace_meta_end
 //]

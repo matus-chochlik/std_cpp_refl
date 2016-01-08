@@ -7,6 +7,13 @@
 
 [concept MetaTypeAlias] is  a __MetaType and  a __MetaAlias reflecting a type alias or typedef.
 
-[reflexpr_MetaTypeAlias]
+[reflexpr_MetaTypeAlias_begin]
+[heading Traits]
+[reflexpr_MetaTypeAlias_inherited_traits]
+[reflexpr_MetaTypeAlias_traits]
+[heading Operations]
+[reflexpr_MetaTypeAlias_inherited_operations]
+[reflexpr_MetaTypeAlias_operations]
+[reflexpr_MetaTypeAlias_end]
 
 [endsect]

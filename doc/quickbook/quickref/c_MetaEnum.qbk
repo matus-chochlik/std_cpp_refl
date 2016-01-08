@@ -7,6 +7,13 @@
 
 [concept MetaEnum] is  a __MetaType and possibly a __MetaScope reflecting an enumeration.
 
-[reflexpr_MetaEnum]
+[reflexpr_MetaEnum_begin]
+[heading Traits]
+[reflexpr_MetaEnum_inherited_traits]
+[reflexpr_MetaEnum_traits]
+[heading Operations]
+[reflexpr_MetaEnum_inherited_operations]
+[reflexpr_MetaEnum_operations]
+[reflexpr_MetaEnum_end]
 
 [endsect]

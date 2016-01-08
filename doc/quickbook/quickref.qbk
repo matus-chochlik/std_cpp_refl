@@ -52,6 +52,5 @@ namespace meta {
 ]
 [include quickref/traits.qbk]
 [include quickref/concepts.qbk]
-
-
 [include quickref/reflexpr.qbk]
+[include quickref/operations.qbk]

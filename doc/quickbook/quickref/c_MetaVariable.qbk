@@ -7,6 +7,13 @@
 
 [concept MetaVariable] is  a __MetaNamed,  a __MetaTyped and possibly a __MetaScoped reflecting a variable.
 
-[reflexpr_MetaVariable]
+[reflexpr_MetaVariable_begin]
+[heading Traits]
+[reflexpr_MetaVariable_inherited_traits]
+[reflexpr_MetaVariable_traits]
+[heading Operations]
+[reflexpr_MetaVariable_inherited_operations]
+[reflexpr_MetaVariable_operations]
+[reflexpr_MetaVariable_end]
 
 [endsect]

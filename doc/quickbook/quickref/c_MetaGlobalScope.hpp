@@ -3,9 +3,10 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaGlobalScope
+//[reflexpr_MetaGlobalScope_begin
 __namespace_meta_begin
-
+//]
+//[reflexpr_MetaGlobalScope_inherited_traits
 
 template <>
 struct __has_name<MetaGlobalScope> /*<
@@ -49,6 +50,9 @@ Inherited from __MetaScope.
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaGlobalScope_traits
+
 template <>
 struct __is_global_scope<MetaGlobalScope>
 {
@@ -61,14 +65,17 @@ struct __is_global_scope<MetaGlobalScope>
 	value_type operator(void) const noexcept;
 };
 
+//]
+//[reflexpr_MetaGlobalScope_inherited_operations
+
 template <>
-struct source_file<MetaGlobalScope>
+struct __source_file<MetaGlobalScope>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of the global scope reflected by this MetaGlobalScope.
+	Source file path of the declaration of the global scope reflected by a MetaGlobalScope.
 	>*/;
 
 	typedef __StringConstant type;
@@ -79,12 +86,12 @@ struct source_file<MetaGlobalScope>
 };
 
 template <>
-struct source_line<MetaGlobalScope>
+struct __source_line<MetaGlobalScope>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file line of the declaration of the global scope reflected by this MetaGlobalScope.
+	static constexpr const unsigned value = ... /*<
+	Source file line of the declaration of the global scope reflected by a MetaGlobalScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -95,12 +102,12 @@ struct source_line<MetaGlobalScope>
 };
 
 template <>
-struct source_column<MetaGlobalScope>
+struct __source_column<MetaGlobalScope>
 {
 	
 	typedef unsigned value_type;
-	static constexpr const unsigned value = /*<
-	Source file column of the declaration of the global scope reflected by this MetaGlobalScope.
+	static constexpr const unsigned value = ... /*<
+	Source file column of the declaration of the global scope reflected by a MetaGlobalScope.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -111,13 +118,13 @@ struct source_column<MetaGlobalScope>
 };
 
 template <>
-struct get_name<MetaGlobalScope>
+struct __get_name<MetaGlobalScope>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	the basic name
+	The basic name of the the global scope reflected by a MetaGlobalScope.
 	>*/;
 
 	typedef __StringConstant type;
@@ -128,11 +135,19 @@ struct get_name<MetaGlobalScope>
 };
 
 template <>
-struct get_scope<MetaGlobalScope>
+struct __get_scope<MetaGlobalScope>
 {
-	 typedef __MetaScope type;
+	
+	typedef __MetaScope type; /*<
+	The MetaScope reflecting the scope of the global scope reflected by a MetaGlobalScope.
+	>*/
+	
 };
 
+//]
+//[reflexpr_MetaGlobalScope_operations
 
+//]
+//[reflexpr_MetaGlobalScope_end
 __namespace_meta_end
 //]
