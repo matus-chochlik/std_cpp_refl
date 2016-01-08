@@ -181,6 +181,16 @@ struct __get_data_members<MetaClass>
 	
 };
 
+template <>
+struct __get_all_data_members<MetaClass>
+{
+	
+	typedef __MetaobjectSequence type; /*<
+	A sequence of Metaobjects reflecting the all data members of a class reflected by a MetaClass.
+	>*/
+	
+};
+
 //]
 //[reflexpr_MetaClass_end
 __namespace_meta_end

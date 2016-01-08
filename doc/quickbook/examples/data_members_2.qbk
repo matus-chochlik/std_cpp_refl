@@ -1,0 +1,9 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:data_members_2 Class data member reflection]
+
+[import data_members_2.hpp]
+[example_data_members_2]
+
+[endsect]

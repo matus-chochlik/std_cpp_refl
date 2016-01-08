@@ -144,6 +144,12 @@
 [def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
 [def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]
 [def __get_data_members_v [link reflexpr.quickref.operations.get_data_members [^get_data_members_v]]]
+
+[def __get_all_data_members [link reflexpr.quickref.operations.get_all_data_members [^get_all_data_members]]]
+[def __get_all_data_members_t [link reflexpr.quickref.operations.get_all_data_members [^get_all_data_members_t]]]
+[def __get_all_data_members_v [link reflexpr.quickref.operations.get_all_data_members [^get_all_data_members_v]]]
+
+
 [/Other concepts]
 [def __StringConstant [link reflexpr.quickref.string_constant ['StringConstant]]]
 [/Metaobject concepts]

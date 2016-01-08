@@ -239,6 +239,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="MetaClass"/>
 	</operation>
 
+	<operation name="get_all_data_members"
+		result="MetaobjectSequence"
+		brief="A sequence of Metaobjects reflecting the all data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaClass"/>
+	</operation>
+
 	<metaobject name="MetaEnum"
 		reflects="an enumeration"
 	>

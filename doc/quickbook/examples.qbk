@@ -11,5 +11,13 @@ This section contains several examples (cross-referenced with the documentation)
 of the usage of the [^__reflexpr] operator and the resulting metaobjects.
 
 [include examples/source_info.qbk]
+[include examples/global_scope.qbk]
+[include examples/namespaces.qbk]
+[include examples/scopes.qbk]
+[include examples/types.qbk]
+[include examples/typedefs.qbk]
+[include examples/data_members_2.qbk]
+
+[include examples/traits.qbk]
 
 [endsect]

@@ -1,0 +1,9 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:typedefs Typedef or type alias reflection]
+
+[import typedefs.hpp]
+[example_typedefs]
+
+[endsect]

@@ -1,0 +1,9 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+[section:types Type reflection]
+
+[import types.hpp]
+[example_types]
+
+[endsect]
