@@ -13,8 +13,9 @@ int main(void)
 {
 	using namespace std;
 
-	// reflected foo
-	typedef __reflexpr(foo) meta_foo;
+	typedef __reflexpr(foo) meta_foo; /*<
+	Reflected [^struct foo].
+	>*/
 
 	static_assert(__is_metaobject_v<meta_foo>, "");
 

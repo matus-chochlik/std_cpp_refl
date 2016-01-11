@@ -11,8 +11,9 @@ int main(void)
 {
 	using namespace std;
 
-	// reflected type unsigned
-	typedef __reflexpr(unsigned) meta_unsigned;
+	typedef __reflexpr(unsigned) meta_unsigned; /*<
+	Reflected type [^unsigned].
+	>*/
 
 	static_assert(__is_metaobject_v<meta_unsigned>, "");
 	static_assert(__meta::__is_type_v<meta_unsigned>, "");

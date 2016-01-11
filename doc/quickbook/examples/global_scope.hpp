@@ -10,7 +10,9 @@ int main(void)
 {
 	using namespace std;
 
-	typedef __reflexpr(::) meta_gs;
+	typedef __reflexpr(::) meta_gs; /*<
+	Reflected global scope.
+	>*/
 
 	static_assert(__is_metaobject_v<meta_gs>, "");
 

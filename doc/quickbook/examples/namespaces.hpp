@@ -15,8 +15,9 @@ int main(void)
 {
 	using namespace std;
 
-	// reflected namespace foo
-	typedef __reflexpr(foo) meta_foo;
+	typedef __reflexpr(foo) meta_foo; /*<
+	Reflected namespace [^foo].
+	>*/
 
 	static_assert(__is_metaobject_v<meta_foo>, "");
 
@@ -29,8 +30,9 @@ int main(void)
 	static_assert(meta::__has_scope_v<meta_foo>, "");
 	cout << meta::__get_name_v<meta_foo> << endl;
 
-	// reflected nested namespace foo::bar
-	typedef reflexpr(foo::bar) meta_foo_bar;
+	typedef reflexpr(foo::bar) meta_foo_bar; /*<
+	Reflected nested namespace [^foo::bar].
+	>*/
 
 	static_assert(is_metaobject_v<meta_foo_bar>, "");
 
@@ -43,8 +45,9 @@ int main(void)
 	static_assert(meta::has_scope_v<meta_foo_bar>, "");
 	cout << meta::get_name_v<meta_foo_bar> << endl;
 
-	// reflected namespace alias foobar
-	typedef reflexpr(foobar) meta_foobar;
+	typedef reflexpr(foobar) meta_foobar; /*<
+	Reflected namespace alias [^foobar].
+	>*/
 
 	static_assert(is_metaobject_v<meta_foobar>, "");
 
