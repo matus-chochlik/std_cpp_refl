@@ -232,6 +232,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<generalization name="MetaScope"/>
 	</metaobject>
 
+	<operation name="get_elaborated_type_specifier"
+		result="MetaSpecifier"
+		brief="A MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaClass"/>
+	</operation>
+
 	<operation name="get_data_members"
 		result="MetaobjectSequence"
 		brief="A sequence of Metaobjects reflecting the public data members of $(reflected) reflected by a $(operand)."
@@ -241,7 +248,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_all_data_members"
 		result="MetaobjectSequence"
-		brief="A sequence of Metaobjects reflecting the all data members of $(reflected) reflected by a $(operand)."
+		brief="A sequence of Metaobjects reflecting all data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaClass"/>
 	</operation>

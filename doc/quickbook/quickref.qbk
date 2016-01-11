@@ -32,7 +32,7 @@ statements are assumed, but omitted for the sake of brevity from this reference.
 In order to avoid conflicts with existing names in the [^std]
 namespace, most named definitions (like the
 [link reflexpr.quickref.traits metaobject traits]),
-should be placed in the namespace [^meta] nested inside namespace [^std].
+are placed in the namespace [^meta] nested inside namespace [^std].
 
 ``
 namespace std {

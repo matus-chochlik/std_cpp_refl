@@ -10,6 +10,8 @@
 This section contains several examples (cross-referenced with the documentation)
 of the usage of the [^__reflexpr] operator and the resulting metaobjects.
 
+[endsect]
+
 [include examples/source_info.qbk]
 [include examples/global_scope.qbk]
 [include examples/namespaces.qbk]
@@ -19,7 +21,8 @@ of the usage of the [^__reflexpr] operator and the resulting metaobjects.
 [include examples/data_members.qbk]
 [include examples/data_members_2.qbk]
 
+[include examples/specifiers.qbk]
+
 [include examples/traits.qbk]
 [include examples/base_names_tpl.qbk]
 
-[endsect]

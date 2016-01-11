@@ -1,0 +1,10 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:get_elaborated_type_specifier get_elaborated_type_specifier]
+[import o_get_elaborated_type_specifier.hpp]
+
+[meta_get_elaborated_type_specifier]
+
+[endsect]

@@ -5,8 +5,11 @@
 	[id reflexpr.implementation]
 ]
 
-[section:intro Introduction]
+A fork of the clang++ compiler with an experimental implementation of this
+proposal can be found [@https://github.com/matus-chochlik/clang on github]
+(on the [@https://github.com/matus-chochlik/clang/tree/mirror-reflection [^mirror-reflection] branch]).
 
-[/TODO]
+The __reflexpr_hpp header is implemented in the [^mirror/] subdirectory.
 
-[endsect]
+[note The implementation is still work-in-progress.]
+

@@ -25,6 +25,8 @@
 
 [include o_get_typedef_type.qbk]
 
+[include o_get_elaborated_type_specifier.qbk]
+
 [include o_get_data_members.qbk]
 
 [include o_get_all_data_members.qbk]

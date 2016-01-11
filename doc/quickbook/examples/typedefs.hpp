@@ -49,7 +49,7 @@ int main(void)
 	cout << meta::get_name_v<meta_foo_bar> << endl;
 
 	// getting the reflected type int
-	typedef meta::get_aliased_t<meta_foo_bar> meta_int;
+	typedef meta::__get_aliased_t<meta_foo_bar> meta_int;
 
 	static_assert(is_metaobject_v<meta_int>, "");
 	static_assert(meta::is_type_v<meta_int>, "");

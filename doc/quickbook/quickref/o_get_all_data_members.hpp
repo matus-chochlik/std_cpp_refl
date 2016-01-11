@@ -13,7 +13,7 @@ struct get_all_data_members
 	static_assert(__is_class_v<__MetaClass>, "");
 
 	typedef __MetaobjectSequence type; /*<
-	A sequence of Metaobjects reflecting the all data members of a class reflected by a MetaClass.
+	A sequence of Metaobjects reflecting all data members of a class reflected by a MetaClass.
 	>*/
 
 
