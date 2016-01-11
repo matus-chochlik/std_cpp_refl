@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaEnum_def
+
+template <typename T>
+__concept bool MetaEnum = __MetaType<T> && __meta::__is_enum_v<T>;
+
+//]
 //[reflexpr_MetaEnum_begin
 __namespace_meta_begin
 //]

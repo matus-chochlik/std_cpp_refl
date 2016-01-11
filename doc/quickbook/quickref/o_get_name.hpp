@@ -6,11 +6,11 @@
 //[meta_get_name
 __namespace_meta_begin
 
-template <typename MetaNamed>
+template <typename T>
+__requires __MetaNamed<T>
 struct get_name
 {
 
-	static_assert(__has_name_v<__MetaNamed>, "");
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
@@ -21,17 +21,13 @@ struct get_name
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;
-
 };
 
+template <typename T>
+using get_name_t = typename get_name<T>::type;
 
-template <typename MetaNamed>
-using get_name_t =
-	typename get_name<MetaNamed>::type;
-
-template <typename MetaNamed>
-constexpr bool get_name_v =
-	get_name<MetaNamed>::value;
+template <typename T>
+constexpr bool get_name_v = get_name<T>::value;
 
 __namespace_meta_end
 //]

@@ -6,11 +6,11 @@
 //[meta_get_size
 __namespace_meta_begin
 
-template <typename MetaobjectSequence>
+template <typename T>
+__requires __MetaobjectSequence<T>
 struct get_size
 {
 
-	static_assert(__is_sequence_v<__MetaobjectSequence>, "");
 	typedef size_t value_type;
 	static constexpr const size_t value = ... /*<
 	Number of elements in the sequence.
@@ -20,17 +20,13 @@ struct get_size
 
 	operator value_type (void) const noexcept;
 	value_type operator(void) const noexcept;
-
 };
 
+template <typename T>
+using get_size_t = typename get_size<T>::type;
 
-template <typename MetaobjectSequence>
-using get_size_t =
-	typename get_size<MetaobjectSequence>::type;
-
-template <typename MetaobjectSequence>
-constexpr bool get_size_v =
-	get_size<MetaobjectSequence>::value;
+template <typename T>
+constexpr bool get_size_v = get_size<T>::value;
 
 __namespace_meta_end
 //]

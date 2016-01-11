@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaAlias_def
+
+template <typename T>
+__concept bool MetaAlias = __MetaNamed<T> && __meta::__is_alias_v<T>;
+
+//]
 //[reflexpr_MetaAlias_begin
 __namespace_meta_begin
 //]

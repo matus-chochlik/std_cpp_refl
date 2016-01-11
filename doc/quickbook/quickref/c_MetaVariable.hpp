@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaVariable_def
+
+template <typename T>
+__concept bool MetaVariable = __MetaNamed<T> && __MetaTyped<T> && __meta::__is_variable_v<T>;
+
+//]
 //[reflexpr_MetaVariable_begin
 __namespace_meta_begin
 //]

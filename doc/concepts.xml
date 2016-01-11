@@ -25,22 +25,22 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 	</unused>
 
-	<trait name="is_sequence" indicates="MetaobjectSequence" uses="get_category"/>
-	<trait name="is_specifier" indicates="MetaSpecifier" uses="get_category"/>
+	<trait name="is_sequence" scope="meta" indicates="MetaobjectSequence" uses="get_category"/>
+	<trait name="is_specifier" scope="meta" indicates="MetaSpecifier" uses="get_category"/>
 
-	<trait name="is_namespace" indicates="MetaNamespace" uses="get_category"/>
-	<trait name="is_global_scope" indicates="MetaGlobalScope" uses="get_category"/>
-	<trait name="is_type" indicates="MetaType" uses="get_category"/>
-	<trait name="is_class" indicates="MetaClass" uses="get_category"/>
-	<trait name="is_enum" indicates="MetaEnum" uses="get_category"/>
-	<trait name="is_variable" indicates="MetaVariable" uses="get_category"/>
+	<trait name="is_namespace" scope="meta" indicates="MetaNamespace" uses="get_category"/>
+	<trait name="is_global_scope" scope="meta" indicates="MetaGlobalScope" uses="get_category"/>
+	<trait name="is_type" scope="meta" indicates="MetaType" uses="get_category"/>
+	<trait name="is_class" scope="meta" indicates="MetaClass" uses="get_category"/>
+	<trait name="is_enum" scope="meta" indicates="MetaEnum" uses="get_category"/>
+	<trait name="is_variable" scope="meta" indicates="MetaVariable" uses="get_category"/>
 
-	<trait name="has_name" indicates="MetaNamed"/>
-	<trait name="has_type" indicates="MetaTyped"/>
-	<trait name="has_scope" indicates="MetaScoped"/>
-	<trait name="is_scope" indicates="MetaScope"/>
-	<trait name="is_alias" indicates="MetaAlias"/>
-	<trait name="is_class_member" indicates="MetaClassMember"/>
+	<trait name="has_name" scope="meta" indicates="MetaNamed"/>
+	<trait name="has_type" scope="meta" indicates="MetaTyped"/>
+	<trait name="has_scope" scope="meta" indicates="MetaScoped"/>
+	<trait name="is_scope" scope="meta" indicates="MetaScope"/>
+	<trait name="is_alias" scope="meta" indicates="MetaAlias"/>
+	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
 
 	<operation name="source_file"
 		brief="Source file path of the declaration of $(reflected) reflected by a $(operand)."
@@ -81,7 +81,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		label="Metaobject\nSequence"
 		brief="is an ordered sequence of metaobjects."
 	>
-		<generalization name="Metaobject"/>
+		<generalization concept="Metaobject"/>
 	</metaobject>
 
 	<operation name="get_size"
@@ -103,7 +103,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaSpecifier"
 		reflects="a specifier"
 	>
-		<generalization name="Metaobject"/>
+		<generalization concept="Metaobject"/>
 	</metaobject>
 
 	<operation name="get_keyword"
@@ -116,7 +116,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaNamed"
 		reflects="a named declaration"
 	>
-		<generalization name="Metaobject"/>
+		<generalization concept="Metaobject"/>
 	</metaobject>
 
 	<operation name="get_name"
@@ -129,7 +129,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaTyped"
 		reflects="base-level construct with a type"
 	>
-		<generalization name="Metaobject"/>
+		<generalization concept="Metaobject"/>
 	</metaobject>
 
 	<operation name="get_type"
@@ -142,7 +142,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaScoped"
 		reflects="a scoped declaration"
 	>
-		<generalization name="Metaobject"/>
+		<generalization concept="Metaobject"/>
 	</metaobject>
 
 	<operation name="get_scope"
@@ -155,14 +155,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaScope"
 		reflects="a scope"
 	>
-		<generalization name="MetaNamed"/>
-		<generalization name="MetaScoped" optional="true"/>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScoped" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
 		reflects="a type or namespace alias"
 	>
-		<generalization name="MetaNamed"/>
+		<generalization concept="MetaNamed"/>
 	</metaobject>
 
 	<operation name="get_aliased"
@@ -176,31 +176,32 @@ by the compiler which allow access to metadata reflecting specific program featu
 		reflects="the global scope"
 		label="Meta\nGlobal\nScope"
 	>
-		<generalization name="MetaNamed"/>
-		<generalization name="MetaScope"/>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScope"/>
 	</metaobject>
 
 	<metaobject name="MetaNamespace"
 		reflects="a namespace"
 	>
-		<generalization name="MetaNamed"/>
-		<generalization name="MetaScope"/>
-		<generalization name="MetaScoped"/>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScope"/>
+		<generalization concept="MetaScoped"/>
 	</metaobject>
 
 	<metaobject name="MetaNamespaceAlias"
 		reflects="a namespace alias"
 		label="Meta\nNamespace\nAlias"
 	>
-		<generalization name="MetaNamespace"/>
-		<generalization name="MetaAlias"/>
+		<generalization concept="MetaNamespace"/>
+		<generalization concept="MetaAlias"/>
+		<constraint operation="get_aliased" trait="is_namespace"/>
 	</metaobject>
 
 	<metaobject name="MetaType"
 		reflects="a type"
 	>
-		<generalization name="MetaNamed"/>
-		<generalization name="MetaScoped"/>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScoped"/>
 	</metaobject>
 
 	<operation name="get_reflected_type"
@@ -214,8 +215,9 @@ by the compiler which allow access to metadata reflecting specific program featu
 		label="MetaType\nAlias"
 		reflects="a type alias or typedef"
 	>
-		<generalization name="MetaType"/>
-		<generalization name="MetaAlias"/>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaAlias"/>
+		<constraint operation="get_aliased" trait="is_type"/>
 	</metaobject>
 
 	<operation name="get_typedef_type"
@@ -228,8 +230,8 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaClass"
 		reflects="a class"
 	>
-		<generalization name="MetaType"/>
-		<generalization name="MetaScope"/>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaScope"/>
 	</metaobject>
 
 	<operation name="get_elaborated_type_specifier"
@@ -256,21 +258,22 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="MetaEnum"
 		reflects="an enumeration"
 	>
-		<generalization name="MetaType"/>
-		<generalization name="MetaScope" optional="true"/>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaScope" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaVariable"
 		reflects="a variable"
 	>
-		<generalization name="MetaNamed"/>
-		<generalization name="MetaTyped"/>
-		<generalization name="MetaScoped" optional="true"/>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaTyped"/>
+		<generalization concept="MetaScoped" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaClassMember"
 		reflects="class member"
 	>
-		<generalization name="MetaScoped"/>
+		<generalization concept="MetaScoped"/>
+		<constraint operation="get_scope" trait="is_class"/>
 	</metaobject>
 </concepts>

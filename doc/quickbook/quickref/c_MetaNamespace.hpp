@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaNamespace_def
+
+template <typename T>
+__concept bool MetaNamespace = __MetaNamed<T> && __MetaScope<T> && __MetaScoped<T> && __meta::__is_namespace_v<T>;
+
+//]
 //[reflexpr_MetaNamespace_begin
 __namespace_meta_begin
 //]

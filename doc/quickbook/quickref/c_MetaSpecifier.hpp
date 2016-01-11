@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaSpecifier_def
+
+template <typename T>
+__concept bool MetaSpecifier = __Metaobject<T> && __meta::__is_specifier_v<T>;
+
+//]
 //[reflexpr_MetaSpecifier_begin
 __namespace_meta_begin
 //]

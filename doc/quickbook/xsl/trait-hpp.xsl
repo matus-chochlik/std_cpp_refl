@@ -18,10 +18,9 @@ __namespace_meta_begin
 
 <xsl:for-each select="trait[@name=$trait]">
 template &lt;typename T&gt;
+__requires __Metaobject&lt;T&gt;
 struct <xsl:value-of select="@name"/>
 {
-	static_assert(__is_metaobject_v&lt;T&gt;, "");
-
 	typedef bool value_type;
 	static constexpr const bool value = ... /*&lt;
 	[^true] if [^T] is a __<xsl:value-of select="@indicates"/>

@@ -42,10 +42,10 @@
 	<xsl:text>(</xsl:text><xsl:value-of select="$child"/><xsl:text>)</xsl:text>
 
 	<xsl:for-each select="/concepts/metaobject[@name=$child]/generalization">
-		<xsl:text>(</xsl:text><xsl:value-of select="@name"/><xsl:text>)</xsl:text>
+		<xsl:text>(</xsl:text><xsl:value-of select="@concept"/><xsl:text>)</xsl:text>
 
 		<xsl:call-template name="list-generalizations">
-			<xsl:with-param name="child" select="@name"/>
+			<xsl:with-param name="child" select="@concept"/>
 		</xsl:call-template>
 	</xsl:for-each>
 </xsl:template>
@@ -149,19 +149,19 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 		<xsl:value-of select="$done"/>
 		<xsl:for-each select="preceding-sibling::generalization">
 		<xsl:call-template name="list-generalizations">
-			<xsl:with-param name="child" select="@name"/>
+			<xsl:with-param name="child" select="@concept"/>
 		</xsl:call-template>
 		</xsl:for-each>
 		</xsl:variable>
 
-		<xsl:if test="not(contains($new_done, concat('(',@name,')')))">
+		<xsl:if test="not(contains($new_done, concat('(',@concept,')')))">
 		<xsl:call-template name="inherited-traits">
-			<xsl:with-param name="child" select="@name"/>
+			<xsl:with-param name="child" select="@concept"/>
 			<xsl:with-param name="done" select="$new_done"/>
 		</xsl:call-template>
 
 		<xsl:call-template name="trait">
-		<xsl:with-param name="trait_mo" select="@name"/>
+		<xsl:with-param name="trait_mo" select="@concept"/>
 		</xsl:call-template>
 		</xsl:if>
 	</xsl:for-each>
@@ -178,19 +178,19 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 		<xsl:value-of select="$done"/>
 		<xsl:for-each select="preceding-sibling::generalization">
 		<xsl:call-template name="list-generalizations">
-			<xsl:with-param name="child" select="@name"/>
+			<xsl:with-param name="child" select="@concept"/>
 		</xsl:call-template>
 		</xsl:for-each>
 		</xsl:variable>
 
-		<xsl:if test="not(contains($new_done, concat('(',@name,')')))">
+		<xsl:if test="not(contains($new_done, concat('(',@concept,')')))">
 		<xsl:call-template name="inherited-operations">
-			<xsl:with-param name="child" select="@name"/>
+			<xsl:with-param name="child" select="@concept"/>
 			<xsl:with-param name="done" select="$new_done"/>
 		</xsl:call-template>
 
 		<xsl:call-template name="operations">
-		<xsl:with-param name="operation_mo" select="@name"/>
+		<xsl:with-param name="operation_mo" select="@concept"/>
 		</xsl:call-template>
 		</xsl:if>
 	</xsl:for-each>
@@ -201,6 +201,32 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_<xsl:value-of select="$metaobject"/>_def
+<xsl:for-each select="/concepts/metaobject[@name=$metaobject]">
+template &lt;typename T&gt;
+__concept bool <xsl:value-of select="@name"/><xsl:text> = </xsl:text>
+<xsl:for-each select="generalization[not(@optional='true')]">
+	<xsl:if test="position() != 1"> &amp;&amp; </xsl:if>
+	<xsl:text>__</xsl:text><xsl:value-of select="@concept"/><xsl:text>&lt;T&gt;</xsl:text>
+</xsl:for-each>
+<xsl:variable name="has_gens" select="generalization[not(@optional='true')]"/>
+<xsl:for-each select="/concepts/trait[@indicates=$metaobject]">
+	<xsl:if test="position() != 1 or $has_gens"> &amp;&amp; </xsl:if>
+	<xsl:if test="@scope">__<xsl:value-of select="@scope"/>::</xsl:if>
+	<xsl:text>__</xsl:text><xsl:value-of select="@name"/><xsl:text>_v&lt;T&gt;</xsl:text>
+</xsl:for-each>
+<xsl:variable name="has_trts" select="/concepts/trait[@indicates=$metaobject]"/>
+<xsl:for-each select="constraint">
+	<xsl:if test="position() != 1 or $has_gens or $has_trts"> &amp;&amp; </xsl:if>
+	<xsl:if test="not($has_trts)">__</xsl:if><xsl:text>meta::</xsl:text>
+	<xsl:if test="@operation and @trait">
+		<xsl:text>__</xsl:text><xsl:value-of select="@trait"/><xsl:text>_v&lt;</xsl:text>
+		<xsl:text>__</xsl:text><xsl:value-of select="@operation"/><xsl:text>_t&lt;T&gt;&gt;</xsl:text>
+	</xsl:if>
+</xsl:for-each>
+<xsl:if test="@name='Metaobject'">__is_metaobject_v&lt;T&gt;</xsl:if>;
+</xsl:for-each>
+//]
 //[reflexpr_<xsl:value-of select="$metaobject"/>_begin
 __namespace_meta_begin
 //]

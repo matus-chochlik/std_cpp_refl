@@ -60,7 +60,7 @@ digraph <xsl:value-of select="$metaobject"/> {
 	node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]
 	edge [dir="both",arrowtail="onormal",arrowhead="none"]
 <xsl:for-each select="metaobject[@name=$metaobject]/generalization">
-	<xsl:variable name="gen_name" select="@name"/>
+	<xsl:variable name="gen_name" select="@concept"/>
 	<xsl:variable name="optional" select="@optional='true'"/>
 	<xsl:for-each select="/concepts/metaobject[@name=$gen_name]">
 		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
@@ -70,27 +70,27 @@ digraph <xsl:value-of select="$metaobject"/> {
 </xsl:for-each>
 
 	<!-- metaobject's specializations -->
-<xsl:for-each select="metaobject[generalization[@name=$metaobject]]">
+<xsl:for-each select="metaobject[generalization[@concept=$metaobject]]">
 	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
-	<xsl:variable name="optional" select="generalization[@name=$metaobject]/@optional='true'"/>
+	<xsl:variable name="optional" select="generalization[@concept=$metaobject]/@optional='true'"/>
 	<xsl:value-of select="$metaobject"/> -> <xsl:value-of select="@name"/>
 	<xsl:if test="$optional">[style="dashed"]</xsl:if>;
 </xsl:for-each>
 
 	<!-- metaobject ordering -->
 <xsl:for-each select="metaobject[@name=$metaobject]/generalization">
-	<xsl:variable name="gen_name" select="@name"/>
+	<xsl:variable name="gen_name" select="@concept"/>
 
 	<xsl:if test="preceding-sibling::generalization">
-		<xsl:value-of select="preceding-sibling::generalization/@name"/> -> <xsl:value-of select="$gen_name"/>[style="invisible",dir="forward"];
+		<xsl:value-of select="preceding-sibling::generalization/@concept"/> -> <xsl:value-of select="$gen_name"/>[style="invisible",dir="forward"];
 	</xsl:if>
 
 </xsl:for-each>
 
-<xsl:for-each select="metaobject[generalization[@name=$metaobject]]">
-		<xsl:if test="preceding-sibling::metaobject[generalization/@name=$metaobject]">
+<xsl:for-each select="metaobject[generalization[@concept=$metaobject]]">
+		<xsl:if test="preceding-sibling::metaobject[generalization/@concept=$metaobject]">
 		
-		<xsl:value-of select="preceding-sibling::metaobject[generalization/@name=$metaobject][1]/@name"/> -> <xsl:value-of select="@name"/>[style="invisible",dir="forward"];
+		<xsl:value-of select="preceding-sibling::metaobject[generalization/@concept=$metaobject][1]/@name"/> -> <xsl:value-of select="@name"/>[style="invisible",dir="forward"];
 		</xsl:if>
 </xsl:for-each>
 

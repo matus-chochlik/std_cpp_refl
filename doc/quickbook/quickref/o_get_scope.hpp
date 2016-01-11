@@ -6,23 +6,18 @@
 //[meta_get_scope
 __namespace_meta_begin
 
-template <typename MetaScoped>
+template <typename T>
+__requires __MetaScoped<T>
 struct get_scope
 {
-
-	static_assert(__has_scope_v<__MetaScoped>, "");
 
 	typedef __MetaScope type; /*<
 	The MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
 	>*/
-
-
 };
 
-
-template <typename MetaScoped>
-using get_scope_t =
-	typename get_scope<MetaScoped>::type;
+template <typename T>
+using get_scope_t = typename get_scope<T>::type;
 
 __namespace_meta_end
 //]

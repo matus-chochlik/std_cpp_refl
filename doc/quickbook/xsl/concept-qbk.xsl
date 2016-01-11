@@ -33,7 +33,7 @@
 		<xsl:if test="@optional='true'">possibly</xsl:if>
 		</xsl:if>
 		<xsl:text> a </xsl:text>
-		<xsl:text>__</xsl:text><xsl:value-of select="@name"/>
+		<xsl:text>__</xsl:text><xsl:value-of select="@concept"/>
 	</xsl:for-each>
 
 	<xsl:choose>
@@ -43,6 +43,8 @@
 </xsl:otherwise>
 </xsl:choose>
 
+[reflexpr_<xsl:value-of select="@name"/>_def]
+[heading Implementation]
 [reflexpr_<xsl:value-of select="@name"/>_begin]
 [heading Traits]
 [reflexpr_<xsl:value-of select="@name"/>_inherited_traits]

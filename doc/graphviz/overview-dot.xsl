@@ -47,7 +47,7 @@ digraph Reflection {
 	<!-- generalizations -->
 	edge [penwidth=2,dir="both",arrowsize=1.5,arrowtail="onormal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>;
+	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>;
 </xsl:for-each>
 
 	<!-- Metaobject -> trait -->

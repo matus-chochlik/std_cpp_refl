@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_Metaobject_def
+
+template <typename T>
+__concept bool Metaobject = __is_metaobject_v<T>;
+
+//]
 //[reflexpr_Metaobject_begin
 __namespace_meta_begin
 //]

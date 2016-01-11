@@ -6,11 +6,11 @@
 //[meta_source_line
 __namespace_meta_begin
 
-template <typename Metaobject>
+template <typename T>
+__requires __Metaobject<T>
 struct source_line
 {
-	static_assert(__is_metaobject_v<__Metaobject>, "");
-	
+
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
 	Source file line of the declaration of a base-level program feature reflected by a Metaobject.
@@ -20,17 +20,13 @@ struct source_line
 
 	operator value_type (void) const noexcept;
 	value_type operator(void) const noexcept;
-
 };
 
+template <typename T>
+using source_line_t = typename source_line<T>::type;
 
-template <typename Metaobject>
-using source_line_t =
-	typename source_line<Metaobject>::type;
-
-template <typename Metaobject>
-constexpr bool source_line_v =
-	source_line<Metaobject>::value;
+template <typename T>
+constexpr bool source_line_v = source_line<T>::value;
 
 __namespace_meta_end
 //]

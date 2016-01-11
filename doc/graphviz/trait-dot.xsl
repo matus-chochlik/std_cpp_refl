@@ -11,13 +11,13 @@
 <xsl:template name="list-specializations">
 	<xsl:param name="parent"/>
 
-	<xsl:for-each select="/concepts/metaobject[generalization/@name=$parent]">
+	<xsl:for-each select="/concepts/metaobject[generalization/@concept=$parent]">
 		<xsl:text>(</xsl:text>
-		<xsl:value-of select="@name"/>
+		<xsl:value-of select="@concept"/>
 		<xsl:text>)</xsl:text>
 
 		<xsl:call-template name="list-specializations">
-			<xsl:with-param name="parent" select="@name"/>
+			<xsl:with-param name="parent" select="@concept"/>
 		</xsl:call-template>
 	</xsl:for-each>
 </xsl:template>
@@ -26,26 +26,26 @@
 	<xsl:param name="parent"/>
 	<xsl:param name="done"/>
 
-	<xsl:for-each select="/concepts/metaobject[generalization/@name=$parent]">
-		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+	<xsl:for-each select="/concepts/metaobject[generalization/@concept=$parent]">
+		<xsl:value-of select="@concept"/>[URL="concept-<xsl:value-of select="@concept"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 
-		<xsl:if test="not(contains($done, concat('(',@name,')')))">
+		<xsl:if test="not(contains($done, concat('(',@concept,')')))">
 		edge [style="solid",dir="both",arrowtail="onormal",arrowhead="none"]
-		<xsl:value-of select="$parent"/> -> <xsl:value-of select="@name"/>
-		<xsl:if test="generalization[@name=$parent]/@optional='true'"> [style="dashed"]</xsl:if>;
-		<xsl:if test="preceding-sibling::metaobject[generalization/@name=$parent]">
+		<xsl:value-of select="$parent"/> -> <xsl:value-of select="@concept"/>
+		<xsl:if test="generalization[@concept=$parent]/@optional='true'"> [style="dashed"]</xsl:if>;
+		<xsl:if test="preceding-sibling::metaobject[generalization/@concept=$parent]">
 		edge [style="invisible",dir="forward"]
-		<xsl:value-of select="preceding-sibling::metaobject[generalization/@name=$parent][1]/@name"/> -> <xsl:value-of select="@name"/>;
+		<xsl:value-of select="preceding-sibling::metaobject[generalization/@concept=$parent][1]/@name"/> -> <xsl:value-of select="@concept"/>;
 		</xsl:if>
 		</xsl:if>
 
 		<xsl:call-template name="process-specializations">
-			<xsl:with-param name="parent" select="@name"/>
+			<xsl:with-param name="parent" select="@concept"/>
 			<xsl:with-param name="done">
 				<xsl:value-of select="$done"/>
-				<xsl:for-each select="preceding-sibling::metaobject[generalization/@name=$parent]">
+				<xsl:for-each select="preceding-sibling::metaobject[generalization/@concept=$parent]">
 				<xsl:call-template name="list-specializations">
-					<xsl:with-param name="parent" select="@name"/>
+					<xsl:with-param name="parent" select="@concept"/>
 				</xsl:call-template>
 				</xsl:for-each>
 			</xsl:with-param>

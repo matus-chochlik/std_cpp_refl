@@ -8,10 +8,9 @@ __namespace_meta_begin
 
 
 template <typename T>
+__requires __Metaobject<T>
 struct is_scope
 {
-	static_assert(__is_metaobject_v<T>, "");
-
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
 	[^true] if [^T] is a __MetaScope

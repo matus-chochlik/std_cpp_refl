@@ -7,6 +7,7 @@
 
 [concept MetaNamed] is  a __Metaobject reflecting a named declaration.
 
+[reflexpr_MetaNamed_def]
 [reflexpr_MetaNamed_begin]
 [heading Traits]
 [reflexpr_MetaNamed_inherited_traits]

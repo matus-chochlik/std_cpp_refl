@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaScope_def
+
+template <typename T>
+__concept bool MetaScope = __MetaNamed<T> && __meta::__is_scope_v<T>;
+
+//]
 //[reflexpr_MetaScope_begin
 __namespace_meta_begin
 //]

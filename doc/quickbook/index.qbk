@@ -181,6 +181,8 @@
 [def __reflexpr_header [link reflexpr.quickref.reflexpr.header [^<reflexpr>]]]
 [def __reflexpr_hpp [link reflexpr.quickref.reflexpr.header [^"reflexpr.hpp"]]]
 
+[def __concept [@http://en.cppreference.com/w/cpp/language/constraints concept]]
+[def __requires [@http://en.cppreference.com/w/cpp/language/constraints requires]]
 
 [include quickref.qbk]
 [include examples.qbk]

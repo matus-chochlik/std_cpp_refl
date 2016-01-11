@@ -7,6 +7,7 @@
 
 [concept MetaTyped] is  a __Metaobject reflecting base-level construct with a type.
 
+[reflexpr_MetaTyped_def]
 [reflexpr_MetaTyped_begin]
 [heading Traits]
 [reflexpr_MetaTyped_inherited_traits]

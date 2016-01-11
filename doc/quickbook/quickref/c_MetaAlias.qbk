@@ -7,6 +7,7 @@
 
 [concept MetaAlias] is  a __MetaNamed reflecting a type or namespace alias.
 
+[reflexpr_MetaAlias_def]
 [reflexpr_MetaAlias_begin]
 [heading Traits]
 [reflexpr_MetaAlias_inherited_traits]

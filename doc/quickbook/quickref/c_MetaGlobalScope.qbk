@@ -7,6 +7,7 @@
 
 [concept MetaGlobalScope] is  a __MetaNamed and  a __MetaScope reflecting the global scope.
 
+[reflexpr_MetaGlobalScope_def]
 [reflexpr_MetaGlobalScope_begin]
 [heading Traits]
 [reflexpr_MetaGlobalScope_inherited_traits]

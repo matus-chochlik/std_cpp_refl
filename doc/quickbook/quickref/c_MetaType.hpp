@@ -3,6 +3,12 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
+//[reflexpr_MetaType_def
+
+template <typename T>
+__concept bool MetaType = __MetaNamed<T> && __MetaScoped<T> && __meta::__is_type_v<T>;
+
+//]
 //[reflexpr_MetaType_begin
 __namespace_meta_begin
 //]

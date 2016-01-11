@@ -6,23 +6,18 @@
 //[meta_get_reflected_type
 __namespace_meta_begin
 
-template <typename MetaType>
+template <typename T>
+__requires __MetaType<T>
 struct get_reflected_type
 {
-
-	static_assert(__is_type_v<__MetaType>, "");
 
 	typedef __Type type; /*<
 	The the base-level type reflected by a MetaType.
 	>*/
-
-
 };
 
-
-template <typename MetaType>
-using get_reflected_type_t =
-	typename get_reflected_type<MetaType>::type;
+template <typename T>
+using get_reflected_type_t = typename get_reflected_type<T>::type;
 
 __namespace_meta_end
 //]

@@ -7,6 +7,7 @@
 
 [concept MetaClassMember] is  a __MetaScoped reflecting class member.
 
+[reflexpr_MetaClassMember_def]
 [reflexpr_MetaClassMember_begin]
 [heading Traits]
 [reflexpr_MetaClassMember_inherited_traits]
