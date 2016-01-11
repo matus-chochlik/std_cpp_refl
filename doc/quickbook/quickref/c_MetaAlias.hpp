@@ -6,7 +6,9 @@
 //[reflexpr_MetaAlias_def
 
 template <typename T>
-__concept bool MetaAlias = __MetaNamed<T> && __meta::__is_alias_v<T>;
+__concept bool MetaAlias =
+	__MetaNamed<T> &&
+	__meta::__is_alias_v<T>;
 
 //]
 //[reflexpr_MetaAlias_begin

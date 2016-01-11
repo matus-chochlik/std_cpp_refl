@@ -8,6 +8,7 @@
 [concept MetaType] is  a __MetaNamed and  a __MetaScoped reflecting a type.
 
 [reflexpr_MetaType_def]
+[heading Implementation]
 [reflexpr_MetaType_begin]
 [heading Traits]
 [reflexpr_MetaType_inherited_traits]

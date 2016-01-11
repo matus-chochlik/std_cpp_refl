@@ -8,6 +8,7 @@
 [concept MetaScoped] is  a __Metaobject reflecting a scoped declaration.
 
 [reflexpr_MetaScoped_def]
+[heading Implementation]
 [reflexpr_MetaScoped_begin]
 [heading Traits]
 [reflexpr_MetaScoped_inherited_traits]

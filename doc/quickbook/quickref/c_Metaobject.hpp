@@ -6,7 +6,8 @@
 //[reflexpr_Metaobject_def
 
 template <typename T>
-__concept bool Metaobject = __is_metaobject_v<T>;
+__concept bool Metaobject =
+	__is_metaobject_v<T>;
 
 //]
 //[reflexpr_Metaobject_begin

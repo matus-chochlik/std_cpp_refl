@@ -8,6 +8,7 @@
 [concept MetaNamespace] is  a __MetaNamed,  a __MetaScope and  a __MetaScoped reflecting a namespace.
 
 [reflexpr_MetaNamespace_def]
+[heading Implementation]
 [reflexpr_MetaNamespace_begin]
 [heading Traits]
 [reflexpr_MetaNamespace_inherited_traits]

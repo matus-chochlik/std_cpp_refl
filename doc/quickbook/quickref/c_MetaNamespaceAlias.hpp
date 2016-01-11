@@ -6,7 +6,10 @@
 //[reflexpr_MetaNamespaceAlias_def
 
 template <typename T>
-__concept bool MetaNamespaceAlias = __MetaNamespace<T> && __MetaAlias<T> && __meta::__is_namespace_v<__get_aliased_t<T>>;
+__concept bool MetaNamespaceAlias =
+	__MetaNamespace<T> &&
+	__MetaAlias<T> &&
+	__meta::__is_namespace_v<__get_aliased_t<T>>;
 
 //]
 //[reflexpr_MetaNamespaceAlias_begin

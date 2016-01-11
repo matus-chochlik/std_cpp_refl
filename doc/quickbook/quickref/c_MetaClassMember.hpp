@@ -6,7 +6,10 @@
 //[reflexpr_MetaClassMember_def
 
 template <typename T>
-__concept bool MetaClassMember = __MetaScoped<T> && __meta::__is_class_member_v<T> && meta::__is_class_v<__get_scope_t<T>>;
+__concept bool MetaClassMember =
+	__MetaScoped<T> &&
+	__meta::__is_class_member_v<T> &&
+	meta::__is_class_v<__get_scope_t<T>>;
 
 //]
 //[reflexpr_MetaClassMember_begin

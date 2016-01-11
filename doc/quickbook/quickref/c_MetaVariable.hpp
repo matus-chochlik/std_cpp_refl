@@ -6,7 +6,10 @@
 //[reflexpr_MetaVariable_def
 
 template <typename T>
-__concept bool MetaVariable = __MetaNamed<T> && __MetaTyped<T> && __meta::__is_variable_v<T>;
+__concept bool MetaVariable =
+	__MetaNamed<T> &&
+	__MetaTyped<T> &&
+	__meta::__is_variable_v<T>;
 
 //]
 //[reflexpr_MetaVariable_begin

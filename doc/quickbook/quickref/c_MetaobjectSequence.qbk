@@ -8,6 +8,7 @@
 [concept MetaobjectSequence] is an ordered sequence of metaobjects.
 
 [reflexpr_MetaobjectSequence_def]
+[heading Implementation]
 [reflexpr_MetaobjectSequence_begin]
 [heading Traits]
 [reflexpr_MetaobjectSequence_inherited_traits]

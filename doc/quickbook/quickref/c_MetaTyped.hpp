@@ -6,7 +6,9 @@
 //[reflexpr_MetaTyped_def
 
 template <typename T>
-__concept bool MetaTyped = __Metaobject<T> && __meta::__has_type_v<T>;
+__concept bool MetaTyped =
+	__Metaobject<T> &&
+	__meta::__has_type_v<T>;
 
 //]
 //[reflexpr_MetaTyped_begin

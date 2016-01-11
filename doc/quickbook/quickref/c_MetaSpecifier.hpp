@@ -6,7 +6,9 @@
 //[reflexpr_MetaSpecifier_def
 
 template <typename T>
-__concept bool MetaSpecifier = __Metaobject<T> && __meta::__is_specifier_v<T>;
+__concept bool MetaSpecifier =
+	__Metaobject<T> &&
+	__meta::__is_specifier_v<T>;
 
 //]
 //[reflexpr_MetaSpecifier_begin

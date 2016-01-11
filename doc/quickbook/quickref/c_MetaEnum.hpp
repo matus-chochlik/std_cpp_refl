@@ -6,7 +6,9 @@
 //[reflexpr_MetaEnum_def
 
 template <typename T>
-__concept bool MetaEnum = __MetaType<T> && __meta::__is_enum_v<T>;
+__concept bool MetaEnum =
+	__MetaType<T> &&
+	__meta::__is_enum_v<T>;
 
 //]
 //[reflexpr_MetaEnum_begin

@@ -6,7 +6,9 @@
 //[reflexpr_MetaNamed_def
 
 template <typename T>
-__concept bool MetaNamed = __Metaobject<T> && __meta::__has_name_v<T>;
+__concept bool MetaNamed =
+	__Metaobject<T> &&
+	__meta::__has_name_v<T>;
 
 //]
 //[reflexpr_MetaNamed_begin

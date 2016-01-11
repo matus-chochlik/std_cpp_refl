@@ -8,6 +8,7 @@
 [concept MetaClass] is  a __MetaType and  a __MetaScope reflecting a class.
 
 [reflexpr_MetaClass_def]
+[heading Implementation]
 [reflexpr_MetaClass_begin]
 [heading Traits]
 [reflexpr_MetaClass_inherited_traits]

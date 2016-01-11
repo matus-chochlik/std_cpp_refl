@@ -6,7 +6,10 @@
 //[reflexpr_MetaType_def
 
 template <typename T>
-__concept bool MetaType = __MetaNamed<T> && __MetaScoped<T> && __meta::__is_type_v<T>;
+__concept bool MetaType =
+	__MetaNamed<T> &&
+	__MetaScoped<T> &&
+	__meta::__is_type_v<T>;
 
 //]
 //[reflexpr_MetaType_begin

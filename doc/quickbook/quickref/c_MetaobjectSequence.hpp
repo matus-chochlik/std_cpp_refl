@@ -6,7 +6,9 @@
 //[reflexpr_MetaobjectSequence_def
 
 template <typename T>
-__concept bool MetaobjectSequence = __Metaobject<T> && __meta::__is_sequence_v<T>;
+__concept bool MetaobjectSequence =
+	__Metaobject<T> &&
+	__meta::__is_sequence_v<T>;
 
 //]
 //[reflexpr_MetaobjectSequence_begin

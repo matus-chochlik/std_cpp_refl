@@ -8,6 +8,7 @@
 [concept MetaSpecifier] is  a __Metaobject reflecting a specifier.
 
 [reflexpr_MetaSpecifier_def]
+[heading Implementation]
 [reflexpr_MetaSpecifier_begin]
 [heading Traits]
 [reflexpr_MetaSpecifier_inherited_traits]

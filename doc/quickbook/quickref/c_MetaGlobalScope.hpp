@@ -6,7 +6,10 @@
 //[reflexpr_MetaGlobalScope_def
 
 template <typename T>
-__concept bool MetaGlobalScope = __MetaNamed<T> && __MetaScope<T> && __meta::__is_global_scope_v<T>;
+__concept bool MetaGlobalScope =
+	__MetaNamed<T> &&
+	__MetaScope<T> &&
+	__meta::__is_global_scope_v<T>;
 
 //]
 //[reflexpr_MetaGlobalScope_begin
