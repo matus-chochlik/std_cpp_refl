@@ -6,4 +6,12 @@
 [import typedefs.hpp]
 [example_typedefs]
 
+[heading Output]
+
+``
+baz
+bar
+int
+``
+
 [endsect]

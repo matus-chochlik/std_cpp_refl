@@ -6,4 +6,10 @@
 [import types.hpp]
 [example_types]
 
+[heading Output]
+
+``
+unsigned int
+``
+
 [endsect]

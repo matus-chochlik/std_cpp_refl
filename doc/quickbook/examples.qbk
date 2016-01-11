@@ -16,8 +16,10 @@ of the usage of the [^__reflexpr] operator and the resulting metaobjects.
 [include examples/scopes.qbk]
 [include examples/types.qbk]
 [include examples/typedefs.qbk]
+[include examples/data_members.qbk]
 [include examples/data_members_2.qbk]
 
 [include examples/traits.qbk]
+[include examples/base_names_tpl.qbk]
 
 [endsect]

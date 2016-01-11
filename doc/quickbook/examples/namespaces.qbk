@@ -6,4 +6,12 @@
 [import namespaces.hpp]
 [example_namespaces]
 
+[heading Output]
+
+``
+foo
+bar
+foobar a.k.a bar
+``
+
 [endsect]

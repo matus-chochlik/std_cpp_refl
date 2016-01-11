@@ -56,5 +56,8 @@ int main(void)
 	static_assert(meta::has_name_v<meta_foobar>, "");
 	static_assert(meta::has_scope_v<meta_foobar>, "");
 	cout << meta::get_name_v<meta_foobar> << " a.k.a ";
+	cout << meta::get_name_v<meta::__get_aliased_t<meta_foobar>> << endl;
+
+	return 0;
 }
 //]
