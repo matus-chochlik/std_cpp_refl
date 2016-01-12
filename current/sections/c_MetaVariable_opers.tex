@@ -1,0 +1,26 @@
+
+\subsubsection{\texttt{get\_pointer}}
+
+returns a pointer to the a variable reflected by a \meta{Variable}.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires MetaVariable<T>
+struct get_pointer
+{
+	typedef conditional_t<
+		is_class_member_v<T>,
+		get_reflected_type_t<get_type_t<T>>
+		get_reflected_type_t<get_scope_t<T>>::*,
+		get_reflected_type_t<get_type_t<T>>*
+	> type;
+
+	static const type value;
+};
+
+
+template <typename T>
+using get_pointer_t = typename get_pointer<T>::type;
+
+\end{minted}

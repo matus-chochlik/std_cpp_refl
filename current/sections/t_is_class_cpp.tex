@@ -4,7 +4,7 @@ namespace meta {
 
 template <typename T>
 requires Metaobject<T>
-struct has_scope
+struct is_class
 {
 	typedef bool value_type;
 	static constexpr const bool value;
@@ -15,10 +15,10 @@ struct has_scope
 };
 
 template <typename T>
-using has_scope_t = typename has_scope<T>::type;
+using is_class_t = typename is_class<T>::type;
 
 template <typename T>
-constexpr bool has_scope_v = has_scope<T>::value;
+constexpr bool is_class_v = is_class<T>::value;
 
 } // namespace meta
 \end{minted}

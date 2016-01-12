@@ -1,13 +1,13 @@
 
-\subsubsection{\texttt{get\_keyword}}
+\subsubsection{\texttt{get\_name}}
 
-returns the keyword of the specifier reflected by a \meta{Specifier}.
+returns the basic name of the a named declaration reflected by a \meta{Named}.
 
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename T>
-requires MetaSpecifier<T>
-struct get_keyword
+requires MetaNamed<T>
+struct get_name
 {
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
@@ -19,6 +19,6 @@ struct get_keyword
 
 
 template <typename T>
-using get_keyword_t = typename get_keyword<T>::type;
+using get_name_t = typename get_name<T>::type;
 
 \end{minted}

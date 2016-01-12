@@ -17,11 +17,7 @@ requires Metaobject&lt;T&gt;
 struct <xsl:value-of select="@name"/>
 {
 	typedef bool value_type;
-	static constexpr const bool value = /*
-		true: if T is a <xsl:value-of select="@indicates"/>
-		false: otherwise
-	*/;
-
+	static constexpr const bool value;
 	typedef integral_constant&lt;bool, value&gt; type;
 
 	operator value_type (void) const noexcept;

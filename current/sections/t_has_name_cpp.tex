@@ -7,11 +7,7 @@ requires Metaobject<T>
 struct has_name
 {
 	typedef bool value_type;
-	static constexpr const bool value = /*
-		true: if T is a MetaNamed
-		false: otherwise
-	*/;
-
+	static constexpr const bool value;
 	typedef integral_constant<bool, value> type;
 
 	operator value_type (void) const noexcept;

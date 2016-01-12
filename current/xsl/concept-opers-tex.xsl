@@ -100,7 +100,6 @@ struct <xsl:value-of select="@name"/>
 	<xsl:when test="@result='IntegralConstant'">
 	typedef <xsl:value-of select="@integer"/> value_type;
 	static constexpr const <xsl:value-of select="@integer"/> value;
-
 	typedef integral_constant&lt;value_type, value&gt; type;
 
 	operator value_type (void) const noexcept;
@@ -109,9 +108,7 @@ struct <xsl:value-of select="@name"/>
 
 	<xsl:when test="@result='StringConstant'">
 	typedef const char value_type[N+1];
-
 	static constexpr const char value[N+1];
-
 	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;

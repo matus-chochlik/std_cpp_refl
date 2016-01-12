@@ -11,7 +11,6 @@ struct get_size
 {
 	typedef size_t value_type;
 	static constexpr const size_t value;
-
 	typedef integral_constant<value_type, value> type;
 
 	operator value_type (void) const noexcept;
