@@ -1,0 +1,12 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+
+template <typename T>
+concept bool MetaClassMember =
+	MetaScoped<T> &&
+	meta::is_class_member_v<T> &&
+	meta::is_class_v<get_scope_t<T>>;
+
+\end{minted}

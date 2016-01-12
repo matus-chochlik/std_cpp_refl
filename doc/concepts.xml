@@ -43,7 +43,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
 
 	<operation name="source_file"
-		brief="Source file path of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns a source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
 		<group name="SourceInfo"/>
@@ -56,7 +56,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<operation name="source_line"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="Source file line of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns a source file line of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
@@ -68,7 +68,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<operation name="source_column"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="Source file column of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns a source file column of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject">
@@ -87,14 +87,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<operation name="get_size"
 		result="IntegralConstant"
 		integer="size_t"
-		brief="Number of elements in the sequence."
+		brief="returns a number of elements in the sequence."
 	>
 		<argument type="MetaobjectSequence"/>
 	</operation>
 
 	<operation name="get_element"
 		result="Metaobject"
-		brief="The i-th element in a MetaobjectSequence"
+		brief="returns the i-th element in a MetaobjectSequence."
 	>
 		<argument type="MetaobjectSequence"/>
 		<argument type="size_t" name="Index"/>
@@ -108,7 +108,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_keyword"
 		result="StringConstant"
-		brief="The keyword of the specifier reflected by a $(operand)."
+		brief="returns the keyword of the specifier reflected by a $(operand)."
 	>
 		<argument type="MetaSpecifier"/>
 	</operation>
@@ -121,7 +121,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_name"
 		result="StringConstant"
-		brief="The basic name of the $(reflected) reflected by a $(operand)."
+		brief="returns the basic name of the $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaNamed"/>
 	</operation>
@@ -134,7 +134,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_type"
 		result="MetaType"
-		brief="The MetaType reflecting the type of $(reflected) reflected by a $(operand)."
+		brief="returns the MetaType reflecting the type of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaTyped"/>
 	</operation>
@@ -147,7 +147,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_scope"
 		result="MetaScope"
-		brief="The MetaScope reflecting the scope of $(reflected) reflected by a $(operand)."
+		brief="returns the MetaScope reflecting the scope of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaScoped"/>
 	</operation>
@@ -156,7 +156,6 @@ by the compiler which allow access to metadata reflecting specific program featu
 		reflects="a scope"
 	>
 		<generalization concept="MetaNamed"/>
-		<generalization concept="MetaScoped" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
@@ -167,7 +166,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_aliased"
 		result="MetaNamed"
-		brief="The MetaNamed reflecting the original declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the MetaNamed reflecting the original declaration of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaAlias"/>
 	</operation>
@@ -206,7 +205,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_reflected_type"
 		result="Type"
-		brief="The the base-level type reflected by a $(operand)."
+		brief="returns the the base-level type reflected by a $(operand)."
 	>
 		<argument type="MetaType"/>
 	</operation>
@@ -222,7 +221,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_typedef_type"
 		result="MetaType"
-		brief="The MetaType reflecting the original declaration of a type reflected by a $(operand)."
+		brief="returns the MetaType reflecting the original declaration of a type reflected by a $(operand)."
 	>
 		<argument type="MetaTypeAlias"/>
 	</operation>
@@ -236,21 +235,21 @@ by the compiler which allow access to metadata reflecting specific program featu
 
 	<operation name="get_elaborated_type_specifier"
 		result="MetaSpecifier"
-		brief="A MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+		brief="returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaClass"/>
 	</operation>
 
 	<operation name="get_data_members"
 		result="MetaobjectSequence"
-		brief="A sequence of Metaobjects reflecting the public data members of $(reflected) reflected by a $(operand)."
+		brief="returns a sequence of Metaobjects reflecting the public data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaClass"/>
 	</operation>
 
 	<operation name="get_all_data_members"
 		result="MetaobjectSequence"
-		brief="A sequence of Metaobjects reflecting all data members of $(reflected) reflected by a $(operand)."
+		brief="returns a sequence of Metaobjects reflecting all data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaClass"/>
 	</operation>

@@ -1,0 +1,19 @@
+
+\subsubsection{\texttt{get\_reflected\_type}}
+
+returns the the base-level type reflected by a \meta{Type}.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires MetaType<T>
+struct get_reflected_type
+{
+	typedef Type type;
+};
+
+
+template <typename T>
+using get_reflected_type_t = typename get_reflected_type<T>::type;
+
+\end{minted}

@@ -4,8 +4,10 @@
 \begin{minted}[tabsize=8]{cpp}
 
 template <typename T>
-concept bool MetaAlias =
+concept bool MetaNamespace =
 	MetaNamed<T> &&
-	meta::is_alias_v<T>;
+	MetaScope<T> &&
+	MetaScoped<T> &&
+	meta::is_namespace_v<T>;
 
 \end{minted}

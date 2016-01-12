@@ -20,7 +20,7 @@ struct <xsl:value-of select="@name"/>
 	static constexpr const bool value = /*
 		true: if T is a <xsl:value-of select="@indicates"/>
 		false: otherwise
-	*/
+	*/;
 
 	typedef integral_constant&lt;bool, value&gt; type;
 

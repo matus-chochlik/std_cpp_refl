@@ -4,8 +4,8 @@
 \begin{minted}[tabsize=8]{cpp}
 
 template <typename T>
-concept bool MetaAlias =
-	MetaNamed<T> &&
-	meta::is_alias_v<T>;
+concept bool MetaEnum =
+	MetaType<T> &&
+	meta::is_enum_v<T>;
 
 \end{minted}

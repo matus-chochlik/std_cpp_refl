@@ -11,7 +11,7 @@
 <xsl:template match="/concepts">
 \subsubsection{Definition}
 
-\begin{minted}[tabsize=4]{cpp}
+\begin{minted}[tabsize=8]{cpp}
 <xsl:for-each select="/concepts/metaobject[@name=$metaobject]">
 template &lt;typename T&gt;
 concept bool <xsl:value-of select="@name"/><xsl:text> =

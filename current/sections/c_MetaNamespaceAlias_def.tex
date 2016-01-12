@@ -1,0 +1,12 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+
+template <typename T>
+concept bool MetaNamespaceAlias =
+	MetaNamespace<T> &&
+	MetaAlias<T> &&
+	meta::is_namespace_v<get_aliased_t<T>>;
+
+\end{minted}
