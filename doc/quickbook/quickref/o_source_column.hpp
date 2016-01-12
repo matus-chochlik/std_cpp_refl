@@ -13,7 +13,7 @@ struct source_column
 
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a base-level program feature reflected by a Metaobject.
+	returns a source file column of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __StringConstant type;

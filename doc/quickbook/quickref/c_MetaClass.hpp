@@ -98,7 +98,7 @@ struct __source_file<MetaClass>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a class reflected by a MetaClass.
+	returns a source file path of the declaration of a class reflected by a MetaClass.
 	>*/;
 
 	typedef __StringConstant type;
@@ -114,7 +114,7 @@ struct __source_line<MetaClass>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a class reflected by a MetaClass.
+	returns a source file line of the declaration of a class reflected by a MetaClass.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -130,7 +130,7 @@ struct __source_column<MetaClass>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a class reflected by a MetaClass.
+	returns a source file column of the declaration of a class reflected by a MetaClass.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -147,7 +147,7 @@ struct __get_name<MetaClass>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a class reflected by a MetaClass.
+	returns the basic name of the a class reflected by a MetaClass.
 	>*/;
 
 	typedef __StringConstant type;
@@ -162,7 +162,7 @@ struct __get_scope<MetaClass>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a class reflected by a MetaClass.
+	returns the MetaScope reflecting the scope of a class reflected by a MetaClass.
 	>*/
 	
 };
@@ -172,7 +172,7 @@ struct __get_reflected_type<MetaClass>
 {
 	
 	typedef __Type type; /*<
-	The the base-level type reflected by a MetaClass.
+	returns the the base-level type reflected by a MetaClass.
 	>*/
 	
 };
@@ -185,7 +185,7 @@ struct __get_elaborated_type_specifier<MetaClass>
 {
 	
 	typedef __MetaSpecifier type; /*<
-	A MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a MetaClass.
+	returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a MetaClass.
 	>*/
 	
 };
@@ -195,7 +195,7 @@ struct __get_data_members<MetaClass>
 {
 	
 	typedef __MetaobjectSequence type; /*<
-	A sequence of Metaobjects reflecting the public data members of a class reflected by a MetaClass.
+	returns a sequence of Metaobjects reflecting the public data members of a class reflected by a MetaClass.
 	>*/
 	
 };
@@ -205,7 +205,7 @@ struct __get_all_data_members<MetaClass>
 {
 	
 	typedef __MetaobjectSequence type; /*<
-	A sequence of Metaobjects reflecting all data members of a class reflected by a MetaClass.
+	returns a sequence of Metaobjects reflecting all data members of a class reflected by a MetaClass.
 	>*/
 	
 };

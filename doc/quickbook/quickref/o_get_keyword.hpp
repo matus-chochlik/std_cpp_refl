@@ -14,7 +14,7 @@ struct get_keyword
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The keyword of the specifier reflected by a MetaSpecifier.
+	returns the keyword of the specifier reflected by a MetaSpecifier.
 	>*/;
 
 	typedef __StringConstant type;

@@ -70,7 +70,7 @@ struct __source_file<MetaType>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a type reflected by a MetaType.
+	returns a source file path of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __StringConstant type;
@@ -86,7 +86,7 @@ struct __source_line<MetaType>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a type reflected by a MetaType.
+	returns a source file line of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -102,7 +102,7 @@ struct __source_column<MetaType>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a type reflected by a MetaType.
+	returns a source file column of the declaration of a type reflected by a MetaType.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -119,7 +119,7 @@ struct __get_name<MetaType>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a type reflected by a MetaType.
+	returns the basic name of the a type reflected by a MetaType.
 	>*/;
 
 	typedef __StringConstant type;
@@ -134,7 +134,7 @@ struct __get_scope<MetaType>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a type reflected by a MetaType.
+	returns the MetaScope reflecting the scope of a type reflected by a MetaType.
 	>*/
 	
 };
@@ -147,7 +147,7 @@ struct __get_reflected_type<MetaType>
 {
 	
 	typedef __Type type; /*<
-	The the base-level type reflected by a MetaType.
+	returns the the base-level type reflected by a MetaType.
 	>*/
 	
 };

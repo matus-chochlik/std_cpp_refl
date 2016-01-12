@@ -12,7 +12,7 @@ struct get_aliased
 {
 
 	typedef __MetaNamed type; /*<
-	The MetaNamed reflecting the original declaration of a type or namespace alias reflected by a MetaAlias.
+	returns the MetaNamed reflecting the original declaration of a type or namespace alias reflected by a MetaAlias.
 	>*/
 };
 

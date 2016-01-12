@@ -12,7 +12,7 @@ struct get_type
 {
 
 	typedef __MetaType type; /*<
-	The MetaType reflecting the type of base-level construct with a type reflected by a MetaTyped.
+	returns the MetaType reflecting the type of base-level construct with a type reflected by a MetaTyped.
 	>*/
 };
 

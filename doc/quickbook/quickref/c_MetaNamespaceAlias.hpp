@@ -32,8 +32,8 @@ Inherited from __MetaNamed.
 };
 
 template <>
-struct __has_scope<MetaNamespaceAlias> /*<
-Inherited from __MetaScoped.
+struct __is_scope<MetaNamespaceAlias> /*<
+Inherited from __MetaScope.
 >*/
 {
 	typedef bool value_type;
@@ -46,8 +46,8 @@ Inherited from __MetaScoped.
 };
 
 template <>
-struct __is_scope<MetaNamespaceAlias> /*<
-Inherited from __MetaScope.
+struct __has_scope<MetaNamespaceAlias> /*<
+Inherited from __MetaScoped.
 >*/
 {
 	typedef bool value_type;
@@ -100,7 +100,7 @@ struct __source_file<MetaNamespaceAlias>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
+	returns a source file path of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -116,7 +116,7 @@ struct __source_line<MetaNamespaceAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
+	returns a source file line of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -132,7 +132,7 @@ struct __source_column<MetaNamespaceAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
+	returns a source file column of the declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -149,7 +149,7 @@ struct __get_name<MetaNamespaceAlias>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a namespace alias reflected by a MetaNamespaceAlias.
+	returns the basic name of the a namespace alias reflected by a MetaNamespaceAlias.
 	>*/;
 
 	typedef __StringConstant type;
@@ -164,7 +164,7 @@ struct __get_scope<MetaNamespaceAlias>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a namespace alias reflected by a MetaNamespaceAlias.
+	returns the MetaScope reflecting the scope of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/
 	
 };
@@ -174,7 +174,7 @@ struct __get_aliased<MetaNamespaceAlias>
 {
 	
 	typedef __MetaNamed type; /*<
-	The MetaNamed reflecting the original declaration of a namespace alias reflected by a MetaNamespaceAlias.
+	returns the MetaNamed reflecting the original declaration of a namespace alias reflected by a MetaNamespaceAlias.
 	>*/
 	
 };

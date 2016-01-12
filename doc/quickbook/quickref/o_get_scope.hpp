@@ -12,7 +12,7 @@ struct get_scope
 {
 
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
+	returns the MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
 	>*/
 };
 

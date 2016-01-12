@@ -12,7 +12,7 @@ struct get_elaborated_type_specifier
 {
 
 	typedef __MetaSpecifier type; /*<
-	A MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a MetaClass.
+	returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a MetaClass.
 	>*/
 };
 

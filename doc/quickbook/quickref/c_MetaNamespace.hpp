@@ -33,8 +33,8 @@ Inherited from __MetaNamed.
 };
 
 template <>
-struct __has_scope<MetaNamespace> /*<
-Inherited from __MetaScoped.
+struct __is_scope<MetaNamespace> /*<
+Inherited from __MetaScope.
 >*/
 {
 	typedef bool value_type;
@@ -47,8 +47,8 @@ Inherited from __MetaScoped.
 };
 
 template <>
-struct __is_scope<MetaNamespace> /*<
-Inherited from __MetaScope.
+struct __has_scope<MetaNamespace> /*<
+Inherited from __MetaScoped.
 >*/
 {
 	typedef bool value_type;
@@ -85,7 +85,7 @@ struct __source_file<MetaNamespace>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a namespace reflected by a MetaNamespace.
+	returns a source file path of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __StringConstant type;
@@ -101,7 +101,7 @@ struct __source_line<MetaNamespace>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a namespace reflected by a MetaNamespace.
+	returns a source file line of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -117,7 +117,7 @@ struct __source_column<MetaNamespace>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a namespace reflected by a MetaNamespace.
+	returns a source file column of the declaration of a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -134,7 +134,7 @@ struct __get_name<MetaNamespace>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a namespace reflected by a MetaNamespace.
+	returns the basic name of the a namespace reflected by a MetaNamespace.
 	>*/;
 
 	typedef __StringConstant type;
@@ -149,7 +149,7 @@ struct __get_scope<MetaNamespace>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a namespace reflected by a MetaNamespace.
+	returns the MetaScope reflecting the scope of a namespace reflected by a MetaNamespace.
 	>*/
 	
 };

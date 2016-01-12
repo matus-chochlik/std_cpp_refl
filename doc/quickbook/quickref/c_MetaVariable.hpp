@@ -84,7 +84,7 @@ struct __source_file<MetaVariable>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a variable reflected by a MetaVariable.
+	returns a source file path of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __StringConstant type;
@@ -100,7 +100,7 @@ struct __source_line<MetaVariable>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a variable reflected by a MetaVariable.
+	returns a source file line of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -116,7 +116,7 @@ struct __source_column<MetaVariable>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a variable reflected by a MetaVariable.
+	returns a source file column of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -133,7 +133,7 @@ struct __get_name<MetaVariable>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a variable reflected by a MetaVariable.
+	returns the basic name of the a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __StringConstant type;
@@ -148,7 +148,7 @@ struct __get_type<MetaVariable>
 {
 	
 	typedef __MetaType type; /*<
-	The MetaType reflecting the type of a variable reflected by a MetaVariable.
+	returns the MetaType reflecting the type of a variable reflected by a MetaVariable.
 	>*/
 	
 };
@@ -158,7 +158,7 @@ struct __get_scope<MetaVariable>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of a variable reflected by a MetaVariable.
+	returns the MetaScope reflecting the scope of a variable reflected by a MetaVariable.
 	>*/
 	
 };

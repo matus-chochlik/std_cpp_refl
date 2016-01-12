@@ -12,7 +12,7 @@ struct get_typedef_type
 {
 
 	typedef __MetaType type; /*<
-	The MetaType reflecting the original declaration of a type reflected by a MetaTypeAlias.
+	returns the MetaType reflecting the original declaration of a type reflected by a MetaTypeAlias.
 	>*/
 };
 

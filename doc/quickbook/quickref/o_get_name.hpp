@@ -14,7 +14,7 @@ struct get_name
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a named declaration reflected by a MetaNamed.
+	returns the basic name of the a named declaration reflected by a MetaNamed.
 	>*/;
 
 	typedef __StringConstant type;

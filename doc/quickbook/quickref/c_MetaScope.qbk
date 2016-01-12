@@ -5,7 +5,7 @@
 [section:MetaScope MetaScope]
 [import c_MetaScope.hpp]
 
-[concept MetaScope] is  a __MetaNamed and possibly a __MetaScoped reflecting a scope.
+[concept MetaScope] is  a __MetaNamed reflecting a scope.
 
 [reflexpr_MetaScope_def]
 [heading Implementation]

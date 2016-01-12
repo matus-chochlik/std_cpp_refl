@@ -56,7 +56,7 @@ struct __source_file<MetaClassMember>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of class member reflected by a MetaClassMember.
+	returns a source file path of the declaration of class member reflected by a MetaClassMember.
 	>*/;
 
 	typedef __StringConstant type;
@@ -72,7 +72,7 @@ struct __source_line<MetaClassMember>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of class member reflected by a MetaClassMember.
+	returns a source file line of the declaration of class member reflected by a MetaClassMember.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -88,7 +88,7 @@ struct __source_column<MetaClassMember>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of class member reflected by a MetaClassMember.
+	returns a source file column of the declaration of class member reflected by a MetaClassMember.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -103,7 +103,7 @@ struct __get_scope<MetaClassMember>
 {
 	
 	typedef __MetaScope type; /*<
-	The MetaScope reflecting the scope of class member reflected by a MetaClassMember.
+	returns the MetaScope reflecting the scope of class member reflected by a MetaClassMember.
 	>*/
 	
 };

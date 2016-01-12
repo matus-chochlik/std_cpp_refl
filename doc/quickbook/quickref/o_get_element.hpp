@@ -12,7 +12,7 @@ struct get_element
 {
 
 	typedef __Metaobject type; /*<
-	The i-th element in a MetaobjectSequence
+	returns the i-th element in a MetaobjectSequence.
 	>*/
 };
 

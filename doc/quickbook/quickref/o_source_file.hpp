@@ -14,7 +14,7 @@ struct source_file
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a base-level program feature reflected by a Metaobject.
+	returns a source file path of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __StringConstant type;

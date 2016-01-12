@@ -41,7 +41,7 @@ struct __source_file<MetaNamed>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	Source file path of the declaration of a named declaration reflected by a MetaNamed.
+	returns a source file path of the declaration of a named declaration reflected by a MetaNamed.
 	>*/;
 
 	typedef __StringConstant type;
@@ -57,7 +57,7 @@ struct __source_line<MetaNamed>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a named declaration reflected by a MetaNamed.
+	returns a source file line of the declaration of a named declaration reflected by a MetaNamed.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -73,7 +73,7 @@ struct __source_column<MetaNamed>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file column of the declaration of a named declaration reflected by a MetaNamed.
+	returns a source file column of the declaration of a named declaration reflected by a MetaNamed.
 	>*/;
 
 	typedef __integral_constant<value_type, value> type;
@@ -93,7 +93,7 @@ struct __get_name<MetaNamed>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	The basic name of the a named declaration reflected by a MetaNamed.
+	returns the basic name of the a named declaration reflected by a MetaNamed.
 	>*/;
 
 	typedef __StringConstant type;

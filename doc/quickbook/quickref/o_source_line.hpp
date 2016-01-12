@@ -13,7 +13,7 @@ struct source_line
 
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	Source file line of the declaration of a base-level program feature reflected by a Metaobject.
+	returns a source file line of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef __StringConstant type;

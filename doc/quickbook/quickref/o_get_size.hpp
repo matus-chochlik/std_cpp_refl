@@ -13,7 +13,7 @@ struct get_size
 
 	typedef size_t value_type;
 	static constexpr const size_t value = ... /*<
-	Number of elements in the sequence.
+	returns a number of elements in the sequence.
 	>*/;
 
 	typedef __StringConstant type;
