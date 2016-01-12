@@ -1,0 +1,12 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+concept bool MetaGlobalScope =
+	MetaNamed<T> &&
+	MetaScope<T> &&
+	meta::is_global_scope_v<T>;
+
+\end{minted}

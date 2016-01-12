@@ -41,3 +41,6 @@ clean:
 	rm -rf $(blddir)
 	rm -rf $(outdir)
 
+.PHONY: cleandeps
+cleandeps:
+	rm -f $(blddir)/*.d

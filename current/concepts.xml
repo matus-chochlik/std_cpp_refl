@@ -1,225 +1,278 @@
-<?xml version="1.0" encoding="utf8" ?>
-<reflection>
-	<trait name="is_metaobject">
-		<param name="X"/>
-		<returns value="true_type"/>
-	</trait>
+<?xml version="1.0" encoding="utf8"?>
+<concepts>
+	<baseobject kind="type" name="Type"/>
+	<baseobject kind="type" name="MetaobjectCategory" label="Metaobject\nCategory"/>
 
-	<concept name="StringConstant">
-		<returns><self/></returns>
-		<data name="value" type="const char*"/>
-	</concept>
+	<baseobject kind="tag" name="global_scope_tag"/>
+	<baseobject kind="tag" name="namespace_tag"/>
+	<baseobject kind="tag" name="type_tag"/>
+	<baseobject kind="tag" name="enum_tag"/>
+	<baseobject kind="tag" name="class_tag"/>
 
-	<concept name="IntegralConstant">
-		<returns><self/></returns>
-		<data name="value" type="Int"/>
-	</concept>
+	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
+	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
+	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
 
-	<concept name="MetaobjectTag">
-		<returns><self/></returns>
-	</concept>
+	<metaobject name="Metaobject"
+		reflects="a base-level program feature"
+		is_a="a concept modelled by stateless anonymous types generated
+by the compiler which allow access to metadata reflecting specific program features"
+	/>
 
-	<concept name="SpecifierTag" future="true">
-		<returns><self/></returns>
-	</concept>
+	<unused>
+	<operation name="get_category" result="MetaobjectCategory">
+		<argument type="Metaobject"/>
+	</operation>
+	</unused>
 
-	<concept name="Metaobject">
-		<returns><self/></returns>
-		<trait name="is_metaobject" result="true"/>
-		<trait name="is_specifier" result="false"/>
-		<trait name="has_name" result="false"/>
-		<trait name="has_scope" result="false"/>
-		<trait name="is_scope" result="false"/>
-		<trait name="has_position" result="false"/>
-		<trait name="is_alias" result="false"/>
-		<trait name="is_class_member" result="false"/>
-		<trait name="has_template" result="false"/>
-		<trait name="is_template" result="false"/>
-		<mfunc name="category" result="MetaobjectTag"/>
-		<mfunc name="source_file" result="StringConstant"/>
-		<mfunc name="source_line" result="IntegralConstant"/>
-	</concept>
+	<trait name="is_sequence" scope="meta" indicates="MetaobjectSequence" uses="get_category"/>
+	<trait name="is_specifier" scope="meta" indicates="MetaSpecifier" uses="get_category"/>
 
-	<concept name="MetaSpecifier" future="true">
-		<is_a base="Metaobject"/>
-		<trait name="is_specifier" result="true"/>
-		<mfunc name="category" result="SpecifierTag"/>
-		<mfunc name="keyword" result="StringConstant"/>
-	</concept>
+	<trait name="is_namespace" scope="meta" indicates="MetaNamespace" uses="get_category"/>
+	<trait name="is_global_scope" scope="meta" indicates="MetaGlobalScope" uses="get_category"/>
+	<trait name="is_type" scope="meta" indicates="MetaType" uses="get_category"/>
+	<trait name="is_class" scope="meta" indicates="MetaClass" uses="get_category"/>
+	<trait name="is_enum" scope="meta" indicates="MetaEnum" uses="get_category"/>
+	<trait name="is_variable" scope="meta" indicates="MetaVariable" uses="get_category"/>
 
-	<concept name="MetaNamed">
-		<is_a base="Metaobject"/>
-		<trait name="has_name" result="true"/>
-		<mfunc name="base_name" result="StringConstant"/>
-		<mfunc name="full_name" result="StringConstant"/>
-	</concept>
+	<trait name="has_name" scope="meta" indicates="MetaNamed"/>
+	<trait name="has_type" scope="meta" indicates="MetaTyped"/>
+	<trait name="has_scope" scope="meta" indicates="MetaScoped"/>
+	<trait name="is_scope" scope="meta" indicates="MetaScope"/>
+	<trait name="is_alias" scope="meta" indicates="MetaAlias"/>
+	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
 
-	<concept name="MetaScoped">
-		<is_a base="Metaobject"/>
-		<trait name="has_scope" result="true"/>
-		<mfunc name="scope" result="MetaScope"/>
-	</concept>
+	<operation name="source_file"
+		brief="returns a source file path of the declaration of $(reflected) reflected by a $(operand)."
+		result="StringConstant"
+	>
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
 
-	<concept name="MetaNamedScoped">
-		<is_a base="MetaNamed"/>
-		<is_a base="MetaScoped"/>
-	</concept>
+	<operation name="source_line"
+		result="IntegralConstant"
+		integer="unsigned"
+		brief="returns a source file line of the declaration of $(reflected) reflected by a $(operand)."
+	>
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
 
-	<concept name="MetaScope">
-		<is_a base="MetaNamedScoped"/>
-		<trait name="is_scope" result="true"/>
-		<afunc name="members" result="MetaNamedScoped"/>
-	</concept>
+	<operation name="source_column"
+		result="IntegralConstant"
+		integer="unsigned"
+		brief="returns a source file column of the declaration of $(reflected) reflected by a $(operand)."
+	>
+		<group name="SourceInfo"/>
+		<argument type="Metaobject">
+			<except if="is_sequence"/>
+			<except if="is_specifier"/>
+		</argument>
+	</operation>
 
-	<concept name="MetaPositional">
-		<is_a base="Metaobject"/>
-		<trait name="has_position" result="true"/>
-		<mfunc name="position" result="IntegralConstant"/>
-	</concept>
+	<metaobject name="MetaobjectSequence"
+		label="Metaobject\nSequence"
+		brief="is an ordered sequence of metaobjects."
+	>
+		<generalization concept="Metaobject"/>
+	</metaobject>
 
-	<concept name="MetaClassMember">
-		<is_a base="MetaNamedScoped"/>
-		<can_be base="MetaTemplate"/>
-		<trait name="is_class_member" result="true"/>
-		<mfunc name="access_specifier" result="MetaSpecifier"/>
-	</concept>
+	<operation name="get_size"
+		result="IntegralConstant"
+		integer="size_t"
+		brief="returns a number of elements in the sequence."
+	>
+		<argument type="MetaobjectSequence"/>
+	</operation>
 
-	<concept name="MetaGlobalScope">
-		<is_a base="MetaScope"/>
-	</concept>
+	<operation name="get_element"
+		result="Metaobject"
+		brief="returns the i-th element in a MetaobjectSequence."
+	>
+		<argument type="MetaobjectSequence"/>
+		<argument type="size_t" name="Index"/>
+	</operation>
 
-	<concept name="MetaNamespace">
-		<is_a base="MetaScope"/>
-	</concept>
+	<metaobject name="MetaSpecifier"
+		reflects="a specifier"
+	>
+		<generalization concept="Metaobject"/>
+	</metaobject>
 
-	<concept name="MetaType">
-		<is_a base="MetaNamedScoped"/>
-		<mfunc name="original_type" result="Unspecified"/>
-	</concept>
+	<operation name="get_keyword"
+		result="StringConstant"
+		brief="returns the keyword of the specifier reflected by a $(operand)."
+	>
+		<argument type="MetaSpecifier"/>
+	</operation>
 
-	<concept name="MetaTypedef">
-		<is_a base="MetaType"/>
-		<can_be base="MetaClassMember"/>
-		<mfunc name="decl_type" result="MetaType"/>
-	</concept>
+	<metaobject name="MetaNamed"
+		reflects="a named declaration"
+	>
+		<generalization concept="Metaobject"/>
+	</metaobject>
 
-	<concept name="MetaClass">
-		<is_a base="MetaType"/>
-		<is_a base="MetaScope"/>
-		<can_be base="MetaTemplate"/>
-		<can_be base="MetaInstantiation"/>
-		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
-		<afunc name="base_classes" result="MetaInheritance"/>
-	</concept>
+	<operation name="get_name"
+		result="StringConstant"
+		brief="returns the basic name of the $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaNamed"/>
+	</operation>
 
-	<concept name="MetaEnum">
-		<is_a base="MetaType"/>
-		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
-		<afunc name="members" result="MetaConstant"/>
-	</concept>
+	<metaobject name="MetaTyped"
+		reflects="base-level construct with a type"
+	>
+		<generalization concept="Metaobject"/>
+	</metaobject>
 
-	<concept name="MetaEnumClass">
-		<is_a base="MetaType"/>
-		<is_a base="MetaScope"/>
-		<mfunc name="base_type" result="MetaType"/>
-		<mfunc name="elaborated_type_specifier" result="MetaSpecifier"/>
-		<afunc name="members" result="MetaEnumValue"/>
-	</concept>
+	<operation name="get_type"
+		result="MetaType"
+		brief="returns the MetaType reflecting the type of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaTyped"/>
+	</operation>
 
-	<concept name="MetaEnumValue" future="true">
-		<is_a base="MetaConstant"/>
-		<is_a base="MetaNamed"/>
-		<can_be base="MetaNamedScoped"/>
-		
-	</concept>
+	<metaobject name="MetaScoped"
+		reflects="a scoped declaration"
+	>
+		<generalization concept="Metaobject"/>
+	</metaobject>
 
-	<concept name="MetaVariable">
-		<is_a base="MetaNamedScoped"/>
-		<can_be base="MetaClassMember"/>
-		<can_be base="MetaTemplate"/>
-		<can_be base="MetaInstantiation"/>
-		<mfunc name="decl_type" result="MetaType"/>
-		<mfunc name="pointer"/>
-		<mfunc name="storage_specifier" result="MetaSpecifier"/>
-	</concept>
+	<operation name="get_scope"
+		result="MetaScope"
+		brief="returns the MetaScope reflecting the scope of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaScoped"/>
+	</operation>
 
-	<concept name="MetaOverloadedFunction" future="true">
-		<is_a base="MetaNamedScoped"/>
-		<afunc name="overloads" result="MetaFunction"/>
-	</concept>
+	<metaobject name="MetaScope"
+		reflects="a scope"
+	>
+		<generalization concept="MetaNamed"/>
+	</metaobject>
 
-	<concept name="MetaFunction" future="true">
-		<is_a base="MetaNamedScoped"/>
-		<can_be base="MetaTemplate"/>
-		<can_be base="MetaClassMember"/>
-		<can_be base="MetaInstantiation"/>
-		<mfunc name="linkage_specifier" result="MetaSpecifier"/>
-		<mfunc name="constexpr_specifier" result="MetaSpecifier"/>
-		<mfunc name="result_type" result="MetaType"/>
-		<afunc name="parameters" result="MetaParameter"/>
-		<mfunc name="noexcept_specifier" result="MetaSpecifier"/>
-		<afunc name="exceptions" result="MetaType"/>
-		<mfunc name="const_specifier" result="MetaSpecifier"/>
-		<mfunc name="virtual_specifier" result="MetaSpecifier"/>
-		<mfunc name="override_specifier" result="MetaSpecifier"/>
-		<mfunc name="is_pure" result="IntegralConstant"/>
-		<mfunc name="pointer"/>
-	</concept>
+	<metaobject name="MetaAlias"
+		reflects="a type or namespace alias"
+	>
+		<generalization concept="MetaNamed"/>
+	</metaobject>
 
-	<concept name="MetaParameter" future="true">
-		<is_a base="MetaNamedScoped"/>
-		<is_a base="MetaPositional"/>
-		<mfunc name="is_pack" result="IntegralConstant"/>
-	</concept>
+	<operation name="get_aliased"
+		result="MetaNamed"
+		brief="returns the MetaNamed reflecting the original declaration of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaAlias"/>
+	</operation>
 
-	<concept name="MetaInitializer" future="true">
-		<is_a base="MetaFunction"/>
-	</concept>
+	<metaobject name="MetaGlobalScope"
+		reflects="the global scope"
+		label="Meta\nGlobal\nScope"
+	>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScope"/>
+	</metaobject>
 
-	<concept name="MetaConstructor" future="true">
-		<is_a base="MetaFunction"/>
-		<can_be base="MetaClassMember"/>
-	</concept>
+	<metaobject name="MetaNamespace"
+		reflects="a namespace"
+	>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScope"/>
+		<generalization concept="MetaScoped"/>
+	</metaobject>
 
-	<concept name="MetaOperator" future="true">
-		<is_a base="MetaFunction"/>
-		<can_be base="MetaClassMember"/>
-	</concept>
+	<metaobject name="MetaNamespaceAlias"
+		reflects="a namespace alias"
+		label="Meta\nNamespace\nAlias"
+	>
+		<generalization concept="MetaNamespace"/>
+		<generalization concept="MetaAlias"/>
+		<constraint operation="get_aliased" trait="is_namespace"/>
+	</metaobject>
 
-	<concept name="MetaTemplate" future="true">
-		<is_a base="MetaNamedScoped"/>
-		<trait name="is_template" result="true"/>
-		<afunc name="template_parameters" result="MetaTemplateParameter"/>
-	</concept>
+	<metaobject name="MetaType"
+		reflects="a type"
+	>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScoped"/>
+	</metaobject>
 
-	<concept name="MetaTemplateParameter" future="true">
-		<is_a base="MetaNamed"/>
-		<is_a base="MetaPositional"/>
-		<either>
-			<is_a base="MetaTypedef"/>
-			<is_a base="MetaConstant"/>
-		</either>
-		<mfunc name="is_pack" result="IntegralConstant"/>
-	</concept>
+	<operation name="get_reflected_type"
+		result="Type"
+		brief="returns the the base-level type reflected by a $(operand)."
+	>
+		<argument type="MetaType"/>
+	</operation>
 
-	<concept name="MetaInstantiation" future="true">
-		<is_a base="MetaNamedScoped"/>
-		<trait name="has_template" result="true"/>
-		<mfunc name="template_" result="MetaTemplate"/>
-	</concept>
+	<metaobject name="MetaTypeAlias"
+		label="MetaType\nAlias"
+		reflects="a type alias or typedef"
+	>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaAlias"/>
+		<constraint operation="get_aliased" trait="is_type"/>
+	</metaobject>
 
-	<concept name="MetaInheritance" future="true">
-		<is_a base="MetaScoped"/>
-		<is_a base="MetaPositional"/>
-		<mfunc name="inheritance_specifier" result="MetaSpecifier"/>
-		<mfunc name="access_specifier" result="MetaSpecifier"/>
-		<mfunc name="scope" result="MetaClass"/>
-		<mfunc name="base_class" result="MetaClass"/>
-	</concept>
+	<operation name="get_typedef_type"
+		result="MetaType"
+		brief="returns the MetaType reflecting the original declaration of a type reflected by a $(operand)."
+	>
+		<argument type="MetaTypeAlias"/>
+	</operation>
 
-	<concept name="MetaConstant" future="true">
-		<is_a base="Metaobject"/>
-		<mfunc name="decl_type" result="MetaType"/>
-		<mfunc name="value" result="IntegralConstant"/>
-	</concept>
-</reflection>
+	<metaobject name="MetaClass"
+		reflects="a class"
+	>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaScope"/>
+	</metaobject>
+
+	<operation name="get_elaborated_type_specifier"
+		result="MetaSpecifier"
+		brief="returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaClass"/>
+	</operation>
+
+	<operation name="get_data_members"
+		result="MetaobjectSequence"
+		brief="returns a sequence of Metaobjects reflecting the public data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaClass"/>
+	</operation>
+
+	<operation name="get_all_data_members"
+		result="MetaobjectSequence"
+		brief="returns a sequence of Metaobjects reflecting all data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="MetaClass"/>
+	</operation>
+
+	<metaobject name="MetaEnum"
+		reflects="an enumeration"
+	>
+		<generalization concept="MetaType"/>
+		<generalization concept="MetaScope" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaVariable"
+		reflects="a variable"
+	>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaTyped"/>
+		<generalization concept="MetaScoped" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaClassMember"
+		reflects="class member"
+	>
+		<generalization concept="MetaScoped"/>
+		<constraint operation="get_scope" trait="is_class"/>
+	</metaobject>
+</concepts>

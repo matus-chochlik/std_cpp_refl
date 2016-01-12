@@ -2,9 +2,9 @@
 
 \newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
 \newcommand{\mchmail}{chochlik@gmail.com}
-\newcommand{\docname}{Static reflection (rev. 3)}
+\newcommand{\docname}{Static reflection (rev. 4)}
 \newcommand{\docnum}{Nxxxx}
-\newcommand{\docdate}{2015-05-17}
+\newcommand{\docdate}{2016-01-12}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -76,16 +76,14 @@ Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail})\\
 
 This paper is the follow-up to N3996, N4111 and N4451 and it is the fourth revision
 of the proposal to add static reflection to the C++ standard.
+It also introduces and briefly describes a partial, experimental implementation
+of this proposal.
 
 \tableofcontents
 
 \input{sections/introduction.tex}
-\input{sections/design_prefs.tex}
-\input{sections/concepts_curr.tex}
-\input{sections/reflection_curr.tex}
-\input{sections/rationale.tex}
-%\input{sections/issues.tex}
-\input{sections/acknowledge.tex}
+\input{sections/specification.tex}
+
 \input{sections/references.tex}
 
 \begin{appendices}
@@ -93,12 +91,6 @@ of the proposal to add static reflection to the C++ standard.
 \appendix
 \part*{Appendix}
 \addcontentsline{toc}{part}{Appendix}
-
-\input{sections/concepts_next.tex}
-\input{sections/reflection_next.tex}
-\input{sections/library.tex}
-\input{sections/identifiers.tex}
-\input{sections/examples.tex}
 \end{appendices}
 
 \end{document}

@@ -1,0 +1,11 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+concept bool MetaAlias =
+	MetaNamed<T> &&
+	meta::is_alias_v<T>;
+
+\end{minted}

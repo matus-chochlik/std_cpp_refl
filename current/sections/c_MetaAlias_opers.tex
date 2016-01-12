@@ -1,0 +1,19 @@
+
+\subsubsection{\texttt{get\_aliased}}
+
+returns the MetaNamed reflecting the original declaration of a type or namespace alias reflected by a \meta{Alias}.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires MetaAlias<T>
+struct get_aliased
+{
+	typedef MetaNamed type;
+};
+
+
+template <typename T>
+using get_aliased_t = typename get_aliased<T>::type;
+
+\end{minted}
