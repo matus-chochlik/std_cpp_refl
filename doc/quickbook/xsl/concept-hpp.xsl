@@ -126,6 +126,17 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 	const char* operator (void) const noexcept;
 	</xsl:when>
 
+	<xsl:when test="@result='Pointer'">
+	typedef Pointer type;
+
+	static const type value = ... /*&lt;
+	<xsl:call-template name="expand-variables">
+		<xsl:with-param name="text" select="@brief"/>
+		<xsl:with-param name="operand" select="$metaobject"/>
+	</xsl:call-template>
+	&gt;*/;
+	</xsl:when>
+
 	<xsl:otherwise>
 	typedef __<xsl:value-of select="@result"/> type; /*&lt;
 	<xsl:call-template name="expand-variables">

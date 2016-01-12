@@ -166,6 +166,18 @@ struct __get_scope<MetaVariable>
 //]
 //[reflexpr_MetaVariable_operations
 
+template <>
+struct __get_pointer<MetaVariable>
+{
+	
+	typedef Pointer type;
+
+	static const type value = ... /*<
+	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer to the variable.
+	>*/;
+	
+};
+
 //]
 //[reflexpr_MetaVariable_end
 __namespace_meta_end

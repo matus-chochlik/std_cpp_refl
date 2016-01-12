@@ -74,7 +74,7 @@ template &lt;<xsl:for-each select="argument">
 //[meta_<xsl:value-of select="$operation"/>
 __namespace_meta_begin
 <xsl:for-each select="operation[@name=$operation]">
-<xsl:variable name="has_value" select="@result='IntegralConstant' or @result='StringConstant'"/>
+<xsl:variable name="has_value" select="@result='IntegralConstant' or @result='StringConstant' or @result='Pointer'"/>
 
 <xsl:call-template name="template-args-decl"/>
 <xsl:text>__requires </xsl:text>
@@ -127,6 +127,21 @@ struct </xsl:text><xsl:value-of select="@name"/>
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;
+</xsl:when>
+<xsl:when test="@result='Pointer'">
+	typedef conditional_t&lt;
+		__is_class_member_v&lt;T&gt;,
+		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;
+		__get_reflected_type_t&lt;__get_scope_t&lt;T&gt;&gt;::*,
+		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;*
+	&gt; type;
+
+	static const type value = ... /*&lt;
+	<xsl:call-template name="expand-variables">
+		<xsl:with-param name="text" select="@brief"/>
+		<xsl:with-param name="operand" select="$metaobject"/>
+	</xsl:call-template>
+	&gt;*/;
 </xsl:when>
 <xsl:otherwise>
 	typedef __<xsl:value-of select="@result"/> type; /*&lt;

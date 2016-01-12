@@ -269,6 +269,15 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<generalization concept="MetaScoped" optional="true"/>
 	</metaobject>
 
+	<operation name="get_pointer"
+		result="Pointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the variable is a class member then the pointer is a class data member pointer,
+		otherwise it is a plain pointer to the variable."
+	>
+		<argument type="MetaVariable"/>
+	</operation>
+
 	<metaobject name="MetaClassMember"
 		reflects="class member"
 	>

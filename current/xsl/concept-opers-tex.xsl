@@ -70,7 +70,9 @@ template &lt;<xsl:for-each select="argument">
 
 <xsl:template name="operations">
 <xsl:param name="operation_mo"/>
-<xsl:variable name="has_value" select="@result='IntegralConstant' or @result='StringConstant'"/>
+<xsl:variable name="has_value"
+	select="@result='IntegralConstant' or @result='StringConstant' or @result='Pointer'"
+/>
 
 <xsl:for-each select="/concepts/operation[argument[@type=$operation_mo]]">
 \subsubsection{\texttt{<xsl:value-of select="str:replace(@name, '_','\_')"/>}}
@@ -114,6 +116,17 @@ struct <xsl:value-of select="@name"/>
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;<xsl:text/>
+	</xsl:when>
+
+	<xsl:when test="@result='Pointer'">
+	typedef conditional_t&lt;
+		__is_class_member_v&lt;T&gt;,
+		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;
+		__get_reflected_type_t&lt;__get_scope_t&lt;T&gt;&gt;::*,
+		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;*
+	&gt; type;
+
+	static const type value;
 	</xsl:when>
 
 	<xsl:otherwise>
