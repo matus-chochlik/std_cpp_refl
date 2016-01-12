@@ -120,13 +120,13 @@ struct <xsl:value-of select="@name"/>
 
 	<xsl:when test="@result='Pointer'">
 	typedef conditional_t&lt;
-		__is_class_member_v&lt;T&gt;,
-		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;
-		__get_reflected_type_t&lt;__get_scope_t&lt;T&gt;&gt;::*,
-		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;*
+		is_class_member_v&lt;T&gt;,
+		get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;
+		get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*,
+		get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;*
 	&gt; type;
 
-	static const type value;
+	static const type value;<xsl:text/>
 	</xsl:when>
 
 	<xsl:otherwise>
