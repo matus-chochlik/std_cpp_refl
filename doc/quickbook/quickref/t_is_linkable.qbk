@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_linkable is_linkable]
+[import t_is_linkable.hpp]
+
+The [^is_linkable] trait indicates that
+the tested metaobject is a __MetaLinkable.
+
+[meta_is_linkable]
+
+[endsect]

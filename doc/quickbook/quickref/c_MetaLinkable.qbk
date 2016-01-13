@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:MetaLinkable MetaLinkable]
+[import c_MetaLinkable.hpp]
+
+[concept MetaLinkable] is  a __MetaNamed and  a __MetaScoped reflecting declaration with storage duration and/or linkage.
+
+[reflexpr_MetaLinkable_def]
+[heading Implementation]
+[reflexpr_MetaLinkable_begin]
+[heading Traits]
+[reflexpr_MetaLinkable_inherited_traits]
+[reflexpr_MetaLinkable_traits]
+[heading Operations]
+[reflexpr_MetaLinkable_inherited_operations]
+[reflexpr_MetaLinkable_operations]
+[reflexpr_MetaLinkable_end]
+
+[endsect]

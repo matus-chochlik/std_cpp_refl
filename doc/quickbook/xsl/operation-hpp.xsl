@@ -130,7 +130,7 @@ struct </xsl:text><xsl:value-of select="@name"/>
 </xsl:when>
 <xsl:when test="@result='Pointer'">
 	typedef conditional_t&lt;
-		__is_class_member_v&lt;T&gt;,
+		__is_class_member_v&lt;T&gt; &amp;&amp; !__is_static_v&lt;T&gt;,
 		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;
 		__get_reflected_type_t&lt;__get_scope_t&lt;T&gt;&gt;::*,
 		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;*

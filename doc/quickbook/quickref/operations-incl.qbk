@@ -11,8 +11,6 @@
 
 [include o_get_element.qbk]
 
-[include o_get_keyword.qbk]
-
 [include o_get_name.qbk]
 
 [include o_get_type.qbk]
@@ -21,11 +19,11 @@
 
 [include o_get_aliased.qbk]
 
+[include o_is_static.qbk]
+
 [include o_get_reflected_type.qbk]
 
 [include o_get_typedef_type.qbk]
-
-[include o_get_elaborated_type_specifier.qbk]
 
 [include o_get_data_members.qbk]
 

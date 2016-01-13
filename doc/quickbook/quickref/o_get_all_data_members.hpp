@@ -12,7 +12,7 @@ struct get_all_data_members
 {
 
 	typedef __MetaobjectSequence type; /*<
-	returns a sequence of Metaobjects reflecting all data members of a class reflected by a MetaClass.
+	returns a sequence of Metaobjects reflecting all    (including the private and protected)   data members of a class reflected by a MetaClass.
 	>*/
 };
 

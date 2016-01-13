@@ -76,6 +76,10 @@
 [def __is_class_member_t [link reflexpr.quickref.traits.is_class_member [^is_class_member_t]]]
 [def __is_class_member_v [link reflexpr.quickref.traits.is_class_member [^is_class_member_v]]]
 
+[def __is_linkable [link reflexpr.quickref.traits.is_linkable [^is_linkable]]]
+[def __is_linkable_t [link reflexpr.quickref.traits.is_linkable [^is_linkable_t]]]
+[def __is_linkable_v [link reflexpr.quickref.traits.is_linkable [^is_linkable_v]]]
+
 [/Categorizaton]
 [def __get_category [link reflexpr.quickref.traits.get_category [^get_category]]]
 [def __get_category_t [link reflexpr.quickref.traits.get_category [^get_category_t]]]
@@ -113,10 +117,6 @@
 [def __get_element_t [link reflexpr.quickref.operations.get_element [^get_element_t]]]
 [def __get_element_v [link reflexpr.quickref.operations.get_element [^get_element_v]]]
 
-[def __get_keyword [link reflexpr.quickref.operations.get_keyword [^get_keyword]]]
-[def __get_keyword_t [link reflexpr.quickref.operations.get_keyword [^get_keyword_t]]]
-[def __get_keyword_v [link reflexpr.quickref.operations.get_keyword [^get_keyword_v]]]
-
 [def __get_name [link reflexpr.quickref.operations.get_name [^get_name]]]
 [def __get_name_t [link reflexpr.quickref.operations.get_name [^get_name_t]]]
 [def __get_name_v [link reflexpr.quickref.operations.get_name [^get_name_v]]]
@@ -133,6 +133,10 @@
 [def __get_aliased_t [link reflexpr.quickref.operations.get_aliased [^get_aliased_t]]]
 [def __get_aliased_v [link reflexpr.quickref.operations.get_aliased [^get_aliased_v]]]
 
+[def __is_static [link reflexpr.quickref.operations.is_static [^is_static]]]
+[def __is_static_t [link reflexpr.quickref.operations.is_static [^is_static_t]]]
+[def __is_static_v [link reflexpr.quickref.operations.is_static [^is_static_v]]]
+
 [def __get_reflected_type [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type]]]
 [def __get_reflected_type_t [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_t]]]
 [def __get_reflected_type_v [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_v]]]
@@ -140,10 +144,6 @@
 [def __get_typedef_type [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type]]]
 [def __get_typedef_type_t [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_t]]]
 [def __get_typedef_type_v [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_v]]]
-
-[def __get_elaborated_type_specifier [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier]]]
-[def __get_elaborated_type_specifier_t [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_t]]]
-[def __get_elaborated_type_specifier_v [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_v]]]
 
 [def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
 [def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]
@@ -168,6 +168,8 @@
 [def __MetaScoped [link reflexpr.quickref.MetaScoped [^MetaScoped]]]
 [def __MetaScope [link reflexpr.quickref.MetaScope [^MetaScope]]]
 [def __MetaAlias [link reflexpr.quickref.MetaAlias [^MetaAlias]]]
+[def __MetaClassMember [link reflexpr.quickref.MetaClassMember [^MetaClassMember]]]
+[def __MetaLinkable [link reflexpr.quickref.MetaLinkable [^MetaLinkable]]]
 [def __MetaGlobalScope [link reflexpr.quickref.MetaGlobalScope [^MetaGlobalScope]]]
 [def __MetaNamespace [link reflexpr.quickref.MetaNamespace [^MetaNamespace]]]
 [def __MetaNamespaceAlias [link reflexpr.quickref.MetaNamespaceAlias [^MetaNamespaceAlias]]]
@@ -176,7 +178,6 @@
 [def __MetaClass [link reflexpr.quickref.MetaClass [^MetaClass]]]
 [def __MetaEnum [link reflexpr.quickref.MetaEnum [^MetaEnum]]]
 [def __MetaVariable [link reflexpr.quickref.MetaVariable [^MetaVariable]]]
-[def __MetaClassMember [link reflexpr.quickref.MetaClassMember [^MetaClassMember]]]
 
 [/The reflection operator]
 [def __reflexpr [link reflexpr.quickref.reflexpr [^reflexpr]]]

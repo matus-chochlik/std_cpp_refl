@@ -21,10 +21,6 @@
 [def __get_element_t [link reflexpr.quickref.operations.get_element [^get_element_t]]]
 [def __get_element_v [link reflexpr.quickref.operations.get_element [^get_element_v]]]
 
-[def __get_keyword [link reflexpr.quickref.operations.get_keyword [^get_keyword]]]
-[def __get_keyword_t [link reflexpr.quickref.operations.get_keyword [^get_keyword_t]]]
-[def __get_keyword_v [link reflexpr.quickref.operations.get_keyword [^get_keyword_v]]]
-
 [def __get_name [link reflexpr.quickref.operations.get_name [^get_name]]]
 [def __get_name_t [link reflexpr.quickref.operations.get_name [^get_name_t]]]
 [def __get_name_v [link reflexpr.quickref.operations.get_name [^get_name_v]]]
@@ -41,6 +37,10 @@
 [def __get_aliased_t [link reflexpr.quickref.operations.get_aliased [^get_aliased_t]]]
 [def __get_aliased_v [link reflexpr.quickref.operations.get_aliased [^get_aliased_v]]]
 
+[def __is_static [link reflexpr.quickref.operations.is_static [^is_static]]]
+[def __is_static_t [link reflexpr.quickref.operations.is_static [^is_static_t]]]
+[def __is_static_v [link reflexpr.quickref.operations.is_static [^is_static_v]]]
+
 [def __get_reflected_type [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type]]]
 [def __get_reflected_type_t [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_t]]]
 [def __get_reflected_type_v [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_v]]]
@@ -48,10 +48,6 @@
 [def __get_typedef_type [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type]]]
 [def __get_typedef_type_t [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_t]]]
 [def __get_typedef_type_v [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_v]]]
-
-[def __get_elaborated_type_specifier [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier]]]
-[def __get_elaborated_type_specifier_t [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_t]]]
-[def __get_elaborated_type_specifier_v [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_v]]]
 
 [def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
 [def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]

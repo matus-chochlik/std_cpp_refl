@@ -9,6 +9,7 @@ template <typename T>
 __concept bool MetaVariable =
 	__MetaNamed<T> &&
 	__MetaTyped<T> &&
+	__MetaLinkable<T> &&
 	__meta::__is_variable_v<T>;
 
 //]
@@ -48,6 +49,20 @@ Inherited from __MetaTyped.
 template <>
 struct __has_scope<MetaVariable> /*<
 Inherited from __MetaScoped.
+>*/
+{
+	typedef bool value_type;
+	static constexpr const bool value = true;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+};
+
+template <>
+struct __is_linkable<MetaVariable> /*<
+Inherited from __MetaLinkable.
 >*/
 {
 	typedef bool value_type;
@@ -163,6 +178,22 @@ struct __get_scope<MetaVariable>
 	
 };
 
+template <>
+struct __is_static<MetaVariable>
+{
+	
+	typedef bool value_type;
+	static constexpr const bool value = ... /*<
+	returns whether the a variable reflected by a MetaVariable was declared the static specifier.
+	>*/;
+
+	typedef __integral_constant<value_type, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+	
+};
+
 //]
 //[reflexpr_MetaVariable_operations
 
@@ -173,7 +204,7 @@ struct __get_pointer<MetaVariable>
 	typedef Pointer type;
 
 	static const type value = ... /*<
-	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer to the variable.
+	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 	>*/;
 	
 };

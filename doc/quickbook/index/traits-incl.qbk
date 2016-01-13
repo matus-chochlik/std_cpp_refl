@@ -5,10 +5,6 @@
 [def __is_sequence_t [link reflexpr.quickref.traits.is_sequence [^is_sequence_t]]]
 [def __is_sequence_v [link reflexpr.quickref.traits.is_sequence [^is_sequence_v]]]
 
-[def __is_specifier [link reflexpr.quickref.traits.is_specifier [^is_specifier]]]
-[def __is_specifier_t [link reflexpr.quickref.traits.is_specifier [^is_specifier_t]]]
-[def __is_specifier_v [link reflexpr.quickref.traits.is_specifier [^is_specifier_v]]]
-
 [def __is_namespace [link reflexpr.quickref.traits.is_namespace [^is_namespace]]]
 [def __is_namespace_t [link reflexpr.quickref.traits.is_namespace [^is_namespace_t]]]
 [def __is_namespace_v [link reflexpr.quickref.traits.is_namespace [^is_namespace_v]]]
@@ -56,3 +52,7 @@
 [def __is_class_member [link reflexpr.quickref.traits.is_class_member [^is_class_member]]]
 [def __is_class_member_t [link reflexpr.quickref.traits.is_class_member [^is_class_member_t]]]
 [def __is_class_member_v [link reflexpr.quickref.traits.is_class_member [^is_class_member_v]]]
+
+[def __is_linkable [link reflexpr.quickref.traits.is_linkable [^is_linkable]]]
+[def __is_linkable_t [link reflexpr.quickref.traits.is_linkable [^is_linkable_t]]]
+[def __is_linkable_v [link reflexpr.quickref.traits.is_linkable [^is_linkable_v]]]

@@ -12,14 +12,14 @@ struct get_pointer
 {
 
 	typedef conditional_t<
-		__is_class_member_v<T>,
+		__is_class_member_v<T> && !__is_static_v<T>,
 		__get_reflected_type_t<__get_type_t<T>>
 		__get_reflected_type_t<__get_scope_t<T>>::*,
 		__get_reflected_type_t<__get_type_t<T>>*
 	> type;
 
 	static const type value = ... /*<
-	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer to the variable.
+	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 	>*/;
 };
 

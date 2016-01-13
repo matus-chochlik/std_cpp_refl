@@ -181,16 +181,6 @@ struct __get_reflected_type<MetaClass>
 //[reflexpr_MetaClass_operations
 
 template <>
-struct __get_elaborated_type_specifier<MetaClass>
-{
-	
-	typedef __MetaSpecifier type; /*<
-	returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a MetaClass.
-	>*/
-	
-};
-
-template <>
 struct __get_data_members<MetaClass>
 {
 	
@@ -205,7 +195,7 @@ struct __get_all_data_members<MetaClass>
 {
 	
 	typedef __MetaobjectSequence type; /*<
-	returns a sequence of Metaobjects reflecting all data members of a class reflected by a MetaClass.
+	returns a sequence of Metaobjects reflecting all    (including the private and protected)   data members of a class reflected by a MetaClass.
 	>*/
 	
 };
