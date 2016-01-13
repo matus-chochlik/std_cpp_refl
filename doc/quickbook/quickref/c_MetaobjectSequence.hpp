@@ -41,13 +41,13 @@ struct __source_file<MetaobjectSequence>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns a source file path of the declaration of  reflected by a MetaobjectSequence.
+	returns the source file path of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -57,13 +57,13 @@ struct __source_line<MetaobjectSequence>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file line of the declaration of  reflected by a MetaobjectSequence.
+	returns the source file line of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -73,13 +73,13 @@ struct __source_column<MetaobjectSequence>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file column of the declaration of  reflected by a MetaobjectSequence.
+	returns the source file column of the declaration of  reflected by a MetaobjectSequence.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -95,10 +95,10 @@ struct __get_size<MetaobjectSequence>
 	returns a number of elements in the sequence.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<size_t, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator size_t(void) const noexcept;
+	size_t operator(void) const noexcept;
 	
 };
 
@@ -106,7 +106,7 @@ template <size_t Index>
 struct __get_element<MetaobjectSequence, Index>
 {
 	
-	typedef __Metaobject type; /*<
+	typedef __Metaobject value_type; /*<
 	returns the i-th element in a MetaobjectSequence.
 	>*/
 	

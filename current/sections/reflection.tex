@@ -5,17 +5,18 @@ The metaobjects reflecting some program feature \verb@X@ as
 described above should be made available to the user by
 the means of a new operator \texttt{reflexpr}.
 More precisely, the reflection operator should return
-a type\footnote{like the \texttt{decltype} operator} conforming to a particular
+a type\footnote{Like the \texttt{decltype} operator} conforming to a particular
 metaobject concept, depending on the reflected expression.
 
-The reflected expression \verb@X@ in the items listed above can be any of the following:
+The reflected expression \verb@X@ in the items listed above can at the moment
+be any of the following\footnote{Future proposals may add new reflectible expressions}:
 
 \begin{itemize}
-\item{\verb@::@} -- The global scope, the returned metaobject is a {\meta{GlobalScope}}.
+\item{No expression or \verb@::@} -- The global scope, the returned metaobject is a {\meta{GlobalScope}}.
 \item{{\em Namespace name}} -- (\verb@std@) the returned metaobject is a {\meta{Namespace}}.
 \item{{\em Namespace alias name}} -- the returned metaobject is a {\meta{NamespaceAlias}}.
 \item{{\em Type name}} -- (\verb@long double@) the returned metaobject is a {\meta{Type}}.
-\item{{\em \verb@typedef@ name}} -- (\verb@std::size_t@ or \verb@std::string@)
+\item{{\em Typedef name}} -- (\verb@std::size_t@ or \verb@std::string@)
      the returned metaobject is a {\meta{TypeAlias}}.
 \item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
      the returned metaobject is a {\meta{Class}}.

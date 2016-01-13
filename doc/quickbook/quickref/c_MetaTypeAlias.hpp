@@ -86,13 +86,13 @@ struct __source_file<MetaTypeAlias>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns a source file path of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
+	returns the source file path of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -102,13 +102,13 @@ struct __source_line<MetaTypeAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file line of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
+	returns the source file line of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -118,13 +118,13 @@ struct __source_column<MetaTypeAlias>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file column of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
+	returns the source file column of the declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -140,8 +140,8 @@ struct __get_name<MetaTypeAlias>
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -149,7 +149,7 @@ template <>
 struct __get_scope<MetaTypeAlias>
 {
 	
-	typedef __MetaScope type; /*<
+	typedef __MetaScope value_type; /*<
 	returns the MetaScope reflecting the scope of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/
 	
@@ -159,7 +159,7 @@ template <>
 struct __get_reflected_type<MetaTypeAlias>
 {
 	
-	typedef __Type type; /*<
+	typedef __Type value_type; /*<
 	returns the the base-level type reflected by a MetaTypeAlias.
 	>*/
 	
@@ -169,7 +169,7 @@ template <>
 struct __get_aliased<MetaTypeAlias>
 {
 	
-	typedef __MetaNamed type; /*<
+	typedef __MetaNamed value_type; /*<
 	returns the MetaNamed reflecting the original declaration of a type alias or typedef reflected by a MetaTypeAlias.
 	>*/
 	
@@ -182,7 +182,7 @@ template <>
 struct __get_typedef_type<MetaTypeAlias>
 {
 	
-	typedef __MetaType type; /*<
+	typedef __MetaType value_type; /*<
 	returns the MetaType reflecting the original declaration of a type reflected by a MetaTypeAlias.
 	>*/
 	

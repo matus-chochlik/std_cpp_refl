@@ -70,9 +70,6 @@ template &lt;<xsl:for-each select="argument">
 
 <xsl:template name="operations">
 <xsl:param name="operation_mo"/>
-<xsl:variable name="has_value"
-	select="@result='IntegralConstant' or @result='StringConstant' or @result='Pointer'"
-/>
 
 <xsl:for-each select="/concepts/operation[argument[@type=$operation_mo]]">
 \subsubsection{\texttt{<xsl:value-of select="str:replace(@name, '_','\_')"/>}}
@@ -93,23 +90,30 @@ template &lt;<xsl:for-each select="argument">
 	<xsl:text>&gt;</xsl:text>
 	</xsl:if>
 </xsl:for-each>
-struct <xsl:value-of select="@name"/>
-<xsl:text>
-{</xsl:text>
+struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 	<xsl:choose>
+	<xsl:when test="@result='BooleanConstant'">
+	typedef integral_constant&lt;bool, value&gt; type;
+	typedef bool value_type;
+	static constexpr const bool value;
+
+	operator bool(void) const noexcept;
+	bool operator(void) const noexcept;<xsl:text/>
+	</xsl:when>
+
 	<xsl:when test="@result='IntegralConstant'">
+	typedef integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
 	typedef <xsl:value-of select="@integer"/> value_type;
 	static constexpr const <xsl:value-of select="@integer"/> value;
-	typedef integral_constant&lt;value_type, value&gt; type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;<xsl:text/>
+	operator <xsl:value-of select="@integer"/>(void) const noexcept;
+	<xsl:value-of select="@integer"/> operator(void) const noexcept;<xsl:text/>
 	</xsl:when>
 
 	<xsl:when test="@result='StringConstant'">
+	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
-	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;<xsl:text/>
@@ -117,13 +121,13 @@ struct <xsl:value-of select="@name"/>
 
 	<xsl:when test="@result='Pointer'">
 	typedef conditional_t&lt;
-		is_class_member_v&lt;T&gt;,
+		is_class_member_v&lt;T&gt; &amp;&amp; !is_static_v&lt;T&gt;,
 		get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;
 		get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*,
 		get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;*
-	&gt; type;
+	&gt; value_type;
 
-	static const type value;<xsl:text/>
+	static const value_type value;<xsl:text/>
 	</xsl:when>
 
 	<xsl:otherwise>
@@ -132,15 +136,15 @@ struct <xsl:value-of select="@name"/>
 	</xsl:choose>
 };
 
+<xsl:if test="@result!='Pointer'">
 <xsl:call-template name="template-args-decl"/>
 <xsl:text>using </xsl:text><xsl:value-of select="@name"/>_t = typename <xsl:value-of select="@name"/>
 	<xsl:call-template name="template-args-list"/>
 	<xsl:text>::type;</xsl:text>
+</xsl:if>
 
 
-<xsl:if test="$has_value">
-<xsl:text>
-</xsl:text>
+<xsl:if test="@result='BooleanConstant' or @result='IntegralConstant' or @result='StringConstant' or @result='Pointer'">
 <xsl:call-template name="template-args-decl"/>
 <xsl:text>constexpr bool </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
 	<xsl:call-template name="template-args-list"/>

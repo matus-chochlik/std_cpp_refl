@@ -74,7 +74,6 @@ template &lt;<xsl:for-each select="argument">
 //[meta_<xsl:value-of select="$operation"/>
 __namespace_meta_begin
 <xsl:for-each select="operation[@name=$operation]">
-<xsl:variable name="has_value" select="@result='IntegralConstant' or @result='StringConstant' or @result='Pointer'"/>
 
 <xsl:call-template name="template-args-decl"/>
 <xsl:text>__requires </xsl:text>
@@ -99,6 +98,20 @@ struct </xsl:text><xsl:value-of select="@name"/>
 	</xsl:for-each>
 </xsl:variable>
 <xsl:choose>
+<xsl:when test="@result='BooleanConstant'">
+	typedef bool value_type;
+	static constexpr const bool value = ... /*&lt;
+	<xsl:call-template name="expand-variables">
+		<xsl:with-param name="text" select="@brief"/>
+		<xsl:with-param name="operand" select="$metaobject"/>
+	</xsl:call-template>
+	&gt;*/;
+
+	typedef integral_constant&lt;bool, value&gt; type;
+
+	operator bool(void) const noexcept;
+	bool operator(void) const noexcept;
+</xsl:when>
 <xsl:when test="@result='IntegralConstant'">
 	typedef <xsl:value-of select="@integer"/> value_type;
 	static constexpr const <xsl:value-of select="@integer"/> value = ... /*&lt;
@@ -108,9 +121,9 @@ struct </xsl:text><xsl:value-of select="@name"/>
 	</xsl:call-template>
 	&gt;*/;
 
-	typedef __StringConstant type;
+	typedef integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
 
-	operator value_type (void) const noexcept;
+	operator value_type(void) const noexcept;
 	value_type operator(void) const noexcept;
 </xsl:when>
 <xsl:when test="@result='StringConstant'">
@@ -125,8 +138,8 @@ struct </xsl:text><xsl:value-of select="@name"/>
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 </xsl:when>
 <xsl:when test="@result='Pointer'">
 	typedef conditional_t&lt;
@@ -134,9 +147,9 @@ struct </xsl:text><xsl:value-of select="@name"/>
 		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;
 		__get_reflected_type_t&lt;__get_scope_t&lt;T&gt;&gt;::*,
 		__get_reflected_type_t&lt;__get_type_t&lt;T&gt;&gt;*
-	&gt; type;
+	&gt; value_type;
 
-	static const type value = ... /*&lt;
+	static const value_type value = ... /*&lt;
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="@brief"/>
 		<xsl:with-param name="operand" select="$metaobject"/>
@@ -155,13 +168,14 @@ struct </xsl:text><xsl:value-of select="@name"/>
 <xsl:text>};
 </xsl:text>
 
+<xsl:if test="@result!='Pointer'">
 <xsl:call-template name="template-args-decl"/>
 <xsl:text>using </xsl:text><xsl:value-of select="@name"/>_t = typename <xsl:value-of select="@name"/>
 	<xsl:call-template name="template-args-list"/>
 	<xsl:text>::type;</xsl:text>
+</xsl:if>
 
-
-<xsl:if test="$has_value">
+<xsl:if test="@result='BooleanConstant' or @result='IntegralConstant' or @result='StringConstant' or @result='Pointer'">
 <xsl:text>
 </xsl:text>
 <xsl:call-template name="template-args-decl"/>

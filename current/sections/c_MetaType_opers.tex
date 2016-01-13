@@ -7,8 +7,7 @@ returns the the base-level type reflected by a \meta{Type}.
 
 template <typename T>
 requires MetaType<T>
-struct get_reflected_type
-{
+struct get_reflected_type {
 	typedef Type type;
 };
 

@@ -7,20 +7,19 @@ returns a pointer to the a variable reflected by a \meta{Variable}.   If the var
 
 template <typename T>
 requires MetaVariable<T>
-struct get_pointer
-{
+struct get_pointer {
 	typedef conditional_t<
-		is_class_member_v<T>,
+		is_class_member_v<T> && !is_static_v<T>,
 		get_reflected_type_t<get_type_t<T>>
 		get_reflected_type_t<get_scope_t<T>>::*,
 		get_reflected_type_t<get_type_t<T>>*
-	> type;
+	> value_type;
 
-	static const type value;
+	static const value_type value;
 };
 
 
 template <typename T>
-using get_pointer_t = typename get_pointer<T>::type;
+constexpr bool get_pointer_v = get_pointer<T>::value;
 
 \end{minted}

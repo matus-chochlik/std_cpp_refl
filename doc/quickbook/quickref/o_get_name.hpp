@@ -19,8 +19,8 @@ struct get_name
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 };
 
 template <typename T>

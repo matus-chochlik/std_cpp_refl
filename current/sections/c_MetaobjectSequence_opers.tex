@@ -7,19 +7,20 @@ returns a number of elements in the sequence.
 
 template <typename T>
 requires MetaobjectSequence<T>
-struct get_size
-{
+struct get_size {
+	typedef integral_constant<size_t, value> type;
 	typedef size_t value_type;
 	static constexpr const size_t value;
-	typedef integral_constant<value_type, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator size_t(void) const noexcept;
+	size_t operator(void) const noexcept;
 };
 
 
 template <typename T>
 using get_size_t = typename get_size<T>::type;
+template <typename T>
+constexpr bool get_size_v = get_size<T>::value;
 
 \end{minted}
 
@@ -31,8 +32,7 @@ returns the i-th element in a MetaobjectSequence.
 
 template <typename T1, size_t Index>
 requires MetaobjectSequence<T1>
-struct get_element
-{
+struct get_element {
 	typedef Metaobject type;
 };
 

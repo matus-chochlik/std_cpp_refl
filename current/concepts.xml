@@ -26,7 +26,9 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</unused>
 
 	<trait name="is_sequence" scope="meta" indicates="MetaobjectSequence" uses="get_category"/>
+	<unused>
 	<trait name="is_specifier" scope="meta" indicates="MetaSpecifier" uses="get_category"/>
+	</unused>
 
 	<trait name="is_namespace" scope="meta" indicates="MetaNamespace" uses="get_category"/>
 	<trait name="is_global_scope" scope="meta" indicates="MetaGlobalScope" uses="get_category"/>
@@ -41,40 +43,32 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_scope" scope="meta" indicates="MetaScope"/>
 	<trait name="is_alias" scope="meta" indicates="MetaAlias"/>
 	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
+	<trait name="is_linkable" scope="meta" indicates="MetaLinkable"/>
 
 	<operation name="source_file"
-		brief="returns a source file path of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject">
-			<except if="is_sequence"/>
-			<except if="is_specifier"/>
-		</argument>
+		<argument type="Metaobject"/>
 	</operation>
 
 	<operation name="source_line"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="returns a source file line of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject">
-			<except if="is_sequence"/>
-			<except if="is_specifier"/>
-		</argument>
+		<argument type="Metaobject"/>
 	</operation>
 
 	<operation name="source_column"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="returns a source file column of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject">
-			<except if="is_sequence"/>
-			<except if="is_specifier"/>
-		</argument>
+		<argument type="Metaobject"/>
 	</operation>
 
 	<metaobject name="MetaobjectSequence"
@@ -100,6 +94,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="size_t" name="Index"/>
 	</operation>
 
+	<unused>
 	<metaobject name="MetaSpecifier"
 		reflects="a specifier"
 	>
@@ -112,6 +107,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<argument type="MetaSpecifier"/>
 	</operation>
+	</unused>
 
 	<metaobject name="MetaNamed"
 		reflects="a named declaration"
@@ -169,6 +165,27 @@ by the compiler which allow access to metadata reflecting specific program featu
 		brief="returns the MetaNamed reflecting the original declaration of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaAlias"/>
+	</operation>
+
+	<metaobject name="MetaClassMember"
+		reflects="class member"
+	>
+		<generalization concept="MetaScoped"/>
+		<constraint operation="get_scope" trait="is_class"/>
+	</metaobject>
+
+	<metaobject name="MetaLinkable"
+		reflects="declaration with storage duration and/or linkage"
+	>
+		<generalization concept="MetaNamed"/>
+		<generalization concept="MetaScoped"/>
+	</metaobject>
+
+	<operation name="is_static"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with the static specifier."
+	>
+		<argument type="MetaLinkable"/>
 	</operation>
 
 	<metaobject name="MetaGlobalScope"
@@ -233,12 +250,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<generalization concept="MetaScope"/>
 	</metaobject>
 
+	<unused>
 	<operation name="get_elaborated_type_specifier"
 		result="MetaSpecifier"
 		brief="returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="MetaClass"/>
 	</operation>
+	</unused>
 
 	<operation name="get_data_members"
 		result="MetaobjectSequence"
@@ -269,6 +288,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<generalization concept="MetaNamed"/>
 		<generalization concept="MetaTyped"/>
 		<generalization concept="MetaScoped" optional="true"/>
+		<generalization concept="MetaLinkable"/>
 	</metaobject>
 
 	<operation name="get_pointer"
@@ -279,11 +299,4 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<argument type="MetaVariable"/>
 	</operation>
-
-	<metaobject name="MetaClassMember"
-		reflects="class member"
-	>
-		<generalization concept="MetaScoped"/>
-		<constraint operation="get_scope" trait="is_class"/>
-	</metaobject>
 </concepts>

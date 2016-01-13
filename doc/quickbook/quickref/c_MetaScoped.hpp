@@ -41,13 +41,13 @@ struct __source_file<MetaScoped>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns a source file path of the declaration of a scoped declaration reflected by a MetaScoped.
+	returns the source file path of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -57,13 +57,13 @@ struct __source_line<MetaScoped>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file line of the declaration of a scoped declaration reflected by a MetaScoped.
+	returns the source file line of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -73,13 +73,13 @@ struct __source_column<MetaScoped>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file column of the declaration of a scoped declaration reflected by a MetaScoped.
+	returns the source file column of the declaration of a scoped declaration reflected by a MetaScoped.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -90,7 +90,7 @@ template <>
 struct __get_scope<MetaScoped>
 {
 	
-	typedef __MetaScope type; /*<
+	typedef __MetaScope value_type; /*<
 	returns the MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
 	>*/
 	

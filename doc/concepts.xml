@@ -46,7 +46,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_linkable" scope="meta" indicates="MetaLinkable"/>
 
 	<operation name="source_file"
-		brief="returns a source file path of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
 		<group name="SourceInfo"/>
@@ -56,7 +56,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<operation name="source_line"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="returns a source file line of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject"/>
@@ -65,7 +65,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<operation name="source_column"
 		result="IntegralConstant"
 		integer="unsigned"
-		brief="returns a source file column of the declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
 		<argument type="Metaobject"/>
@@ -182,9 +182,8 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</metaobject>
 
 	<operation name="is_static"
-		result="IntegralConstant"
-		integer="bool"
-		brief="returns whether the $(reflected) reflected by a $(operand) was declared the static specifier."
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with the static specifier."
 	>
 		<argument type="MetaLinkable"/>
 	</operation>

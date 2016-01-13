@@ -95,6 +95,20 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 </xsl:for-each>&gt;
 {
 	<xsl:choose>
+	<xsl:when test="@result='BooleanConstant'">
+	typedef bool value_type;
+	static constexpr const bool value = ... /*&lt;
+	<xsl:call-template name="expand-variables">
+		<xsl:with-param name="text" select="@brief"/>
+		<xsl:with-param name="operand" select="$metaobject"/>
+	</xsl:call-template>
+	&gt;*/;
+
+	typedef __integral_constant&lt;bool, value&gt; type;
+
+	operator bool (void) const noexcept;
+	bool operator(void) const noexcept;
+	</xsl:when>
 	<xsl:when test="@result='IntegralConstant'">
 	typedef <xsl:value-of select="@integer"/> value_type;
 	static constexpr const <xsl:value-of select="@integer"/> value = ... /*&lt;
@@ -104,10 +118,10 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 	</xsl:call-template>
 	&gt;*/;
 
-	typedef __integral_constant&lt;value_type, value&gt; type;
+	typedef __integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator <xsl:value-of select="@integer"/>(void) const noexcept;
+	<xsl:value-of select="@integer"/> operator(void) const noexcept;
 	</xsl:when>
 
 	<xsl:when test="@result='StringConstant'">
@@ -122,14 +136,14 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	</xsl:when>
 
 	<xsl:when test="@result='Pointer'">
-	typedef Pointer type;
+	typedef Pointer value_type;
 
-	static const type value = ... /*&lt;
+	static const value_type value = ... /*&lt;
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="@brief"/>
 		<xsl:with-param name="operand" select="$metaobject"/>
@@ -138,7 +152,7 @@ struct __<xsl:value-of select="@name"/>&lt;<xsl:for-each select="argument">
 	</xsl:when>
 
 	<xsl:otherwise>
-	typedef __<xsl:value-of select="@result"/> type; /*&lt;
+	typedef __<xsl:value-of select="@result"/> value_type; /*&lt;
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="@brief"/>
 		<xsl:with-param name="operand" select="$metaobject"/>

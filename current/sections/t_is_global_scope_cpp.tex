@@ -2,21 +2,18 @@
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {
 
-template <typename T>
-requires Metaobject<T>
-struct is_global_scope
-{
+template <typename T> requires Metaobject<T>
+struct is_global_scope {
+	typedef integral_constant<bool, value> type;
 	typedef bool value_type;
 	static constexpr const bool value;
-	typedef integral_constant<bool, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator bool(void) const noexcept;
+	bool operator(void) const noexcept;
 };
 
 template <typename T>
 using is_global_scope_t = typename is_global_scope<T>::type;
-
 template <typename T>
 constexpr bool is_global_scope_v = is_global_scope<T>::value;
 

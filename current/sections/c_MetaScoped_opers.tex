@@ -7,8 +7,7 @@ returns the MetaScope reflecting the scope of a scoped declaration reflected by 
 
 template <typename T>
 requires MetaScoped<T>
-struct get_scope
-{
+struct get_scope {
 	typedef MetaScope type;
 };
 

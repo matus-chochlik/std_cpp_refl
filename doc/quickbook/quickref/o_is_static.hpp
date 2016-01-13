@@ -13,13 +13,13 @@ struct is_static
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	returns whether the declaration with storage duration and/or linkage reflected by a MetaLinkable was declared the static specifier.
+	returns whether the declaration with storage duration and/or linkage reflected by a MetaLinkable was declared with the static specifier.
 	>*/;
 
-	typedef __StringConstant type;
+	typedef integral_constant<bool, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator bool(void) const noexcept;
+	bool operator(void) const noexcept;
 };
 
 template <typename T>

@@ -16,9 +16,9 @@ struct get_size
 	returns a number of elements in the sequence.
 	>*/;
 
-	typedef __StringConstant type;
+	typedef integral_constant<size_t, value> type;
 
-	operator value_type (void) const noexcept;
+	operator value_type(void) const noexcept;
 	value_type operator(void) const noexcept;
 };
 

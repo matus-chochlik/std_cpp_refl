@@ -16,15 +16,13 @@ struct get_pointer
 		__get_reflected_type_t<__get_type_t<T>>
 		__get_reflected_type_t<__get_scope_t<T>>::*,
 		__get_reflected_type_t<__get_type_t<T>>*
-	> type;
+	> value_type;
 
-	static const type value = ... /*<
+	static const value_type value = ... /*<
 	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 	>*/;
 };
 
-template <typename T>
-using get_pointer_t = typename get_pointer<T>::type;
 
 template <typename T>
 constexpr bool get_pointer_v = get_pointer<T>::value;

@@ -7,11 +7,10 @@ returns the basic name of the a named declaration reflected by a \meta{Named}.
 
 template <typename T>
 requires MetaNamed<T>
-struct get_name
-{
+struct get_name {
+	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
-	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;
@@ -20,5 +19,7 @@ struct get_name
 
 template <typename T>
 using get_name_t = typename get_name<T>::type;
+template <typename T>
+constexpr bool get_name_v = get_name<T>::value;
 
 \end{minted}

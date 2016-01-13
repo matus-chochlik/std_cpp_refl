@@ -7,8 +7,7 @@ returns the MetaNamed reflecting the original declaration of a type or namespace
 
 template <typename T>
 requires MetaAlias<T>
-struct get_aliased
-{
+struct get_aliased {
 	typedef MetaNamed type;
 };
 

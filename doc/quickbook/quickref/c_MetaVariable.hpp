@@ -99,13 +99,13 @@ struct __source_file<MetaVariable>
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns a source file path of the declaration of a variable reflected by a MetaVariable.
+	returns the source file path of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -115,13 +115,13 @@ struct __source_line<MetaVariable>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file line of the declaration of a variable reflected by a MetaVariable.
+	returns the source file line of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -131,13 +131,13 @@ struct __source_column<MetaVariable>
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns a source file column of the declaration of a variable reflected by a MetaVariable.
+	returns the source file column of the declaration of a variable reflected by a MetaVariable.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<unsigned, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator unsigned(void) const noexcept;
+	unsigned operator(void) const noexcept;
 	
 };
 
@@ -153,8 +153,8 @@ struct __get_name<MetaVariable>
 
 	typedef __StringConstant type;
 
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
 	
 };
 
@@ -162,7 +162,7 @@ template <>
 struct __get_type<MetaVariable>
 {
 	
-	typedef __MetaType type; /*<
+	typedef __MetaType value_type; /*<
 	returns the MetaType reflecting the type of a variable reflected by a MetaVariable.
 	>*/
 	
@@ -172,7 +172,7 @@ template <>
 struct __get_scope<MetaVariable>
 {
 	
-	typedef __MetaScope type; /*<
+	typedef __MetaScope value_type; /*<
 	returns the MetaScope reflecting the scope of a variable reflected by a MetaVariable.
 	>*/
 	
@@ -184,13 +184,13 @@ struct __is_static<MetaVariable>
 	
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	returns whether the a variable reflected by a MetaVariable was declared the static specifier.
+	returns whether the a variable reflected by a MetaVariable was declared with the static specifier.
 	>*/;
 
-	typedef __integral_constant<value_type, value> type;
+	typedef __integral_constant<bool, value> type;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator bool (void) const noexcept;
+	bool operator(void) const noexcept;
 	
 };
 
@@ -201,9 +201,9 @@ template <>
 struct __get_pointer<MetaVariable>
 {
 	
-	typedef Pointer type;
+	typedef Pointer value_type;
 
-	static const type value = ... /*<
+	static const value_type value = ... /*<
 	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 	>*/;
 	

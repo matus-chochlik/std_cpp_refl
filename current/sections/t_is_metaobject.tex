@@ -6,23 +6,17 @@ to the \texttt{std} namespace as one of the type traits.
 
 \begin{minted}{cpp}
 template <typename T>
-struct is_metaobject
-{
-	typedef bool value_type;
-	static constexpr const bool value = /*
-		true: if T is a metaobject
-		false: otherwise
-	*/
-
+struct is_metaobject {
 	typedef integral_constant<bool, value> type;
+	typedef bool value_type;
+	static constexpr const bool value;
 
-	operator value_type (void) const noexcept;
-	value_type operator(void) const noexcept;
+	operator bool(void) const noexcept;
+	bool operator(void) const noexcept;
 };
 
 template <typename T>
 using is_metaobject_t = typename is_metaobject<T>::type;
-
 template <typename T>
 constexpr bool is_metaobject_v = is_metaobject<T>::value;
 \end{minted}
