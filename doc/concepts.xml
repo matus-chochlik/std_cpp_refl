@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf8"?>
 <concepts>
 	<baseobject kind="type" name="Type"/>
+	<unused>
 	<baseobject kind="type" name="MetaobjectCategory" label="Metaobject\nCategory"/>
+	</unused>
 
 	<baseobject kind="tag" name="global_scope_tag"/>
 	<baseobject kind="tag" name="namespace_tag"/>

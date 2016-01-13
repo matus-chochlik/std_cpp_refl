@@ -11,7 +11,7 @@
 digraph Reflection {
 	overlap=false
 	rankdir=BT
-	ranksep=0.25
+	ranksep=0.45
 	fontName="Courier"
 	maxiter=1000000
 

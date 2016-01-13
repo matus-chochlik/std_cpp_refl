@@ -26,26 +26,9 @@
 \cfoot{}
 
 \usepackage[pdftex]{graphicx}
-\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\DeclareGraphicsExtensions{.pdf}
 \graphicspath{{images/}}
-
-\usepackage{tikz}
-\usetikzlibrary{arrows,positioning}
-\tikzstyle{concept}=[
-	rectangle,	
-	very thick,
-	draw=red!80!black!80,
-	top color=white,
-	bottom color=red!20,
-	node distance=0.5em and 1.5em
-]
-\tikzstyle{inheritance}=[
-	->,
-	shorten >=1pt,
-	>=open triangle 90,
-	very thick
-]
-   
+\usepackage{adjustbox}
 
 \setcounter{tocdepth}{3} 
 
@@ -93,6 +76,7 @@ of this proposal.
 \appendix
 \part*{Appendix}
 \addcontentsline{toc}{part}{Appendix}
+\input{sections/diagrams.tex}
 \end{appendices}
 
 \end{document}

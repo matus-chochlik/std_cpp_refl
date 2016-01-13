@@ -22,7 +22,7 @@ $(blddir)/%.sty: %.sty | $(blddir)
 	cp $< $@
 
 $(blddir)/%.pdf: $(blddir)/%.tex $(blddir)/%.tex.d $(blddir)/minted.sty | $(blddir)
-	cp -rf images $(blddir)/images || true
+	cp -rf images $(blddir) || true
 	cd $(blddir) && \
 		pdflatex $(latexopts) $(notdir $<) && \
 		pdflatex $(latexopts) $(notdir $<) && \

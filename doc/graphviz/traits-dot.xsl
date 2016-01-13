@@ -9,9 +9,10 @@
 
 <xsl:template match="/concepts">
 digraph Traits {
-	overlap=false
 	rankdir=LR
-	ranksep=0.5
+	overlap=false
+	sep=1.2
+	ranksep=0.8
 	clusterrank="local"
 	fontName="Courier"
 	maxiter=1000000
@@ -49,7 +50,7 @@ digraph Traits {
 	edge [style="solid",dir="both",arrowhead="none",arrowtail="onormal"]
 
 <xsl:for-each select="*/generalization">
-	<xsl:value-of select="@name"/> -> <xsl:value-of select="../@name"/>
+	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>
 	<xsl:if test="@optional='true'">[style="dashed"]</xsl:if>;
 </xsl:for-each>
 
