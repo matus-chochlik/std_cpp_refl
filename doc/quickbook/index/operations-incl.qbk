@@ -45,10 +45,6 @@
 [def __get_reflected_type_t [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_t]]]
 [def __get_reflected_type_v [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_v]]]
 
-[def __get_typedef_type [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type]]]
-[def __get_typedef_type_t [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_t]]]
-[def __get_typedef_type_v [link reflexpr.quickref.operations.get_typedef_type [^get_typedef_type_v]]]
-
 [def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
 [def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]
 [def __get_data_members_v [link reflexpr.quickref.operations.get_data_members [^get_data_members_v]]]

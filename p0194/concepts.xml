@@ -238,13 +238,6 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<constraint operation="get_aliased" trait="is_type"/>
 	</metaobject>
 
-	<operation name="get_typedef_type"
-		result="MetaType"
-		brief="returns the MetaType reflecting the original declaration of a type reflected by a $(operand)."
-	>
-		<argument type="MetaTypeAlias"/>
-	</operation>
-
 	<metaobject name="MetaClass"
 		reflects="a class"
 	>

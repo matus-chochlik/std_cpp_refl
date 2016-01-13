@@ -178,16 +178,6 @@ struct __get_aliased<MetaTypeAlias>
 //]
 //[reflexpr_MetaTypeAlias_operations
 
-template <>
-struct __get_typedef_type<MetaTypeAlias>
-{
-	
-	typedef __MetaType value_type; /*<
-	returns the MetaType reflecting the original declaration of a type reflected by a MetaTypeAlias.
-	>*/
-	
-};
-
 //]
 //[reflexpr_MetaTypeAlias_end
 __namespace_meta_end
