@@ -16,6 +16,7 @@ digraph <xsl:value-of select="$metaobject"/> {
 	fontName="Sans"
 	maxiter=1000000
 
+	edge [arrowsize=1.5]
 	node [penwidth=2]
 
 	<!-- generic types -->
@@ -47,18 +48,19 @@ digraph <xsl:value-of select="$metaobject"/> {
 </xsl:for-each>
 
 	edge [style="solid"]
-	edge [arrowsize=1.5]
 	edge [penwidth=2]
 
 	<!-- the metaobject -->
 	node [style="rounded,filled",shape="box",fillcolor="#90cc90"]
 <xsl:for-each select="metaobject[@name=$metaobject]">
-	<xsl:value-of select="@name"/>[URL="hierarchy.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+	<xsl:value-of select="@name"/>
+	<xsl:text>[URL="hierarchy.svg"</xsl:text>
+	<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- metaobject's generalizations -->
 	node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]
-	edge [dir="both",arrowtail="onormal",arrowhead="none"]
+	edge [dir="both",fillcolor="white",arrowtail="normal",arrowhead="none"]
 <xsl:for-each select="metaobject[@name=$metaobject]/generalization">
 	<xsl:variable name="gen_name" select="@concept"/>
 	<xsl:variable name="optional" select="@optional='true'"/>
@@ -124,7 +126,7 @@ digraph <xsl:value-of select="$metaobject"/> {
 </xsl:for-each>
 
 	edge [style="dashed",dir="forward"]
-	edge [arrowhead="vee"]
+	edge [arrowhead="vee",fillcolor="black"]
 
 <xsl:for-each select="operation[@result=$metaobject]">
 	<xsl:value-of select="@name"/> -> <xsl:value-of select="@result"/>;

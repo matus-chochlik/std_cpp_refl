@@ -13,11 +13,11 @@
 
 	<xsl:for-each select="/concepts/metaobject[generalization/@concept=$parent]">
 		<xsl:text>(</xsl:text>
-		<xsl:value-of select="@concept"/>
+		<xsl:value-of select="@name"/>
 		<xsl:text>)</xsl:text>
 
 		<xsl:call-template name="list-specializations">
-			<xsl:with-param name="parent" select="@concept"/>
+			<xsl:with-param name="parent" select="@name"/>
 		</xsl:call-template>
 	</xsl:for-each>
 </xsl:template>
@@ -27,25 +27,25 @@
 	<xsl:param name="done"/>
 
 	<xsl:for-each select="/concepts/metaobject[generalization/@concept=$parent]">
-		<xsl:value-of select="@concept"/>[URL="concept-<xsl:value-of select="@concept"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+		<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 
-		<xsl:if test="not(contains($done, concat('(',@concept,')')))">
-		edge [style="solid",dir="both",arrowtail="onormal",arrowhead="none"]
-		<xsl:value-of select="$parent"/> -> <xsl:value-of select="@concept"/>
+		<xsl:if test="not(contains($done, concat('(',@name,')')))">
+		edge [style="solid",dir="both",fillcolor="white",arrowtail="normal",arrowhead="none"]
+		<xsl:value-of select="$parent"/> -> <xsl:value-of select="@name"/>
 		<xsl:if test="generalization[@concept=$parent]/@optional='true'"> [style="dashed"]</xsl:if>;
 		<xsl:if test="preceding-sibling::metaobject[generalization/@concept=$parent]">
 		edge [style="invisible",dir="forward"]
-		<xsl:value-of select="preceding-sibling::metaobject[generalization/@concept=$parent][1]/@name"/> -> <xsl:value-of select="@concept"/>;
+		<xsl:value-of select="preceding-sibling::metaobject[generalization/@concept=$parent][1]/@name"/> -> <xsl:value-of select="@name"/>;
 		</xsl:if>
 		</xsl:if>
 
 		<xsl:call-template name="process-specializations">
-			<xsl:with-param name="parent" select="@concept"/>
+			<xsl:with-param name="parent" select="@name"/>
 			<xsl:with-param name="done">
 				<xsl:value-of select="$done"/>
 				<xsl:for-each select="preceding-sibling::metaobject[generalization/@concept=$parent]">
 				<xsl:call-template name="list-specializations">
-					<xsl:with-param name="parent" select="@concept"/>
+					<xsl:with-param name="parent" select="@name"/>
 				</xsl:call-template>
 				</xsl:for-each>
 			</xsl:with-param>
@@ -61,6 +61,7 @@ digraph <xsl:value-of select="$trait"/> {
 	fontName="Sans"
 	maxiter=1000000
 
+	edge [arrowsize=1.5]
 	node [penwidth=2]
 
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
@@ -71,7 +72,6 @@ digraph <xsl:value-of select="$trait"/> {
 
 <xsl:variable name="mo_name" select="trait[@name=$trait]/@indicates"/>
 
-	edge [arrowsize=1.5]
 	edge [penwidth=2]
 	edge [style="dotted",arrowhead="none"]
 	node [style="rounded,filled",shape="box",fillcolor="#c0ffc0"]

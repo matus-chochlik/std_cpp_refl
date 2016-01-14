@@ -49,7 +49,7 @@ struct __is_scope<MetaScope>
 //[reflexpr_MetaScope_inherited_operations
 
 template <>
-struct __source_file<MetaScope>
+struct __get_source_file<MetaScope>
 {
 	
 	typedef const char value_type[N+1];
@@ -66,7 +66,7 @@ struct __source_file<MetaScope>
 };
 
 template <>
-struct __source_line<MetaScope>
+struct __get_source_line<MetaScope>
 {
 	
 	typedef unsigned value_type;
@@ -82,7 +82,7 @@ struct __source_line<MetaScope>
 };
 
 template <>
-struct __source_column<MetaScope>
+struct __get_source_column<MetaScope>
 {
 	
 	typedef unsigned value_type;

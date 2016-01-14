@@ -1,11 +1,11 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[include o_source_file.qbk]
+[include o_get_source_file.qbk]
 
-[include o_source_line.qbk]
+[include o_get_source_line.qbk]
 
-[include o_source_column.qbk]
+[include o_get_source_column.qbk]
 
 [include o_get_size.qbk]
 

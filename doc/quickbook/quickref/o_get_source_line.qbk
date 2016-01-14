@@ -1,0 +1,10 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:get_source_line get_source_line]
+[import o_get_source_line.hpp]
+
+[meta_get_source_line]
+
+[endsect]

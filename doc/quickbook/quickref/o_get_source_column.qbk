@@ -1,0 +1,10 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:get_source_column get_source_column]
+[import o_get_source_column.hpp]
+
+[meta_get_source_column]
+
+[endsect]

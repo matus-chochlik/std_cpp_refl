@@ -35,7 +35,7 @@ struct __is_sequence<MetaobjectSequence>
 //[reflexpr_MetaobjectSequence_inherited_operations
 
 template <>
-struct __source_file<MetaobjectSequence>
+struct __get_source_file<MetaobjectSequence>
 {
 	
 	typedef const char value_type[N+1];
@@ -52,7 +52,7 @@ struct __source_file<MetaobjectSequence>
 };
 
 template <>
-struct __source_line<MetaobjectSequence>
+struct __get_source_line<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;
@@ -68,7 +68,7 @@ struct __source_line<MetaobjectSequence>
 };
 
 template <>
-struct __source_column<MetaobjectSequence>
+struct __get_source_column<MetaobjectSequence>
 {
 	
 	typedef unsigned value_type;

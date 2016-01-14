@@ -47,7 +47,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
 	<trait name="is_linkable" scope="meta" indicates="MetaLinkable"/>
 
-	<operation name="source_file"
+	<operation name="get_source_file"
 		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
@@ -55,7 +55,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="Metaobject"/>
 	</operation>
 
-	<operation name="source_line"
+	<operation name="get_source_line"
 		result="IntegralConstant"
 		integer="unsigned"
 		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
@@ -64,7 +64,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="Metaobject"/>
 	</operation>
 
-	<operation name="source_column"
+	<operation name="get_source_column"
 		result="IntegralConstant"
 		integer="unsigned"
 		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."

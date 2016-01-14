@@ -25,7 +25,7 @@ __namespace_meta_begin
 //[reflexpr_Metaobject_operations
 
 template <>
-struct __source_file<Metaobject>
+struct __get_source_file<Metaobject>
 {
 	
 	typedef const char value_type[N+1];
@@ -42,7 +42,7 @@ struct __source_file<Metaobject>
 };
 
 template <>
-struct __source_line<Metaobject>
+struct __get_source_line<Metaobject>
 {
 	
 	typedef unsigned value_type;
@@ -58,7 +58,7 @@ struct __source_line<Metaobject>
 };
 
 template <>
-struct __source_column<Metaobject>
+struct __get_source_column<Metaobject>
 {
 	
 	typedef unsigned value_type;

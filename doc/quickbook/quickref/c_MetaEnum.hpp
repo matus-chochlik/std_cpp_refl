@@ -91,7 +91,7 @@ struct __is_enum<MetaEnum>
 //[reflexpr_MetaEnum_inherited_operations
 
 template <>
-struct __source_file<MetaEnum>
+struct __get_source_file<MetaEnum>
 {
 	
 	typedef const char value_type[N+1];
@@ -108,7 +108,7 @@ struct __source_file<MetaEnum>
 };
 
 template <>
-struct __source_line<MetaEnum>
+struct __get_source_line<MetaEnum>
 {
 	
 	typedef unsigned value_type;
@@ -124,7 +124,7 @@ struct __source_line<MetaEnum>
 };
 
 template <>
-struct __source_column<MetaEnum>
+struct __get_source_column<MetaEnum>
 {
 	
 	typedef unsigned value_type;

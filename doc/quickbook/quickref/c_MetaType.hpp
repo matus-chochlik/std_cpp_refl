@@ -64,7 +64,7 @@ struct __is_type<MetaType>
 //[reflexpr_MetaType_inherited_operations
 
 template <>
-struct __source_file<MetaType>
+struct __get_source_file<MetaType>
 {
 	
 	typedef const char value_type[N+1];
@@ -81,7 +81,7 @@ struct __source_file<MetaType>
 };
 
 template <>
-struct __source_line<MetaType>
+struct __get_source_line<MetaType>
 {
 	
 	typedef unsigned value_type;
@@ -97,7 +97,7 @@ struct __source_line<MetaType>
 };
 
 template <>
-struct __source_column<MetaType>
+struct __get_source_column<MetaType>
 {
 	
 	typedef unsigned value_type;

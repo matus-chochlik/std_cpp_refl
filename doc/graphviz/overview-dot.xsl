@@ -15,6 +15,7 @@ digraph Reflection {
 	fontName="Courier"
 	maxiter=1000000
 
+	edge [arrowsize=1.5]
 	node [penwidth=2]
 
 	<!-- generic types -->
@@ -35,7 +36,10 @@ digraph Reflection {
 	<!-- metaobjects -->
 	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 <xsl:for-each select="metaobject">
-	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+	<xsl:value-of select="@name"/>
+	<xsl:text>[URL="concept-</xsl:text><xsl:value-of select="@name"/>.svg"
+	<xsl:if test="@abstract='true'">,fillcolor="#a0a0ff"</xsl:if>
+	<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- operations / traits -->
@@ -45,7 +49,7 @@ digraph Reflection {
 </xsl:for-each>
 
 	<!-- generalizations -->
-	edge [penwidth=2,dir="both",arrowsize=1.5,arrowtail="onormal",arrowhead="none"]
+	edge [penwidth=2,dir="both",fillcolor="white",arrowtail="normal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
 	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>;
 </xsl:for-each>
@@ -62,7 +66,7 @@ digraph Reflection {
 </xsl:for-each>
 
 	<!-- operations / traits -> Result -->
-	edge [penwidth=1,arrowhead="vee",style="dashed"]
+	edge [penwidth=1,arrowhead="vee",style="dashed",fillcolor="black"]
 <xsl:for-each select="trait|operation">
 	<xsl:value-of select="@name"/> -> <xsl:choose>
 		<xsl:when test="@result">

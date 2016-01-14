@@ -35,7 +35,7 @@ struct __has_name<MetaNamed>
 //[reflexpr_MetaNamed_inherited_operations
 
 template <>
-struct __source_file<MetaNamed>
+struct __get_source_file<MetaNamed>
 {
 	
 	typedef const char value_type[N+1];
@@ -52,7 +52,7 @@ struct __source_file<MetaNamed>
 };
 
 template <>
-struct __source_line<MetaNamed>
+struct __get_source_line<MetaNamed>
 {
 	
 	typedef unsigned value_type;
@@ -68,7 +68,7 @@ struct __source_line<MetaNamed>
 };
 
 template <>
-struct __source_column<MetaNamed>
+struct __get_source_column<MetaNamed>
 {
 	
 	typedef unsigned value_type;

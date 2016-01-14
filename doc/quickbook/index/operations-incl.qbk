@@ -1,17 +1,17 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[def __source_file [link reflexpr.quickref.operations.source_file [^source_file]]]
-[def __source_file_t [link reflexpr.quickref.operations.source_file [^source_file_t]]]
-[def __source_file_v [link reflexpr.quickref.operations.source_file [^source_file_v]]]
+[def __get_source_file [link reflexpr.quickref.operations.get_source_file [^get_source_file]]]
+[def __get_source_file_t [link reflexpr.quickref.operations.get_source_file [^get_source_file_t]]]
+[def __get_source_file_v [link reflexpr.quickref.operations.get_source_file [^get_source_file_v]]]
 
-[def __source_line [link reflexpr.quickref.operations.source_line [^source_line]]]
-[def __source_line_t [link reflexpr.quickref.operations.source_line [^source_line_t]]]
-[def __source_line_v [link reflexpr.quickref.operations.source_line [^source_line_v]]]
+[def __get_source_line [link reflexpr.quickref.operations.get_source_line [^get_source_line]]]
+[def __get_source_line_t [link reflexpr.quickref.operations.get_source_line [^get_source_line_t]]]
+[def __get_source_line_v [link reflexpr.quickref.operations.get_source_line [^get_source_line_v]]]
 
-[def __source_column [link reflexpr.quickref.operations.source_column [^source_column]]]
-[def __source_column_t [link reflexpr.quickref.operations.source_column [^source_column_t]]]
-[def __source_column_v [link reflexpr.quickref.operations.source_column [^source_column_v]]]
+[def __get_source_column [link reflexpr.quickref.operations.get_source_column [^get_source_column]]]
+[def __get_source_column_t [link reflexpr.quickref.operations.get_source_column [^get_source_column_t]]]
+[def __get_source_column_v [link reflexpr.quickref.operations.get_source_column [^get_source_column_v]]]
 
 [def __get_size [link reflexpr.quickref.operations.get_size [^get_size]]]
 [def __get_size_t [link reflexpr.quickref.operations.get_size [^get_size_t]]]

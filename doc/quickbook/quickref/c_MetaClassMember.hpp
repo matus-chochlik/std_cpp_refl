@@ -50,7 +50,7 @@ struct __is_class_member<MetaClassMember>
 //[reflexpr_MetaClassMember_inherited_operations
 
 template <>
-struct __source_file<MetaClassMember>
+struct __get_source_file<MetaClassMember>
 {
 	
 	typedef const char value_type[N+1];
@@ -67,7 +67,7 @@ struct __source_file<MetaClassMember>
 };
 
 template <>
-struct __source_line<MetaClassMember>
+struct __get_source_line<MetaClassMember>
 {
 	
 	typedef unsigned value_type;
@@ -83,7 +83,7 @@ struct __source_line<MetaClassMember>
 };
 
 template <>
-struct __source_column<MetaClassMember>
+struct __get_source_column<MetaClassMember>
 {
 	
 	typedef unsigned value_type;

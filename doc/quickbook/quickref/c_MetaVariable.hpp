@@ -93,7 +93,7 @@ struct __is_variable<MetaVariable>
 //[reflexpr_MetaVariable_inherited_operations
 
 template <>
-struct __source_file<MetaVariable>
+struct __get_source_file<MetaVariable>
 {
 	
 	typedef const char value_type[N+1];
@@ -110,7 +110,7 @@ struct __source_file<MetaVariable>
 };
 
 template <>
-struct __source_line<MetaVariable>
+struct __get_source_line<MetaVariable>
 {
 	
 	typedef unsigned value_type;
@@ -126,7 +126,7 @@ struct __source_line<MetaVariable>
 };
 
 template <>
-struct __source_column<MetaVariable>
+struct __get_source_column<MetaVariable>
 {
 	
 	typedef unsigned value_type;

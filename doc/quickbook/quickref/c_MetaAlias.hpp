@@ -49,7 +49,7 @@ struct __is_alias<MetaAlias>
 //[reflexpr_MetaAlias_inherited_operations
 
 template <>
-struct __source_file<MetaAlias>
+struct __get_source_file<MetaAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -66,7 +66,7 @@ struct __source_file<MetaAlias>
 };
 
 template <>
-struct __source_line<MetaAlias>
+struct __get_source_line<MetaAlias>
 {
 	
 	typedef unsigned value_type;
@@ -82,7 +82,7 @@ struct __source_line<MetaAlias>
 };
 
 template <>
-struct __source_column<MetaAlias>
+struct __get_source_column<MetaAlias>
 {
 	
 	typedef unsigned value_type;

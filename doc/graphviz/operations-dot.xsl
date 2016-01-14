@@ -15,6 +15,7 @@ digraph Reflection {
 	fontName="Sans"
 	maxiter=1000000
 
+	edge [arrowsize=1.5]
 	node [penwidth=2]
 
 	<!-- generic types -->
@@ -42,7 +43,10 @@ digraph Reflection {
 	<!-- metaobjects -->
 	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
 <xsl:for-each select="metaobject">
-	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+	<xsl:value-of select="@name"/>
+	<xsl:text>[URL="concept-</xsl:text><xsl:value-of select="@name"/><xsl:text>.svg"</xsl:text>
+	<xsl:if test="@abstract='true'">,fillcolor="#a0a0ff"</xsl:if>
+	<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 </xsl:for-each>
 
 	<!-- operations -->
@@ -53,9 +57,8 @@ digraph Reflection {
 
 	<!-- generalizations -->
 	edge [style="solid"]
-	edge [arrowsize=1.5]
 	edge [penwidth=0.3]
-	edge [dir="both",arrowtail="onormal",arrowhead="none"]
+	edge [dir="both",fillcolor="white",arrowtail="normal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
 	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>
 	<xsl:if test="@optional='true'">[style="dashed"]</xsl:if>;
@@ -70,7 +73,7 @@ digraph Reflection {
 </xsl:for-each>
 
 	<!-- operations -> Result -->
-	edge [dir="forward",arrowhead="vee"]
+	edge [dir="forward",arrowhead="vee",fillcolor="black"]
 <xsl:for-each select="operation">
 	<xsl:value-of select="@name"/> -> <xsl:choose>
 		<xsl:when test="@result">

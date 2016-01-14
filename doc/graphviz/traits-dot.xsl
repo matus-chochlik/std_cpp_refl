@@ -10,6 +10,7 @@
 <xsl:template match="/concepts">
 digraph Traits {
 	rankdir=LR
+	concentrate=true
 	overlap=false
 	sep=1.2
 	ranksep=0.8
@@ -26,7 +27,10 @@ digraph Traits {
 	subgraph cluster_<xsl:value-of select="@name"/> {
 	penwidth=0
 	node [style="rounded,filled",shape="box",fillcolor="#a0ffa0"]
-	<xsl:value-of select="@name"/>[URL="concept-<xsl:value-of select="@name"/>.svg"<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
+	<xsl:value-of select="@name"/>
+	<xsl:text>[URL="concept-</xsl:text><xsl:value-of select="@name"/><xsl:text>.svg"</xsl:text>
+	<xsl:if test="@abstract='true'">,fillcolor="#a0a0ff"</xsl:if>
+	<xsl:if test="@label">,label="<xsl:value-of select="@label"/>"</xsl:if>];
 
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 	edge [style="dashed",dir="forward",arrowhead="none"]
@@ -47,7 +51,8 @@ digraph Traits {
 
 	edge [constraint="true"]
 	edge [penwidth=0.3]
-	edge [style="solid",dir="both",arrowhead="none",arrowtail="onormal"]
+	edge [arrowsize=1.5]
+	edge [style="solid",dir="both",fillcolor="white",arrowhead="none",arrowtail="normal"]
 
 <xsl:for-each select="*/generalization">
 	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>

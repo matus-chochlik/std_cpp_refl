@@ -16,6 +16,7 @@
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
 
 	<metaobject name="Metaobject"
+		abstract="true"
 		reflects="a base-level program feature"
 		is_a="a concept modelled by stateless anonymous types generated
 by the compiler which allow access to metadata reflecting specific program features"
@@ -47,7 +48,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
 	<trait name="is_linkable" scope="meta" indicates="MetaLinkable"/>
 
-	<operation name="source_file"
+	<operation name="get_source_file"
 		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
@@ -55,7 +56,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="Metaobject"/>
 	</operation>
 
-	<operation name="source_line"
+	<operation name="get_source_line"
 		result="IntegralConstant"
 		integer="unsigned"
 		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
@@ -64,7 +65,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<argument type="Metaobject"/>
 	</operation>
 
-	<operation name="source_column"
+	<operation name="get_source_column"
 		result="IntegralConstant"
 		integer="unsigned"
 		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."
@@ -74,6 +75,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaobjectSequence"
+		abstract="true"
 		label="Metaobject\nSequence"
 		brief="is an ordered sequence of metaobjects."
 	>
@@ -112,6 +114,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</unused>
 
 	<metaobject name="MetaNamed"
+		abstract="true"
 		reflects="a named declaration"
 	>
 		<generalization concept="Metaobject"/>
@@ -125,6 +128,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaTyped"
+		abstract="true"
 		reflects="base-level construct with a type"
 	>
 		<generalization concept="Metaobject"/>
@@ -138,6 +142,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaScoped"
+		abstract="true"
 		reflects="a scoped declaration"
 	>
 		<generalization concept="Metaobject"/>
@@ -151,12 +156,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaScope"
+		abstract="true"
 		reflects="a scope"
 	>
 		<generalization concept="MetaNamed"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
+		abstract="true"
 		reflects="a type or namespace alias"
 	>
 		<generalization concept="MetaNamed"/>
@@ -170,6 +177,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaClassMember"
+		abstract="true"
 		reflects="class member"
 	>
 		<generalization concept="MetaScoped"/>
@@ -177,6 +185,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</metaobject>
 
 	<metaobject name="MetaLinkable"
+		abstract="true"
 		reflects="declaration with storage duration and/or linkage"
 	>
 		<generalization concept="MetaNamed"/>

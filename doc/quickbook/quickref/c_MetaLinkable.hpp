@@ -64,7 +64,7 @@ struct __is_linkable<MetaLinkable>
 //[reflexpr_MetaLinkable_inherited_operations
 
 template <>
-struct __source_file<MetaLinkable>
+struct __get_source_file<MetaLinkable>
 {
 	
 	typedef const char value_type[N+1];
@@ -81,7 +81,7 @@ struct __source_file<MetaLinkable>
 };
 
 template <>
-struct __source_line<MetaLinkable>
+struct __get_source_line<MetaLinkable>
 {
 	
 	typedef unsigned value_type;
@@ -97,7 +97,7 @@ struct __source_line<MetaLinkable>
 };
 
 template <>
-struct __source_column<MetaLinkable>
+struct __get_source_column<MetaLinkable>
 {
 	
 	typedef unsigned value_type;

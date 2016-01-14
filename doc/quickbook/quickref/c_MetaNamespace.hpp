@@ -79,7 +79,7 @@ struct __is_namespace<MetaNamespace>
 //[reflexpr_MetaNamespace_inherited_operations
 
 template <>
-struct __source_file<MetaNamespace>
+struct __get_source_file<MetaNamespace>
 {
 	
 	typedef const char value_type[N+1];
@@ -96,7 +96,7 @@ struct __source_file<MetaNamespace>
 };
 
 template <>
-struct __source_line<MetaNamespace>
+struct __get_source_line<MetaNamespace>
 {
 	
 	typedef unsigned value_type;
@@ -112,7 +112,7 @@ struct __source_line<MetaNamespace>
 };
 
 template <>
-struct __source_column<MetaNamespace>
+struct __get_source_column<MetaNamespace>
 {
 	
 	typedef unsigned value_type;

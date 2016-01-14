@@ -94,7 +94,7 @@ Inherited from __MetaAlias.
 //[reflexpr_MetaNamespaceAlias_inherited_operations
 
 template <>
-struct __source_file<MetaNamespaceAlias>
+struct __get_source_file<MetaNamespaceAlias>
 {
 	
 	typedef const char value_type[N+1];
@@ -111,7 +111,7 @@ struct __source_file<MetaNamespaceAlias>
 };
 
 template <>
-struct __source_line<MetaNamespaceAlias>
+struct __get_source_line<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;
@@ -127,7 +127,7 @@ struct __source_line<MetaNamespaceAlias>
 };
 
 template <>
-struct __source_column<MetaNamespaceAlias>
+struct __get_source_column<MetaNamespaceAlias>
 {
 	
 	typedef unsigned value_type;

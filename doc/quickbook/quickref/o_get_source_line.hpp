@@ -3,17 +3,17 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[meta_source_column
+//[meta_get_source_line
 __namespace_meta_begin
 
 template <typename T>
 __requires __Metaobject<T>
-struct source_column
+struct get_source_line
 {
 
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns the source file column of the declaration of a base-level program feature reflected by a Metaobject.
+	returns the source file line of the declaration of a base-level program feature reflected by a Metaobject.
 	>*/;
 
 	typedef integral_constant<unsigned, value> type;
@@ -23,10 +23,10 @@ struct source_column
 };
 
 template <typename T>
-using source_column_t = typename source_column<T>::type;
+using get_source_line_t = typename get_source_line<T>::type;
 
 template <typename T>
-constexpr bool source_column_v = source_column<T>::value;
+constexpr bool get_source_line_v = get_source_line<T>::value;
 
 __namespace_meta_end
 //]

@@ -1,5 +1,5 @@
 
-\subsubsection{\texttt{source\_file}}
+\subsubsection{\texttt{get\_source\_file}}
 
 returns the source file path of the declaration of a base-level program feature reflected by a \meta{object}.
 
@@ -7,7 +7,7 @@ returns the source file path of the declaration of a base-level program feature 
 
 template <typename T>
 requires Metaobject<T>
-struct source_file {
+struct get_source_file {
 	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
@@ -18,13 +18,13 @@ struct source_file {
 
 
 template <typename T>
-using source_file_t = typename source_file<T>::type;
+using get_source_file_t = typename get_source_file<T>::type;
 template <typename T>
-constexpr bool source_file_v = source_file<T>::value;
+constexpr bool get_source_file_v = get_source_file<T>::value;
 
 \end{minted}
 
-\subsubsection{\texttt{source\_line}}
+\subsubsection{\texttt{get\_source\_line}}
 
 returns the source file line of the declaration of a base-level program feature reflected by a \meta{object}.
 
@@ -32,7 +32,7 @@ returns the source file line of the declaration of a base-level program feature 
 
 template <typename T>
 requires Metaobject<T>
-struct source_line {
+struct get_source_line {
 	typedef integral_constant<unsigned, value> type;
 	typedef unsigned value_type;
 	static constexpr const unsigned value;
@@ -43,13 +43,13 @@ struct source_line {
 
 
 template <typename T>
-using source_line_t = typename source_line<T>::type;
+using get_source_line_t = typename get_source_line<T>::type;
 template <typename T>
-constexpr bool source_line_v = source_line<T>::value;
+constexpr bool get_source_line_v = get_source_line<T>::value;
 
 \end{minted}
 
-\subsubsection{\texttt{source\_column}}
+\subsubsection{\texttt{get\_source\_column}}
 
 returns the source file column of the declaration of a base-level program feature reflected by a \meta{object}.
 
@@ -57,7 +57,7 @@ returns the source file column of the declaration of a base-level program featur
 
 template <typename T>
 requires Metaobject<T>
-struct source_column {
+struct get_source_column {
 	typedef integral_constant<unsigned, value> type;
 	typedef unsigned value_type;
 	static constexpr const unsigned value;
@@ -68,8 +68,8 @@ struct source_column {
 
 
 template <typename T>
-using source_column_t = typename source_column<T>::type;
+using get_source_column_t = typename get_source_column<T>::type;
 template <typename T>
-constexpr bool source_column_v = source_column<T>::value;
+constexpr bool get_source_column_v = get_source_column<T>::value;
 
 \end{minted}
