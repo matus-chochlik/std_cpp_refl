@@ -16,6 +16,7 @@
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
 
 	<metaobject name="Metaobject"
+		abstract="true"
 		reflects="a base-level program feature"
 		is_a="a concept modelled by stateless anonymous types generated
 by the compiler which allow access to metadata reflecting specific program features"
@@ -74,6 +75,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaobjectSequence"
+		abstract="true"
 		label="Metaobject\nSequence"
 		brief="is an ordered sequence of metaobjects."
 	>
@@ -112,6 +114,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</unused>
 
 	<metaobject name="MetaNamed"
+		abstract="true"
 		reflects="a named declaration"
 	>
 		<generalization concept="Metaobject"/>
@@ -125,6 +128,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaTyped"
+		abstract="true"
 		reflects="base-level construct with a type"
 	>
 		<generalization concept="Metaobject"/>
@@ -138,6 +142,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaScoped"
+		abstract="true"
 		reflects="a scoped declaration"
 	>
 		<generalization concept="Metaobject"/>
@@ -151,12 +156,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaScope"
+		abstract="true"
 		reflects="a scope"
 	>
 		<generalization concept="MetaNamed"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
+		abstract="true"
 		reflects="a type or namespace alias"
 	>
 		<generalization concept="MetaNamed"/>
@@ -170,6 +177,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</operation>
 
 	<metaobject name="MetaClassMember"
+		abstract="true"
 		reflects="class member"
 	>
 		<generalization concept="MetaScoped"/>
@@ -177,6 +185,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</metaobject>
 
 	<metaobject name="MetaLinkable"
+		abstract="true"
 		reflects="declaration with storage duration and/or linkage"
 	>
 		<generalization concept="MetaNamed"/>
@@ -274,7 +283,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		reflects="an enumeration"
 	>
 		<generalization concept="MetaType"/>
-		<generalization concept="MetaScope" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaEnumClass"
+		reflects="a strongly typed enumeration"
+	>
+		<generalization concept="MetaEnum"/>
+		<generalization concept="MetaScope"/>
 	</metaobject>
 
 	<metaobject name="MetaVariable"
@@ -282,7 +297,6 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<generalization concept="MetaNamed"/>
 		<generalization concept="MetaTyped"/>
-		<generalization concept="MetaScoped" optional="true"/>
 		<generalization concept="MetaLinkable"/>
 	</metaobject>
 
@@ -294,4 +308,11 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<argument type="MetaVariable"/>
 	</operation>
+
+	<metaobject name="MetaDataMember"
+		reflects="a class data member"
+	>
+		<generalization concept="MetaVariable"/>
+		<generalization concept="MetaClassMember"/>
+	</metaobject>
 </concepts>

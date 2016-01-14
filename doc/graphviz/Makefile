@@ -14,7 +14,10 @@ all: diagrams
 
 diagrams: $(foreach I, $(DIAGRAMS), ./out/$I.svg)
 
-./out/%.svg: ./tmp/%.dot | out
+./out/%.svg: ./tmp/%.svg | out
+	$(XSLTPROC) --output $@ ./cc2dot-fixup.xsl $^
+
+./tmp/%.svg: ./tmp/%.dot | out
 	$(GRAPHVIZ) -Tsvg -o $@ $<
 
 ./tmp/%.dot: ./%-dot.xsl ../concepts.xml | tmp

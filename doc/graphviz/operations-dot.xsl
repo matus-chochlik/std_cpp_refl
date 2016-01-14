@@ -16,7 +16,6 @@ digraph Reflection {
 	maxiter=1000000
 
 	edge [arrowsize=1.5]
-	node [penwidth=2]
 
 	<!-- generic types -->
 	node [style="filled",shape="box",fillcolor="#a0a0a0"]
@@ -57,7 +56,7 @@ digraph Reflection {
 
 	<!-- generalizations -->
 	edge [style="solid"]
-	edge [penwidth=0.3]
+	edge [penwidth=1.0,color="#c0c0c0"]
 	edge [dir="both",fillcolor="white",arrowtail="normal",arrowhead="none"]
 <xsl:for-each select="*/generalization">
 	<xsl:value-of select="@concept"/> -> <xsl:value-of select="../@name"/>
@@ -65,7 +64,7 @@ digraph Reflection {
 </xsl:for-each>
 
 	<!-- Node -> operation -->
-	edge [penwidth=3]
+	edge [penwidth=3,color="black"]
 	edge [style="dashed"]
 	edge [dir="forward",arrowhead="none"]
 <xsl:for-each select="operation/argument">

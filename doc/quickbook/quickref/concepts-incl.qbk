@@ -33,4 +33,8 @@
 
 [include c_MetaEnum.qbk]
 
+[include c_MetaEnumClass.qbk]
+
 [include c_MetaVariable.qbk]
+
+[include c_MetaDataMember.qbk]

@@ -3,21 +3,21 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_MetaEnum_def
+//[reflexpr_MetaEnumClass_def
 
 template <typename T>
-__concept bool MetaEnum =
-	__MetaType<T> &&
-	__meta::__is_enum_v<T>;
+__concept bool MetaEnumClass =
+	__MetaEnum<T> &&
+	__MetaScope<T>;
 
 //]
-//[reflexpr_MetaEnum_begin
+//[reflexpr_MetaEnumClass_begin
 __namespace_meta_begin
 //]
-//[reflexpr_MetaEnum_inherited_traits
+//[reflexpr_MetaEnumClass_inherited_traits
 
 template <>
-struct __has_name<MetaEnum> /*<
+struct __has_name<MetaEnumClass> /*<
 Inherited from __MetaNamed.
 >*/
 {
@@ -31,7 +31,7 @@ Inherited from __MetaNamed.
 };
 
 template <>
-struct __has_scope<MetaEnum> /*<
+struct __has_scope<MetaEnumClass> /*<
 Inherited from __MetaScoped.
 >*/
 {
@@ -45,7 +45,7 @@ Inherited from __MetaScoped.
 };
 
 template <>
-struct __is_type<MetaEnum> /*<
+struct __is_type<MetaEnumClass> /*<
 Inherited from __MetaType.
 >*/
 {
@@ -58,11 +58,24 @@ Inherited from __MetaType.
 	value_type operator(void) const noexcept;
 };
 
-//]
-//[reflexpr_MetaEnum_traits
+template <>
+struct __is_enum<MetaEnumClass> /*<
+Inherited from __MetaEnum.
+>*/
+{
+	typedef bool value_type;
+	static constexpr const bool value = true;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+};
 
 template <>
-struct __is_enum<MetaEnum>
+struct __is_scope<MetaEnumClass> /*<
+Inherited from __MetaScope.
+>*/
 {
 	typedef bool value_type;
 	static constexpr const bool value = true;
@@ -74,16 +87,19 @@ struct __is_enum<MetaEnum>
 };
 
 //]
-//[reflexpr_MetaEnum_inherited_operations
+//[reflexpr_MetaEnumClass_traits
+
+//]
+//[reflexpr_MetaEnumClass_inherited_operations
 
 template <>
-struct __get_source_file<MetaEnum>
+struct __get_source_file<MetaEnumClass>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns the source file path of the declaration of an enumeration reflected by a MetaEnum.
+	returns the source file path of the declaration of a strongly typed enumeration reflected by a MetaEnumClass.
 	>*/;
 
 	typedef __StringConstant type;
@@ -94,12 +110,12 @@ struct __get_source_file<MetaEnum>
 };
 
 template <>
-struct __get_source_line<MetaEnum>
+struct __get_source_line<MetaEnumClass>
 {
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns the source file line of the declaration of an enumeration reflected by a MetaEnum.
+	returns the source file line of the declaration of a strongly typed enumeration reflected by a MetaEnumClass.
 	>*/;
 
 	typedef __integral_constant<unsigned, value> type;
@@ -110,12 +126,12 @@ struct __get_source_line<MetaEnum>
 };
 
 template <>
-struct __get_source_column<MetaEnum>
+struct __get_source_column<MetaEnumClass>
 {
 	
 	typedef unsigned value_type;
 	static constexpr const unsigned value = ... /*<
-	returns the source file column of the declaration of an enumeration reflected by a MetaEnum.
+	returns the source file column of the declaration of a strongly typed enumeration reflected by a MetaEnumClass.
 	>*/;
 
 	typedef __integral_constant<unsigned, value> type;
@@ -126,13 +142,13 @@ struct __get_source_column<MetaEnum>
 };
 
 template <>
-struct __get_name<MetaEnum>
+struct __get_name<MetaEnumClass>
 {
 	
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns the basic name of the an enumeration reflected by a MetaEnum.
+	returns the basic name of the a strongly typed enumeration reflected by a MetaEnumClass.
 	>*/;
 
 	typedef __StringConstant type;
@@ -143,29 +159,29 @@ struct __get_name<MetaEnum>
 };
 
 template <>
-struct __get_scope<MetaEnum>
+struct __get_scope<MetaEnumClass>
 {
 	
 	typedef __MetaScope value_type; /*<
-	returns the MetaScope reflecting the scope of an enumeration reflected by a MetaEnum.
+	returns the MetaScope reflecting the scope of a strongly typed enumeration reflected by a MetaEnumClass.
 	>*/
 	
 };
 
 template <>
-struct __get_reflected_type<MetaEnum>
+struct __get_reflected_type<MetaEnumClass>
 {
 	
 	typedef __Type value_type; /*<
-	returns the the base-level type reflected by a MetaEnum.
+	returns the the base-level type reflected by a MetaEnumClass.
 	>*/
 	
 };
 
 //]
-//[reflexpr_MetaEnum_operations
+//[reflexpr_MetaEnumClass_operations
 
 //]
-//[reflexpr_MetaEnum_end
+//[reflexpr_MetaEnumClass_end
 __namespace_meta_end
 //]

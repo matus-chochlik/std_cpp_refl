@@ -5,7 +5,7 @@
 [section:MetaEnum MetaEnum]
 [import c_MetaEnum.hpp]
 
-[concept MetaEnum] is  a __MetaType and possibly a __MetaScope reflecting an enumeration.
+[concept MetaEnum] is  a __MetaType reflecting an enumeration.
 
 [reflexpr_MetaEnum_def]
 [heading Implementation]

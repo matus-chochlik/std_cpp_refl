@@ -283,7 +283,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		reflects="an enumeration"
 	>
 		<generalization concept="MetaType"/>
-		<generalization concept="MetaScope" optional="true"/>
+	</metaobject>
+
+	<metaobject name="MetaEnumClass"
+		reflects="a strongly typed enumeration"
+	>
+		<generalization concept="MetaEnum"/>
+		<generalization concept="MetaScope"/>
 	</metaobject>
 
 	<metaobject name="MetaVariable"
@@ -291,7 +297,6 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<generalization concept="MetaNamed"/>
 		<generalization concept="MetaTyped"/>
-		<generalization concept="MetaScoped" optional="true"/>
 		<generalization concept="MetaLinkable"/>
 	</metaobject>
 
@@ -303,4 +308,11 @@ by the compiler which allow access to metadata reflecting specific program featu
 	>
 		<argument type="MetaVariable"/>
 	</operation>
+
+	<metaobject name="MetaDataMember"
+		reflects="a class data member"
+	>
+		<generalization concept="MetaVariable"/>
+		<generalization concept="MetaClassMember"/>
+	</metaobject>
 </concepts>

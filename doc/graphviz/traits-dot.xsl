@@ -10,7 +10,6 @@
 <xsl:template match="/concepts">
 digraph Traits {
 	rankdir=LR
-	concentrate=true
 	overlap=false
 	sep=1.2
 	ranksep=0.8
@@ -50,7 +49,7 @@ digraph Traits {
 </xsl:for-each>
 
 	edge [constraint="true"]
-	edge [penwidth=0.3]
+	edge [penwidth=1.0,color="#c0c0c0"]
 	edge [arrowsize=1.5]
 	edge [style="solid",dir="both",fillcolor="white",arrowhead="none",arrowtail="normal"]
 
@@ -70,12 +69,14 @@ digraph Traits {
 
 </xsl:for-each>
 
+<xsl:comment>
 <xsl:for-each select="metaobject">
 	<xsl:variable name="this" select="@name"/>
-	<xsl:for-each select="preceding-sibling::metaobject[1]">
+	<xsl:for-each select="preceding-sibling::metaobject[2]">
 	<xsl:value-of select="@name"/> -> <xsl:value-of select="$this"/>;
 	</xsl:for-each>
 </xsl:for-each>
+</xsl:comment>
 
 }
 </xsl:template>

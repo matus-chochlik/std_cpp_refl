@@ -16,4 +16,6 @@
 [def __MetaTypeAlias [link reflexpr.quickref.MetaTypeAlias [^MetaTypeAlias]]]
 [def __MetaClass [link reflexpr.quickref.MetaClass [^MetaClass]]]
 [def __MetaEnum [link reflexpr.quickref.MetaEnum [^MetaEnum]]]
+[def __MetaEnumClass [link reflexpr.quickref.MetaEnumClass [^MetaEnumClass]]]
 [def __MetaVariable [link reflexpr.quickref.MetaVariable [^MetaVariable]]]
+[def __MetaDataMember [link reflexpr.quickref.MetaDataMember [^MetaDataMember]]]

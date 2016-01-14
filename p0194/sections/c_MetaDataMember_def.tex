@@ -1,0 +1,11 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+
+template <typename T>
+concept bool MetaDataMember =
+	MetaVariable<T> &&
+	MetaClassMember<T>;
+
+\end{minted}

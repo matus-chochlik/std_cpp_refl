@@ -5,7 +5,7 @@
 [section:MetaVariable MetaVariable]
 [import c_MetaVariable.hpp]
 
-[concept MetaVariable] is  a __MetaNamed,  a __MetaTyped, possibly a __MetaScoped and  a __MetaLinkable reflecting a variable.
+[concept MetaVariable] is  a __MetaNamed,  a __MetaTyped and  a __MetaLinkable reflecting a variable.
 
 [reflexpr_MetaVariable_def]
 [heading Implementation]
