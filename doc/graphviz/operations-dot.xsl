@@ -16,6 +16,7 @@ digraph Reflection {
 	maxiter=1000000
 
 	edge [arrowsize=1.5]
+	node [penwidth=2.0]
 
 	<!-- generic types -->
 	node [style="filled",shape="box",fillcolor="#a0a0a0"]

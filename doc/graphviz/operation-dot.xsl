@@ -64,6 +64,20 @@ digraph <xsl:value-of select="$operation"/> {
 	edge [arrowsize=1.5]
 	node [penwidth=2]
 
+	<!-- generic types -->
+	node [style="filled",shape="box",fillcolor="#a0a0a0"]
+<xsl:for-each select="baseobject[@kind='type']">
+	<xsl:variable name="obj_name" select="@name"/>
+
+	<xsl:if test="
+		/concepts/operation[@result=$obj_name and @name=$operation] or
+		/concepts/operation[@name=$operation and argument[@type=$obj_name]]
+	">
+	<xsl:value-of select="@name"/>
+	<xsl:if test="@label">[label="<xsl:value-of select="@label"/>"]</xsl:if>;
+	</xsl:if>
+</xsl:for-each>
+
 	node [style="filled",shape="egg",fillcolor="#c0c0c0"]
 	<!-- the trait -->
 <xsl:for-each select="operation[@name=$operation]">

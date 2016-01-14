@@ -26,6 +26,7 @@ digraph <xsl:value-of select="$metaobject"/> {
 
 	<xsl:if test="
 		/concepts/operation[@result=$obj_name and argument[@type=$metaobject]] or
+		/concepts/operation[argument[@type=$obj_name] and argument[@type=$metaobject]] or
 		/concepts/operation[@result=$metaobject and argument[@type=$obj_name]]
 	">
 	<xsl:value-of select="@name"/>

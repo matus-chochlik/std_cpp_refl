@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf8"?>
 <concepts>
 	<baseobject kind="type" name="Type"/>
+	<baseobject kind="type" name="Pointer"/>
+	<baseobject kind="type" name="size_t"/>
 	<unused>
 	<baseobject kind="type" name="MetaobjectCategory" label="Metaobject\nCategory"/>
 	</unused>
