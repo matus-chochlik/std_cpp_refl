@@ -34,7 +34,7 @@ int main(void)
 	static_assert(meta::__has_name_v<meta_foo_baz>, "");
 	cout << meta::__get_name_v<meta_foo_baz> << endl;
 
-	typedef meta::__get_typedef_type_t<meta_foo_baz> meta_foo_bar; /*<
+	typedef meta::__get_aliased_t<meta_foo_baz> meta_foo_bar; /*<
 	Getting the reflected typedef [^foo::bar].
 	>*/
 
