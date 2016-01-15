@@ -1,0 +1,10 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_public is_public]
+[import o_is_public.hpp]
+
+[meta_is_public]
+
+[endsect]

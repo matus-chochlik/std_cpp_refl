@@ -186,6 +186,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		<constraint operation="get_scope" trait="is_class"/>
 	</metaobject>
 
+	<operation name="is_public"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with public access."
+	>
+		<argument type="MetaClassMember"/>
+	</operation>
+
 	<metaobject name="MetaLinkable"
 		abstract="true"
 		reflects="declaration with storage duration and/or linkage"

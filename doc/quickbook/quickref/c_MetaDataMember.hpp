@@ -220,6 +220,22 @@ struct __get_pointer<MetaDataMember>
 	
 };
 
+template <>
+struct __is_public<MetaDataMember>
+{
+	
+	typedef bool value_type;
+	static constexpr const bool value = ... /*<
+	returns whether the a class data member reflected by a MetaDataMember was declared with public access.
+	>*/;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator bool (void) const noexcept;
+	bool operator(void) const noexcept;
+	
+};
+
 //]
 //[reflexpr_MetaDataMember_operations
 

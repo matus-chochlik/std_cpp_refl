@@ -37,6 +37,10 @@
 [def __get_aliased_t [link reflexpr.quickref.operations.get_aliased [^get_aliased_t]]]
 [def __get_aliased_v [link reflexpr.quickref.operations.get_aliased [^get_aliased_v]]]
 
+[def __is_public [link reflexpr.quickref.operations.is_public [^is_public]]]
+[def __is_public_t [link reflexpr.quickref.operations.is_public [^is_public_t]]]
+[def __is_public_v [link reflexpr.quickref.operations.is_public [^is_public_v]]]
+
 [def __is_static [link reflexpr.quickref.operations.is_static [^is_static]]]
 [def __is_static_t [link reflexpr.quickref.operations.is_static [^is_static_t]]]
 [def __is_static_v [link reflexpr.quickref.operations.is_static [^is_static_v]]]

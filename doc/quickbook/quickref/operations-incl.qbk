@@ -19,6 +19,8 @@
 
 [include o_get_aliased.qbk]
 
+[include o_is_public.qbk]
+
 [include o_is_static.qbk]
 
 [include o_get_reflected_type.qbk]

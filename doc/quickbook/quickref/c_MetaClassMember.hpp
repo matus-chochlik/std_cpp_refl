@@ -111,6 +111,22 @@ struct __get_scope<MetaClassMember>
 //]
 //[reflexpr_MetaClassMember_operations
 
+template <>
+struct __is_public<MetaClassMember>
+{
+	
+	typedef bool value_type;
+	static constexpr const bool value = ... /*<
+	returns whether the class member reflected by a MetaClassMember was declared with public access.
+	>*/;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator bool (void) const noexcept;
+	bool operator(void) const noexcept;
+	
+};
+
 //]
 //[reflexpr_MetaClassMember_end
 __namespace_meta_end
