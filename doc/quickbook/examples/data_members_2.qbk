@@ -1,7 +1,7 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[section:data_members_2 Class data member reflection]
+[section:data_members_2 Class data member reflection (2)]
 
 [import data_members_2.hpp]
 [example_data_members_2]

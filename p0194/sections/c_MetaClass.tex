@@ -7,3 +7,7 @@ reflecting a class, struct or union.
 \input{sections/c_MetaClass_trait.tex}
 \input{sections/c_MetaClass_def.tex}
 \input{sections/c_MetaClass_opers.tex}
+
+The \meta{objectSequence} returned by \texttt{get\_data\_members} and
+\texttt{get\_all\_data\_members} should \emph{not} include metaobjects reflecting
+inherited data members.
