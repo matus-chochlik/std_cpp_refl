@@ -20,9 +20,9 @@ int main(void)
 	static_assert(__is_metaobject_v<meta_foo>, "");
 
 	cout << "name: " << __meta::__get_name_v<meta_foo> << endl;
-	cout << "file: " << meta::__source_file_v<meta_foo> << endl;
-	cout << "line: " << meta::__source_line_v<meta_foo> << endl;
-	cout << "col: "<< meta::__source_column_v<meta_foo> << endl;
+	cout << "file: " << meta::__get_source_file_v<meta_foo> << endl;
+	cout << "line: " << meta::__get_source_line_v<meta_foo> << endl;
+	cout << "col: "<< meta::__get_source_column_v<meta_foo> << endl;
 
 	return 0;
 }
