@@ -6,4 +6,12 @@
 [import scopes.hpp]
 [example_scopes]
 
+[heading Output]
+
+``
+baz
+bar
+foo
+``
+
 [endsect]

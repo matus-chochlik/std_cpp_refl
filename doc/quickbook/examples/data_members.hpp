@@ -30,7 +30,7 @@ int main(void)
 	static_assert(__is_metaobject_v<meta_data_mems>, "");
 	static_assert(meta::__is_sequence_v<meta_data_mems>, "");
 
-	std::cout << meta::__get_size_v<meta_data_mems> << std::endl; /*<
+	cout << meta::__get_size_v<meta_data_mems> << endl; /*<
 	[^4]
 	>*/
 
@@ -41,7 +41,7 @@ int main(void)
 	static_assert(meta::__is_variable_v<meta_data_mem0>, "");
 	static_assert(meta::__has_type_v<meta_data_mem0>, "");
 
-	std::cout << meta::__get_name_v<meta_data_mem0> << std::endl; /*<
+	cout << meta::__get_name_v<meta_data_mem0> << endl; /*<
 	[^b]
 	>*/
 
@@ -52,7 +52,7 @@ int main(void)
 	static_assert(meta::is_variable_v<meta_data_mem2>, "");
 	static_assert(meta::has_type_v<meta_data_mem2>, "");
 
-	std::cout << meta::get_name_v<meta_data_mem2> << std::endl; /*<
+	cout << meta::get_name_v<meta_data_mem2> << endl; /*<
 	[^y]
 	>*/
 
@@ -62,7 +62,7 @@ int main(void)
 	static_assert(is_metaobject_v<meta_all_data_mems>, "");
 	static_assert(meta::is_sequence_v<meta_all_data_mems>, "");
 
-	std::cout << meta::get_size_v<meta_all_data_mems> << std::endl; /*<
+	cout << meta::get_size_v<meta_all_data_mems> << endl; /*<
 	[^7]
 	>*/
 
@@ -73,7 +73,7 @@ int main(void)
 	static_assert(meta::is_variable_v<meta_all_data_mem0>, "");
 	static_assert(meta::has_type_v<meta_all_data_mem0>, "");
 
-	std::cout << meta::get_name_v<meta_all_data_mem0> << std::endl; /*<
+	cout << meta::get_name_v<meta_all_data_mem0> << endl; /*<
 	[^_i]
 	>*/
 
@@ -84,7 +84,7 @@ int main(void)
 	static_assert(meta::is_variable_v<meta_all_data_mem3>, "");
 	static_assert(meta::has_type_v<meta_all_data_mem3>, "");
 
-	std::cout << meta::get_name_v<meta_all_data_mem3> << std::endl; /*<
+	cout << meta::get_name_v<meta_all_data_mem3> << endl; /*<
 	[^x]
 	>*/
 

@@ -5,6 +5,7 @@
 
 //[example_scopes
 #include __reflexpr_header
+#include <iostream>
 
 namespace foo {
 
@@ -51,6 +52,10 @@ int main(void)
 	static_assert(meta::is_namespace_v<meta_foobar_s>, "");
 	static_assert(meta::is_global_scope_v<meta_foobar_s>, "");
 	static_assert(!meta::is_class_v<meta_foobar_s>, "");
+
+	cout << meta::__get_name_v<meta_foo_bar_baz> << endl;
+	cout << meta::get_name_v<meta_foo_bar_baz_s> << endl;
+	cout << meta::get_name_v<meta_foo_bar_s> << endl;
 
 	return 0;
 }

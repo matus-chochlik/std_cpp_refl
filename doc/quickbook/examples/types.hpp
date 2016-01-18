@@ -27,6 +27,10 @@ int main(void)
 	static_assert(meta::__has_name_v<meta_unsigned>, "");
 	cout << meta::__get_name_v<meta_unsigned> << endl;
 
+	typedef reflexpr(unsigned*) meta_ptr_unsigned;
+	static_assert(meta::has_name_v<meta_ptr_unsigned>, "");
+	cout << meta::get_name_v<meta_ptr_unsigned> << endl;
+
 	return 0;
 }
 //]
