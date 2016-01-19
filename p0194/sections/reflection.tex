@@ -27,6 +27,11 @@ like variables, overloaded functions, constructors, etc.}:
      the returned metaobject is a {\meta{EnumClass}}.
 \end{itemize}
 
-The reflection operator should have access to \verb@private@ and
-\verb@protected@ members of classes.
+\subsection{Required header}
+\label{section-reflexpr-header}
 
+The standard \texttt{<reflexpr>} header \emph{must} be included before
+the \emph{reflexpr} operator can be used\footnote{Similar to the
+\texttt{<typeinfo>} header being required for the \texttt{typeid} operator.}.
+This header file defines the metaobject trait templates described above
+and the templates implementing the \emph{interface} of the metaobjects.
