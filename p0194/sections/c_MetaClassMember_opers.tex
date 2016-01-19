@@ -20,6 +20,6 @@ struct is_public {
 template <typename T>
 using is_public_t = typename is_public<T>::type;
 template <typename T>
-constexpr bool is_public_v = is_public<T>::value;
+constexpr auto is_public_v = is_public<T>::value;
 
 \end{minted}

@@ -20,7 +20,7 @@ struct get_size {
 template <typename T>
 using get_size_t = typename get_size<T>::type;
 template <typename T>
-constexpr bool get_size_v = get_size<T>::value;
+constexpr auto get_size_v = get_size<T>::value;
 
 \end{minted}
 

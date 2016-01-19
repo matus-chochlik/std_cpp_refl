@@ -20,6 +20,6 @@ struct get_name {
 template <typename T>
 using get_name_t = typename get_name<T>::type;
 template <typename T>
-constexpr bool get_name_v = get_name<T>::value;
+constexpr auto get_name_v = get_name<T>::value;
 
 \end{minted}

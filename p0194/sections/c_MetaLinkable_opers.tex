@@ -20,6 +20,6 @@ struct is_static {
 template <typename T>
 using is_static_t = typename is_static<T>::type;
 template <typename T>
-constexpr bool is_static_v = is_static<T>::value;
+constexpr auto is_static_v = is_static<T>::value;
 
 \end{minted}

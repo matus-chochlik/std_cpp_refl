@@ -20,7 +20,7 @@ struct get_source_file {
 template <typename T>
 using get_source_file_t = typename get_source_file<T>::type;
 template <typename T>
-constexpr bool get_source_file_v = get_source_file<T>::value;
+constexpr auto get_source_file_v = get_source_file<T>::value;
 
 \end{minted}
 
@@ -45,7 +45,7 @@ struct get_source_line {
 template <typename T>
 using get_source_line_t = typename get_source_line<T>::type;
 template <typename T>
-constexpr bool get_source_line_v = get_source_line<T>::value;
+constexpr auto get_source_line_v = get_source_line<T>::value;
 
 \end{minted}
 
@@ -70,6 +70,6 @@ struct get_source_column {
 template <typename T>
 using get_source_column_t = typename get_source_column<T>::type;
 template <typename T>
-constexpr bool get_source_column_v = get_source_column<T>::value;
+constexpr auto get_source_column_v = get_source_column<T>::value;
 
 \end{minted}

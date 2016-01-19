@@ -144,9 +144,9 @@ struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 </xsl:if>
 
 
-<xsl:if test="@result='BooleanConstant' or @result='IntegralConstant' or @result='StringConstant' or @result='Pointer'">
+<xsl:if test="@result='BooleanConstant' or @result='IntegralConstant' or @result='StringConstant'">
 <xsl:call-template name="template-args-decl"/>
-<xsl:text>constexpr bool </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
+<xsl:text>constexpr auto </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
 	<xsl:call-template name="template-args-list"/>
 	<xsl:text>::value;</xsl:text>
 </xsl:if>
