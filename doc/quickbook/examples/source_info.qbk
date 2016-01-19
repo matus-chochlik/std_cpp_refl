@@ -9,8 +9,12 @@
 [heading Output]
 
 ``
-name: foo
-file: ./mirror/examples/source_info.cpp
+name: 'int'
+file: ''
+line: 0
+col: 0
+name: 'foo'
+file: './mirror/examples/source_info.cpp'
 line: 4
 col: 8
 ``
