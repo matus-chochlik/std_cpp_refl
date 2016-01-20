@@ -3,8 +3,8 @@
 
 [section:data_members Class data member reflection]
 
-[import data_members.hpp]
-[example_data_members]
+[import data_members_1.hpp]
+[example_data_members_1]
 
 [heading Output]
 
