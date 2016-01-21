@@ -1,17 +1,16 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[section:typedefs Typedef or type alias reflection]
+[section:typedefs_2 Class typedef reflection]
 
-[import typedefs.hpp]
-[example_typedefs]
+[import typedefs_2.hpp]
+[example_typedefs_2]
 
 [heading Output]
 
 ``
-baz
 bar
-int
+foo
 ``
 
 [endsect]

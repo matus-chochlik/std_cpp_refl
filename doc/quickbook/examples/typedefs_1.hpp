@@ -3,7 +3,7 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[example_typedefs
+//[example_typedefs_1
 #include __reflexpr_header
 #include <iostream>
 

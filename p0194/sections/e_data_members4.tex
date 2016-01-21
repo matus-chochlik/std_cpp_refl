@@ -84,11 +84,8 @@ int main(void)
 	using namespace std;
 
 	tetrahedron t{
-		{
-			{0.f,0.f,0.f},
-			{1.f,0.f,0.f},
-			{0.f,0.f,1.f}
-		}, {0.f,1.f,0.f}
+		{{0.f,0.f,0.f}, {1.f,0.f,0.f}, {0.f,0.f,1.f}},
+		{0.f,1.f,0.f}
 	};
 
 	std::cout << "{\"t\": ";
