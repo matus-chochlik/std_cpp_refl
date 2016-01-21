@@ -26,10 +26,10 @@ int main(void)
 	static_assert(__meta::__is_type_v<meta_foo_baz>, "");
 	static_assert(meta::__is_alias_v<meta_foo_baz>, "");
 
-	static_assert(is_same<
+	static_assert(__is_same_v<
 		meta::__get_reflected_type_t<meta_foo_baz>,
 		foo::baz
-	>::value, "");
+	>, "");
 
 	static_assert(meta::__has_name_v<meta_foo_baz>, "");
 	cout << meta::__get_name_v<meta_foo_baz> << endl;
@@ -42,10 +42,10 @@ int main(void)
 	static_assert(meta::is_type_v<meta_foo_bar>, "");
 	static_assert(meta::is_alias_v<meta_foo_bar>, "");
 
-	static_assert(is_same<
+	static_assert(__is_same_v<
 		meta::get_reflected_type_t<meta_foo_bar>,
 		foo::bar
-	>::value, "");
+	>, "");
 
 	static_assert(meta::has_name_v<meta_foo_bar>, "");
 	cout << meta::get_name_v<meta_foo_bar> << endl;
@@ -58,10 +58,10 @@ int main(void)
 	static_assert(meta::is_type_v<meta_int>, "");
 	static_assert(!meta::is_alias_v<meta_int>, "");
 
-	static_assert(is_same<
+	static_assert(__is_same_v<
 		meta::get_reflected_type_t<meta_int>,
 		int
-	>::value, "");
+	>, "");
 
 	static_assert(meta::has_name_v<meta_int>, "");
 	cout << meta::get_name_v<meta_int> << endl;

@@ -155,5 +155,6 @@ a:hover
 {
 	color: #202040;
 	text-shadow: 1px 1px 1px rgba(40, 40, 40, 0.5);
+	text-decoration: underline;
 }
 

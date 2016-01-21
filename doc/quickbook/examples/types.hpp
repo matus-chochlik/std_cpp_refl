@@ -19,10 +19,10 @@ int main(void)
 	static_assert(__meta::__is_type_v<meta_unsigned>, "");
 	static_assert(!__meta::__is_alias_v<meta_unsigned>, "");
 
-	static_assert(is_same<
+	static_assert(__is_same_v<
 		meta::__get_reflected_type_t<meta_unsigned>,
 		unsigned
-	>::value, "");
+	>, "");
 
 	static_assert(meta::__has_name_v<meta_unsigned>, "");
 	cout << meta::__get_name_v<meta_unsigned> << endl;
