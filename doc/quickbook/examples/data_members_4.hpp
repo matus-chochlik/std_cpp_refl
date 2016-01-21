@@ -60,10 +60,9 @@ template <typename T>
 std::ostream& value_to_json(std::ostream& out, const T& v)
 {
 	typedef __reflexpr(T) meta_T;
-	typedef std::meta::__get_aliased_t<meta_T> meta_R;
-	return reflected_to_json<meta_R>(
+	return reflected_to_json<meta_T>(
 		out, v,
-		std::meta::__is_class_t<meta_R>()
+		std::meta::__is_class_t<meta_T>()
 	);
 };
 
