@@ -7,3 +7,8 @@ A \meta{Named} is a \meta{object} reflecting a named base-level construct
 \input{sections/c_MetaNamed_trait.tex}
 \input{sections/c_MetaNamed_def.tex}
 \input{sections/c_MetaNamed_opers.tex}
+
+In case of types, the \texttt{get\_name} operation returns the type (or type alias)
+name without any qualifiers, asterisks\footnote{in case of pointers},
+ampersands\footnote{in case of references}, angle or square brackets\footnote{
+in case of templates or arrays}, etc.

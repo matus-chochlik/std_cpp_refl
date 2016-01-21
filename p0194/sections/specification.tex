@@ -6,7 +6,7 @@ in C++ should be made available through a set of {\em anonymous} types
 defined by the compiler and through related functions and template classes.
 At the moment these types should describe only the following program
 constructs: namespaces\footnote{in a limited form}, types, typedefs,
-classes and their data members.
+classes and their data members and enum types.
 
 In the future, the set of metaobjects should be extended to reflect also
 class inheritance, free functions, class member functions, templates,
@@ -32,7 +32,7 @@ type, etc.
 This section describes a set of metaobject concepts and their requirements,
 traits for metaobject classification and operators providing access to the metaobjects.
 
-Unless stated otherwise, all named templates proposed and described below should
+Unless stated otherwise, all proposed named templates described below should
 go into the \verb@std::meta@ nested namespace in order to contain reflection-related
 definitions and to help avoiding potential name conflicts.
 
