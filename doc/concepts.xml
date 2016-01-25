@@ -161,7 +161,9 @@ by the compiler which allow access to metadata reflecting specific program featu
 		abstract="true"
 		reflects="a scope"
 	>
-		<generalization concept="MetaNamed"/>
+		<generalization concept="Metaobject"/>
+		<generalization concept="MetaNamed" optional="true"/>
+		<generalization concept="MetaScoped" optional="true"/>
 	</metaobject>
 
 	<metaobject name="MetaAlias"
@@ -212,7 +214,6 @@ by the compiler which allow access to metadata reflecting specific program featu
 		reflects="the global scope"
 		label="Meta\nGlobal\nScope"
 	>
-		<generalization concept="MetaNamed"/>
 		<generalization concept="MetaScope"/>
 	</metaobject>
 

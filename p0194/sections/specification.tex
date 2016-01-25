@@ -8,9 +8,9 @@ At the moment these types should describe only the following program
 constructs: namespaces\footnote{in a limited form}, types, typedefs,
 classes and their data members and enum types.
 
-In the future, the set of metaobjects should be extended to reflect also
+In the future, the set of metaobjects should be extended to reflect
 class inheritance, free functions, class member functions, templates,
-template parameters, enumerated values, specifiers, etc.
+template parameters, enumerated values, possibly the C++ specifiers, etc.
 
 The compiler should generate metadata for the program constructs defined
 in the currently processed translation unit, when requested by invoking
@@ -30,7 +30,8 @@ have a different type then a metaobject reflecting the \verb@double@
 type, etc.
 
 This section describes a set of metaobject concepts and their requirements,
-traits for metaobject classification and operators providing access to the metaobjects.
+traits for metaobject classification and operations providing the individual
+bits of meta-data.
 
 Unless stated otherwise, all proposed named templates described below should
 go into the \verb@std::meta@ nested namespace in order to contain reflection-related
