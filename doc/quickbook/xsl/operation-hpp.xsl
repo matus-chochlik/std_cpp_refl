@@ -184,6 +184,15 @@ struct </xsl:text><xsl:value-of select="@name"/>
 	<xsl:text>::value;</xsl:text>
 </xsl:if>
 
+<xsl:if test="@result='Pointer'">
+<xsl:text>
+</xsl:text>
+<xsl:call-template name="template-args-decl"/>
+<xsl:text>const bool </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
+	<xsl:call-template name="template-args-list"/>
+	<xsl:text>::value;</xsl:text>
+</xsl:if>
+
 </xsl:for-each>
 
 __namespace_meta_end

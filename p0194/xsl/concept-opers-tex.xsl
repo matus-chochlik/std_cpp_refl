@@ -151,6 +151,13 @@ struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 	<xsl:text>::value;</xsl:text>
 </xsl:if>
 
+<xsl:if test="@result='Pointer'">
+<xsl:call-template name="template-args-decl"/>
+<xsl:text>const auto </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
+	<xsl:call-template name="template-args-list"/>
+	<xsl:text>::value;</xsl:text>
+</xsl:if>
+
 \end{minted}
 </xsl:for-each>
 </xsl:template>

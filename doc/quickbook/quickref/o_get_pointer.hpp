@@ -27,5 +27,8 @@ struct get_pointer
 template <typename T>
 constexpr bool get_pointer_v = get_pointer<T>::value;
 
+template <typename T>
+const bool get_pointer_v = get_pointer<T>::value;
+
 __namespace_meta_end
 //]

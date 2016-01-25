@@ -7,7 +7,7 @@
 
 template <typename T>
 __concept bool MetaScope =
-	__MetaNamed<T> &&
+	__Metaobject<T> &&
 	__meta::__is_scope_v<T>;
 
 //]
@@ -19,6 +19,20 @@ __namespace_meta_begin
 template <>
 struct __has_name<MetaScope> /*<
 Inherited from __MetaNamed.
+>*/
+{
+	typedef bool value_type;
+	static constexpr const bool value = true;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+};
+
+template <>
+struct __has_scope<MetaScope> /*<
+Inherited from __MetaScoped.
 >*/
 {
 	typedef bool value_type;
@@ -111,6 +125,16 @@ struct __get_name<MetaScope>
 
 	operator const char*(void) const noexcept;
 	const char* operator(void) const noexcept;
+	
+};
+
+template <>
+struct __get_scope<MetaScope>
+{
+	
+	typedef __MetaScope value_type; /*<
+	returns the MetaScope reflecting the scope of a scope reflected by a MetaScope.
+	>*/
 	
 };
 

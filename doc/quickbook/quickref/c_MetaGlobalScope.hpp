@@ -7,7 +7,6 @@
 
 template <typename T>
 __concept bool MetaGlobalScope =
-	__MetaNamed<T> &&
 	__MetaScope<T> &&
 	__meta::__is_global_scope_v<T>;
 
@@ -20,6 +19,20 @@ __namespace_meta_begin
 template <>
 struct __has_name<MetaGlobalScope> /*<
 Inherited from __MetaNamed.
+>*/
+{
+	typedef bool value_type;
+	static constexpr const bool value = true;
+
+	typedef __integral_constant<bool, value> type;
+
+	operator value_type (void) const noexcept;
+	value_type operator(void) const noexcept;
+};
+
+template <>
+struct __has_scope<MetaGlobalScope> /*<
+Inherited from __MetaScoped.
 >*/
 {
 	typedef bool value_type;
@@ -126,6 +139,16 @@ struct __get_name<MetaGlobalScope>
 
 	operator const char*(void) const noexcept;
 	const char* operator(void) const noexcept;
+	
+};
+
+template <>
+struct __get_scope<MetaGlobalScope>
+{
+	
+	typedef __MetaScope value_type; /*<
+	returns the MetaScope reflecting the scope of the global scope reflected by a MetaGlobalScope.
+	>*/
 	
 };
 

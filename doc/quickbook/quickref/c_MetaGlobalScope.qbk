@@ -5,7 +5,7 @@
 [section:MetaGlobalScope MetaGlobalScope]
 [import c_MetaGlobalScope.hpp]
 
-[concept MetaGlobalScope] is  a __MetaNamed and  a __MetaScope reflecting the global scope.
+[concept MetaGlobalScope] is  a __MetaScope reflecting the global scope.
 
 [reflexpr_MetaGlobalScope_def]
 [heading Implementation]

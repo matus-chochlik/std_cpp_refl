@@ -32,8 +32,8 @@ Inherited from __MetaNamed.
 };
 
 template <>
-struct __is_scope<MetaNamespaceAlias> /*<
-Inherited from __MetaScope.
+struct __has_scope<MetaNamespaceAlias> /*<
+Inherited from __MetaScoped.
 >*/
 {
 	typedef bool value_type;
@@ -46,8 +46,8 @@ Inherited from __MetaScope.
 };
 
 template <>
-struct __has_scope<MetaNamespaceAlias> /*<
-Inherited from __MetaScoped.
+struct __is_scope<MetaNamespaceAlias> /*<
+Inherited from __MetaScope.
 >*/
 {
 	typedef bool value_type;
