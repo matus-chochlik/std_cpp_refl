@@ -35,3 +35,18 @@ the \emph{reflexpr} operator can be used\footnote{Similar to the
 \texttt{<typeinfo>} header being required for the \texttt{typeid} operator.}.
 This header file defines the metaobject trait templates described above
 and the templates implementing the \emph{interface} of the metaobjects.
+
+\subsection{Future extensions}
+
+In a future proposal a new variant of the \texttt{reflexpr} operator
+-- \texttt{reflexpr(X, Concept)} will be introduced.
+This operator will return a pack of \meta{object}s reflecting members of
+the base-level construct \texttt{X} which conform to the specified
+\texttt{Concept}. The parameter \texttt{X} is the same as in the single argument
+version, \texttt{Concept} is the name of a metaobject concept.
+
+For example:
+
+\begin{minted}[tabsize=4]{cpp}
+typedef std::tuple<reflexpr(std, MetaTypedef)...> meta_std_typedefs;
+\end{minted}
