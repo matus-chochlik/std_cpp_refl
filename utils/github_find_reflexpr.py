@@ -10,9 +10,11 @@ def query_repos(page):
 def process_file(words, full_path):
 	import re
 
-	for line in open(full_path):
-		for word in re.findall(r"\b[^\d\W]\w*\b", line):
-			words[word] = words.get(word, 0)+1
+	try:
+		for line in open(full_path):
+			for word in re.findall(r"\b[^\d\W]\w*\b", line):
+				words[word] = words.get(word, 0)+1
+	except IOError: pass
 	return words
 
 def search_repo(page, repo_url, repo_dir, words):

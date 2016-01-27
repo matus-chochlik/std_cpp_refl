@@ -1,0 +1,45 @@
+\section{Impact on the standard}
+
+This proposal requires the addition of a new operator
+\texttt{reflexpr} with fairly simple rules for its operands,
+which {\em may} cause conflicts with identifiers in existing code.
+
+However, we have performed a simple analysis on \num{903} third-party, open-source
+repositories\footnote{Only original repositories, not forks.}
+hosted on \url{http://github.com/}, where we counted identifiers
+in the C++ source files. We have found \num{599080707} instances of
+\num{7525668} {\em distinct} words matching to the C++ identifier rules.
+We have found {\em zero} occurences of \say{reflexpr}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|r|l|}
+\hline
+\textbf{identifier} & \textbf{count} \\\hline
+\hline
+\texttt{alignof} & \num{1224} \\\hline
+\texttt{char} & \num{2077657} \\\hline
+\texttt{const} & \num{9373624} \\\hline
+\texttt{decltype} & \num{17630} \\\hline
+\texttt{double} & \num{652416} \\\hline
+\texttt{float} & \num{790323} \\\hline
+\texttt{int} & \num{5070681} \\\hline
+\texttt{mirror} & \num{4454} \\\hline
+\texttt{mirrored} & \num{1013} \\\hline
+\texttt{reflected} & \num{1006} \\\hline
+\textbf{\texttt{reflexpr}} & \num{0} \\\hline
+\texttt{sizeof} & \num{556957} \\\hline
+\texttt{typeid} & \num{11284} \\\hline
+
+\end{tabular}
+\label{table-identifier-occurences}
+\caption{Number of occurrences of selected words in the scanned sources.}
+\end{table}
+
+
+No other changes to the core language are required, especially no new rules
+for template parameters. The metaobjects can be implemented by (basically) regular
+types and the interface is implemented by regular templates.
+A lazy implementation may require the addition of several compiler builtin
+operators similar to those already used for the type-traits, but other
+implementations are possible.
