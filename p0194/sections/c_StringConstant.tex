@@ -5,9 +5,9 @@
 
 \begin{minted}[tabsize=4]{cpp}
 struct StringConstant {
-	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
+	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;

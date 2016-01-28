@@ -3,7 +3,7 @@
 namespace meta {
 
 template <typename T> requires Metaobject<T>
-struct is_sequence {
+struct is_linkable {
 	typedef bool value_type;
 	static constexpr const bool value;
 	typedef integral_constant<bool, value> type;
@@ -13,9 +13,9 @@ struct is_sequence {
 };
 
 template <typename T>
-using is_sequence_t = typename is_sequence<T>::type;
+using is_linkable_t = typename is_linkable<T>::type;
 template <typename T>
-constexpr bool is_sequence_v = is_sequence<T>::value;
+constexpr bool is_linkable_v = is_linkable<T>::value;
 
 } // namespace meta
 \end{minted}

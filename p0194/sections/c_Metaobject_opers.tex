@@ -8,9 +8,9 @@ returns the source file path of the declaration of a base-level program feature 
 template <typename T>
 requires Metaobject<T>
 struct get_source_file {
-	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
+	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;
@@ -33,9 +33,9 @@ returns the source file line of the declaration of a base-level program feature 
 template <typename T>
 requires Metaobject<T>
 struct get_source_line {
-	typedef integral_constant<unsigned, value> type;
 	typedef unsigned value_type;
 	static constexpr const unsigned value;
+	typedef integral_constant<unsigned, value> type;
 
 	operator unsigned(void) const noexcept;
 	unsigned operator(void) const noexcept;
@@ -58,9 +58,9 @@ returns the source file column of the declaration of a base-level program featur
 template <typename T>
 requires Metaobject<T>
 struct get_source_column {
-	typedef integral_constant<unsigned, value> type;
 	typedef unsigned value_type;
 	static constexpr const unsigned value;
+	typedef integral_constant<unsigned, value> type;
 
 	operator unsigned(void) const noexcept;
 	unsigned operator(void) const noexcept;

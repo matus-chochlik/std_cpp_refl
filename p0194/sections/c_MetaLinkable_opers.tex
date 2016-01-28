@@ -8,9 +8,9 @@ returns whether the declaration with storage duration and/or linkage reflected b
 template <typename T>
 requires MetaLinkable<T>
 struct is_static {
-	typedef integral_constant<bool, value> type;
 	typedef bool value_type;
 	static constexpr const bool value;
+	typedef integral_constant<bool, value> type;
 
 	operator bool(void) const noexcept;
 	bool operator(void) const noexcept;

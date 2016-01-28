@@ -7,9 +7,9 @@ to the \texttt{std} namespace as one of the type traits.
 \begin{minted}{cpp}
 template <typename T>
 struct is_metaobject {
-	typedef integral_constant<bool, value> type;
 	typedef bool value_type;
 	static constexpr const bool value;
+	typedef integral_constant<bool, value> type;
 
 	operator bool(void) const noexcept;
 	bool operator(void) const noexcept;

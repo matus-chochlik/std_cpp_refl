@@ -8,9 +8,9 @@ returns a number of elements in the sequence.
 template <typename T>
 requires MetaobjectSequence<T>
 struct get_size {
-	typedef integral_constant<size_t, value> type;
 	typedef size_t value_type;
 	static constexpr const size_t value;
+	typedef integral_constant<size_t, value> type;
 
 	operator size_t(void) const noexcept;
 	size_t operator(void) const noexcept;

@@ -14,9 +14,9 @@ namespace meta {
 <xsl:for-each select="trait[@name=$trait]">
 template &lt;typename T&gt; requires Metaobject&lt;T&gt;
 struct <xsl:value-of select="@name"/> {
-	typedef integral_constant&lt;bool, value&gt; type;
 	typedef bool value_type;
 	static constexpr const bool value;
+	typedef integral_constant&lt;bool, value&gt; type;
 
 	operator bool(void) const noexcept;
 	bool operator(void) const noexcept;

@@ -93,27 +93,27 @@ template &lt;<xsl:for-each select="argument">
 struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 	<xsl:choose>
 	<xsl:when test="@result='BooleanConstant'">
-	typedef integral_constant&lt;bool, value&gt; type;
 	typedef bool value_type;
 	static constexpr const bool value;
+	typedef integral_constant&lt;bool, value&gt; type;
 
 	operator bool(void) const noexcept;
 	bool operator(void) const noexcept;<xsl:text/>
 	</xsl:when>
 
 	<xsl:when test="@result='IntegralConstant'">
-	typedef integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
 	typedef <xsl:value-of select="@integer"/> value_type;
 	static constexpr const <xsl:value-of select="@integer"/> value;
+	typedef integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
 
 	operator <xsl:value-of select="@integer"/>(void) const noexcept;
 	<xsl:value-of select="@integer"/> operator(void) const noexcept;<xsl:text/>
 	</xsl:when>
 
 	<xsl:when test="@result='StringConstant'">
-	typedef StringConstant type;
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1];
+	typedef StringConstant type;
 
 	operator const char* (void) const noexcept;
 	const char* operator (void) const noexcept;<xsl:text/>
