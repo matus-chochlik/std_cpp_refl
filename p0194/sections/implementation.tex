@@ -12,3 +12,16 @@ of code in the compiler plus circa 540 lines in the \texttt{<reflexpr>} header.
 
 All examples listed in Appendix \ref{section-reflexpr-examples} are working with
 the modified compiler.
+
+This particular implementation works by generating and adding new \texttt{CXXRecordDecl}s,
+with member typedefs and member constants providing basic meta-data, to the AST.
+The templates implementing the metaobject operations are referencing and
+occasionally transforming the members of the metaobject types.
+
+The \texttt{is\_metaobject} trait is implemented by extending the existing
+clang's type-trait framework and adding the \texttt{\_\_is\_metaobject} builtin
+operator.
+
+The \meta{objectSequence} operations, namely \texttt{get\_size} and
+\texttt{get\_element} are implemented lazily by using the new
+\texttt{\_\_reflexpr\_size} and \texttt{\_\_reflexpr\_element} operators.

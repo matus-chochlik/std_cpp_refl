@@ -1,10 +1,9 @@
 \section{Impact on the standard}
 
 This proposal requires the addition of a new operator
-\texttt{reflexpr} with fairly simple rules for its operands,
-which {\em may} cause conflicts with identifiers in existing code.
+\texttt{reflexpr} which {\em may} cause conflicts with identifiers in existing code.
 
-However, we have performed a quick analysis on \num{994} third-party, open-source
+For what it's worth, we have performed a quick analysis on \num{994} third-party, open-source
 repositories hosted on \url{http://github.com/}\footnote{The main branches
 of original repositories, not forks.}, where we counted identifiers
 in the C++ source files. We have found \num{646313149} instances of
@@ -41,6 +40,6 @@ We did not find {\em any} occurence of \say{reflexpr}.
 No other changes to the core language are required, especially no new rules
 for template parameters. The metaobjects can be implemented by (basically) regular
 types and the interface is implemented by regular templates.
-A lazy implementation may require the addition of several compiler builtin
+An implementation with lazy evaluation may require the addition of several compiler builtin
 operators similar to those already used for the type-traits, but other
 implementations are possible.

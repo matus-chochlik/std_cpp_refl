@@ -19,7 +19,7 @@ like variables, overloaded functions, constructors, etc.}:
 \item{{\em Type name}} -- (\verb@long double@) the returned metaobject is a {\meta{Type}}.
 \item{{\em Typedef name}} -- (\verb@std::size_t@ or \verb@std::string@)
      the returned metaobject is a {\meta{TypeAlias}}.
-\item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<int, double>@)
+\item{{\em Class name}} -- (\verb@std::thread@ or \verb@std::map<unsigned, float>@)
      the returned metaobject is a {\meta{Class}}.
 \item{{\em Enum name}} -- 
      the returned metaobject is a {\meta{Enum}}.
@@ -38,7 +38,7 @@ and the templates implementing the \emph{interface} of the metaobjects.
 
 \subsection{Future extensions}
 
-In a future proposal a new variant of the \texttt{reflexpr} operator
+In a future proposal an additional, new variant of the \texttt{reflexpr} operator
 -- \texttt{reflexpr(X, Concept)} will be introduced.
 This operator will return a pack of \meta{object}s reflecting members of
 the base-level construct \texttt{X} which conform to the specified
