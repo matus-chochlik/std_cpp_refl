@@ -3,10 +3,11 @@
 
 returns a pointer to the a variable reflected by a \meta{Variable}.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 
-\begin{minted}[tabsize=4]{cpp}
-
-template <typename T>
-requires Variable<T>
+\begin{minted}{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Variable T>
 struct get_pointer
 {
 	typedef conditional_t<
@@ -19,7 +20,9 @@ struct get_pointer
 	static const value_type value;
 };
 	
-template <typename T>
+template <Variable T>
 const auto get_pointer_v = get_pointer<T>::value;
-
+\end{minted}
+\begin{minted}{cpp}
+} // namespace meta
 \end{minted}

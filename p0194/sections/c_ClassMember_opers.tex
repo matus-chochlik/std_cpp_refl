@@ -3,12 +3,15 @@
 
 returns whether the class member reflected by a \meta{ClassMember} was declared with public access.
 
-\begin{minted}[tabsize=4]{cpp}
-
-template <typename T>
-requires ClassMember<T>
+\begin{minted}{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <ClassMember T>
 struct is_public : integral_constant<bool, ...> { };
-template <typename T>
-using is_public_t = typename is_public<T>::type;
-
+template <ClassMember T>
+constexpr auto is_public_v = is_public<T>::value;
+\end{minted}
+\begin{minted}{cpp}
+} // namespace meta
 \end{minted}

@@ -9,15 +9,18 @@
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-\begin{minted}[tabsize=4]{cpp}
+\begin{minted}{cpp}
 namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 <xsl:for-each select="trait[@name=$trait]">
-template &lt;typename T&gt; requires Declaration&lt;T&gt;
+template &lt;Object T&gt;
 struct <xsl:value-of select="@name"/> : integral_constant&lt;bool, ... &gt; { };
-
 template &lt;typename T&gt;
 constexpr bool <xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>&lt;T&gt;::value;
 </xsl:for-each>
+\end{minted}
+\begin{minted}{cpp}
 } // namespace meta
 \end{minted}
 </xsl:template>

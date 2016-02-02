@@ -3,12 +3,15 @@
 
 returns whether the declaration with storage duration and/or linkage reflected by a \meta{Linkable} was declared with the static specifier.
 
-\begin{minted}[tabsize=4]{cpp}
-
-template <typename T>
-requires Linkable<T>
+\begin{minted}{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Linkable T>
 struct is_static : integral_constant<bool, ...> { };
-template <typename T>
-using is_static_t = typename is_static<T>::type;
-
+template <Linkable T>
+constexpr auto is_static_v = is_static<T>::value;
+\end{minted}
+\begin{minted}{cpp}
+} // namespace meta
 \end{minted}

@@ -13,7 +13,7 @@
 \subsubsection{\texttt{<xsl:value-of select="str:replace(@name,'_','\_')"/>}}
 
 The \texttt{<xsl:value-of select="@scope"/>::<xsl:value-of select="str:replace(@name,'_','\_')"/>}
-trait indicates if the \meta{Declaration} passed as argument is a \meta{<xsl:value-of select="$metaobject"/>}.
+trait indicates if the \meta{Object} passed as argument is a \meta{<xsl:value-of select="$metaobject"/>}.
 
 \input{sections/t_<xsl:value-of select="@name"/>_cpp.tex}
 </xsl:for-each>

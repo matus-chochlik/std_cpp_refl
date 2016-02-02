@@ -1,0 +1,16 @@
+
+\subsubsection{\texttt{get\_source\_location}}
+
+returns the source location info of the declaration of a base-level program feature reflected by a \meta{Object}.
+
+\begin{minted}{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Object T>
+struct get_source_location : source_location { };
+
+\end{minted}
+\begin{minted}{cpp}
+} // namespace meta
+\end{minted}

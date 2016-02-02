@@ -1,14 +1,15 @@
 
 \subsubsection{Definition}
 
-\begin{minted}[tabsize=8]{cpp}
+\begin{minted}{cpp}
 namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
 
 template <typename T>
-concept bool NamespaceAlias =
-	Namespace<T> &&
-	Alias<T> &&
-	meta::is_namespace_v<get_aliased_t<T>>;
+concept bool NamespaceAlias = Namespace<T> && Alias<T> && is_namespace_v<get_aliased_t<T>>;
 
+\end{minted}
+\begin{minted}{cpp}
 } // namespace meta
 \end{minted}

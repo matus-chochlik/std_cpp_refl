@@ -1,12 +1,15 @@
 
-\begin{minted}[tabsize=4]{cpp}
+\begin{minted}{cpp}
 namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 
-template <typename T> requires Declaration<T>
+template <Object T>
 struct is_enum : integral_constant<bool, ... > { };
-
 template <typename T>
 constexpr bool is_enum_v = is_enum<T>::value;
 
+\end{minted}
+\begin{minted}{cpp}
 } // namespace meta
 \end{minted}

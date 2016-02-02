@@ -13,15 +13,16 @@
 	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
 	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
+	<baseobject kind="const" name="SourceLocation" label="Source\nLocation"/>
 
-	<metaobject name="Declaration"
+	<metaobject name="Object"
 		abstract="true"
 		reflects="a base-level program feature"
 		is_a="a concept modelled by stateless anonymous types generated
 by the compiler which allow access to metadata reflecting specific program features"
 	/>
 
-	<trait name="is_sequence" scope="meta" indicates="DeclarationSequence" uses="get_category"/>
+	<trait name="is_sequence" scope="meta" indicates="ObjectSequence" uses="get_category"/>
 	<unused>
 	<trait name="is_specifier" scope="meta" indicates="Specifier" uses="get_category"/>
 	</unused>
@@ -41,38 +42,19 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_class_member" scope="meta" indicates="ClassMember"/>
 	<trait name="is_linkable" scope="meta" indicates="Linkable"/>
 
-	<operation name="get_source_file"
-		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
-		result="StringConstant"
+	<operation name="get_source_location"
+		brief="returns the source location info of the declaration of $(reflected) reflected by a $(operand)."
+		result="SourceLocation"
 	>
-		<group name="SourceInfo"/>
-		<argument type="Declaration"/>
+		<argument type="Object"/>
 	</operation>
 
-	<operation name="get_source_line"
-		result="IntegralConstant"
-		integer="unsigned"
-		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
-	>
-		<group name="SourceInfo"/>
-		<argument type="Declaration"/>
-	</operation>
-
-	<operation name="get_source_column"
-		result="IntegralConstant"
-		integer="unsigned"
-		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."
-	>
-		<group name="SourceInfo"/>
-		<argument type="Declaration"/>
-	</operation>
-
-	<metaobject name="DeclarationSequence"
+	<metaobject name="ObjectSequence"
 		abstract="true"
-		label="Declaration\nSequence"
+		label="Object\nSequence"
 		brief="is an ordered sequence of metaobjects."
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 	</metaobject>
 
 	<operation name="get_size"
@@ -80,14 +62,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 		integer="size_t"
 		brief="returns a number of elements in the sequence."
 	>
-		<argument type="DeclarationSequence"/>
+		<argument type="ObjectSequence"/>
 	</operation>
 
 	<operation name="get_element"
-		result="Declaration"
-		brief="returns the i-th element in a DeclarationSequence."
+		result="Object"
+		brief="returns the i-th element in a ObjectSequence."
 	>
-		<argument type="DeclarationSequence"/>
+		<argument type="ObjectSequence"/>
 		<argument type="size_t" name="Index"/>
 	</operation>
 
@@ -95,7 +77,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<metaobject name="Specifier"
 		reflects="a specifier"
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 	</metaobject>
 
 	<operation name="get_keyword"
@@ -110,7 +92,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		abstract="true"
 		reflects="a named declaration"
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 	</metaobject>
 
 	<operation name="get_name"
@@ -124,7 +106,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		abstract="true"
 		reflects="base-level declaration with a type"
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 	</metaobject>
 
 	<operation name="get_type"
@@ -138,7 +120,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		abstract="true"
 		reflects="a scoped declaration"
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 	</metaobject>
 
 	<operation name="get_scope"
@@ -152,7 +134,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		abstract="true"
 		reflects="a scope"
 	>
-		<generalization concept="Declaration"/>
+		<generalization concept="Object"/>
 		<generalization concept="Named" optional="true"/>
 		<generalization concept="Scoped" optional="true"/>
 	</metaobject>
@@ -265,14 +247,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</unused>
 
 	<operation name="get_data_members"
-		result="DeclarationSequence"
+		result="ObjectSequence"
 		brief="returns a sequence of objects reflecting the public data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
 	</operation>
 
 	<operation name="get_all_data_members"
-		result="DeclarationSequence"
+		result="ObjectSequence"
 		brief="returns a sequence of objects reflecting all 
 		(including the private and protected)
 		data members of $(reflected) reflected by a $(operand)."

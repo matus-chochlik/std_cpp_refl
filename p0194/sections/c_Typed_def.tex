@@ -1,13 +1,15 @@
 
 \subsubsection{Definition}
 
-\begin{minted}[tabsize=8]{cpp}
+\begin{minted}{cpp}
 namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
 
 template <typename T>
-concept bool Typed =
-	Declaration<T> &&
-	meta::has_type_v<T>;
+concept bool Typed = Object<T> && has_type_v<T>;
 
+\end{minted}
+\begin{minted}{cpp}
 } // namespace meta
 \end{minted}

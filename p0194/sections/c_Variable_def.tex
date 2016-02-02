@@ -1,15 +1,15 @@
 
 \subsubsection{Definition}
 
-\begin{minted}[tabsize=8]{cpp}
+\begin{minted}{cpp}
 namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
 
 template <typename T>
-concept bool Variable =
-	Named<T> &&
-	Typed<T> &&
-	Linkable<T> &&
-	meta::is_variable_v<T>;
+concept bool Variable = Named<T> && Typed<T> && Linkable<T> && is_variable_v<T>;
 
+\end{minted}
+\begin{minted}{cpp}
 } // namespace meta
 \end{minted}

@@ -7,7 +7,7 @@ namespace meta {
 \begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
 
 template <typename T>
-concept bool DataMember = Variable<T> && ClassMember<T>;
+concept bool ObjectSequence = Object<T> && is_sequence_v<T>;
 
 \end{minted}
 \begin{minted}{cpp}
