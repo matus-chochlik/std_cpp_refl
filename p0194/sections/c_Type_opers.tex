@@ -15,13 +15,9 @@ struct get_reflected_type
 };
 	
 template <Type T>
-using get_reflected_type_t = typename get_reflected_type<T>::type;
-
+constexpr auto get_reflected_type_v = get_reflected_type<T>::value;
 \end{minted}
 \begin{minted}{cpp}
 } // namespace meta
 \end{minted}
 
-
-Note that \texttt{get\_reflected\_type<...>::type}
-must conform to the \meta{Type} concept.
