@@ -6,7 +6,7 @@ namespace meta {
 
 template <Object T>
 struct is_enum : integral_constant<bool, ... > { };
-template <typename T>
+template <Object T>
 constexpr bool is_enum_v = is_enum<T>::value;
 
 \end{minted}

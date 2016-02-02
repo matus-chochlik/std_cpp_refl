@@ -16,7 +16,7 @@ namespace meta {
 <xsl:for-each select="trait[@name=$trait]">
 template &lt;Object T&gt;
 struct <xsl:value-of select="@name"/> : integral_constant&lt;bool, ... &gt; { };
-template &lt;typename T&gt;
+template &lt;Object T&gt;
 constexpr bool <xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>&lt;T&gt;::value;
 </xsl:for-each>
 \end{minted}

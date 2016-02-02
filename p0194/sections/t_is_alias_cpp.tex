@@ -6,7 +6,7 @@ namespace meta {
 
 template <Object T>
 struct is_alias : integral_constant<bool, ... > { };
-template <typename T>
+template <Object T>
 constexpr bool is_alias_v = is_alias<T>::value;
 
 \end{minted}

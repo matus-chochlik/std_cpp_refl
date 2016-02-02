@@ -6,7 +6,7 @@ namespace meta {
 
 template <Object T>
 struct is_scope : integral_constant<bool, ... > { };
-template <typename T>
+template <Object T>
 constexpr bool is_scope_v = is_scope<T>::value;
 
 \end{minted}

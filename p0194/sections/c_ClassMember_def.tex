@@ -5,9 +5,8 @@
 namespace meta {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
-
-template <typename T>
-concept bool ClassMember = Scoped<T> && is_class_member_v<T> && is_class_v<get_scope_t<T>>;
+template <Object T>
+concept bool ClassMember = Scoped<T> && is_class_member_v<T> && Class<get_scope_t<T>>;
 
 \end{minted}
 \begin{minted}{cpp}

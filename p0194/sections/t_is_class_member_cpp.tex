@@ -6,7 +6,7 @@ namespace meta {
 
 template <Object T>
 struct is_class_member : integral_constant<bool, ... > { };
-template <typename T>
+template <Object T>
 constexpr bool is_class_member_v = is_class_member<T>::value;
 
 \end{minted}

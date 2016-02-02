@@ -6,7 +6,7 @@ namespace meta {
 
 template <Object T>
 struct is_global_scope : integral_constant<bool, ... > { };
-template <typename T>
+template <Object T>
 constexpr bool is_global_scope_v = is_global_scope<T>::value;
 
 \end{minted}

@@ -5,8 +5,7 @@
 namespace meta {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
-
-template <typename T>
+template <Object T>
 concept bool Namespace = Named<T> && Scope<T> && Scoped<T> && is_namespace_v<T>;
 
 \end{minted}

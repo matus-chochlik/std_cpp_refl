@@ -5,9 +5,8 @@
 namespace meta {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
-
-template <typename T>
-concept bool Typed = Object<T> && has_type_v<T>;
+template <Object T>
+concept bool Typed = has_type_v<T>;
 
 \end{minted}
 \begin{minted}{cpp}

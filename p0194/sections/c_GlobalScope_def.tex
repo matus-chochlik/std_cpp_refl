@@ -5,8 +5,7 @@
 namespace meta {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4,breakafter=&]{cpp}
-
-template <typename T>
+template <Object T>
 concept bool GlobalScope = Scope<T> && is_global_scope_v<T>;
 
 \end{minted}
