@@ -3,9 +3,6 @@
 	<baseobject kind="type" name="Type"/>
 	<baseobject kind="type" name="Pointer"/>
 	<baseobject kind="type" name="size_t"/>
-	<unused>
-	<baseobject kind="type" name="MetaobjectCategory" label="Metaobject\nCategory"/>
-	</unused>
 
 	<baseobject kind="tag" name="global_scope_tag"/>
 	<baseobject kind="tag" name="namespace_tag"/>
@@ -17,45 +14,39 @@
 	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
 
-	<metaobject name="Metaobject"
+	<metaobject name="Declaration"
 		abstract="true"
 		reflects="a base-level program feature"
 		is_a="a concept modelled by stateless anonymous types generated
 by the compiler which allow access to metadata reflecting specific program features"
 	/>
 
+	<trait name="is_sequence" scope="meta" indicates="DeclarationSequence" uses="get_category"/>
 	<unused>
-	<operation name="get_category" result="MetaobjectCategory">
-		<argument type="Metaobject"/>
-	</operation>
+	<trait name="is_specifier" scope="meta" indicates="Specifier" uses="get_category"/>
 	</unused>
 
-	<trait name="is_sequence" scope="meta" indicates="MetaobjectSequence" uses="get_category"/>
-	<unused>
-	<trait name="is_specifier" scope="meta" indicates="MetaSpecifier" uses="get_category"/>
-	</unused>
+	<trait name="is_namespace" scope="meta" indicates="Namespace" uses="get_category"/>
+	<trait name="is_global_scope" scope="meta" indicates="GlobalScope" uses="get_category"/>
+	<trait name="is_type" scope="meta" indicates="Type" uses="get_category"/>
+	<trait name="is_class" scope="meta" indicates="Class" uses="get_category"/>
+	<trait name="is_enum" scope="meta" indicates="Enum" uses="get_category"/>
+	<trait name="is_variable" scope="meta" indicates="Variable" uses="get_category"/>
 
-	<trait name="is_namespace" scope="meta" indicates="MetaNamespace" uses="get_category"/>
-	<trait name="is_global_scope" scope="meta" indicates="MetaGlobalScope" uses="get_category"/>
-	<trait name="is_type" scope="meta" indicates="MetaType" uses="get_category"/>
-	<trait name="is_class" scope="meta" indicates="MetaClass" uses="get_category"/>
-	<trait name="is_enum" scope="meta" indicates="MetaEnum" uses="get_category"/>
-	<trait name="is_variable" scope="meta" indicates="MetaVariable" uses="get_category"/>
-
-	<trait name="has_name" scope="meta" indicates="MetaNamed"/>
-	<trait name="has_type" scope="meta" indicates="MetaTyped"/>
-	<trait name="has_scope" scope="meta" indicates="MetaScoped"/>
-	<trait name="is_scope" scope="meta" indicates="MetaScope"/>
-	<trait name="is_alias" scope="meta" indicates="MetaAlias"/>
-	<trait name="is_class_member" scope="meta" indicates="MetaClassMember"/>
-	<trait name="is_linkable" scope="meta" indicates="MetaLinkable"/>
+	<trait name="has_name" scope="meta" indicates="Named"/>
+	<trait name="has_type" scope="meta" indicates="Typed"/>
+	<trait name="has_scope" scope="meta" indicates="Scoped"/>
+	<trait name="is_scope" scope="meta" indicates="Scope"/>
+	<trait name="is_alias" scope="meta" indicates="Alias"/>
+	<trait name="is_class_member" scope="meta" indicates="ClassMember"/>
+	<trait name="is_linkable" scope="meta" indicates="Linkable"/>
 
 	<operation name="get_source_file"
 		brief="returns the source file path of the declaration of $(reflected) reflected by a $(operand)."
 		result="StringConstant"
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject"/>
+		<argument type="Declaration"/>
 	</operation>
 
 	<operation name="get_source_line"
@@ -64,7 +55,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 		brief="returns the source file line of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject"/>
+		<argument type="Declaration"/>
 	</operation>
 
 	<operation name="get_source_column"
@@ -73,15 +64,15 @@ by the compiler which allow access to metadata reflecting specific program featu
 		brief="returns the source file column of the declaration of $(reflected) reflected by a $(operand)."
 	>
 		<group name="SourceInfo"/>
-		<argument type="Metaobject"/>
+		<argument type="Declaration"/>
 	</operation>
 
-	<metaobject name="MetaobjectSequence"
+	<metaobject name="DeclarationSequence"
 		abstract="true"
-		label="Metaobject\nSequence"
+		label="Declaration\nSequence"
 		brief="is an ordered sequence of metaobjects."
 	>
-		<generalization concept="Metaobject"/>
+		<generalization concept="Declaration"/>
 	</metaobject>
 
 	<operation name="get_size"
@@ -89,102 +80,102 @@ by the compiler which allow access to metadata reflecting specific program featu
 		integer="size_t"
 		brief="returns a number of elements in the sequence."
 	>
-		<argument type="MetaobjectSequence"/>
+		<argument type="DeclarationSequence"/>
 	</operation>
 
 	<operation name="get_element"
-		result="Metaobject"
-		brief="returns the i-th element in a MetaobjectSequence."
+		result="Declaration"
+		brief="returns the i-th element in a DeclarationSequence."
 	>
-		<argument type="MetaobjectSequence"/>
+		<argument type="DeclarationSequence"/>
 		<argument type="size_t" name="Index"/>
 	</operation>
 
 	<unused>
-	<metaobject name="MetaSpecifier"
+	<metaobject name="Specifier"
 		reflects="a specifier"
 	>
-		<generalization concept="Metaobject"/>
+		<generalization concept="Declaration"/>
 	</metaobject>
 
 	<operation name="get_keyword"
 		result="StringConstant"
 		brief="returns the keyword of the specifier reflected by a $(operand)."
 	>
-		<argument type="MetaSpecifier"/>
+		<argument type="Specifier"/>
 	</operation>
 	</unused>
 
-	<metaobject name="MetaNamed"
+	<metaobject name="Named"
 		abstract="true"
 		reflects="a named declaration"
 	>
-		<generalization concept="Metaobject"/>
+		<generalization concept="Declaration"/>
 	</metaobject>
 
 	<operation name="get_name"
 		result="StringConstant"
 		brief="returns the basic name of the $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaNamed"/>
+		<argument type="Named"/>
 	</operation>
 
-	<metaobject name="MetaTyped"
+	<metaobject name="Typed"
 		abstract="true"
-		reflects="base-level construct with a type"
+		reflects="base-level declaration with a type"
 	>
-		<generalization concept="Metaobject"/>
+		<generalization concept="Declaration"/>
 	</metaobject>
 
 	<operation name="get_type"
-		result="MetaType"
-		brief="returns the MetaType reflecting the type of $(reflected) reflected by a $(operand)."
+		result="Type"
+		brief="returns the Type reflecting the type of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaTyped"/>
+		<argument type="Typed"/>
 	</operation>
 
-	<metaobject name="MetaScoped"
+	<metaobject name="Scoped"
 		abstract="true"
 		reflects="a scoped declaration"
 	>
-		<generalization concept="Metaobject"/>
+		<generalization concept="Declaration"/>
 	</metaobject>
 
 	<operation name="get_scope"
-		result="MetaScope"
-		brief="returns the MetaScope reflecting the scope of $(reflected) reflected by a $(operand)."
+		result="Scope"
+		brief="returns the Scope reflecting the scope of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaScoped"/>
+		<argument type="Scoped"/>
 	</operation>
 
-	<metaobject name="MetaScope"
+	<metaobject name="Scope"
 		abstract="true"
 		reflects="a scope"
 	>
-		<generalization concept="Metaobject"/>
-		<generalization concept="MetaNamed" optional="true"/>
-		<generalization concept="MetaScoped" optional="true"/>
+		<generalization concept="Declaration"/>
+		<generalization concept="Named" optional="true"/>
+		<generalization concept="Scoped" optional="true"/>
 	</metaobject>
 
-	<metaobject name="MetaAlias"
+	<metaobject name="Alias"
 		abstract="true"
 		reflects="a type or namespace alias"
 	>
-		<generalization concept="MetaNamed"/>
+		<generalization concept="Named"/>
 	</metaobject>
 
 	<operation name="get_aliased"
-		result="MetaNamed"
-		brief="returns the MetaNamed reflecting the original declaration of $(reflected) reflected by a $(operand)."
+		result="Named"
+		brief="returns the Named reflecting the original declaration of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaAlias"/>
+		<argument type="Alias"/>
 	</operation>
 
-	<metaobject name="MetaClassMember"
+	<metaobject name="ClassMember"
 		abstract="true"
 		reflects="class member"
 	>
-		<generalization concept="MetaScoped"/>
+		<generalization concept="Scoped"/>
 		<constraint operation="get_scope" trait="is_class"/>
 	</metaobject>
 
@@ -192,122 +183,122 @@ by the compiler which allow access to metadata reflecting specific program featu
 		result="BooleanConstant"
 		brief="returns whether the $(reflected) reflected by a $(operand) was declared with public access."
 	>
-		<argument type="MetaClassMember"/>
+		<argument type="ClassMember"/>
 	</operation>
 
-	<metaobject name="MetaLinkable"
+	<metaobject name="Linkable"
 		abstract="true"
 		reflects="declaration with storage duration and/or linkage"
 	>
-		<generalization concept="MetaNamed"/>
-		<generalization concept="MetaScoped"/>
+		<generalization concept="Named"/>
+		<generalization concept="Scoped"/>
 	</metaobject>
 
 	<operation name="is_static"
 		result="BooleanConstant"
 		brief="returns whether the $(reflected) reflected by a $(operand) was declared with the static specifier."
 	>
-		<argument type="MetaLinkable"/>
+		<argument type="Linkable"/>
 	</operation>
 
-	<metaobject name="MetaGlobalScope"
+	<metaobject name="GlobalScope"
 		reflects="the global scope"
-		label="Meta\nGlobal\nScope"
+		label="Global\nScope"
 	>
-		<generalization concept="MetaScope"/>
+		<generalization concept="Scope"/>
 	</metaobject>
 
-	<metaobject name="MetaNamespace"
+	<metaobject name="Namespace"
 		reflects="a namespace"
 	>
-		<generalization concept="MetaNamed"/>
-		<generalization concept="MetaScope"/>
-		<generalization concept="MetaScoped"/>
+		<generalization concept="Named"/>
+		<generalization concept="Scope"/>
+		<generalization concept="Scoped"/>
 	</metaobject>
 
-	<metaobject name="MetaNamespaceAlias"
+	<metaobject name="NamespaceAlias"
 		reflects="a namespace alias"
-		label="Meta\nNamespace\nAlias"
+		label="Namespace\nAlias"
 	>
-		<generalization concept="MetaNamespace"/>
-		<generalization concept="MetaAlias"/>
+		<generalization concept="Namespace"/>
+		<generalization concept="Alias"/>
 		<constraint operation="get_aliased" trait="is_namespace"/>
 	</metaobject>
 
-	<metaobject name="MetaType"
+	<metaobject name="Type"
 		reflects="a type"
 	>
-		<generalization concept="MetaNamed"/>
-		<generalization concept="MetaScoped"/>
+		<generalization concept="Named"/>
+		<generalization concept="Scoped"/>
 	</metaobject>
 
 	<operation name="get_reflected_type"
 		result="Type"
 		brief="returns the the base-level type reflected by a $(operand)."
 	>
-		<argument type="MetaType"/>
+		<argument type="Type"/>
 	</operation>
 
-	<metaobject name="MetaTypeAlias"
-		label="MetaType\nAlias"
+	<metaobject name="TypeAlias"
+		label="Type\nAlias"
 		reflects="a type alias or typedef"
 	>
-		<generalization concept="MetaType"/>
-		<generalization concept="MetaAlias"/>
+		<generalization concept="Type"/>
+		<generalization concept="Alias"/>
 		<constraint operation="get_aliased" trait="is_type"/>
 	</metaobject>
 
-	<metaobject name="MetaClass"
+	<metaobject name="Class"
 		reflects="a class"
 	>
-		<generalization concept="MetaType"/>
-		<generalization concept="MetaScope"/>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
 	</metaobject>
 
 	<unused>
 	<operation name="get_elaborated_type_specifier"
-		result="MetaSpecifier"
-		brief="returns a MetaSpecifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+		result="Specifier"
+		brief="returns a Specifier reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaClass"/>
+		<argument type="Class"/>
 	</operation>
 	</unused>
 
 	<operation name="get_data_members"
-		result="MetaobjectSequence"
-		brief="returns a sequence of Metaobjects reflecting the public data members of $(reflected) reflected by a $(operand)."
+		result="DeclarationSequence"
+		brief="returns a sequence of objects reflecting the public data members of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaClass"/>
+		<argument type="Class"/>
 	</operation>
 
 	<operation name="get_all_data_members"
-		result="MetaobjectSequence"
-		brief="returns a sequence of Metaobjects reflecting all 
+		result="DeclarationSequence"
+		brief="returns a sequence of objects reflecting all 
 		(including the private and protected)
 		data members of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="MetaClass"/>
+		<argument type="Class"/>
 	</operation>
 
-	<metaobject name="MetaEnum"
+	<metaobject name="Enum"
 		reflects="an enumeration"
 	>
-		<generalization concept="MetaType"/>
+		<generalization concept="Type"/>
 	</metaobject>
 
-	<metaobject name="MetaEnumClass"
+	<metaobject name="EnumClass"
 		reflects="a strongly typed enumeration"
 	>
-		<generalization concept="MetaEnum"/>
-		<generalization concept="MetaScope"/>
+		<generalization concept="Enum"/>
+		<generalization concept="Scope"/>
 	</metaobject>
 
-	<metaobject name="MetaVariable"
+	<metaobject name="Variable"
 		reflects="a variable"
 	>
-		<generalization concept="MetaNamed"/>
-		<generalization concept="MetaTyped"/>
-		<generalization concept="MetaLinkable"/>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Linkable"/>
 	</metaobject>
 
 	<operation name="get_pointer"
@@ -316,13 +307,13 @@ by the compiler which allow access to metadata reflecting specific program featu
 		If the variable is a class member then the pointer is a class data member pointer,
 		otherwise it is a plain pointer."
 	>
-		<argument type="MetaVariable"/>
+		<argument type="Variable"/>
 	</operation>
 
-	<metaobject name="MetaDataMember"
+	<metaobject name="DataMember"
 		reflects="a class data member"
 	>
-		<generalization concept="MetaVariable"/>
-		<generalization concept="MetaClassMember"/>
+		<generalization concept="Variable"/>
+		<generalization concept="ClassMember"/>
 	</metaobject>
 </concepts>

@@ -1,0 +1,12 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+namespace meta {
+
+template <typename T>
+concept bool Declaration =
+	is_metaobject_v<T>;
+
+} // namespace meta
+\end{minted}

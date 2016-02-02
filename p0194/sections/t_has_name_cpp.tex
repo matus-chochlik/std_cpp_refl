@@ -2,18 +2,9 @@
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {
 
-template <typename T> requires Metaobject<T>
-struct has_name {
-	typedef bool value_type;
-	static constexpr const bool value;
-	typedef integral_constant<bool, value> type;
+template <typename T> requires Declaration<T>
+struct has_name : integral_constant<bool, ... > { };
 
-	operator bool(void) const noexcept;
-	bool operator(void) const noexcept;
-};
-
-template <typename T>
-using has_name_t = typename has_name<T>::type;
 template <typename T>
 constexpr bool has_name_v = has_name<T>::value;
 

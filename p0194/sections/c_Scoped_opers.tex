@@ -1,0 +1,18 @@
+
+\subsubsection{\texttt{get\_scope}}
+
+returns the Scope reflecting the scope of a scoped declaration reflected by a \meta{Scoped}.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires Scoped<T>
+struct get_scope
+{
+	typedef Scope type;
+};
+	
+template <typename T>
+using get_scope_t = typename get_scope<T>::type;
+
+\end{minted}

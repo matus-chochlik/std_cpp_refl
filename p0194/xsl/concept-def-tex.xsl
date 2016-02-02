@@ -5,13 +5,14 @@
 	xmlns:exsl="http://exslt.org/common"
 	extension-element-prefixes="str exsl"
 >
-<xsl:param name="metaobject" value="Metaobject"/>
+<xsl:param name="metaobject" value="Declaration"/>
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
 \subsubsection{Definition}
 
 \begin{minted}[tabsize=8]{cpp}
+namespace meta {
 <xsl:for-each select="/concepts/metaobject[@name=$metaobject]">
 template &lt;typename T&gt;
 concept bool <xsl:value-of select="@name"/><xsl:text> =
@@ -38,8 +39,9 @@ concept bool <xsl:value-of select="@name"/><xsl:text> =
 		<xsl:value-of select="@operation"/><xsl:text>_t&lt;T&gt;&gt;</xsl:text>
 	</xsl:if>
 </xsl:for-each>
-<xsl:if test="@name='Metaobject'">is_metaobject_v&lt;T&gt;</xsl:if>;
+<xsl:if test="@name='Declaration'">is_metaobject_v&lt;T&gt;</xsl:if>;
 </xsl:for-each>
+} // namespace meta
 \end{minted}
 </xsl:template>
 

@@ -1,0 +1,13 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+namespace meta {
+
+template <typename T>
+concept bool Enum =
+	Type<T> &&
+	meta::is_enum_v<T>;
+
+} // namespace meta
+\end{minted}

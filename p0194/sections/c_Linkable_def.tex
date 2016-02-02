@@ -1,0 +1,14 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+namespace meta {
+
+template <typename T>
+concept bool Linkable =
+	Named<T> &&
+	Scoped<T> &&
+	meta::is_linkable_v<T>;
+
+} // namespace meta
+\end{minted}

@@ -19,7 +19,7 @@
 	<xsl:choose>
 	<xsl:when test="$variable = 'operand'">
 		<xsl:text>\meta{</xsl:text>
-		<xsl:value-of select="substring-after($operand,'Meta')"/>
+		<xsl:value-of select="$operand"/>
 		<xsl:text>}</xsl:text>
 	</xsl:when>
 	<xsl:when test="$variable = 'reflected'">
@@ -90,36 +90,24 @@ template &lt;<xsl:for-each select="argument">
 	<xsl:text>&gt;</xsl:text>
 	</xsl:if>
 </xsl:for-each>
-struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
+struct <xsl:value-of select="@name"/>
 	<xsl:choose>
 	<xsl:when test="@result='BooleanConstant'">
-	typedef bool value_type;
-	static constexpr const bool value;
-	typedef integral_constant&lt;bool, value&gt; type;
-
-	operator bool(void) const noexcept;
-	bool operator(void) const noexcept;<xsl:text/>
+	<xsl:text> : integral_constant&lt;bool, ...&gt; { };</xsl:text>
 	</xsl:when>
 
 	<xsl:when test="@result='IntegralConstant'">
-	typedef <xsl:value-of select="@integer"/> value_type;
-	static constexpr const <xsl:value-of select="@integer"/> value;
-	typedef integral_constant&lt;<xsl:value-of select="@integer"/>, value&gt; type;
-
-	operator <xsl:value-of select="@integer"/>(void) const noexcept;
-	<xsl:value-of select="@integer"/> operator(void) const noexcept;<xsl:text/>
+	<xsl:text> : integral_constant&lt;</xsl:text>
+	<xsl:value-of select="@integer"/>
+	<xsl:text>, ...&gt; { };</xsl:text>
 	</xsl:when>
 
 	<xsl:when test="@result='StringConstant'">
-	typedef const char value_type[N+1];
-	static constexpr const char value[N+1];
-	typedef StringConstant type;
-
-	operator const char* (void) const noexcept;
-	const char* operator (void) const noexcept;<xsl:text/>
+	<xsl:text> : StringConstant { };</xsl:text>
 	</xsl:when>
 
 	<xsl:when test="@result='Pointer'">
+{
 	typedef conditional_t&lt;
 		is_class_member_v&lt;T&gt; &amp;&amp; !is_static_v&lt;T&gt;,
 		get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;
@@ -128,13 +116,15 @@ struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 	&gt; value_type;
 
 	static const value_type value;<xsl:text/>
+};
 	</xsl:when>
 
 	<xsl:otherwise>
+{
 	typedef <xsl:value-of select="@result"/><xsl:text> type;</xsl:text>
+};
 	</xsl:otherwise>
 	</xsl:choose>
-};
 
 <xsl:if test="@result!='Pointer'">
 <xsl:call-template name="template-args-decl"/>
@@ -143,13 +133,6 @@ struct <xsl:value-of select="@name"/><xsl:text> {</xsl:text>
 	<xsl:text>::type;</xsl:text>
 </xsl:if>
 
-
-<xsl:if test="@result='BooleanConstant' or @result='IntegralConstant' or @result='StringConstant'">
-<xsl:call-template name="template-args-decl"/>
-<xsl:text>constexpr auto </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
-	<xsl:call-template name="template-args-list"/>
-	<xsl:text>::value;</xsl:text>
-</xsl:if>
 
 <xsl:if test="@result='Pointer'">
 <xsl:call-template name="template-args-decl"/>

@@ -10,33 +10,6 @@ in the C++ source files. We have found \num{646313149} instances of
 \num{7903042} {\em distinct} words matching the C++ identifier rules.
 We did not find {\em any} occurence of \say{reflexpr}.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{|l|r|}
-\hline
-\textbf{identifier} & \textbf{count} \\\hline
-\hline
-\texttt{alignof} & \num{1247} \\\hline
-\texttt{char} & \num{2186021} \\\hline
-\texttt{const} & \num{10144518} \\\hline
-\texttt{decltype} & \num{17875} \\\hline
-\texttt{double} & \num{708042} \\\hline
-\texttt{float} & \num{863591} \\\hline
-\texttt{int} & \num{5397800} \\\hline
-\texttt{mirror} & \num{4741} \\\hline
-\texttt{mirrored} & \num{1196} \\\hline
-\texttt{reflected} & \num{1118} \\\hline
-\textbf{\texttt{reflexpr}} & \num{0} \\\hline
-\texttt{sizeof} & \num{590229} \\\hline
-\texttt{typeid} & \num{2374664} \\\hline
-
-
-\end{tabular}
-\label{table-identifier-occurences}
-\caption{Number of occurrences of selected words in the scanned C++ sources.}
-\end{table}
-
-
 No other changes to the core language are required, especially no new rules
 for template parameters. The metaobjects can be implemented by (basically) regular
 types and the interface is implemented by regular templates.

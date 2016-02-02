@@ -2,18 +2,9 @@
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {
 
-template <typename T> requires Metaobject<T>
-struct is_variable {
-	typedef bool value_type;
-	static constexpr const bool value;
-	typedef integral_constant<bool, value> type;
+template <typename T> requires Declaration<T>
+struct is_variable : integral_constant<bool, ... > { };
 
-	operator bool(void) const noexcept;
-	bool operator(void) const noexcept;
-};
-
-template <typename T>
-using is_variable_t = typename is_variable<T>::type;
 template <typename T>
 constexpr bool is_variable_v = is_variable<T>::value;
 

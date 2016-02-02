@@ -5,21 +5,21 @@ We propose that the basic metadata describing a program written
 in C++ should be made available through a set of {\em anonymous} types
 defined by the compiler and through related functions and template classes.
 At the moment these types should describe only the following program
-constructs: namespaces\footnote{in a limited form}, types, typedefs,
+declarations: namespaces\footnote{in a limited form}, types, typedefs,
 classes and their data members and enum types.
 
 In the future, the set of metaobjects should be extended to reflect
 class inheritance, free functions, class member functions, templates,
 template parameters, enumerated values, possibly the C++ specifiers, etc.
 
-The compiler should generate metadata for the program constructs defined
+The compiler should generate metadata for the program declarations
 in the currently processed translation unit, when requested by invoking
 the reflection operator. Members of ordered sets (sequences) of metaobjects,
 like scope members, parameters of a function, and so on, should be listed
 in the order of appearance in the processed source code.
 
 Since we want the metadata to be available at compile-time,
-different base-level constructs should be reflected by
+different base-level declarations should be reflected by
 {\em statically different} metaobjects and thus by {\em different} types.
 For example a metaobject reflecting the global scope namespace should
 be a different {\em type} than a metaobject reflecting the \verb@std@
@@ -39,25 +39,25 @@ definitions and to help avoiding potential name conflicts.
 
 \input{sections/c_StringConstant.tex}
 
-\input{sections/c_Metaobject.tex}
-\input{sections/c_MetaobjectSequence.tex}
+\input{sections/c_Declaration.tex}
+\input{sections/c_DeclarationSequence.tex}
 
-\input{sections/c_MetaNamed.tex}
-\input{sections/c_MetaTyped.tex}
-\input{sections/c_MetaScoped.tex}
-\input{sections/c_MetaScope.tex}
-\input{sections/c_MetaAlias.tex}
-\input{sections/c_MetaLinkable.tex}
-\input{sections/c_MetaClassMember.tex}
+\input{sections/c_Named.tex}
+\input{sections/c_Typed.tex}
+\input{sections/c_Scoped.tex}
+\input{sections/c_Scope.tex}
+\input{sections/c_Alias.tex}
+\input{sections/c_Linkable.tex}
+\input{sections/c_ClassMember.tex}
 
-\input{sections/c_MetaGlobalScope.tex}
-\input{sections/c_MetaNamespace.tex}
-\input{sections/c_MetaNamespaceAlias.tex}
+\input{sections/c_GlobalScope.tex}
+\input{sections/c_Namespace.tex}
+\input{sections/c_NamespaceAlias.tex}
 
-\input{sections/c_MetaType.tex}
-\input{sections/c_MetaTypeAlias.tex}
-\input{sections/c_MetaClass.tex}
-\input{sections/c_MetaEnum.tex}
-\input{sections/c_MetaEnumClass.tex}
-\input{sections/c_MetaVariable.tex}
-\input{sections/c_MetaDataMember.tex}
+\input{sections/c_Type.tex}
+\input{sections/c_TypeAlias.tex}
+\input{sections/c_Class.tex}
+\input{sections/c_Enum.tex}
+\input{sections/c_EnumClass.tex}
+\input{sections/c_Variable.tex}
+\input{sections/c_DataMember.tex}

@@ -1,0 +1,14 @@
+\subsection{Meta-Named}
+\label{concept-Meta-Named}
+
+A \meta{Named} is a \meta{Declaration} reflecting a named base-level declaration
+(namespace, type, variable, function, etc.).
+
+\input{sections/c_Named_trait.tex}
+\input{sections/c_Named_def.tex}
+\input{sections/c_Named_opers.tex}
+
+In case of types, the \texttt{get\_name} operation returns the type (or type alias)
+name without any qualifiers, asterisks\footnote{in case of pointers},
+ampersands\footnote{in case of references}, angle or square brackets\footnote{
+in case of templates or arrays}, etc.

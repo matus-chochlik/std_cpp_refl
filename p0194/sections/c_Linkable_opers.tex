@@ -1,0 +1,14 @@
+
+\subsubsection{\texttt{is\_static}}
+
+returns whether the declaration with storage duration and/or linkage reflected by a \meta{Linkable} was declared with the static specifier.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires Linkable<T>
+struct is_static : integral_constant<bool, ...> { };
+template <typename T>
+using is_static_t = typename is_static<T>::type;
+
+\end{minted}

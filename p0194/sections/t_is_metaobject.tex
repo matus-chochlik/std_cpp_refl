@@ -6,17 +6,8 @@ to the \texttt{std} namespace as one of the type traits.
 
 \begin{minted}{cpp}
 template <typename T>
-struct is_metaobject {
-	typedef bool value_type;
-	static constexpr const bool value;
-	typedef integral_constant<bool, value> type;
+struct is_metaobject : integral_constant<bool, ...> { };
 
-	operator bool(void) const noexcept;
-	bool operator(void) const noexcept;
-};
-
-template <typename T>
-using is_metaobject_t = typename is_metaobject<T>::type;
 template <typename T>
 constexpr bool is_metaobject_v = is_metaobject<T>::value;
 \end{minted}

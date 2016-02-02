@@ -1,0 +1,14 @@
+
+\subsubsection{Definition}
+
+\begin{minted}[tabsize=8]{cpp}
+namespace meta {
+
+template <typename T>
+concept bool Class =
+	Type<T> &&
+	Scope<T> &&
+	meta::is_class_v<T>;
+
+} // namespace meta
+\end{minted}

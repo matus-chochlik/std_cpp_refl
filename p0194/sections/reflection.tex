@@ -40,13 +40,13 @@ and the templates implementing the \emph{interface} of the metaobjects.
 
 In a future proposal an additional, new variant of the \texttt{reflexpr} operator
 -- \texttt{reflexpr(X, Concept)} could be introduced.
-This operator would return a pack of \meta{object}s reflecting members of
-the base-level construct \texttt{X} which conform to the specified
+This operator would return a pack of \meta{Declaration}s reflecting members of
+the base-level declaration \texttt{X} which conform to the specified
 \texttt{Concept}. The parameter \texttt{X} is the same as in the single argument
 version, \texttt{Concept} is the name of a metaobject concept.
 
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-typedef std::tuple<reflexpr(std, MetaTypedef)...> meta_std_typedefs;
+typedef std::tuple<reflexpr(std, std::meta::Typedef)...> meta_std_typedefs;
 \end{minted}

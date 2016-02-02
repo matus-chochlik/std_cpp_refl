@@ -1,0 +1,32 @@
+
+\subsubsection{\texttt{get\_size}}
+
+returns a number of elements in the sequence.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+requires DeclarationSequence<T>
+struct get_size : integral_constant<size_t, ...> { };
+template <typename T>
+using get_size_t = typename get_size<T>::type;
+
+\end{minted}
+
+\subsubsection{\texttt{get\_element}}
+
+returns the i-th element in a DeclarationSequence.
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T1, size_t Index>
+requires DeclarationSequence<T1>
+struct get_element
+{
+	typedef Declaration type;
+};
+	
+template <typename T1, size_t Index>
+using get_element_t = typename get_element<T1, Index>::type;
+
+\end{minted}

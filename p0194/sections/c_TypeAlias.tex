@@ -1,0 +1,11 @@
+\subsection{Meta-TypeAlias}
+\label{concept-Meta-TypeAlias}
+
+A \meta{TypeAlias} is a \meta{Type} and a \meta{Alias}
+reflecting a typedef, a type alias or a substituted template type parameter.
+
+\input{sections/c_TypeAlias_def.tex}
+
+If the reflected type alias or typedef refers to a class then the reflecting
+\meta{TypeAlias} is also a \meta{Class}, if the reflected alias refers
+to an enum then the \meta{TypeAlias} is also a \meta{Enum}.

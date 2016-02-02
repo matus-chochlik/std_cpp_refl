@@ -2,18 +2,9 @@
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {
 
-template <typename T> requires Metaobject<T>
-struct is_linkable {
-	typedef bool value_type;
-	static constexpr const bool value;
-	typedef integral_constant<bool, value> type;
+template <typename T> requires Declaration<T>
+struct is_linkable : integral_constant<bool, ... > { };
 
-	operator bool(void) const noexcept;
-	bool operator(void) const noexcept;
-};
-
-template <typename T>
-using is_linkable_t = typename is_linkable<T>::type;
 template <typename T>
 constexpr bool is_linkable_v = is_linkable<T>::value;
 
