@@ -2,15 +2,9 @@
 
 \begin{itemize}
 
-\item {\em The reflection of C++11/14 features not covered by this proposal}.
+\item{Reflection of \texttt{union}s -- should we add a \em{Meta-Union} or
+handle unions together with classes.}
 
-\item {\em Explicit specification of what should be reflected}. It might be useful to have
-the ability to explicitly specify either what to reflect or what to hide from reflection.
-For example the "whitelisting" (explicitly specifying of what should be reflected) of namespace
-or class members could simplify reflective meta-algorithms so that they would not have
-to implement complicated filters when traversing scope members, to hide implementation details and
-to improve compilation times. It is important that this functionality is decoupled from the
-scope member declarations, since it would allow applications to cherry-pick what should be
-reflected even in third-party libraries.
+\item{Should \meta{GlobalScope} be also a \meta{Namespace}?}
 
 \end{itemize}

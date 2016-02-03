@@ -1,8 +1,27 @@
 
 
+\subsubsection{\texttt{reflects\_same}}
+
+indicates if two metaobjects reflect the same base-level declaration.
+
+\begin{minted}{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Object T1, Object T2>
+struct reflects_same : integral_constant<bool, ...> { };
+template <Object T1, Object T2>
+constexpr auto reflects_same_v = reflects_same<T1, T2>::value;
+\end{minted}
+\begin{minted}{cpp}
+} // namespace meta
+\end{minted}
+
+
+
 \subsubsection{\texttt{get\_source\_location}}
 
-returns the source location info of the declaration of a base-level program feature reflected by a \meta{Object}.
+returns the source location info of the declaration of a base-level program declaration reflected by a \meta{Object}.
 
 \begin{minted}{cpp}
 namespace meta {

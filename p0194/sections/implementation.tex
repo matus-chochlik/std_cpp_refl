@@ -25,3 +25,11 @@ operator.
 The \meta{ObjectSequence} operations, namely \texttt{get\_size} and
 \texttt{get\_element} are implemented lazily by using the new
 \texttt{\_\_reflexpr\_size} and \texttt{\_\_reflexpr\_element} operators.
+
+No rigorous measurements were made, but the implementation is not expected to
+incur any noticeable overhead in terms of memory footprint or processing
+times\footnote{Besides the fact that several new tokens were added.} when
+compiling programs, which do not use reflection.
+
+Also note that this specification underwent some last-minute changes,
+which were not incorporated into the implementation yet.

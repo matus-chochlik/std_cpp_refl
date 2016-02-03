@@ -1,7 +1,7 @@
 \section{Reflection operator}
 \label{section-reflection-operator}
 
-The metaobjects reflecting some program feature \verb@X@ 
+The metaobjects reflecting some program declaration \verb@X@ 
 should be made available to the user by
 the means of a new operator \texttt{reflexpr}.
 More precisely, the reflection operator should return
@@ -9,7 +9,7 @@ a type\footnote{Like the \texttt{decltype} operator} conforming to a particular
 metaobject concept, depending on the argument.
 
 The operand \verb@X@ of the \texttt{reflexpr} operator can at the moment
-be any of the following\footnote{Future proposals may add new reflectible expressions,
+be any of the following\footnote{Future proposals may add new operands
 like variables, overloaded functions, constructors, etc.}:
 
 \begin{itemize}
@@ -26,6 +26,21 @@ like variables, overloaded functions, constructors, etc.}:
 \item{{\em Enum class name}} -- (\verb@std::launch@)
      the returned metaobject is a {\meta{EnumClass}}.
 \end{itemize}
+
+\subsection{Redeclarations}
+
+The meta data queried by \texttt{reflexpr} depends on the point of invocation
+of the operator; only declarations in front of the invocation will be visible.
+Subsequent invocations are independent of prior invocations, as if all compiler
+generated types were unique to each reflexpr invocation.
+
+\begin{minted}{cpp}
+struct foo;
+constexpr size_t x = get_size_v<get_data_members_t<reflexpr(foo)>>; // 0
+
+struct foo { int a,b,c,d };
+constexpr size_t y = get_size_v<get_data_members_t<reflexpr(foo)>>; // 4
+\end{minted}
 
 \subsection{Required header}
 \label{section-reflexpr-header}

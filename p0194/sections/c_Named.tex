@@ -18,6 +18,7 @@ For example:
 \begin{minted}{cpp}
 get_name_v<reflexpr(std::vector<int>)>; // "vector"
 get_name_v<reflexpr(volatile std::size_t* [10])>; // "size_t"
-get_name_v<reflexpr(vector<int>* (*)(vector<double>&))>; // ""
-get_name_v<reflexpr(vector<int>* foo(vector<double>&))>; // "foo"
+get_name_v<reflexpr(std::vector<int>* (*)(std::vector<double>&))>; // ""
+get_name_v<reflexpr(std::vector<int>* (*pfoo)(std::vector<double>&))>; // "pfoo"
+get_name_v<reflexpr(std::vector<int>* foo(std::vector<double>&))>; // "foo"
 \end{minted}
