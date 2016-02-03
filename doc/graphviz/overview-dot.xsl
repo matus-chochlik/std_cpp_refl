@@ -57,7 +57,7 @@ digraph Reflection {
 	<!-- Metaobject -> trait -->
 	edge [penwidth=1,arrowhead="none",arrowtail="none",style="solid"]
 <xsl:for-each select="trait">
-	Metaobject -> <xsl:value-of select="@name"/>;
+	Object -> <xsl:value-of select="@name"/>;
 </xsl:for-each>
 
 	<!-- Node -> operation -->

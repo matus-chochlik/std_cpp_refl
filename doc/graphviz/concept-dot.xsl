@@ -5,7 +5,7 @@
 	xmlns:exsl="http://exslt.org/common"
 	extension-element-prefixes="str exsl"
 >
-<xsl:param name="metaobject" value="Metaobject"/>
+<xsl:param name="metaobject" value="Object"/>
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
