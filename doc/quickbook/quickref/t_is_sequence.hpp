@@ -13,7 +13,7 @@ struct is_sequence
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaobjectSequence
+	[^true] if [^T] is a __ObjectSequence
 	[^false] otherwise.
 	>*/;
 

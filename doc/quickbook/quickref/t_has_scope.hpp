@@ -13,7 +13,7 @@ struct has_scope
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaScoped
+	[^true] if [^T] is a __Scoped
 	[^false] otherwise.
 	>*/;
 

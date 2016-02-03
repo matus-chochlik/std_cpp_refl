@@ -7,12 +7,12 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaClass<T>
+__requires __Class<T>
 struct get_all_data_members
 {
 
-	typedef __MetaobjectSequence type; /*<
-	returns a sequence of Metaobjects reflecting all    (including the private and protected)   data members of a class reflected by a MetaClass.
+	typedef __ObjectSequence type; /*<
+	returns a sequence of objects reflecting all    (including the private and protected)   data members of a class reflected by a Class.
 	>*/
 };
 

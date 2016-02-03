@@ -6,7 +6,7 @@
 [import t_is_global_scope.hpp]
 
 The [^is_global_scope] trait indicates that
-the tested metaobject is a __MetaGlobalScope.
+the tested metaobject is a __GlobalScope.
 
 [meta_is_global_scope]
 

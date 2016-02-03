@@ -6,7 +6,7 @@
 [import t_is_scope.hpp]
 
 The [^is_scope] trait indicates that
-the tested metaobject is a __MetaScope.
+the tested metaobject is a __Scope.
 
 [meta_is_scope]
 

@@ -1,40 +1,40 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[include c_Metaobject.qbk]
+[include c_Object.qbk]
 
-[include c_MetaobjectSequence.qbk]
+[include c_ObjectSequence.qbk]
 
-[include c_MetaNamed.qbk]
+[include c_Named.qbk]
 
-[include c_MetaTyped.qbk]
+[include c_Typed.qbk]
 
-[include c_MetaScoped.qbk]
+[include c_Scoped.qbk]
 
-[include c_MetaScope.qbk]
+[include c_Scope.qbk]
 
-[include c_MetaAlias.qbk]
+[include c_Alias.qbk]
 
-[include c_MetaClassMember.qbk]
+[include c_ClassMember.qbk]
 
-[include c_MetaLinkable.qbk]
+[include c_Linkable.qbk]
 
-[include c_MetaGlobalScope.qbk]
+[include c_GlobalScope.qbk]
 
-[include c_MetaNamespace.qbk]
+[include c_Namespace.qbk]
 
-[include c_MetaNamespaceAlias.qbk]
+[include c_NamespaceAlias.qbk]
 
-[include c_MetaType.qbk]
+[include c_Type.qbk]
 
-[include c_MetaTypeAlias.qbk]
+[include c_TypeAlias.qbk]
 
-[include c_MetaClass.qbk]
+[include c_Class.qbk]
 
-[include c_MetaEnum.qbk]
+[include c_Enum.qbk]
 
-[include c_MetaEnumClass.qbk]
+[include c_EnumClass.qbk]
 
-[include c_MetaVariable.qbk]
+[include c_Variable.qbk]
 
-[include c_MetaDataMember.qbk]
+[include c_DataMember.qbk]

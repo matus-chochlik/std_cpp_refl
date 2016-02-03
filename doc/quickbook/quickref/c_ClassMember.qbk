@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:ClassMember ClassMember]
+[import c_ClassMember.hpp]
+
+[concept ClassMember] is  a __Scoped reflecting class member.
+
+[reflexpr_ClassMember_def]
+[heading Implementation]
+[reflexpr_ClassMember_begin]
+[heading Traits]
+[reflexpr_ClassMember_inherited_traits]
+[reflexpr_ClassMember_traits]
+[heading Operations]
+[reflexpr_ClassMember_inherited_operations]
+[reflexpr_ClassMember_operations]
+[reflexpr_ClassMember_end]
+
+[endsect]

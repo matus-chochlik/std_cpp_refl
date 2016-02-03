@@ -1,11 +1,9 @@
 
 [/ Copyright 2015 Matus Chochlik.                             ]
 
-[include o_get_source_file.qbk]
+[include o_reflects_same.qbk]
 
-[include o_get_source_line.qbk]
-
-[include o_get_source_column.qbk]
+[include o_get_source_location.qbk]
 
 [include o_get_size.qbk]
 

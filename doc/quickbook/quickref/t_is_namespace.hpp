@@ -13,7 +13,7 @@ struct is_namespace
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaNamespace
+	[^true] if [^T] is a __Namespace
 	[^false] otherwise.
 	>*/;
 

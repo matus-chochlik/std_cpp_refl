@@ -13,7 +13,7 @@ struct is_enum
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaEnum
+	[^true] if [^T] is a __Enum
 	[^false] otherwise.
 	>*/;
 

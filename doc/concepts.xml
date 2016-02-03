@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf8"?>
 <concepts>
+	<baseobject kind="type" name="OriginalType"/>
 	<baseobject kind="type" name="Pointer"/>
-	<baseobject kind="type" name="type"/>
 	<baseobject kind="type" name="size_t"/>
 
 	<baseobject kind="tag" name="global_scope_tag"/>
@@ -17,9 +17,9 @@
 
 	<metaobject name="Object"
 		abstract="true"
-		reflects="a base-level program feature"
+		reflects="a base-level program declaration"
 		is_a="a concept modelled by stateless anonymous types generated
-by the compiler which allow access to metadata reflecting specific program features"
+by the compiler which allow access to metadata reflecting specific program declarations"
 	/>
 
 	<trait name="is_sequence" scope="meta" indicates="ObjectSequence" uses="get_category"/>
@@ -41,6 +41,14 @@ by the compiler which allow access to metadata reflecting specific program featu
 	<trait name="is_alias" scope="meta" indicates="Alias"/>
 	<trait name="is_class_member" scope="meta" indicates="ClassMember"/>
 	<trait name="is_linkable" scope="meta" indicates="Linkable"/>
+
+	<operation name="reflects_same"
+		brief="indicates if two metaobjects reflect the same base-level declaration."
+		result="BooleanConstant"
+	>
+		<argument type="Object"/>
+		<argument type="Object"/>
+	</operation>
 
 	<operation name="get_source_location"
 		brief="returns the source location info of the declaration of $(reflected) reflected by a $(operand)."
@@ -215,7 +223,7 @@ by the compiler which allow access to metadata reflecting specific program featu
 	</metaobject>
 
 	<operation name="get_reflected_type"
-		result="type"
+		result="OriginalType"
 		brief="returns the the base-level type reflected by a $(operand)."
 	>
 		<argument type="Type"/>

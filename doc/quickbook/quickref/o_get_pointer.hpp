@@ -7,7 +7,7 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaVariable<T>
+__requires __Variable<T>
 struct get_pointer
 {
 
@@ -19,7 +19,7 @@ struct get_pointer
 	> value_type;
 
 	static const value_type value = ... /*<
-	returns a pointer to the a variable reflected by a MetaVariable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
+	returns a pointer to the a variable reflected by a Variable.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.
 	>*/;
 };
 

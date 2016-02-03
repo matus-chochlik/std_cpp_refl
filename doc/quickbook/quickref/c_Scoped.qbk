@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Scoped Scoped]
+[import c_Scoped.hpp]
+
+[concept Scoped] is  a __Object reflecting a scoped declaration.
+
+[reflexpr_Scoped_def]
+[heading Implementation]
+[reflexpr_Scoped_begin]
+[heading Traits]
+[reflexpr_Scoped_inherited_traits]
+[reflexpr_Scoped_traits]
+[heading Operations]
+[reflexpr_Scoped_inherited_operations]
+[reflexpr_Scoped_operations]
+[reflexpr_Scoped_end]
+
+[endsect]

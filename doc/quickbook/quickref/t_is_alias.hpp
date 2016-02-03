@@ -13,7 +13,7 @@ struct is_alias
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaAlias
+	[^true] if [^T] is a __Alias
 	[^false] otherwise.
 	>*/;
 

@@ -7,13 +7,13 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaLinkable<T>
+__requires __Linkable<T>
 struct is_static
 {
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	returns whether the declaration with storage duration and/or linkage reflected by a MetaLinkable was declared with the static specifier.
+	returns whether the declaration with storage duration and/or linkage reflected by a Linkable was declared with the static specifier.
 	>*/;
 
 	typedef integral_constant<bool, value> type;

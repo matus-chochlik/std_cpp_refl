@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Typed Typed]
+[import c_Typed.hpp]
+
+[concept Typed] is  a __Object reflecting base-level declaration with a type.
+
+[reflexpr_Typed_def]
+[heading Implementation]
+[reflexpr_Typed_begin]
+[heading Traits]
+[reflexpr_Typed_inherited_traits]
+[reflexpr_Typed_traits]
+[heading Operations]
+[reflexpr_Typed_inherited_operations]
+[reflexpr_Typed_operations]
+[reflexpr_Typed_end]
+
+[endsect]

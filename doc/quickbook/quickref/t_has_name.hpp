@@ -13,7 +13,7 @@ struct has_name
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaNamed
+	[^true] if [^T] is a __Named
 	[^false] otherwise.
 	>*/;
 

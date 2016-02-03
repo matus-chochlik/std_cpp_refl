@@ -13,7 +13,7 @@ struct is_type
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaType
+	[^true] if [^T] is a __Type
 	[^false] otherwise.
 	>*/;
 

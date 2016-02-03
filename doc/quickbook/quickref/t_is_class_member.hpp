@@ -13,7 +13,7 @@ struct is_class_member
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaClassMember
+	[^true] if [^T] is a __ClassMember
 	[^false] otherwise.
 	>*/;
 

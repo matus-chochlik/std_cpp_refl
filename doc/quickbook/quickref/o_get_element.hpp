@@ -7,12 +7,12 @@
 __namespace_meta_begin
 
 template <typename T1, size_t Index>
-__requires __MetaobjectSequence<T1>
+__requires __ObjectSequence<T1>
 struct get_element
 {
 
-	typedef __Metaobject type; /*<
-	returns the i-th element in a MetaobjectSequence.
+	typedef __Object type; /*<
+	returns the i-th element in a ObjectSequence.
 	>*/
 };
 

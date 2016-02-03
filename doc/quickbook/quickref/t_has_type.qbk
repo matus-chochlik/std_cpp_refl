@@ -6,7 +6,7 @@
 [import t_has_type.hpp]
 
 The [^has_type] trait indicates that
-the tested metaobject is a __MetaTyped.
+the tested metaobject is a __Typed.
 
 [meta_has_type]
 

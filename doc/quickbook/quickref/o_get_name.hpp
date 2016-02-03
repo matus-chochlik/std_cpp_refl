@@ -7,14 +7,14 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaNamed<T>
+__requires __Named<T>
 struct get_name
 {
 
 	typedef const char value_type[N+1];
 
 	static constexpr const char value[N+1] = ... /*<
-	returns the basic name of the a named declaration reflected by a MetaNamed.
+	returns the basic name of the a named declaration reflected by a Named.
 	>*/;
 
 	typedef __StringConstant type;

@@ -6,7 +6,7 @@
 [import t_has_scope.hpp]
 
 The [^has_scope] trait indicates that
-the tested metaobject is a __MetaScoped.
+the tested metaobject is a __Scoped.
 
 [meta_has_scope]
 

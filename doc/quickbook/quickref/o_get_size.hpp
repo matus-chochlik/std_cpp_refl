@@ -7,7 +7,7 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaobjectSequence<T>
+__requires __ObjectSequence<T>
 struct get_size
 {
 

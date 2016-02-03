@@ -13,7 +13,7 @@ struct is_variable
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaVariable
+	[^true] if [^T] is a __Variable
 	[^false] otherwise.
 	>*/;
 

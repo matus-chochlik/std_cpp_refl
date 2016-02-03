@@ -7,12 +7,12 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaAlias<T>
+__requires __Alias<T>
 struct get_aliased
 {
 
-	typedef __MetaNamed type; /*<
-	returns the MetaNamed reflecting the original declaration of a type or namespace alias reflected by a MetaAlias.
+	typedef __Named type; /*<
+	returns the Named reflecting the original declaration of a type or namespace alias reflected by a Alias.
 	>*/
 };
 

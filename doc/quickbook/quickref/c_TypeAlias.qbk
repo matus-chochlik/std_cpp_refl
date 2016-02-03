@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:TypeAlias TypeAlias]
+[import c_TypeAlias.hpp]
+
+[concept TypeAlias] is  a __Type and  a __Alias reflecting a type alias or typedef.
+
+[reflexpr_TypeAlias_def]
+[heading Implementation]
+[reflexpr_TypeAlias_begin]
+[heading Traits]
+[reflexpr_TypeAlias_inherited_traits]
+[reflexpr_TypeAlias_traits]
+[heading Operations]
+[reflexpr_TypeAlias_inherited_operations]
+[reflexpr_TypeAlias_operations]
+[reflexpr_TypeAlias_end]
+
+[endsect]

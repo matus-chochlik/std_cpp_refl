@@ -7,12 +7,12 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaType<T>
+__requires __Type<T>
 struct get_reflected_type
 {
 
-	typedef __Type type; /*<
-	returns the the base-level type reflected by a MetaType.
+	typedef __OriginalType type; /*<
+	returns the the base-level type reflected by a Type.
 	>*/
 };
 

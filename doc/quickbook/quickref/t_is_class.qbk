@@ -6,7 +6,7 @@
 [import t_is_class.hpp]
 
 The [^is_class] trait indicates that
-the tested metaobject is a __MetaClass.
+the tested metaobject is a __Class.
 
 [meta_is_class]
 

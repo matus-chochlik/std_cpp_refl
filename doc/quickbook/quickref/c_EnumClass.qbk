@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:EnumClass EnumClass]
+[import c_EnumClass.hpp]
+
+[concept EnumClass] is  a __Enum and  a __Scope reflecting a strongly typed enumeration.
+
+[reflexpr_EnumClass_def]
+[heading Implementation]
+[reflexpr_EnumClass_begin]
+[heading Traits]
+[reflexpr_EnumClass_inherited_traits]
+[reflexpr_EnumClass_traits]
+[heading Operations]
+[reflexpr_EnumClass_inherited_operations]
+[reflexpr_EnumClass_operations]
+[reflexpr_EnumClass_end]
+
+[endsect]

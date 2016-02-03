@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Scope Scope]
+[import c_Scope.hpp]
+
+[concept Scope] is  a __Object, possibly a __Named and possibly a __Scoped reflecting a scope.
+
+[reflexpr_Scope_def]
+[heading Implementation]
+[reflexpr_Scope_begin]
+[heading Traits]
+[reflexpr_Scope_inherited_traits]
+[reflexpr_Scope_traits]
+[heading Operations]
+[reflexpr_Scope_inherited_operations]
+[reflexpr_Scope_operations]
+[reflexpr_Scope_end]
+
+[endsect]

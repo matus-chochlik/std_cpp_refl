@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Namespace Namespace]
+[import c_Namespace.hpp]
+
+[concept Namespace] is  a __Named,  a __Scope and  a __Scoped reflecting a namespace.
+
+[reflexpr_Namespace_def]
+[heading Implementation]
+[reflexpr_Namespace_begin]
+[heading Traits]
+[reflexpr_Namespace_inherited_traits]
+[reflexpr_Namespace_traits]
+[heading Operations]
+[reflexpr_Namespace_inherited_operations]
+[reflexpr_Namespace_operations]
+[reflexpr_Namespace_end]
+
+[endsect]

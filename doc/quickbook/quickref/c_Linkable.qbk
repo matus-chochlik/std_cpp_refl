@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Linkable Linkable]
+[import c_Linkable.hpp]
+
+[concept Linkable] is  a __Named and  a __Scoped reflecting declaration with storage duration and/or linkage.
+
+[reflexpr_Linkable_def]
+[heading Implementation]
+[reflexpr_Linkable_begin]
+[heading Traits]
+[reflexpr_Linkable_inherited_traits]
+[reflexpr_Linkable_traits]
+[heading Operations]
+[reflexpr_Linkable_inherited_operations]
+[reflexpr_Linkable_operations]
+[reflexpr_Linkable_end]
+
+[endsect]

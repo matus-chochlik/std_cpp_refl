@@ -7,12 +7,12 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaScoped<T>
+__requires __Scoped<T>
 struct get_scope
 {
 
-	typedef __MetaScope type; /*<
-	returns the MetaScope reflecting the scope of a scoped declaration reflected by a MetaScoped.
+	typedef __Scope type; /*<
+	returns the Scope reflecting the scope of a scoped declaration reflected by a Scoped.
 	>*/
 };
 

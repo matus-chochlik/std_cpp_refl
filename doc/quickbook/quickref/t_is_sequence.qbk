@@ -6,7 +6,7 @@
 [import t_is_sequence.hpp]
 
 The [^is_sequence] trait indicates that
-the tested metaobject is a __MetaobjectSequence.
+the tested metaobject is a __ObjectSequence.
 
 [meta_is_sequence]
 

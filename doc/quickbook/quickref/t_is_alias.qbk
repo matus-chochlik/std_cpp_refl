@@ -6,7 +6,7 @@
 [import t_is_alias.hpp]
 
 The [^is_alias] trait indicates that
-the tested metaobject is a __MetaAlias.
+the tested metaobject is a __Alias.
 
 [meta_is_alias]
 

@@ -63,15 +63,8 @@ std::ostream& value_to_json(std::ostream& out, const T& v)
 	);
 };
 
-struct point
-{
-	float x, y, z;
-};
-
-struct triangle
-{
-	point a, b, c;
-};
+struct point { float x, y, z; };
+struct triangle { point a, b, c; };
 
 struct tetrahedron
 {

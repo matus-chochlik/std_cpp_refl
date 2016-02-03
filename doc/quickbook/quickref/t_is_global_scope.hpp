@@ -13,7 +13,7 @@ struct is_global_scope
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaGlobalScope
+	[^true] if [^T] is a __GlobalScope
 	[^false] otherwise.
 	>*/;
 

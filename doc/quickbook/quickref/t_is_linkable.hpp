@@ -13,7 +13,7 @@ struct is_linkable
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaLinkable
+	[^true] if [^T] is a __Linkable
 	[^false] otherwise.
 	>*/;
 

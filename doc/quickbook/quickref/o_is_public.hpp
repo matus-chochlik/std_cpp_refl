@@ -7,13 +7,13 @@
 __namespace_meta_begin
 
 template <typename T>
-__requires __MetaClassMember<T>
+__requires __ClassMember<T>
 struct is_public
 {
 
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	returns whether the class member reflected by a MetaClassMember was declared with public access.
+	returns whether the class member reflected by a ClassMember was declared with public access.
 	>*/;
 
 	typedef integral_constant<bool, value> type;
