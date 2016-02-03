@@ -36,10 +36,15 @@ generated types were unique to each reflexpr invocation.
 
 \begin{minted}{cpp}
 struct foo;
-constexpr size_t x = get_size_v<get_data_members_t<reflexpr(foo)>>; // 0
+using meta_foo_fwd = reflexpr(foo);
+constexpr size_t x = get_size_v<get_data_members_t<meta_foo_fwd>>; // 0
 
-struct foo { int a,b,c,d };
-constexpr size_t y = get_size_v<get_data_members_t<reflexpr(foo)>>; // 4
+struct foo { int a,b,c,d; };
+using meta_foo = reflexpr(foo);
+constexpr size_t y = get_size_v<get_data_members_t<meta_foo>>; // 4
+
+constexpr bool b1 = is_same_v<meta_foo_fwd, meta_foo>; // false
+constexpr bool b2 = meta::reflects_same_v<meta_foo_fwd, meta_foo>; // true
 \end{minted}
 
 \subsection{Required header}

@@ -13,10 +13,10 @@ class inheritance, free functions, class member functions, templates,
 template parameters, enumerated values, possibly the C++ specifiers, etc.
 
 The compiler should generate metadata for the program declarations
-in the currently processed translation unit, when requested by invoking
-the reflection operator. Members of ordered sets (sequences) of metaobjects,
-like scope members, parameters of a function, and so on, should be listed
-in the order of appearance in the processed source code.
+in the currently processed translation unit, when requested by the invocation
+of the reflection operator. Members of ordered sets (sequences) of metaobjects,
+like scope members, parameters of a function, base classes, and so on, should be listed
+in the order of appearance in the processed translation unit.
 
 Since we want the metadata to be available at compile-time,
 different base-level declarations should be reflected by
