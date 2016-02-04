@@ -2,7 +2,7 @@
 
 \subsubsection{\texttt{get\_data\_members}}
 
-returns a sequence of objects reflecting the public data members of a class reflected by a \meta{Class}.
+returns a \meta{ObjectSequence} of metaobjects reflecting   the public data members of a class reflected by a \meta{Class}.
 
 \begin{minted}{cpp}
 namespace meta {
@@ -29,7 +29,7 @@ must conform to the \meta{ObjectSequence} concept.
 
 \subsubsection{\texttt{get\_all\_data\_members}}
 
-returns a sequence of objects reflecting all    (including the private and protected)   data members of a class reflected by a \meta{Class}.
+returns a \meta{ObjectSequence} of metaobjects reflecting all    (including the private and protected)   data members of a class reflected by a \meta{Class}.
 
 \begin{minted}{cpp}
 namespace meta {

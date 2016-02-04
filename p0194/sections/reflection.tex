@@ -36,15 +36,22 @@ generated types were unique to each reflexpr invocation.
 
 \begin{minted}{cpp}
 struct foo;
-using meta_foo_fwd = reflexpr(foo);
-constexpr size_t x = get_size_v<get_data_members_t<meta_foo_fwd>>; // 0
+using meta_foo_fwd1 = reflexpr(foo);
+constexpr size_t n1 = get_size_v<get_data_members_t<meta_foo_fwd1>>; // 0
+
+struct foo;
+using meta_foo_fwd2 = reflexpr(foo);
+constexpr size_t n2 = get_size_v<get_data_members_t<meta_foo_fwd2>>; // 0
+
+constexpr bool b1 = is_same_v<meta_foo_fwd1, meta_foo_fwd2>; // unspecified
+constexpr bool b2 = meta::reflects_same_v<meta_foo_fwd1, meta_foo_fwd2>; // true
 
 struct foo { int a,b,c,d; };
 using meta_foo = reflexpr(foo);
-constexpr size_t y = get_size_v<get_data_members_t<meta_foo>>; // 4
+constexpr size_t n3 = get_size_v<get_data_members_t<meta_foo>>; // 4
 
-constexpr bool b1 = is_same_v<meta_foo_fwd, meta_foo>; // false
-constexpr bool b2 = meta::reflects_same_v<meta_foo_fwd, meta_foo>; // true
+constexpr bool b3 = is_same_v<meta_foo_fwd1, meta_foo>; // false
+constexpr bool b4 = meta::reflects_same_v<meta_foo_fwd1, meta_foo>; // true
 \end{minted}
 
 \subsection{Required header}

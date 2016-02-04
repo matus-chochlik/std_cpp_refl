@@ -10,6 +10,7 @@
 
 <xsl:template name="expand-variables">
 <xsl:param name="text"/>
+<xsl:param name="result"/>
 <xsl:param name="operand"/>
 	<xsl:choose>
 	<xsl:when test="contains($text, '$(')">
@@ -17,6 +18,11 @@
 
 	<xsl:variable name="variable" select="substring-before(substring-after($text,'$('), ')')"/>
 	<xsl:choose>
+	<xsl:when test="$variable = 'result'">
+		<xsl:text>\meta{</xsl:text>
+		<xsl:value-of select="$result"/>
+		<xsl:text>}</xsl:text>
+	</xsl:when>
 	<xsl:when test="$variable = 'operand'">
 		<xsl:text>\meta{</xsl:text>
 		<xsl:value-of select="$operand"/>
@@ -30,6 +36,7 @@
 
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="substring-after(substring-after($text, '$('), ')')"/>
+		<xsl:with-param name="result" select="$result"/>
 		<xsl:with-param name="operand" select="$operand"/>
 	</xsl:call-template>
 
@@ -79,6 +86,7 @@
 
 <xsl:call-template name="expand-variables">
 	<xsl:with-param name="text" select="@brief"/>
+	<xsl:with-param name="result" select="@result"/>
 	<xsl:with-param name="operand" select="$metaobject"/>
 </xsl:call-template>
 

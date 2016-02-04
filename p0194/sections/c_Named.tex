@@ -8,7 +8,7 @@ A \meta{Named} is a \meta{Object} reflecting a named base-level declaration
 \input{sections/c_Named_def.tex}
 \input{sections/c_Named_opers.tex}
 
-In case of types, the \texttt{get\_name} operation returns the type (or type alias)
+The \texttt{get\_name} operation returns the type, alias, namespace, etc.
 name without any qualifiers, asterisks\footnote{in case of pointers},
 ampersands\footnote{in case of references}, angle or square brackets\footnote{
 in case of templates or arrays}, etc.
@@ -21,4 +21,7 @@ get_name_v<reflexpr(volatile std::size_t* [10])>; // "size_t"
 get_name_v<reflexpr(std::vector<int>* (*)(std::vector<double>&))>; // ""
 get_name_v<reflexpr(std::vector<int>* (*pfoo)(std::vector<double>&))>; // "pfoo"
 get_name_v<reflexpr(std::vector<int>* foo(std::vector<double>&))>; // "foo"
+get_name_v<reflexpr(std::chrono)>; // "chrono"
+get_name_v<reflexpr(std::nothrow)>; // "nothrow" (in the future)
+get_name_v<reflexpr(std::string::npos)>; // "npos" (in the future)
 \end{minted}
