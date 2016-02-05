@@ -3,17 +3,44 @@
 In this paper we propose to add native support for
 compile-time reflection to C++ by the means of compiler generated
 types providing basic metadata describing various program declarations.
-When finalized, these metaobjects, together with some additions to the standard
-library can later be used to implement other third-party libraries
-providing both compile-time and run-time high-level
-reflection utilities.
-
-In this paper we propose to add a new reflection operator and the initial subset
+This paper introduces a new reflection operator and the initial subset
 of metaobject concepts which we assume to be essential
 and which will provide a good starting point for future extensions.
+
+When finalized, these metaobjects, together with some additions to the standard
+library can later be used to implement other third-party libraries
+providing both compile-time and run-time, high-level reflection utilities.
 
 Please refer to the previous papers \cite{n3996,n4111,n4451,n4452}
 for the motivation for this proposal, including some examples,
 design considerations and rationale. In \cite{ITFPWTHOR} a complex use-case
 for a static reflection is described.
 
+\subsection{Revision history}
+
+\begin{itemize}
+\item{\textbf{Revision 4}} -- Further refines the concepts from N4111; changes
+the names of the metaobject operations to verbs, adds new operations. Introduces a nested namespace
+\texttt{std::meta} which contains most of the reflection-related additions to the standard library.
+Rephrases definition of meta objects using Concepts Lite. Specifies the
+reflection operator name -- \texttt{reflexpr}.
+Introduces an experimental implementation of the reflection operator in clang.
+Drops the context-dependent reflection from N4111 (will be re-introduced later).
+
+\item{\textbf{Revision 3} (N4451 \cite{n4451})} -- Incorporates the feedback from the discussion
+about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
+definitions, removes some of the additions to the standard library added in the previous revisions.
+Adds context-dependent reflection.
+
+\item{\textbf{Revision 2} (N4111 \cite{n4111})} -- Refines the metaobject concepts and introduces
+a concrete implementation of their interface by the means of templates similar
+to the standard type traits. Describes some additions to the standard library
+(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
+Answers some questions from the discussion about N3996 and expands the design
+rationale.
+
+\item{\textbf{Revision 1} (N3996 \cite{n3996})} -- Describes the method of static reflection
+by the means of compiler-generated anonymous types. Introduces the first version
+of the metaobject concepts and some possiblities of their implementation.
+Also includes discussion about the motivation and the design rationale for the proposal.
+\end{itemize}
