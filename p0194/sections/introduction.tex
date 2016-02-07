@@ -19,9 +19,11 @@ for a static reflection is described.
 \subsection{Revision history}
 
 \begin{itemize}
-\item{\textbf{Revision 4}} -- Further refines the concepts from N4111; changes
-the names of the metaobject operations to verbs, adds new operations. Introduces a nested namespace
-\texttt{std::meta} which contains most of the reflection-related additions to the standard library.
+\item{\textbf{Revision 4}} -- Further refines the concepts from N4111; prefixes
+the names of the metaobject operations with \texttt{get\_}, adds new operations,
+replaces the metaobject category tags with new metaobject traits.
+Introduces a nested namespace \texttt{std::meta} which contains most
+of the reflection-related additions to the standard library.
 Rephrases definition of meta objects using Concepts Lite. Specifies the
 reflection operator name -- \texttt{reflexpr}.
 Introduces an experimental implementation of the reflection operator in clang.
