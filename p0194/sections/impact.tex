@@ -16,3 +16,9 @@ types and the interface is implemented by regular templates.
 An implementation with lazy evaluation may require the addition of several compiler builtin
 operators similar to those already used for the type-traits, but other
 implementations are possible.
+
+\subsection{Alternative spelling of the operator}
+
+Alternatively the \texttt{constexpr(X)} or \texttt{std::reflexpr(X)} syntax could 
+be used instead of unscoped \texttt{reflexpr(X)} to further minimise possible name
+conflicts with existing identifiers.

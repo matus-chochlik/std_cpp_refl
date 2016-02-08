@@ -57,11 +57,12 @@ constexpr bool b4 = meta::reflects_same_v<meta_foo_fwd1, meta_foo>; // true
 \subsection{Required header}
 \label{section-reflexpr-header}
 
-The standard \texttt{<reflexpr>} header \emph{must} be included before
-the \emph{reflexpr} operator can be used\footnote{Similar to the
+If the header \texttt{<reflexpr>} is not included prior to a use
+of \texttt{reflexpr}, the program is ill-formed\footnote{Similar to the
 \texttt{<typeinfo>} header being required for the \texttt{typeid} operator.}.
-This header file defines the metaobject trait templates described above
-and the templates implementing the \emph{interface} of the metaobjects.
+This header file defines the metaobject trait templates\footnote{
+Except for \texttt{is\_metaobject}.}
+and the templates implementing the operations on metaobjects as described above.
 
 \subsection{Future extensions}
 
@@ -77,3 +78,4 @@ For example:
 \begin{minted}[tabsize=4]{cpp}
 typedef std::tuple<reflexpr(std, std::meta::Typedef)...> meta_std_typedefs;
 \end{minted}
+
