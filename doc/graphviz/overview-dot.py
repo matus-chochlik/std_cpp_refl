@@ -9,6 +9,8 @@ class options:
 
 		self.type_head_color = "#707070"
 		self.cell_color = "#D0D0D0"
+		self.gen_operations = True
+		self.gen_traits = True
 
 def iter_last(iterable):
     items = iter(iterable)
@@ -362,13 +364,15 @@ def print_graph_dot(opts, concepts):
 	""")
 
 	# Other concepts
-	print_concept_node(opts, concepts, "SourceLocation", "source_location")
-	print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
-	print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")
-	print_string_const_node(opts, concepts)
-	print_pointer_node(opts, concepts)
-	print_plain_type_node(opts, concepts, "OriginalType", "original-type")
-	print_plain_type_node(opts, concepts, "size_t", "size_t")
+	if opts.gen_traits or opts.gen_operations:
+		print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
+	if opts.gen_operations:
+		print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")
+		print_concept_node(opts, concepts, "SourceLocation", "source_location")
+		print_string_const_node(opts, concepts)
+		print_pointer_node(opts, concepts)
+		print_plain_type_node(opts, concepts, "OriginalType", "original-type")
+		print_plain_type_node(opts, concepts, "size_t", "size_t")
 
 	# Metaobject nodes 
 	for metaobject in concepts.findall("metaobject"):
@@ -376,45 +380,51 @@ def print_graph_dot(opts, concepts):
 
 
 	# Trait nodes
-	for trait in concepts.findall("trait"):
-		print_trait_node(opts, concepts, trait)
+	if opts.gen_traits:
+		for trait in concepts.findall("trait"):
+			print_trait_node(opts, concepts, trait)
 
 	# Operation nodes
-	for operation in concepts.findall("operation"):
-		print_operation_node(opts, concepts, operation)
+	if opts.gen_operations:
+		for operation in concepts.findall("operation"):
+			print_operation_node(opts, concepts, operation)
 
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
 	edge [constraint="false" style="dashed" arrowhead="none"];""")
 
-	for trait in concepts.findall("trait"):
-		print_edge(opts, trait.attrib["name"], trait.attrib["indicates"])
-	opts.output.write("\n")
+	if opts.gen_traits:
+		for trait in concepts.findall("trait"):
+			print_edge(opts, trait.attrib["name"], trait.attrib["indicates"])
+		opts.output.write("\n")
 
 	# Trait -> BooleanConstant (result) edges
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	for trait in concepts.findall("trait"):
-		print_edge(opts, trait.attrib["name"], "BooleanConstant")
-	opts.output.write("\n")
+	if opts.gen_traits:
+		for trait in concepts.findall("trait"):
+			print_edge(opts, trait.attrib["name"], "BooleanConstant")
+		opts.output.write("\n")
 
 	# Operation -> Result edges
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	for operation in concepts.findall("operation"):
-		print_edge(opts, operation.attrib["name"], operation.attrib["result"])
-	opts.output.write("\n")
+	if opts.gen_operations:
+		for operation in concepts.findall("operation"):
+			print_edge(opts, operation.attrib["name"], operation.attrib["result"])
+		opts.output.write("\n")
 
 	# Argument -> Operation edges
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	for operation in concepts.findall("operation"):
-		for argument in operation.findall("argument"):
-			print_edge(opts, argument.attrib["type"], operation.attrib["name"])
-	opts.output.write("\n")
+	if opts.gen_operations:
+		for operation in concepts.findall("operation"):
+			for argument in operation.findall("argument"):
+				print_edge(opts, argument.attrib["type"], operation.attrib["name"])
+		opts.output.write("\n")
 
 	# Metaobject is-a edges
 	opts.output.write("""
