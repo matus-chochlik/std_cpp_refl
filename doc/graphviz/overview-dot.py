@@ -7,6 +7,9 @@ class options:
 	def __init__(self):
 		self.output = sys.stdout
 
+		self.type_head_color = "#707070"
+		self.cell_color = "#D0D0D0"
+
 def iter_last(iterable):
     items = iter(iterable)
     prev = next(items)
@@ -22,8 +25,8 @@ def print_concept_node(opts, concepts, name, definition):
 	values = {
 		"name" : name,
 		"definition": definition,
-		"head_color": "#707070",
-		"cell_color": "#D0D0D0"
+		"head_color": opts.type_head_color,
+		"cell_color": opts.cell_color
 	}
 
 	opts.output.write("""
@@ -56,8 +59,8 @@ def print_string_const_node(opts, concepts):
 
 	values = {
 		"name" : "StringConstant",
-		"head_color": "#707070",
-		"cell_color": "#D0D0D0"
+		"head_color": opts.type_head_color,
+		"cell_color": opts.cell_color
 	}
 
 	opts.output.write("""
@@ -95,24 +98,28 @@ def print_string_const_node(opts, concepts):
 
  
 def print_pointer_node(opts, concepts):
-	name = "Pointer"
+	values = {
+		"name" : "Pointer",
+		"head_color": opts.type_head_color,
+		"cell_color": opts.cell_color
+	}
 
 	opts.output.write("""
-	%s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%s.svg">"""
-	% (name, name))
+	%(name)s [label=<
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
+	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="#707070" COLSPAN="3" ALIGN="LEFT">template &lt;typename T&gt;</TD>
-	</TR>""")
+		<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">template &lt;typename T&gt;</TD>
+	</TR>""" % values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="#707070" ALIGN="RIGHT">using</TD>
-		<TD BGCOLOR="#707070" ALIGN="LEFT"><B>Pointer</B></TD>
-		<TD BGCOLOR="#D0D0D0" ALIGN="CENTER"> = </TD>
-	</TR>""")
+		<TD BGCOLOR="%(head_color)s" ALIGN="RIGHT">using</TD>
+		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT"><B>%(name)s</B></TD>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER"> = </TD>
+	</TR>""" % values)
 
 	opts.output.write("""
 	</TABLE>>
@@ -120,16 +127,22 @@ def print_pointer_node(opts, concepts):
 	];\n""")
  
 def print_plain_type_node(opts, concepts, name, label):
+	values = {
+		"name" : name,
+		"label" : label,
+		"head_color": opts.type_head_color,
+		"cell_color": opts.cell_color
+	}
 
 	opts.output.write("""
-	%s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%s.svg">"""
-	% (name, name))
+	%(name)s [label=<
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
+	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="#707070" ALIGN="CENTER">%s</TD>
-	</TR>""" % label)
+		<TD BGCOLOR="%(head_color)s" ALIGN="CENTER">%(label)s</TD>
+	</TR>""" % values)
 
 	opts.output.write("""
 	</TABLE>>
@@ -140,25 +153,31 @@ def print_plain_type_node(opts, concepts, name, label):
 def print_metaobject_node(opts, concepts, metaobject):
 	name = metaobject.attrib["name"]
 	is_base = name == "Object"
+	values = {
+		"name" : name,
+		"typename_T": "typename T" if is_base else "Object T",
+		"head_color": "ORANGE",
+		"cell_color": opts.cell_color
+	}
 
 	opts.output.write("""
-	%s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%s.svg">"""
-	% (name, name))
+	%(name)s [label=<
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name).svg">"""
+	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="ORANGE" COLSPAN="3" ALIGN="LEFT">template &lt;%s&gt;</TD>
+		<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">template &lt;%(typename_T)s&gt;</TD>
 	</TR>"""
-	% ("typename T" if is_base else "Object T"));
+	% values);
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="ORANGE" ALIGN="RIGHT">concept bool</TD>
-		<TD BGCOLOR="ORANGE" ALIGN="LEFT"><B>%s</B></TD>
-		<TD BGCOLOR="#D0D0D0" ALIGN="CENTER">=</TD>
+		<TD BGCOLOR="%(head_color)s" ALIGN="RIGHT">concept bool</TD>
+		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT"><B>%(name)s</B></TD>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER">=</TD>
 	</TR>"""
-	% (name))
+	% values)
 
 	requirements = list()
 
@@ -167,11 +186,15 @@ def print_metaobject_node(opts, concepts, metaobject):
 
 	if is_base: requirements += ["is_metaobject"]
 
-	for item, is_last in iter_last(requirements): opts.output.write("""
-	<TR>
-		<TD BGCOLOR="#D0D0D0" COLSPAN="2" ALIGN="RIGHT"><B>%s</B>&lt;T&gt;</TD>
-		<TD BGCOLOR="#D0D0D0" ALIGN="LEFT">%s</TD>
-	</TR>""" % (item, ";" if is_last else "&amp;&amp;"))
+	for item, is_last in iter_last(requirements):
+		values_in = values
+		values_in["item"] = item
+		values_in["sep"] = ";" if is_last else "&amp;&amp;"
+		opts.output.write("""
+		<TR>
+		<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="RIGHT"><B>%(item)s</B>&lt;T&gt;</TD>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">%(sep)s</TD>
+		</TR>""" % values)
 
 
 	opts.output.write("""
@@ -182,29 +205,33 @@ def print_metaobject_node(opts, concepts, metaobject):
  
 def print_trait_node(opts, concepts, trait):
 	name = trait.attrib["name"]
+	values = {
+		"name" : name,
+		"head_color": "#8080E0",
+		"cell_color": opts.cell_color
+	}
 
 	opts.output.write("""
-	%s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%s.svg">"""
-	% (name, name))
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="#8080D0" COLSPAN="2" ALIGN="LEFT">template &lt;Object T&gt;</TD>
-	</TR>""")
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="#8080D0" ALIGN="LEFT">struct <B>%s</B></TD>
-		<TD BGCOLOR="#D0D0D0" ALIGN="CENTER">:</TD>
-	</TR>"""
-	% (name))
+	%(name)s [label=<
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
+	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="#D0D0D0" ALIGN="RIGHT"><B>BooleanConstant</B></TD>
-		<TD BGCOLOR="#D0D0D0" ALIGN="LEFT">{ };</TD>
-	</TR>""")
+		<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">template &lt;Object T&gt;</TD>
+	</TR>""" % values)
+
+	opts.output.write("""
+	<TR>
+		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER">:</TD>
+	</TR>""" % values)
+
+	opts.output.write("""
+	<TR>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT"><B>BooleanConstant</B></TD>
+		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{ };</TD>
+	</TR>""" % values)
 
 	opts.output.write("""
 	</TABLE>>
@@ -219,9 +246,6 @@ def print_trait_node(opts, concepts, trait):
 def print_operation_node(opts, concepts, operation):
 	name = operation.attrib["name"]
 	result = operation.attrib["result"]
-
-	inherit_result = result in ["StringConstant", "IntegralConstant", "BooleanConstant"]
-
 	operand = "Object"
 	for arg in operation.findall("argument"):
 		argt = arg.attrib["type"]
@@ -229,63 +253,71 @@ def print_operation_node(opts, concepts, operation):
 			operand = argt
 			break
 
+	values = {
+		"name" : name,
+		"result" : result,
+		"operand" : operand,
+		"head_color": "#E08080",
+		"cell_color": opts.cell_color
+	}
+
+	inherit_result = result in ["StringConstant", "IntegralConstant", "BooleanConstant"]
+
 	opts.output.write("""
-	%s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%s.svg">"""
-	% (name, name))
+	%(name)s [label=<
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
+	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="#C080D0" COLSPAN="2" ALIGN="LEFT">template &lt;%s T&gt;</TD>
+		<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">template &lt;%(operand)s T&gt;</TD>
 	</TR>"""
-	% operand)
+	% values)
 
 
 	if inherit_result:
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="#C080D0" ALIGN="LEFT">struct <B>%s</B></TD>
-			<TD BGCOLOR="#C0D0D0" ALIGN="CENTER">:</TD>
-		</TR>"""
-		% (name))
+			<TD BGCOLOR="%(head_color)s" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+			<TD BGCOLOR="%(head_color)s" ALIGN="CENTER">:</TD>
+		</TR>""" % values)
 
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="#D0D0D0" ALIGN="RIGHT"><B>%s</B></TD>
-			<TD BGCOLOR="#D0D0D0" ALIGN="LEFT">{ };</TD>
-		</TR>"""
-		% result)
+			<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT"><B>%(result)s</B></TD>
+			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{ };</TD>
+		</TR>""" % values)
 	else:
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="#C080D0" COLSPAN="2" ALIGN="LEFT">struct <B>%s</B></TD>
+			<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">struct <B>%(name)s</B></TD>
 		</TR>"""
-		% (name))
+		% values)
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="#D0D0D0" ALIGN="LEFT">{</TD>
-			<TD BGCOLOR="#D0D0D0"></TD>
-		</TR>""")
+			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{</TD>
+			<TD BGCOLOR="%(cell_color)s"></TD>
+		</TR>""" % values)
 
 		if result == "Pointer":
 			opts.output.write("""
 			<TR>
-				<TD BGCOLOR="#D0D0D0"></TD>
-				<TD BGCOLOR="#D0D0D0" ALIGN="RIGHT">const Pointer value;</TD>
-			</TR>""")
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT">const %(result)s value;</TD>
+			</TR>""" % values)
 		else:
 			opts.output.write("""
 			<TR>
-				<TD BGCOLOR="#D0D0D0"></TD>
-				<TD BGCOLOR="#D0D0D0" ALIGN="RIGHT">typedef %s type;</TD>
-			</TR>""" % result)
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT">typedef %(result)s type;</TD>
+			</TR>""" % values)
 	
 
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="#D0D0D0" ALIGN="LEFT">};</TD>
-			<TD BGCOLOR="#D0D0D0"></TD>
-		</TR>""")
+			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">};</TD>
+			<TD BGCOLOR="%(cell_color)s"></TD>
+		</TR>""" % values)
 
 
 	opts.output.write("""
