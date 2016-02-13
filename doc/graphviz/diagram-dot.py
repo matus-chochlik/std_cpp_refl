@@ -2,24 +2,95 @@
 # coding: UTF-8
 
 import sys
+
+def get_argument_parser():
+	import argparse
+
+	def BoolArgValue(arg):
+		if(arg in ("True", "true", "T", "Yes", "yes", "Y", "On", "1")):
+			return True
+		elif(arg in ("False", "false", "F", "No", "no", "N", "Off", "0")):
+			return False
+		else:
+			msg = "'%s' is not a valid boolean value" % str(arg)
+			raise argparse.ArgumentTypeError(msg)
+
+	argparser = argparse.ArgumentParser(
+		prog="overview-dot"
+	)
+
+	argparser.add_argument(
+		'infile',
+		nargs='?',
+		type=argparse.FileType('r'),
+		default=sys.stdin
+	)
+
+	argparser.add_argument(
+		"--generate-operations", "-go",
+		type=BoolArgValue,
+		choices=[True, False],
+		action="store",
+		default=True,
+	)
+
+	argparser.add_argument(
+		"--generate-traits", "-gt",
+		type=BoolArgValue,
+		choices=[True, False],
+		action="store",
+		default=True,
+	)
+
+	mode_args = argparser.add_mutually_exclusive_group()
+
+	mode_args.add_argument(
+		"--metaobject", "-mo",
+		type=str,
+		action="store",
+		default=None
+	)
+
+	mode_args.add_argument(
+		"--trait", "-tr",
+		type=str,
+		action="store",
+		default=None
+	)
+
+	mode_args.add_argument(
+		"--operation", "-op",
+		type=str,
+		action="store",
+		default=None
+	)
+
+	return argparser
  
 class options:
 	def __init__(self):
-		self.output = sys.stdout
+
+		useropts = get_argument_parser().parse_args(sys.argv[1:])
 
 		self.type_head_color = "#707070"
 		self.metaobject_head_color = "ORANGE"
 		self.trait_head_color = "#8080E0"
 		self.operation_head_color = "#E08080"
 		self.cell_color = "#D0D0D0"
-		self.gen_operations = True
-		self.gen_traits = True
+		self.gen_operations = useropts.generate_operations
+		self.gen_traits = useropts.generate_traits
 
 		self.traits_rank_same = True
 		self.operations_rank_same = False
 
 		self.rankdir = "BT"
 		self.ranksep = 0.9
+
+		self.metaobject = useropts.metaobject
+		self.operation = useropts.operation
+		self.trait = useropts.trait
+		self.xmlinput = useropts.infile
+		self.output = sys.stdout
 
 def iter_last(iterable):
     items = iter(iterable)
@@ -30,6 +101,8 @@ def iter_last(iterable):
         prev = item
     yield prev, True
 
+def find_metaobject(concepts, name):
+	return concepts.findall("metaobject[@name='%s']" % name)[0]
  
 def print_concept_node(opts, concepts, name, definition):
 
@@ -59,48 +132,6 @@ def print_concept_node(opts, concepts, name, definition):
 		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">;</TD>
 	</TR>""" % values)
 
-
-	opts.output.write("""
-	</TABLE>>
-	shape="none"
-	];\n""")
-
- 
-def print_string_const_node(opts, concepts):
-
-	values = {
-		"name" : "StringConstant",
-		"head_color": opts.type_head_color,
-		"cell_color": opts.cell_color
-	}
-
-	opts.output.write("""
-	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
-	% values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">struct <B>%(name)s</B></TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{</TD>
-		<TD BGCOLOR="%(cell_color)s"></TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(cell_color)s"></TD>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT">constexpr const char value[N+1];</TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">};</TD>
-		<TD BGCOLOR="%(cell_color)s"></TD>
-	</TR>""" % values)
 
 	opts.output.write("""
 	</TABLE>>
@@ -258,7 +289,7 @@ def print_operation_node(opts, concepts, operation):
 		"cell_color": opts.cell_color
 	}
 
-	inherit_result = result in ["StringConstant", "IntegralConstant", "BooleanConstant"]
+	inherit_result = result in ["IntegralConstant", "BooleanConstant"]
 
 	opts.output.write("""
 	%(name)s [label=<
@@ -296,7 +327,13 @@ def print_operation_node(opts, concepts, operation):
 			<TD BGCOLOR="%(cell_color)s" COLSPAN="3"></TD>
 		</TR>""" % values)
 
-		if result == "Pointer":
+		if result == "StringConstant":
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">static constexpr const char value[N+1];</TD>
+			</TR>""" % values)
+		elif result == "Pointer":
 
 			opts.output.write("""
 			<TR>
@@ -388,10 +425,92 @@ def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 
 	print_edge(opts, spec_name, gene_name)
 
-def print_graph_dot(opts, concepts):
+def print_metaobject(opts, concepts):
+	opts.output.write("""digraph %(metaobject)s {
+	overlap=false
+	rankdir=%(rankdir)s
+	ranksep=%(ranksep)f
+	fontName="Sans"
+	maxiter=1000000
+
+	edge [penwidth=2.0 arrowsize=2.0];
+	node [penwidth=2.0];
+	""" % {
+		"metaobject": opts.metaobject,
+		"rankdir": opts.rankdir,
+		"ranksep": opts.ranksep
+	})
+
+	metaobject = find_metaobject(concepts, opts.metaobject)
+
+	print_metaobject_node(opts, concepts, metaobject)
+
+	# Metaobject is-a edges
+	opts.output.write("""
+	edge [constraint="true" style="solid" fillcolor="WHITE", arrowhead="normal"];""")
+
+	for gen in metaobject.findall("generalization"):
+		generalization = find_metaobject(concepts, gen.attrib["concept"])
+		print_metaobject_node(opts, concepts, generalization)
+		print_concept_edge(opts, metaobject, generalization)
+
+	for specialization in concepts.findall("metaobject"):
+		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
+			print_metaobject_node(opts, concepts, specialization)
+			print_concept_edge(opts, specialization, metaobject)
+
+	# Trait -> Metaobject (indicates) edges
+	opts.output.write("""
+	edge [constraint="false" style="dotted" arrowhead="none"];""")
+
+	for trait in concepts.findall("trait[@indicates='%s']" % opts.metaobject):
+		print_trait_node(opts, concepts, trait)
+		print_concept_edge(opts, trait, metaobject)
+
+	# Operation -> Result edges
+	opts.output.write("""
+	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+
+	for operation in concepts.findall("operation[@result='%s']" % opts.metaobject):
+		print_operation_node(opts, concepts, operation)
+		print_edge(opts, operation.attrib["name"], operation.attrib["result"])
+	opts.output.write("\n")
+
+	# Argument -> Operation edges
+	opts.output.write("""
+	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+
+	if opts.gen_operations:
+		for operation in concepts.findall("operation"):
+			for argument in operation.findall("argument[@type='%s']" % opts.metaobject):
+				print_operation_node(opts, concepts, operation)
+				print_edge(opts, argument.attrib["type"], operation.attrib["name"])
+		opts.output.write("\n")
+
+	# Metaobject ordering edges
+	opts.output.write("""
+	edge [constraint="true" style="invis"];""")
+
+	prev_mo = None
+	for gen in metaobject.findall("generalization"):
+		if prev_mo:
+			print_concept_edge(opts, generalization, prev_mo)
+		prev_mo = generalization
+
+	prev_mo = None
+	for specialization in concepts.findall("metaobject"):
+		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
+			if prev_mo:
+				print_concept_edge(opts, specialization, prev_mo)
+			prev_mo = specialization 
+
+	opts.output.write("""}
+	""")
+
+def print_overview(opts, concepts):
 	import random
 
-	opts.output.write("""digraph Reflection {
+	opts.output.write("""digraph Overview {
 	overlap=false
 	rankdir=%(rankdir)s
 	ranksep=%(ranksep)f
@@ -411,7 +530,7 @@ def print_graph_dot(opts, concepts):
 	if opts.gen_operations:
 		print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")
 		print_concept_node(opts, concepts, "SourceLocation", "source_location")
-		print_string_const_node(opts, concepts)
+		print_plain_type_node(opts, concepts, "StringConstant", "StringConstant")
 		print_plain_type_node(opts, concepts, "Pointer", "pointer")
 		print_plain_type_node(opts, concepts, "OriginalType", "original-type")
 		print_plain_type_node(opts, concepts, "size_t", "size_t")
@@ -495,10 +614,6 @@ def print_graph_dot(opts, concepts):
 				print_concept_edge(opts, metaobject, prev_mo)
 		prev_mo = metaobject
 
-	# Operation -> Result edges
-	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
-
 	opts.output.write("""}
 	""")
 
@@ -507,8 +622,15 @@ def main():
 	import xml.etree.ElementTree as XET
 
 	opts = options();
+	concepts = XET.parse(opts.xmlinput).getroot()
 
-	print_graph_dot(opts, XET.parse(sys.argv[1]).getroot())
+	if opts.metaobject:
+		print_metaobject(opts, concepts)
+	elif opts.operation:
+		pass
+	elif opts.trait:
+		pass
+	else: print_overview(opts, concepts)
 
 
 #pass run the main function
