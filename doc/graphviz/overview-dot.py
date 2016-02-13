@@ -8,9 +8,18 @@ class options:
 		self.output = sys.stdout
 
 		self.type_head_color = "#707070"
+		self.metaobject_head_color = "ORANGE"
+		self.trait_head_color = "#8080E0"
+		self.operation_head_color = "#E08080"
 		self.cell_color = "#D0D0D0"
 		self.gen_operations = True
 		self.gen_traits = True
+
+		self.traits_rank_same = True
+		self.operations_rank_same = False
+
+		self.rankdir = "BT"
+		self.ranksep = 0.9
 
 def iter_last(iterable):
     items = iter(iterable)
@@ -99,35 +108,6 @@ def print_string_const_node(opts, concepts):
 	];\n""")
 
  
-def print_pointer_node(opts, concepts):
-	values = {
-		"name" : "Pointer",
-		"head_color": opts.type_head_color,
-		"cell_color": opts.cell_color
-	}
-
-	opts.output.write("""
-	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(name)s.svg">"""
-	% values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">template &lt;typename T&gt;</TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(head_color)s" ALIGN="RIGHT">using</TD>
-		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT"><B>%(name)s</B></TD>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER"> = </TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	</TABLE>>
-	shape="none"
-	];\n""")
- 
 def print_plain_type_node(opts, concepts, name, label):
 	values = {
 		"name" : name,
@@ -158,7 +138,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 	values = {
 		"name" : name,
 		"typename_T": "typename T" if is_base else "Object T",
-		"head_color": "ORANGE",
+		"head_color": opts.metaobject_head_color,
 		"cell_color": opts.cell_color
 	}
 
@@ -209,7 +189,7 @@ def print_trait_node(opts, concepts, trait):
 	name = trait.attrib["name"]
 	values = {
 		"name" : name,
-		"head_color": "#8080E0",
+		"head_color": opts.trait_head_color,
 		"cell_color": opts.cell_color
 	}
 
@@ -240,26 +220,41 @@ def print_trait_node(opts, concepts, trait):
 	shape="none"
 	];""")
 
-	opts.output.write("""
-	{rank=same; %s, %s};\n"""
-	% (trait.attrib["indicates"], name))
+	if opts.traits_rank_same:
+		opts.output.write("""
+		{rank=same; %s, %s};\n"""
+		% (trait.attrib["indicates"], name))
 
  
 def print_operation_node(opts, concepts, operation):
 	name = operation.attrib["name"]
 	result = operation.attrib["result"]
-	operand = "Object"
-	for arg in operation.findall("argument"):
-		argt = arg.attrib["type"]
+
+	operand = None
+	operands = []
+	arguments = operation.findall("argument")
+
+	if len(arguments) == 1:
+		argt = arguments[0].attrib["type"]
 		if len(concepts.findall("metaobject[@name='%s']" % argt)) > 0:
-			operand = argt
-			break
+			if operand is None:
+				operand = argt
+		operands.append("%s T" % argt)
+
+	else:
+		for arg in arguments:
+			argt = arg.attrib["type"]
+			argn = arg.attrib.get("name", None)
+			if len(concepts.findall("metaobject[@name='%s']" % argt)) > 0:
+				if operand is None:
+					operand = argt
+			operands.append("%s %s" % (argt, argn if argn else "T%d" % (len(operands)+1)))
 
 	values = {
 		"name" : name,
 		"result" : result,
-		"operand" : operand,
-		"head_color": "#E08080",
+		"operands" : ", ".join(operands),
+		"head_color": opts.operation_head_color,
 		"cell_color": opts.cell_color
 	}
 
@@ -272,7 +267,7 @@ def print_operation_node(opts, concepts, operation):
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">template &lt;%(operand)s T&gt;</TD>
+		<TD BGCOLOR="%(head_color)s" COLSPAN="4" ALIGN="LEFT">template &lt;%(operands)s&gt;</TD>
 	</TR>"""
 	% values)
 
@@ -280,45 +275,88 @@ def print_operation_node(opts, concepts, operation):
 	if inherit_result:
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="%(head_color)s" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+			<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">struct <B>%(name)s</B></TD>
 			<TD BGCOLOR="%(head_color)s" ALIGN="CENTER">:</TD>
 		</TR>""" % values)
 
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT"><B>%(result)s</B></TD>
+			<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="RIGHT"><B>%(result)s</B></TD>
 			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{ };</TD>
 		</TR>""" % values)
 	else:
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+			<TD BGCOLOR="%(head_color)s" COLSPAN="4" ALIGN="LEFT">struct <B>%(name)s</B></TD>
 		</TR>"""
 		% values)
 		opts.output.write("""
 		<TR>
 			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{</TD>
-			<TD BGCOLOR="%(cell_color)s"></TD>
+			<TD BGCOLOR="%(cell_color)s" COLSPAN="3"></TD>
 		</TR>""" % values)
 
 		if result == "Pointer":
+
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT">const %(result)s value;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">const</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="LEFT">conditional_t&lt;</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">is_class_member_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s">&amp;&amp;</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">!is_static_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;*</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">&gt; value;</TD>
 			</TR>""" % values)
 		else:
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT">typedef %(result)s type;</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">typedef %(result)s type;</TD>
 			</TR>""" % values)
 	
 
 		opts.output.write("""
 		<TR>
 			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">};</TD>
-			<TD BGCOLOR="%(cell_color)s"></TD>
+			<TD BGCOLOR="%(cell_color)s" COLSPAN="3"></TD>
 		</TR>""" % values)
 
 
@@ -327,9 +365,10 @@ def print_operation_node(opts, concepts, operation):
 	shape="none"
 	];""")
 
-	opts.output.write("""
-	{rank=same; %s, %s};\n"""
-	% (operand, name))
+	if opts.operations_rank_same:
+		opts.output.write("""
+		{rank=same; %s, %s};\n"""
+		% (operand, name))
 
 
 def print_edge(opts, name_from, name_to):
@@ -354,14 +393,17 @@ def print_graph_dot(opts, concepts):
 
 	opts.output.write("""digraph Reflection {
 	overlap=false
-	rankdir=BT
-	ranksep=1.0
+	rankdir=%(rankdir)s
+	ranksep=%(ranksep)f
 	fontName="Sans"
 	maxiter=1000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
-	""")
+	""" % {
+		"rankdir": opts.rankdir,
+		"ranksep": opts.ranksep
+	})
 
 	# Other concepts
 	if opts.gen_traits or opts.gen_operations:
@@ -370,7 +412,7 @@ def print_graph_dot(opts, concepts):
 		print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")
 		print_concept_node(opts, concepts, "SourceLocation", "source_location")
 		print_string_const_node(opts, concepts)
-		print_pointer_node(opts, concepts)
+		print_plain_type_node(opts, concepts, "Pointer", "pointer")
 		print_plain_type_node(opts, concepts, "OriginalType", "original-type")
 		print_plain_type_node(opts, concepts, "size_t", "size_t")
 
@@ -391,7 +433,7 @@ def print_graph_dot(opts, concepts):
 
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
-	edge [constraint="false" style="dashed" arrowhead="none"];""")
+	edge [constraint="true" style="dotted" arrowhead="none"];""")
 
 	if opts.gen_traits:
 		for trait in concepts.findall("trait"):

@@ -246,14 +246,12 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Scope"/>
 	</metaobject>
 
-	<unused>
 	<operation name="get_elaborated_type_specifier"
 		result="Specifier"
 		brief="returns a $(result) reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
 	</operation>
-	</unused>
 
 	<operation name="get_data_members"
 		result="ObjectSequence"
