@@ -127,7 +127,7 @@ struct __get_scope<TypeAlias>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a type alias or typedef reflected by a TypeAlias.
+	returns the result reflecting the scope of a type alias or typedef reflected by a TypeAlias.
 	>*/
 	
 };
@@ -147,7 +147,7 @@ struct __get_aliased<TypeAlias>
 {
 	
 	typedef __Named value_type; /*<
-	returns the Named reflecting the original declaration of a type alias or typedef reflected by a TypeAlias.
+	returns the result reflecting the original declaration of a type alias or typedef reflected by a TypeAlias.
 	>*/
 	
 };

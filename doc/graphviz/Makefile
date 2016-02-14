@@ -23,14 +23,26 @@ diagrams: $(foreach I, $(DIAGRAMS), ./out/$I.svg)
 ./tmp/%.dot: ./%-dot.xsl ../concepts.xml | tmp
 	$(XSLTPROC) --output $@ $^
 
-./tmp/concept-%.dot: ./concept-dot.xsl ../concepts.xml | tmp
-	$(XSLTPROC) --stringparam metaobject $* --output $@ $^
+./tmp/overview.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py --output $@ --input $<
 
-./tmp/trait-%.dot: ./trait-dot.xsl ../concepts.xml | tmp
-	$(XSLTPROC) --stringparam trait $* --output $@ $^
+./tmp/hierarchy.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py -go 0 -gt 0 --output $@ --input $<
 
-./tmp/operation-%.dot: ./operation-dot.xsl ../concepts.xml | tmp
-	$(XSLTPROC) --stringparam operation $* --output $@ $^
+./tmp/operations.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py -go 1 -gt 0 --output $@ --input $<
+
+./tmp/traits.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py -go 0 -gt 1 --output $@ --input $<
+
+./tmp/concept-%.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py --metaobject $* --output $@ --input $<
+
+./tmp/operation-%.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py --operation $* --output $@ --input $<
+
+./tmp/trait-%.dot: ../concepts.xml ./diagram-dot.py | tmp
+	./diagram-dot.py --trait $* --output $@ --input $<
 
 ./tmp/%.mk: ./%-mk.xsl ../concepts.xml | tmp
 	$(XSLTPROC) --output $@ $^

@@ -3,6 +3,7 @@
 [def __Object [link reflexpr.quickref.Object [^Object]]]
 [def __ObjectSequence [link reflexpr.quickref.ObjectSequence [^ObjectSequence]]]
 [def __Named [link reflexpr.quickref.Named [^Named]]]
+[def __Specifier [link reflexpr.quickref.Specifier [^Specifier]]]
 [def __Typed [link reflexpr.quickref.Typed [^Typed]]]
 [def __Scoped [link reflexpr.quickref.Scoped [^Scoped]]]
 [def __Scope [link reflexpr.quickref.Scope [^Scope]]]

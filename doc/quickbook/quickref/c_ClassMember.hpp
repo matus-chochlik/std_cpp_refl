@@ -80,7 +80,7 @@ struct __get_scope<ClassMember>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of class member reflected by a ClassMember.
+	returns the result reflecting the scope of class member reflected by a ClassMember.
 	>*/
 	
 };
@@ -101,6 +101,16 @@ struct __is_public<ClassMember>
 
 	operator bool (void) const noexcept;
 	bool operator(void) const noexcept;
+	
+};
+
+template <>
+struct __get_access_specifier<ClassMember>
+{
+	
+	typedef __Specifier value_type; /*<
+	returns the result reflecting the access specifier of class member reflected by a ClassMember.
+	>*/
 	
 };
 

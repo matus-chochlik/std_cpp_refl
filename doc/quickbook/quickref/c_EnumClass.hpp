@@ -140,7 +140,7 @@ struct __get_scope<EnumClass>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a strongly typed enumeration reflected by a EnumClass.
+	returns the result reflecting the scope of a strongly typed enumeration reflected by a EnumClass.
 	>*/
 	
 };

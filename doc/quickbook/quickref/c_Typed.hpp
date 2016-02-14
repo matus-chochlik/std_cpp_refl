@@ -68,7 +68,7 @@ struct __get_type<Typed>
 {
 	
 	typedef __Type value_type; /*<
-	returns the Type reflecting the type of base-level declaration with a type reflected by a Typed.
+	returns the result reflecting the type of base-level declaration with a type reflected by a Typed.
 	>*/
 	
 };

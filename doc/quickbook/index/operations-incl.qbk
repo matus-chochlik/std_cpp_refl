@@ -37,6 +37,10 @@
 [def __is_public_t [link reflexpr.quickref.operations.is_public [^is_public_t]]]
 [def __is_public_v [link reflexpr.quickref.operations.is_public [^is_public_v]]]
 
+[def __get_access_specifier [link reflexpr.quickref.operations.get_access_specifier [^get_access_specifier]]]
+[def __get_access_specifier_t [link reflexpr.quickref.operations.get_access_specifier [^get_access_specifier_t]]]
+[def __get_access_specifier_v [link reflexpr.quickref.operations.get_access_specifier [^get_access_specifier_v]]]
+
 [def __is_static [link reflexpr.quickref.operations.is_static [^is_static]]]
 [def __is_static_t [link reflexpr.quickref.operations.is_static [^is_static_t]]]
 [def __is_static_v [link reflexpr.quickref.operations.is_static [^is_static_v]]]
@@ -44,6 +48,10 @@
 [def __get_reflected_type [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type]]]
 [def __get_reflected_type_t [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_t]]]
 [def __get_reflected_type_v [link reflexpr.quickref.operations.get_reflected_type [^get_reflected_type_v]]]
+
+[def __get_elaborated_type_specifier [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier]]]
+[def __get_elaborated_type_specifier_t [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_t]]]
+[def __get_elaborated_type_specifier_v [link reflexpr.quickref.operations.get_elaborated_type_specifier [^get_elaborated_type_specifier_v]]]
 
 [def __get_data_members [link reflexpr.quickref.operations.get_data_members [^get_data_members]]]
 [def __get_data_members_t [link reflexpr.quickref.operations.get_data_members [^get_data_members_t]]]

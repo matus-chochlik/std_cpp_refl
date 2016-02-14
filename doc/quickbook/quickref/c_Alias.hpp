@@ -99,7 +99,7 @@ struct __get_aliased<Alias>
 {
 	
 	typedef __Named value_type; /*<
-	returns the Named reflecting the original declaration of a type or namespace alias reflected by a Alias.
+	returns the result reflecting the original declaration of a type or namespace alias reflected by a Alias.
 	>*/
 	
 };

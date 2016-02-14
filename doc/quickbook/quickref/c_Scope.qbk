@@ -5,7 +5,7 @@
 [section:Scope Scope]
 [import c_Scope.hpp]
 
-[concept Scope] is  a __Object, possibly a __Named and possibly a __Scoped reflecting a scope.
+[concept Scope] is  a __Object reflecting a scope.
 
 [reflexpr_Scope_def]
 [heading Implementation]

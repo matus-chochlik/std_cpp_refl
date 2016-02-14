@@ -3,22 +3,22 @@
  *  Copyright 2015 Matus Chochlik.
  */
 
-//[reflexpr_GlobalScope_def
+//[reflexpr_Specifier_def
 
 template <typename T>
-__concept bool GlobalScope =
-	__Scope<T> &&
-	__meta::__is_global_scope_v<T>;
+__concept bool Specifier =
+	__Named<T> &&
+	__meta::__is_specifier_v<T>;
 
 //]
-//[reflexpr_GlobalScope_begin
+//[reflexpr_Specifier_begin
 __namespace_meta_begin
 //]
-//[reflexpr_GlobalScope_inherited_traits
+//[reflexpr_Specifier_inherited_traits
 
 template <>
-struct __is_scope<GlobalScope> /*<
-Inherited from __Scope.
+struct __has_name<Specifier> /*<
+Inherited from __Named.
 >*/
 {
 	typedef bool value_type;
@@ -31,10 +31,10 @@ Inherited from __Scope.
 };
 
 //]
-//[reflexpr_GlobalScope_traits
+//[reflexpr_Specifier_traits
 
 template <>
-struct __is_global_scope<GlobalScope>
+struct __is_specifier<Specifier>
 {
 	typedef bool value_type;
 	static constexpr const bool value = true;
@@ -46,10 +46,10 @@ struct __is_global_scope<GlobalScope>
 };
 
 //]
-//[reflexpr_GlobalScope_inherited_operations
+//[reflexpr_Specifier_inherited_operations
 
 template <>
-struct __reflects_same<GlobalScope, GlobalScope>
+struct __reflects_same<Specifier, Specifier>
 {
 	
 	typedef bool value_type;
@@ -65,19 +65,36 @@ struct __reflects_same<GlobalScope, GlobalScope>
 };
 
 template <>
-struct __get_source_location<GlobalScope>
+struct __get_source_location<Specifier>
 {
 	
 	typedef __SourceLocation value_type; /*<
-	returns the source location info of the declaration of the global scope reflected by a GlobalScope.
+	returns the source location info of the declaration of a specifier reflected by a Specifier.
 	>*/
 	
 };
 
-//]
-//[reflexpr_GlobalScope_operations
+template <>
+struct __get_name<Specifier>
+{
+	
+	typedef const char value_type[N+1];
+
+	static constexpr const char value[N+1] = ... /*<
+	returns the basic name of the a specifier reflected by a Specifier.
+	>*/;
+
+	typedef __StringConstant type;
+
+	operator const char*(void) const noexcept;
+	const char* operator(void) const noexcept;
+	
+};
 
 //]
-//[reflexpr_GlobalScope_end
+//[reflexpr_Specifier_operations
+
+//]
+//[reflexpr_Specifier_end
 __namespace_meta_end
 //]

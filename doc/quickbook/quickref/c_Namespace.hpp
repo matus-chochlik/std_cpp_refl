@@ -33,8 +33,8 @@ Inherited from __Named.
 };
 
 template <>
-struct __has_scope<Namespace> /*<
-Inherited from __Scoped.
+struct __is_scope<Namespace> /*<
+Inherited from __Scope.
 >*/
 {
 	typedef bool value_type;
@@ -47,8 +47,8 @@ Inherited from __Scoped.
 };
 
 template <>
-struct __is_scope<Namespace> /*<
-Inherited from __Scope.
+struct __has_scope<Namespace> /*<
+Inherited from __Scoped.
 >*/
 {
 	typedef bool value_type;
@@ -126,7 +126,7 @@ struct __get_scope<Namespace>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a namespace reflected by a Namespace.
+	returns the result reflecting the scope of a namespace reflected by a Namespace.
 	>*/
 	
 };

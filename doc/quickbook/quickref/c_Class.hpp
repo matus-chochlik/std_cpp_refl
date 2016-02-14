@@ -139,7 +139,7 @@ struct __get_scope<Class>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a class reflected by a Class.
+	returns the result reflecting the scope of a class reflected by a Class.
 	>*/
 	
 };
@@ -158,11 +158,21 @@ struct __get_reflected_type<Class>
 //[reflexpr_Class_operations
 
 template <>
+struct __get_elaborated_type_specifier<Class>
+{
+	
+	typedef __Specifier value_type; /*<
+	returns a result reflecting the elaborated type specifier (class,struct,union,...) of a class reflected by a Class.
+	>*/
+	
+};
+
+template <>
 struct __get_data_members<Class>
 {
 	
 	typedef __ObjectSequence value_type; /*<
-	returns a sequence of objects reflecting the public data members of a class reflected by a Class.
+	returns a result of metaobjects reflecting   the public data members of a class reflected by a Class.
 	>*/
 	
 };
@@ -172,7 +182,7 @@ struct __get_all_data_members<Class>
 {
 	
 	typedef __ObjectSequence value_type; /*<
-	returns a sequence of objects reflecting all    (including the private and protected)   data members of a class reflected by a Class.
+	returns a result of metaobjects reflecting all    (including the private and protected)   data members of a class reflected by a Class.
 	>*/
 	
 };

@@ -58,6 +58,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="ObjectSequence"
 		abstract="true"
 		label="Object\nSequence"
+		reflects="an ordered sequence of metaobjects"
 		brief="is an ordered sequence of metaobjects."
 	>
 		<generalization concept="Object"/>

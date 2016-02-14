@@ -154,7 +154,7 @@ struct __get_type<DataMember>
 {
 	
 	typedef __Type value_type; /*<
-	returns the Type reflecting the type of a class data member reflected by a DataMember.
+	returns the result reflecting the type of a class data member reflected by a DataMember.
 	>*/
 	
 };
@@ -164,7 +164,7 @@ struct __get_scope<DataMember>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a class data member reflected by a DataMember.
+	returns the result reflecting the scope of a class data member reflected by a DataMember.
 	>*/
 	
 };
@@ -210,6 +210,16 @@ struct __is_public<DataMember>
 
 	operator bool (void) const noexcept;
 	bool operator(void) const noexcept;
+	
+};
+
+template <>
+struct __get_access_specifier<DataMember>
+{
+	
+	typedef __Specifier value_type; /*<
+	returns the result reflecting the access specifier of a class data member reflected by a DataMember.
+	>*/
 	
 };
 

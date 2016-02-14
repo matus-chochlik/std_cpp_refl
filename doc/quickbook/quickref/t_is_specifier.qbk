@@ -6,7 +6,7 @@
 [import t_is_specifier.hpp]
 
 The [^is_specifier] trait indicates that
-the tested metaobject is a __MetaSpecifier.
+the tested metaobject is a __Specifier.
 
 [meta_is_specifier]
 

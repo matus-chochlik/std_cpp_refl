@@ -111,7 +111,7 @@ struct __get_scope<Linkable>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of declaration with storage duration and/or linkage reflected by a Linkable.
+	returns the result reflecting the scope of declaration with storage duration and/or linkage reflected by a Linkable.
 	>*/
 	
 };

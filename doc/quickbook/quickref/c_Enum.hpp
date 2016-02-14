@@ -124,7 +124,7 @@ struct __get_scope<Enum>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of an enumeration reflected by a Enum.
+	returns the result reflecting the scope of an enumeration reflected by a Enum.
 	>*/
 	
 };

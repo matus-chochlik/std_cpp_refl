@@ -111,7 +111,7 @@ struct __get_scope<Type>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a type reflected by a Type.
+	returns the result reflecting the scope of a type reflected by a Type.
 	>*/
 	
 };

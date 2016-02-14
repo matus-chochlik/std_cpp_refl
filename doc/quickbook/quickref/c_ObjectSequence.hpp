@@ -84,7 +84,7 @@ struct __get_element<ObjectSequence, Index>
 {
 	
 	typedef __Object value_type; /*<
-	returns the i-th element in a ObjectSequence.
+	returns the i-th result in a ObjectSequence.
 	>*/
 	
 };

@@ -12,7 +12,7 @@ struct get_scope
 {
 
 	typedef __Scope type; /*<
-	returns the Scope reflecting the scope of a scoped declaration reflected by a Scoped.
+	returns the result reflecting the scope of a scoped declaration reflected by a Scoped.
 	>*/
 };
 

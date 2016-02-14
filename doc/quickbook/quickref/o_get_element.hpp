@@ -12,7 +12,7 @@ struct get_element
 {
 
 	typedef __Object type; /*<
-	returns the i-th element in a ObjectSequence.
+	returns the i-th result in a ObjectSequence.
 	>*/
 };
 

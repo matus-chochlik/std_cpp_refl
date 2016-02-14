@@ -19,9 +19,13 @@
 
 [include o_is_public.qbk]
 
+[include o_get_access_specifier.qbk]
+
 [include o_is_static.qbk]
 
 [include o_get_reflected_type.qbk]
+
+[include o_get_elaborated_type_specifier.qbk]
 
 [include o_get_data_members.qbk]
 

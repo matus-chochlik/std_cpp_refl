@@ -32,8 +32,8 @@ Inherited from __Named.
 };
 
 template <>
-struct __has_scope<NamespaceAlias> /*<
-Inherited from __Scoped.
+struct __is_scope<NamespaceAlias> /*<
+Inherited from __Scope.
 >*/
 {
 	typedef bool value_type;
@@ -46,8 +46,8 @@ Inherited from __Scoped.
 };
 
 template <>
-struct __is_scope<NamespaceAlias> /*<
-Inherited from __Scope.
+struct __has_scope<NamespaceAlias> /*<
+Inherited from __Scoped.
 >*/
 {
 	typedef bool value_type;
@@ -141,7 +141,7 @@ struct __get_scope<NamespaceAlias>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a namespace alias reflected by a NamespaceAlias.
+	returns the result reflecting the scope of a namespace alias reflected by a NamespaceAlias.
 	>*/
 	
 };
@@ -151,7 +151,7 @@ struct __get_aliased<NamespaceAlias>
 {
 	
 	typedef __Named value_type; /*<
-	returns the Named reflecting the original declaration of a namespace alias reflected by a NamespaceAlias.
+	returns the result reflecting the original declaration of a namespace alias reflected by a NamespaceAlias.
 	>*/
 	
 };

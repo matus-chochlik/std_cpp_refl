@@ -68,7 +68,7 @@ struct __get_scope<Scoped>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a scoped declaration reflected by a Scoped.
+	returns the result reflecting the scope of a scoped declaration reflected by a Scoped.
 	>*/
 	
 };

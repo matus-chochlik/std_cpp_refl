@@ -13,7 +13,7 @@ struct is_specifier
 {
 	typedef bool value_type;
 	static constexpr const bool value = ... /*<
-	[^true] if [^T] is a __MetaSpecifier
+	[^true] if [^T] is a __Specifier
 	[^false] otherwise.
 	>*/;
 

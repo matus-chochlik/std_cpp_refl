@@ -27,6 +27,25 @@ def get_argument_parser():
 	)
 
 	argparser.add_argument(
+		'outfile',
+		nargs='?',
+		type=argparse.FileType('w'),
+		default=sys.stdout
+	)
+
+	argparser.add_argument(
+		'--input',
+		type=argparse.FileType('r'),
+		action="store"
+	)
+
+	argparser.add_argument(
+		'--output',
+		type=argparse.FileType('w'),
+		action="store"
+	)
+
+	argparser.add_argument(
 		"--generate-operations", "-go",
 		type=BoolArgValue,
 		choices=[True, False],
@@ -80,7 +99,7 @@ class options:
 		self.gen_operations = useropts.generate_operations
 		self.gen_traits = useropts.generate_traits
 
-		self.traits_rank_same = True
+		self.traits_rank_same = useropts.trait is None
 		self.operations_rank_same = False
 
 		self.rankdir = "BT"
@@ -89,8 +108,8 @@ class options:
 		self.metaobject = useropts.metaobject
 		self.operation = useropts.operation
 		self.trait = useropts.trait
-		self.xmlinput = useropts.infile
-		self.output = sys.stdout
+		self.xmlinput = useropts.input if useropts.input else useropts.infile
+		self.output = useropts.output if useropts.output else useropts.outfile
 
 def iter_last(iterable):
     items = iter(iterable)
@@ -108,12 +127,15 @@ def find_metaobject(concepts, name):
 def find_operation(concepts, name):
 	ops = concepts.findall("operation[@name='%s']" % name)
 	return ops[0] if len(ops) > 0 else None
+
+def find_trait(concepts, name):
+	trs = concepts.findall("trait[@name='%s']" % name)
+	return trs[0] if len(trs) > 0 else None
  
 def print_concept_node(opts, concepts, name, definition):
 
 	values = {
 		"name" : name,
-		"href" : name,
 		"definition": definition,
 		"head_color": opts.type_head_color,
 		"cell_color": opts.cell_color
@@ -121,7 +143,7 @@ def print_concept_node(opts, concepts, name, definition):
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0">"""
 	% values)
 
 	opts.output.write("""
@@ -148,7 +170,6 @@ def print_concept_node(opts, concepts, name, definition):
 def print_plain_type_node(opts, concepts, name, label):
 	values = {
 		"name" : name,
-		"href" : name,
 		"label" : label,
 		"head_color": opts.type_head_color,
 		"cell_color": opts.cell_color
@@ -156,7 +177,7 @@ def print_plain_type_node(opts, concepts, name, label):
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0">"""
 	% values)
 
 	opts.output.write("""
@@ -173,9 +194,15 @@ def print_plain_type_node(opts, concepts, name, label):
 def print_metaobject_node(opts, concepts, metaobject):
 	name = metaobject.attrib["name"]
 	is_base = name == "Object"
+
+	href = "concept-%s" % name
+
+	if opts.metaobject == name:
+		href = "hierarchy"
+
 	values = {
 		"name" : name,
-		"href" : name,
+		"href" : href,
 		"typename_T": "typename T" if is_base else "Object T",
 		"head_color": opts.metaobject_head_color,
 		"cell_color": opts.cell_color
@@ -183,7 +210,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href).svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
 	% values)
 
 	opts.output.write("""
@@ -226,9 +253,15 @@ def print_metaobject_node(opts, concepts, metaobject):
  
 def print_trait_node(opts, concepts, trait):
 	name = trait.attrib["name"]
+
+	href = "trait-%s" % name
+
+	if opts.trait == name:
+		href = "traits"
+
 	values = {
 		"name" : name,
-		"href" : name,
+		"href" : href,
 		"head_color": opts.trait_head_color,
 		"cell_color": opts.cell_color
 	}
@@ -270,13 +303,18 @@ def print_operation_node(opts, concepts, operation):
 	name = operation.attrib["name"]
 	result = operation.attrib["result"]
 
+	href = "operation-%s" % name
+
+	if opts.operation == name:
+		href = "operations"
+
 	operand = None
 	operands = []
 	arguments = operation.findall("argument")
 
 	if len(arguments) == 1:
 		argt = arguments[0].attrib["type"]
-		if len(concepts.findall("metaobject[@name='%s']" % argt)) > 0:
+		if find_metaobject(concepts, argt) is not None:
 			if operand is None:
 				operand = argt
 		operands.append("%s T" % argt)
@@ -285,14 +323,14 @@ def print_operation_node(opts, concepts, operation):
 		for arg in arguments:
 			argt = arg.attrib["type"]
 			argn = arg.attrib.get("name", None)
-			if len(concepts.findall("metaobject[@name='%s']" % argt)) > 0:
+			if find_metaobject(concepts, argt) is not None:
 				if operand is None:
 					operand = argt
 			operands.append("%s %s" % (argt, argn if argn else "T%d" % (len(operands)+1)))
 
 	values = {
 		"name" : name,
-		"href" : name,
+		"href" : href,
 		"result" : result,
 		"operands" : ", ".join(operands),
 		"head_color": opts.operation_head_color,
@@ -435,6 +473,19 @@ def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 
 	print_edge(opts, spec_name, gene_name)
 
+def print_note_node(opts, name, text):
+	import textwrap
+
+	opts.output.write("""
+	edge [constraint="false" style="dotted" arrowhead="none"];""")
+
+	wrapper = textwrap.TextWrapper()
+	wrapper.width = 22
+	text = "\n".join(wrapper.wrap(text))
+
+	opts.output.write("""
+	%s [shape="note", bgcolor="WHEAT" label="%s"];""" % (name, text))
+
 def print_metaobject(opts, concepts):
 	opts.output.write("""digraph %(metaobject)s {
 	overlap=false
@@ -503,22 +554,30 @@ def print_metaobject(opts, concepts):
 
 	prev_mo = None
 	for gen in metaobject.findall("generalization"):
-		if prev_mo:
+		if prev_mo is not None: 
 			print_concept_edge(opts, generalization, prev_mo)
 		prev_mo = generalization
 
 	prev_mo = None
 	for specialization in concepts.findall("metaobject"):
 		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
-			if prev_mo:
+			if prev_mo is not None:
 				print_concept_edge(opts, specialization, prev_mo)
 			prev_mo = specialization 
+
+	# Note
+	try: desc = metaobject.attrib["brief"]
+	except: desc = "Reflects %s." % metaobject.attrib["reflects"]
+	print_note_node(opts, "description", desc)
+	print_edge(opts, opts.metaobject, "description")
 
 	opts.output.write("""}
 	""")
 
 
 def print_operation(opts, concepts):
+	import re
+
 	opts.output.write("""digraph %(operation)s {
 	overlap=false
 	rankdir=%(rankdir)s
@@ -550,12 +609,71 @@ def print_operation(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
+	reflected = None
 	for argument in operation.findall("argument"):
-		operand = find_metaobject(concepts, argument.attrib["type"])
-		if operand is not None:
+		argt = find_metaobject(concepts, argument.attrib["type"])
+		if argt is not None:
+			operand = argt
+			reflected = operand.attrib["reflects"]
+
 			print_metaobject_node(opts, concepts, operand)
 			print_concept_edge(opts, operand, operation)
 	opts.output.write("\n")
+
+	# Note
+	desc = operation.attrib["brief"]
+	desc = re.sub(r"\$\(([^)]+)\)", r"%(\1)s", desc)
+	desc = desc % {
+		"result": "Meta-%s" % result.attrib["name"] if result is not None else "-",
+		"operand": "Meta-%s" % operand.attrib["name"] if operand is not None else "-",
+		"reflected": reflected if reflected is not None else "-"
+	}
+	print_note_node(opts, "description", desc)
+	print_edge(opts, opts.operation, "description")
+
+	opts.output.write("""}
+	""")
+
+def print_trait(opts, concepts):
+	opts.output.write("""digraph %(trait)s {
+	overlap=false
+	rankdir=%(rankdir)s
+	ranksep=%(ranksep)f
+	fontName="Sans"
+	maxiter=1000000
+
+	edge [penwidth=2.0 arrowsize=2.0];
+	node [penwidth=2.0];
+	""" % {
+		"trait": opts.trait,
+		"rankdir": opts.rankdir,
+		"ranksep": opts.ranksep
+	})
+
+	print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
+
+	trait = find_trait(concepts, opts.trait)
+	print_trait_node(opts, concepts, trait)
+
+	indicates = trait.attrib["indicates"]
+	print_metaobject_node(opts, concepts, find_metaobject(concepts, indicates))
+
+	# Trait -> Metaobject (indicates) edges
+	opts.output.write("""
+	edge [constraint="true" style="dotted" arrowhead="none"];""")
+
+	print_edge(opts, indicates, opts.trait)
+
+	# Trait -> result
+	opts.output.write("""
+	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+
+	print_edge(opts, opts.trait, "BooleanConstant")
+
+	# Note
+	desc = "Indicates that a metaobject is a %s." % indicates
+	print_note_node(opts, "description", desc)
+	print_edge(opts, opts.trait, "description")
 
 	opts.output.write("""}
 	""")
@@ -683,7 +801,7 @@ def main():
 	elif opts.operation:
 		print_operation(opts, concepts)
 	elif opts.trait:
-		pass # TODO
+		print_trait(opts, concepts)
 	else: print_overview(opts, concepts)
 
 

@@ -5,6 +5,10 @@
 [def __is_sequence_t [link reflexpr.quickref.traits.is_sequence [^is_sequence_t]]]
 [def __is_sequence_v [link reflexpr.quickref.traits.is_sequence [^is_sequence_v]]]
 
+[def __is_specifier [link reflexpr.quickref.traits.is_specifier [^is_specifier]]]
+[def __is_specifier_t [link reflexpr.quickref.traits.is_specifier [^is_specifier_t]]]
+[def __is_specifier_v [link reflexpr.quickref.traits.is_specifier [^is_specifier_v]]]
+
 [def __is_namespace [link reflexpr.quickref.traits.is_namespace [^is_namespace]]]
 [def __is_namespace_t [link reflexpr.quickref.traits.is_namespace [^is_namespace_t]]]
 [def __is_namespace_v [link reflexpr.quickref.traits.is_namespace [^is_namespace_v]]]

@@ -3,6 +3,8 @@
 
 [include t_is_sequence.qbk]
 
+[include t_is_specifier.qbk]
+
 [include t_is_namespace.qbk]
 
 [include t_is_global_scope.qbk]

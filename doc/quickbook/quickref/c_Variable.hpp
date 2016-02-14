@@ -140,7 +140,7 @@ struct __get_type<Variable>
 {
 	
 	typedef __Type value_type; /*<
-	returns the Type reflecting the type of a variable reflected by a Variable.
+	returns the result reflecting the type of a variable reflected by a Variable.
 	>*/
 	
 };
@@ -150,7 +150,7 @@ struct __get_scope<Variable>
 {
 	
 	typedef __Scope value_type; /*<
-	returns the Scope reflecting the scope of a variable reflected by a Variable.
+	returns the result reflecting the scope of a variable reflected by a Variable.
 	>*/
 	
 };
