@@ -487,6 +487,8 @@ def print_note_node(opts, name, text):
 	%s [shape="note", bgcolor="WHEAT" label="%s"];""" % (name, text))
 
 def print_metaobject(opts, concepts):
+	import random
+
 	opts.output.write("""digraph %(metaobject)s {
 	overlap=false
 	rankdir=%(rankdir)s
@@ -541,12 +543,11 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	if opts.gen_operations:
-		for operation in concepts.findall("operation"):
-			for argument in operation.findall("argument[@type='%s']" % opts.metaobject):
-				print_operation_node(opts, concepts, operation)
-				print_edge(opts, argument.attrib["type"], operation.attrib["name"])
-		opts.output.write("\n")
+	for operation in concepts.findall("operation"):
+		for argument in operation.findall("argument[@type='%s']" % opts.metaobject):
+			print_operation_node(opts, concepts, operation)
+			print_edge(opts, argument.attrib["type"], operation.attrib["name"])
+	opts.output.write("\n")
 
 	# Metaobject ordering edges
 	opts.output.write("""
@@ -556,14 +557,25 @@ def print_metaobject(opts, concepts):
 	for gen in metaobject.findall("generalization"):
 		if prev_mo is not None: 
 			print_concept_edge(opts, generalization, prev_mo)
-		prev_mo = generalization
+		prev_mo = generalization if random.random() < 0.6 else None
 
 	prev_mo = None
 	for specialization in concepts.findall("metaobject"):
 		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
 			if prev_mo is not None:
 				print_concept_edge(opts, specialization, prev_mo)
-			prev_mo = specialization 
+			prev_mo = specialization if random.random() < 0.55 else None
+
+	prev_op = None
+	for operation in concepts.findall("operation"):
+		is_relevant = operation.attrib["result"] == opts.metaobject 
+		is_relevant |= len(operation.findall("argument[@type='%s']" % opts.metaobject))>0
+		if is_relevant:
+			if prev_op is not None:
+				print_concept_edge(opts, operation, prev_op)
+				
+			prev_op = operation if random.random() < 0.6 else None
+			
 
 	# Note
 	try: desc = metaobject.attrib["brief"]
