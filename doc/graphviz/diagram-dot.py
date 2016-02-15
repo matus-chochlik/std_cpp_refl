@@ -104,6 +104,8 @@ class options:
 
 		self.rankdir = "BT"
 		self.ranksep = 0.9
+		self.nodesep = 0.9
+		self.sep = 0.2
 
 		self.metaobject = useropts.metaobject
 		self.operation = useropts.operation
@@ -493,7 +495,10 @@ def print_metaobject(opts, concepts):
 	overlap=false
 	rankdir=%(rankdir)s
 	ranksep=%(ranksep)f
+	nodesep=%(nodesep)f
+	sep=%(sep)f
 	fontName="Sans"
+	splines=curved
 	maxiter=1000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
@@ -501,7 +506,9 @@ def print_metaobject(opts, concepts):
 	""" % {
 		"metaobject": opts.metaobject,
 		"rankdir": opts.rankdir,
-		"ranksep": opts.ranksep
+		"ranksep": opts.ranksep,
+		"nodesep": opts.nodesep,
+		"sep": opts.sep
 	})
 
 	metaobject = find_metaobject(concepts, opts.metaobject)
@@ -594,7 +601,10 @@ def print_operation(opts, concepts):
 	overlap=false
 	rankdir=%(rankdir)s
 	ranksep=%(ranksep)f
+	nodesep=%(nodesep)f
+	sep=%(sep)f
 	fontName="Sans"
+	splines=true
 	maxiter=1000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
@@ -602,7 +612,9 @@ def print_operation(opts, concepts):
 	""" % {
 		"operation": opts.operation,
 		"rankdir": opts.rankdir,
-		"ranksep": opts.ranksep
+		"ranksep": opts.ranksep,
+		"nodesep": opts.nodesep,
+		"sep": opts.sep
 	})
 
 	operation = find_operation(concepts, opts.operation)
@@ -651,7 +663,10 @@ def print_trait(opts, concepts):
 	overlap=false
 	rankdir=%(rankdir)s
 	ranksep=%(ranksep)f
+	nodesep=%(nodesep)f
+	sep=%(sep)f
 	fontName="Sans"
+	splines=true
 	maxiter=1000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
@@ -659,7 +674,9 @@ def print_trait(opts, concepts):
 	""" % {
 		"trait": opts.trait,
 		"rankdir": opts.rankdir,
-		"ranksep": opts.ranksep
+		"ranksep": opts.ranksep,
+		"nodesep": opts.nodesep,
+		"sep": opts.sep
 	})
 
 	print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
@@ -698,14 +715,18 @@ def print_overview(opts, concepts):
 	overlap=false
 	rankdir=%(rankdir)s
 	ranksep=%(ranksep)f
+	nodesep=%(nodesep)f
 	fontName="Sans"
+	splines=true
 	maxiter=1000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
 	""" % {
 		"rankdir": opts.rankdir,
-		"ranksep": opts.ranksep
+		"ranksep": opts.ranksep,
+		"nodesep": opts.nodesep,
+		"sep": opts.sep
 	})
 
 	# Other concepts
