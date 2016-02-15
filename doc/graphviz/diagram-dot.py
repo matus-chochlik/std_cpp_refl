@@ -102,14 +102,19 @@ class options:
 		self.traits_rank_same = useropts.trait is None
 		self.operations_rank_same = False
 
-		self.rankdir = "BT"
-		self.ranksep = 0.9
-		self.nodesep = 0.9
-		self.sep = 0.2
-
 		self.metaobject = useropts.metaobject
 		self.operation = useropts.operation
 		self.trait = useropts.trait
+		self.detail = self.metaobject is not None or \
+				self.operation is not None or \
+				self.trait is not None
+
+		self.rankdir = "BT"
+		self.ranksep = 0.9
+		self.nodesep = 0.9 if self.detail else 0.3
+		self.sep = 0.2 if self.detail else 0.1
+
+
 		self.xmlinput = useropts.input if useropts.input else useropts.infile
 		self.output = useropts.output if useropts.output else useropts.outfile
 
@@ -357,7 +362,7 @@ def print_operation_node(opts, concepts, operation):
 		opts.output.write("""
 		<TR>
 			<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">struct <B>%(name)s</B></TD>
-			<TD BGCOLOR="%(head_color)s" ALIGN="CENTER">:</TD>
+			<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER">:</TD>
 		</TR>""" % values)
 
 		opts.output.write("""
