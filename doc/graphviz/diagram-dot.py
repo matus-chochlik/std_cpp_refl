@@ -522,7 +522,7 @@ def print_metaobject(opts, concepts):
 	splines=curved
 	maxiter=10000000
 
-	edge [penwidth=2.0 arrowsize=2.0];
+	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
 	node [penwidth=2.0];
 	""" % {
 		"metaobject": opts.metaobject,
@@ -566,6 +566,16 @@ def print_metaobject(opts, concepts):
 		uname = get_concept_uname(operation)
 		print_operation_node(opts, concepts, operation)
 		print_edge(opts, uname, operation.attrib["result"])
+	opts.output.write("\n")
+
+	# Operation -> Element edges
+	opts.output.write("""
+	edge [constraint="false" style="dotted" arrowhead="diamond"];""")
+
+	for operation in concepts.findall("operation[@element='%s']" % opts.metaobject):
+		uname = get_concept_uname(operation)
+		print_operation_node(opts, concepts, operation)
+		print_edge(opts, operation.attrib["element"], uname)
 	opts.output.write("\n")
 
 	# Argument -> Operation edges
@@ -630,7 +640,7 @@ def print_operation(opts, concepts):
 	splines=true
 	maxiter=10000000
 
-	edge [penwidth=2.0 arrowsize=2.0];
+	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
 	node [penwidth=2.0];
 	""" % {
 		"operation": opts.operation,
@@ -711,7 +721,7 @@ def print_trait(opts, concepts):
 	splines=true
 	maxiter=10000000
 
-	edge [penwidth=2.0 arrowsize=2.0];
+	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
 	node [penwidth=2.0];
 	""" % {
 		"trait": opts.trait,
@@ -762,7 +772,7 @@ def print_overview(opts, concepts):
 	splines=true
 	maxiter=10000000
 
-	edge [penwidth=2.0 arrowsize=2.0];
+	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
 	node [penwidth=2.0];
 	""" % {
 		"rankdir": opts.rankdir,
@@ -839,7 +849,7 @@ def print_overview(opts, concepts):
 
 	# Metaobject is-a edges
 	opts.output.write("""
-	edge [constraint="true" style="solid" fillcolor="WHITE", arrowhead="normal"];""")
+	edge [constraint="true" style="solid" arrowhead="normal"];""")
 
 	for derived in concepts.findall("metaobject"):
 		for base in derived.findall("generalization"):
