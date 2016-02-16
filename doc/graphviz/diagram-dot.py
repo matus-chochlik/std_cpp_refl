@@ -84,6 +84,13 @@ def get_argument_parser():
 		default=None
 	)
 
+	argparser.add_argument(
+		"--revision", "-R",
+		type=int,
+		action="store",
+		default=100
+	)
+
 	return argparser
  
 class options:
@@ -98,6 +105,7 @@ class options:
 		self.cell_color = "#D0D0D0"
 		self.gen_operations = useropts.generate_operations
 		self.gen_traits = useropts.generate_traits
+		self.revision = useropts.revision
 
 		self.traits_rank_same = useropts.trait is None
 		self.operations_rank_same = False
@@ -127,23 +135,31 @@ def iter_last(iterable):
         prev = item
     yield prev, True
 
-def find_metaobject(concepts, name):
-	mos = concepts.findall("metaobject[@name='%s']" % name)
+
+def in_revision(opts, node):
+	try: return int(node.attrib["revision"]) <= opts.revision
+	except KeyError: return True
+
+def findall(opts, parent_node, query):
+	return [x for x in parent_node.findall(query) if in_revision(opts, x)]
+
+def find_metaobject(opts, concepts, name):
+	mos = findall(opts, concepts, "metaobject[@name='%s']" % name)
 	return mos[0] if len(mos) > 0 else None
 
-def find_operation(concepts, name):
+def find_operation(opts, concepts, name):
 	try:
-		ops = concepts.findall("operation[@uname='%s']" % name)
+		ops = findall(opts, concepts, "operation[@uname='%s']" % name)
 		if len(ops) == 0:
 			raise Error()
-	except: ops = concepts.findall("operation[@name='%s']" % name)
+	except: ops = findall(opts, concepts, "operation[@name='%s']" % name)
 	return ops[0] if len(ops) > 0 else None
 
-def find_trait(concepts, name):
-	trs = concepts.findall("trait[@name='%s']" % name)
+def find_trait(opts, concepts, name):
+	trs = findall(opts, concepts, "trait[@name='%s']" % name)
 	return trs[0] if len(trs) > 0 else None
 
-def get_concept_uname(concept):
+def get_node_uname(concept):
 	try: return concept.attrib["uname"]
 	except: return concept.attrib["name"]
  
@@ -244,9 +260,18 @@ def print_metaobject_node(opts, concepts, metaobject):
 
 	requirements = list()
 
-	requirements += ["%s&lt;T&gt;" % x.attrib["concept"] for x in metaobject.findall("generalization")]
-	requirements += ["%s&lt;T&gt;" % x.attrib["name"] for x in concepts.findall("trait[@indicates='%s']" % name)]
-	requirements += ["%s&lt;%s&lt;T&gt;&gt;" % (x.attrib["trait"], x.attrib["operation"]) for x in metaobject.findall("constraint")]
+	requirements += [
+		"%s&lt;T&gt;" % x.attrib["concept"]
+		for x in findall(opts, metaobject, "generalization")
+	]
+	requirements += [
+		"%s&lt;T&gt;" % x.attrib["name"]
+		for x in findall(opts, concepts, "trait[@indicates='%s']" % name)
+	]
+	requirements += [
+		"%s&lt;%s&lt;T&gt;&gt;" % (x.attrib["trait"], x.attrib["operation"])
+		for x in findall(opts, metaobject, "constraint")
+	]
 
 	if is_base: requirements += ["is_metaobject"]
 
@@ -317,7 +342,7 @@ def print_trait_node(opts, concepts, trait):
  
 def print_operation_node(opts, concepts, operation):
 	name = operation.attrib["name"]
-	uname = get_concept_uname(operation)
+	uname = get_node_uname(operation)
 	result = operation.attrib["result"]
 
 	href = "operation-%s" % uname
@@ -327,11 +352,11 @@ def print_operation_node(opts, concepts, operation):
 
 	operand = None
 	operands = []
-	arguments = operation.findall("argument")
+	arguments = findall(opts, operation, "argument")
 
 	if len(arguments) == 1:
 		argt = arguments[0].attrib["type"]
-		if find_metaobject(concepts, argt) is not None:
+		if find_metaobject(opts, concepts, argt) is not None:
 			if operand is None:
 				operand = argt
 		operands.append("%s T" % argt)
@@ -340,7 +365,7 @@ def print_operation_node(opts, concepts, operation):
 		for arg in arguments:
 			argt = arg.attrib["type"]
 			argn = arg.attrib.get("name", None)
-			if find_metaobject(concepts, argt) is not None:
+			if find_metaobject(opts, concepts, argt) is not None:
 				if operand is None:
 					operand = argt
 			operands.append("%s %s" % (argt, argn if argn else "T%d" % (len(operands)+1)))
@@ -480,8 +505,8 @@ def print_edge(opts, name_from, name_to):
 	% (name_from, name_to))
 
 def print_concept_edge(opts, concept_from, concept_to):
-	name_from = get_concept_uname(concept_from)
-	name_to = get_concept_uname(concept_to)
+	name_from = get_node_uname(concept_from)
+	name_to = get_node_uname(concept_to)
 
 	print_edge(opts, name_from, name_to)
 
@@ -532,7 +557,7 @@ def print_metaobject(opts, concepts):
 		"sep": opts.sep
 	})
 
-	metaobject = find_metaobject(concepts, opts.metaobject)
+	metaobject = find_metaobject(opts, concepts, opts.metaobject)
 
 	print_metaobject_node(opts, concepts, metaobject)
 
@@ -540,13 +565,13 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="solid" fillcolor="WHITE", arrowhead="normal"];""")
 
-	for gen in metaobject.findall("generalization"):
-		generalization = find_metaobject(concepts, gen.attrib["concept"])
+	for gen in findall(opts, metaobject, "generalization"):
+		generalization = find_metaobject(opts, concepts, gen.attrib["concept"])
 		print_metaobject_node(opts, concepts, generalization)
 		print_concept_edge(opts, metaobject, generalization)
 
-	for specialization in concepts.findall("metaobject"):
-		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
+	for specialization in findall(opts, concepts, "metaobject"):
+		if findall(opts, specialization, "generalization[@concept='%s']" % opts.metaobject):
 			print_metaobject_node(opts, concepts, specialization)
 			print_concept_edge(opts, specialization, metaobject)
 
@@ -554,7 +579,7 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="false" style="dotted" arrowhead="none"];""")
 
-	for trait in concepts.findall("trait[@indicates='%s']" % opts.metaobject):
+	for trait in findall(opts, concepts, "trait[@indicates='%s']" % opts.metaobject):
 		print_trait_node(opts, concepts, trait)
 		print_concept_edge(opts, trait, metaobject)
 
@@ -562,8 +587,8 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	for operation in concepts.findall("operation[@result='%s']" % opts.metaobject):
-		uname = get_concept_uname(operation)
+	for operation in findall(opts, concepts, "operation[@result='%s']" % opts.metaobject):
+		uname = get_node_uname(operation)
 		print_operation_node(opts, concepts, operation)
 		print_edge(opts, uname, operation.attrib["result"])
 	opts.output.write("\n")
@@ -572,8 +597,8 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="false" style="dotted" arrowhead="diamond"];""")
 
-	for operation in concepts.findall("operation[@element='%s']" % opts.metaobject):
-		uname = get_concept_uname(operation)
+	for operation in findall(opts, concepts, "operation[@element='%s']" % opts.metaobject):
+		uname = get_node_uname(operation)
 		print_operation_node(opts, concepts, operation)
 		print_edge(opts, operation.attrib["element"], uname)
 	opts.output.write("\n")
@@ -582,9 +607,9 @@ def print_metaobject(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	for operation in concepts.findall("operation"):
-		uname = get_concept_uname(operation)
-		for argument in operation.findall("argument[@type='%s']" % opts.metaobject):
+	for operation in findall(opts, concepts, "operation"):
+		uname = get_node_uname(operation)
+		for argument in findall(opts, operation, "argument[@type='%s']" % opts.metaobject):
 			print_operation_node(opts, concepts, operation)
 			print_edge(opts, argument.attrib["type"], uname)
 	opts.output.write("\n")
@@ -594,22 +619,22 @@ def print_metaobject(opts, concepts):
 	edge [constraint="true" style="invis"];""")
 
 	prev_mo = None
-	for gen in metaobject.findall("generalization"):
+	for gen in findall(opts, metaobject, "generalization"):
 		if prev_mo is not None: 
 			print_concept_edge(opts, generalization, prev_mo)
 		prev_mo = generalization if random.random() < 0.6 else None
 
 	prev_mo = None
-	for specialization in concepts.findall("metaobject"):
-		if specialization.findall("generalization[@concept='%s']" % opts.metaobject):
+	for specialization in findall(opts, concepts, "metaobject"):
+		if findall(opts, specialization, "generalization[@concept='%s']" % opts.metaobject):
 			if prev_mo is not None:
 				print_concept_edge(opts, specialization, prev_mo)
 			prev_mo = specialization if random.random() < 0.55 else None
 
 	prev_op = None
-	for operation in concepts.findall("operation"):
+	for operation in findall(opts, concepts, "operation"):
 		is_relevant = operation.attrib["result"] == opts.metaobject 
-		is_relevant |= len(operation.findall("argument[@type='%s']" % opts.metaobject))>0
+		is_relevant |= len(findall(opts, operation, "argument[@type='%s']" % opts.metaobject))>0
 		if is_relevant:
 			if prev_op is not None:
 				print_concept_edge(opts, operation, prev_op)
@@ -650,12 +675,12 @@ def print_operation(opts, concepts):
 		"sep": opts.sep
 	})
 
-	operation = find_operation(concepts, opts.operation)
-	uname = get_concept_uname(operation)
+	operation = find_operation(opts, concepts, opts.operation)
+	uname = get_node_uname(operation)
 	print_operation_node(opts, concepts, operation)
 
-	result = find_metaobject(concepts, operation.attrib["result"])
-	try: element = find_metaobject(concepts, operation.attrib["element"])
+	result = find_metaobject(opts, concepts, operation.attrib["result"])
+	try: element = find_metaobject(opts, concepts, operation.attrib["element"])
 	except: element = None
 
 	if result is not None:
@@ -684,8 +709,8 @@ def print_operation(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	reflected = None
-	for argument in operation.findall("argument"):
-		argt = find_metaobject(concepts, argument.attrib["type"])
+	for argument in findall(opts, operation, "argument"):
+		argt = find_metaobject(opts, concepts, argument.attrib["type"])
 		if argt is not None:
 			operand = argt
 			reflected = operand.attrib["reflects"]
@@ -733,11 +758,11 @@ def print_trait(opts, concepts):
 
 	print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
 
-	trait = find_trait(concepts, opts.trait)
+	trait = find_trait(opts, concepts, opts.trait)
 	print_trait_node(opts, concepts, trait)
 
 	indicates = trait.attrib["indicates"]
-	print_metaobject_node(opts, concepts, find_metaobject(concepts, indicates))
+	print_metaobject_node(opts, concepts, find_metaobject(opts, concepts, indicates))
 
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
@@ -794,18 +819,19 @@ def print_overview(opts, concepts):
 		print_plain_type_node(opts, concepts, "size_t", "size_t")
 
 	# Metaobject nodes 
-	for metaobject in concepts.findall("metaobject"):
-		print_metaobject_node(opts, concepts, metaobject)
+	for metaobject in findall(opts, concepts, "metaobject"):
+		if in_revision(opts, metaobject):
+			print_metaobject_node(opts, concepts, metaobject)
 
 
 	# Trait nodes
 	if opts.gen_traits:
-		for trait in concepts.findall("trait"):
+		for trait in findall(opts, concepts, "trait"):
 			print_trait_node(opts, concepts, trait)
 
 	# Operation nodes
 	if opts.gen_operations:
-		for operation in concepts.findall("operation"):
+		for operation in findall(opts, concepts, "operation"):
 			print_operation_node(opts, concepts, operation)
 
 	# Trait -> Metaobject (indicates) edges
@@ -813,7 +839,7 @@ def print_overview(opts, concepts):
 	edge [constraint="true" style="dotted" arrowhead="none"];""")
 
 	if opts.gen_traits:
-		for trait in concepts.findall("trait"):
+		for trait in findall(opts, concepts, "trait"):
 			print_edge(opts, trait.attrib["name"], trait.attrib["indicates"])
 		opts.output.write("\n")
 
@@ -822,7 +848,7 @@ def print_overview(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	if opts.gen_traits:
-		for trait in concepts.findall("trait"):
+		for trait in findall(opts, concepts, "trait"):
 			print_edge(opts, trait.attrib["name"], "BooleanConstant")
 		opts.output.write("\n")
 
@@ -831,8 +857,8 @@ def print_overview(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	if opts.gen_operations:
-		for operation in concepts.findall("operation"):
-			uname = get_concept_uname(operation)
+		for operation in findall(opts, concepts, "operation"):
+			uname = get_node_uname(operation)
 			print_edge(opts, uname, operation.attrib["result"])
 		opts.output.write("\n")
 
@@ -841,9 +867,9 @@ def print_overview(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	if opts.gen_operations:
-		for operation in concepts.findall("operation"):
-			uname = get_concept_uname(operation)
-			for argument in operation.findall("argument"):
+		for operation in findall(opts, concepts, "operation"):
+			uname = get_node_uname(operation)
+			for argument in findall(opts, operation, "argument"):
 				print_edge(opts, argument.attrib["type"], uname)
 		opts.output.write("\n")
 
@@ -851,8 +877,8 @@ def print_overview(opts, concepts):
 	opts.output.write("""
 	edge [constraint="true" style="solid" arrowhead="normal"];""")
 
-	for derived in concepts.findall("metaobject"):
-		for base in derived.findall("generalization"):
+	for derived in findall(opts, concepts, "metaobject"):
+		for base in findall(opts, derived, "generalization"):
 			print_concept_gen_spec_edge(opts, concepts, base, derived)
 	opts.output.write("\n")
 
@@ -860,16 +886,16 @@ def print_overview(opts, concepts):
 	opts.output.write("""
 	edge [style="invis"];""")
 
-	for metaobject in concepts.findall("metaobject"):
-		for prev_mo in metaobject.findall("order_after"):
+	for metaobject in findall(opts, concepts, "metaobject"):
+		for prev_mo in findall(opts, metaobject, "order_after"):
 			print_concept_gen_spec_edge(opts, concepts, prev_mo, metaobject)
 	opts.output.write("\n")
 			
 	
 	prev_mo = None
-	for metaobject in concepts.findall("metaobject"):
+	for metaobject in findall(opts, concepts, "metaobject"):
 		if prev_mo is not None:
-			coef = len(metaobject.findall("generalization"))/3.0
+			coef = len(findall(opts, metaobject, "generalization"))/3.0
 			if random.random() < coef:
 				print_concept_edge(opts, metaobject, prev_mo)
 		prev_mo = metaobject

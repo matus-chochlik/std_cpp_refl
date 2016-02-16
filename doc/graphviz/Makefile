@@ -1,6 +1,7 @@
 XSLTPROC = xsltproc
 DOT = dot
 NEATO = neato
+REVISION = 0
 
 sinclude tmp/concepts.mk
 sinclude tmp/traits.mk
@@ -32,31 +33,31 @@ diagrams: $(foreach I, $(DIAGRAMS), ./out/$I.svg)
 
 
 ./tmp/%.dot: ./%-dot.xsl ../concepts.xml | tmp
-	$(XSLTPROC) --output $@ $^
+	$(XSLTPROC) --stringparam revision $(REVISION) --output $@ $^
 
 ./tmp/overview.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) --output $@ --input $<
 
 ./tmp/hierarchy.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py -go 0 -gt 0 --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) -go 0 -gt 0 --output $@ --input $<
 
 ./tmp/operations.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py -go 1 -gt 0 --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) -go 1 -gt 0 --output $@ --input $<
 
 ./tmp/traits.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py -go 0 -gt 1 --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) -go 0 -gt 1 --output $@ --input $<
 
 ./tmp/concept-%.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py --metaobject $* --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) --metaobject $* --output $@ --input $<
 
 ./tmp/operation-%.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py --operation $* --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) --operation $* --output $@ --input $<
 
 ./tmp/trait-%.dot: ../concepts.xml diagram-dot.py Makefile | tmp
-	./diagram-dot.py --trait $* --output $@ --input $<
+	./diagram-dot.py -R $(REVISION) --trait $* --output $@ --input $<
 
 ./tmp/%.mk: ./%-mk.xsl ../concepts.xml Makefile | tmp
-	$(XSLTPROC) --output $@ $< ../concepts.xml
+	$(XSLTPROC) --stringparam revision $(REVISION) --output $@ $< ../concepts.xml
 
 out tmp:
 	mkdir -p $@

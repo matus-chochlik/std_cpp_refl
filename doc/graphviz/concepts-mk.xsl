@@ -5,10 +5,11 @@
 	xmlns:exsl="http://exslt.org/common"
 	extension-element-prefixes="str exsl"
 >
+<xsl:param name="revision" select="100"/>
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-CONCEPTS =<xsl:for-each select="metaobject">
+CONCEPTS =<xsl:for-each select="metaobject[$revision >= @revision]">
 	<xsl:text> </xsl:text><xsl:value-of select="@name"/>
 </xsl:for-each>
 

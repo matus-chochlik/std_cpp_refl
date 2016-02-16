@@ -454,7 +454,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_parameters"
 		uname="get_function_parameters"
 		revision="1"
-		result="ObjectSequence" element="Parameter"
+		result="ObjectSequence" element="FunctionParameter"
 		brief="returns a $(result) of $(elements) reflecting the parameters of a $(operand)."
 	>
 		<argument type="Function"/>
