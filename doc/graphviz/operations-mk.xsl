@@ -9,7 +9,11 @@
 
 <xsl:template match="/concepts">
 OPERATIONS=<xsl:for-each select="operation">
-	<xsl:text> </xsl:text><xsl:value-of select="@name"/>
+	<xsl:text> </xsl:text>
+	<xsl:choose>
+		<xsl:when test="@uname"><xsl:value-of select="@uname"/></xsl:when>
+		<xsl:otherwise><xsl:value-of select="@name"/></xsl:otherwise>
+	</xsl:choose>
 </xsl:for-each>
 
 </xsl:template>

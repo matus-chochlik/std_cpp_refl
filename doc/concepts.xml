@@ -25,13 +25,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<trait name="is_sequence" scope="meta" indicates="ObjectSequence"/>
 	<trait name="is_specifier" scope="meta" indicates="Specifier"/>
 
-	<trait name="is_namespace" scope="meta" indicates="Namespace"/>
-	<trait name="is_global_scope" scope="meta" indicates="GlobalScope"/>
-	<trait name="is_type" scope="meta" indicates="Type"/>
-	<trait name="is_class" scope="meta" indicates="Class"/>
-	<trait name="is_enum" scope="meta" indicates="Enum"/>
-	<trait name="is_variable" scope="meta" indicates="Variable"/>
-
 	<trait name="has_name" scope="meta" indicates="Named"/>
 	<trait name="has_type" scope="meta" indicates="Typed"/>
 	<trait name="has_scope" scope="meta" indicates="Scoped"/>
@@ -39,6 +32,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<trait name="is_alias" scope="meta" indicates="Alias"/>
 	<trait name="is_class_member" scope="meta" indicates="ClassMember"/>
 	<trait name="is_linkable" scope="meta" indicates="Linkable"/>
+
+	<trait name="is_namespace" scope="meta" indicates="Namespace"/>
+	<trait name="is_global_scope" scope="meta" indicates="GlobalScope"/>
+	<trait name="is_type" scope="meta" indicates="Type"/>
+	<trait name="is_class" scope="meta" indicates="Class"/>
+	<trait name="is_enum" scope="meta" indicates="Enum"/>
+	<trait name="is_variable" scope="meta" indicates="Variable"/>
+	<trait name="is_function" scope="meta" indicates="Function"/>
+	<trait name="is_parameter" scope="meta" indicates="Parameter"/>
 
 	<operation name="reflects_same"
 		brief="indicates if two metaobjects reflect the same base-level declaration."
@@ -255,16 +257,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_data_members"
-		result="ObjectSequence"
-		brief="returns a $(result) of metaobjects reflecting
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
 	</operation>
 
 	<operation name="get_all_data_members"
-		result="ObjectSequence"
-		brief="returns a $(result) of metaobjects reflecting all 
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting all 
 		(including the private and protected)
 		data members of $(reflected) reflected by a $(operand)."
 	>
@@ -293,6 +295,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<operation name="get_pointer"
+		uname="get_data_pointer"
 		result="Pointer"
 		brief="returns a pointer to the $(reflected) reflected by a $(operand).
 		If the variable is a class member then the pointer is a class data member pointer,
@@ -306,5 +309,60 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<generalization concept="Variable"/>
 		<generalization concept="ClassMember"/>
+	</metaobject>
+
+	<metaobject name="Function"
+		reflects="a function"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Linkable"/>
+	</metaobject>
+
+	<operation name="get_pointer"
+		uname="get_function_pointer"
+		result="FunctionPointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the function is a class member then the pointer is a class member function pointer,
+		otherwise it is a plain function pointer."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_result_type"
+		result="Type"
+		brief="returns a $(result) reflecting the return type of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_parameters"
+		uname="get_function_parameters"
+		result="ObjectSequence" element="Parameter"
+		brief="returns a $(result) of $(elements) reflecting the parameters of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<metaobject name="OverloadedFunction"
+		reflects="a set of functions"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Scoped"/>
+	</metaobject>
+
+	<operation name="get_overloads"
+		result="ObjectSequence" element="Function"
+		brief="returns a $(result) of the $(element) reflecting the concrete overloads of a $(operand)."
+	>
+		<argument type="OverloadedFunction"/>
+	</operation>
+
+	<metaobject name="Parameter"
+		reflects="a function parameter"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Scoped"/>
 	</metaobject>
 </concepts>

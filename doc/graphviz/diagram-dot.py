@@ -132,12 +132,20 @@ def find_metaobject(concepts, name):
 	return mos[0] if len(mos) > 0 else None
 
 def find_operation(concepts, name):
-	ops = concepts.findall("operation[@name='%s']" % name)
+	try:
+		ops = concepts.findall("operation[@uname='%s']" % name)
+		if len(ops) == 0:
+			raise Error()
+	except: ops = concepts.findall("operation[@name='%s']" % name)
 	return ops[0] if len(ops) > 0 else None
 
 def find_trait(concepts, name):
 	trs = concepts.findall("trait[@name='%s']" % name)
 	return trs[0] if len(trs) > 0 else None
+
+def get_concept_uname(concept):
+	try: return concept.attrib["uname"]
+	except: return concept.attrib["name"]
  
 def print_concept_node(opts, concepts, name, definition):
 
@@ -308,11 +316,12 @@ def print_trait_node(opts, concepts, trait):
  
 def print_operation_node(opts, concepts, operation):
 	name = operation.attrib["name"]
+	uname = get_concept_uname(operation)
 	result = operation.attrib["result"]
 
-	href = "operation-%s" % name
+	href = "operation-%s" % uname
 
-	if opts.operation == name:
+	if opts.operation == uname:
 		href = "operations"
 
 	operand = None
@@ -337,6 +346,7 @@ def print_operation_node(opts, concepts, operation):
 
 	values = {
 		"name" : name,
+		"uname" : uname,
 		"href" : href,
 		"result" : result,
 		"operands" : ", ".join(operands),
@@ -347,7 +357,7 @@ def print_operation_node(opts, concepts, operation):
 	inherit_result = result in ["IntegralConstant", "BooleanConstant"]
 
 	opts.output.write("""
-	%(name)s [label=<
+	%(uname)s [label=<
 	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
 	% values)
 
@@ -469,8 +479,8 @@ def print_edge(opts, name_from, name_to):
 	% (name_from, name_to))
 
 def print_concept_edge(opts, concept_from, concept_to):
-	name_from = concept_from.attrib["name"]
-	name_to = concept_to.attrib["name"]
+	name_from = get_concept_uname(concept_from)
+	name_to = get_concept_uname(concept_to)
 
 	print_edge(opts, name_from, name_to)
 
@@ -504,7 +514,7 @@ def print_metaobject(opts, concepts):
 	sep=%(sep)f
 	fontName="Sans"
 	splines=curved
-	maxiter=1000000
+	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
@@ -547,8 +557,9 @@ def print_metaobject(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	for operation in concepts.findall("operation[@result='%s']" % opts.metaobject):
+		uname = get_concept_uname(operation)
 		print_operation_node(opts, concepts, operation)
-		print_edge(opts, operation.attrib["name"], operation.attrib["result"])
+		print_edge(opts, uname, operation.attrib["result"])
 	opts.output.write("\n")
 
 	# Argument -> Operation edges
@@ -556,9 +567,10 @@ def print_metaobject(opts, concepts):
 	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
 	for operation in concepts.findall("operation"):
+		uname = get_concept_uname(operation)
 		for argument in operation.findall("argument[@type='%s']" % opts.metaobject):
 			print_operation_node(opts, concepts, operation)
-			print_edge(opts, argument.attrib["type"], operation.attrib["name"])
+			print_edge(opts, argument.attrib["type"], uname)
 	opts.output.write("\n")
 
 	# Metaobject ordering edges
@@ -610,7 +622,7 @@ def print_operation(opts, concepts):
 	sep=%(sep)f
 	fontName="Sans"
 	splines=true
-	maxiter=1000000
+	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
@@ -623,9 +635,13 @@ def print_operation(opts, concepts):
 	})
 
 	operation = find_operation(concepts, opts.operation)
+	uname = get_concept_uname(operation)
 	print_operation_node(opts, concepts, operation)
 
 	result = find_metaobject(concepts, operation.attrib["result"])
+	try: element = find_metaobject(concepts, operation.attrib["element"])
+	except: element = None
+
 	if result is not None:
 		print_metaobject_node(opts, concepts, result)
 
@@ -633,6 +649,19 @@ def print_operation(opts, concepts):
 		opts.output.write("""
 		edge [constraint="true" style="dashed" arrowhead="vee"];""")
 		print_concept_edge(opts, operation, result)
+
+		# Result -> Element
+		if element is not None:
+			print_metaobject_node(opts, concepts, element)
+			opts.output.write("""
+			edge [constraint="false" arrowhead="none" arrowtail="diamond" dir="both"];""")
+			print_concept_edge(opts, result, element)
+			opts.output.write("""
+			edge [style="dotted" dir="forward"];""")
+			desc = "All elements must be Meta-%s(s)" % element.attrib["name"]
+			print_note_node(opts, "element_desc", desc)
+			print_edge(opts, result.attrib["name"], "element_desc")
+			print_edge(opts, element.attrib["name"], "element_desc")
 
 	# Argument -> Operation edges
 	opts.output.write("""
@@ -646,7 +675,7 @@ def print_operation(opts, concepts):
 			reflected = operand.attrib["reflects"]
 
 			print_metaobject_node(opts, concepts, operand)
-			print_concept_edge(opts, operand, operation)
+			print_edge(opts, operand.attrib["name"], uname)
 	opts.output.write("\n")
 
 	# Note
@@ -654,11 +683,13 @@ def print_operation(opts, concepts):
 	desc = re.sub(r"\$\(([^)]+)\)", r"%(\1)s", desc)
 	desc = desc % {
 		"result": "Meta-%s" % result.attrib["name"] if result is not None else "-",
+		"element": "Meta-%s" % element.attrib["name"] if element is not None else "-",
+		"elements": "Meta-%s(s)" % element.attrib["name"] if element is not None else "-",
 		"operand": "Meta-%s" % operand.attrib["name"] if operand is not None else "-",
 		"reflected": reflected if reflected is not None else "-"
 	}
 	print_note_node(opts, "description", desc)
-	print_edge(opts, opts.operation, "description")
+	print_edge(opts, uname, "description")
 
 	opts.output.write("""}
 	""")
@@ -672,7 +703,7 @@ def print_trait(opts, concepts):
 	sep=%(sep)f
 	fontName="Sans"
 	splines=true
-	maxiter=1000000
+	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
@@ -723,7 +754,7 @@ def print_overview(opts, concepts):
 	nodesep=%(nodesep)f
 	fontName="Sans"
 	splines=true
-	maxiter=1000000
+	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0];
 	node [penwidth=2.0];
@@ -742,6 +773,7 @@ def print_overview(opts, concepts):
 		print_concept_node(opts, concepts, "SourceLocation", "source_location")
 		print_plain_type_node(opts, concepts, "StringConstant", "StringConstant")
 		print_plain_type_node(opts, concepts, "Pointer", "pointer")
+		print_plain_type_node(opts, concepts, "FunctionPointer", "function-pointer")
 		print_plain_type_node(opts, concepts, "OriginalType", "original-type")
 		print_plain_type_node(opts, concepts, "size_t", "size_t")
 
@@ -784,7 +816,8 @@ def print_overview(opts, concepts):
 
 	if opts.gen_operations:
 		for operation in concepts.findall("operation"):
-			print_edge(opts, operation.attrib["name"], operation.attrib["result"])
+			uname = get_concept_uname(operation)
+			print_edge(opts, uname, operation.attrib["result"])
 		opts.output.write("\n")
 
 	# Argument -> Operation edges
@@ -793,8 +826,9 @@ def print_overview(opts, concepts):
 
 	if opts.gen_operations:
 		for operation in concepts.findall("operation"):
+			uname = get_concept_uname(operation)
 			for argument in operation.findall("argument"):
-				print_edge(opts, argument.attrib["type"], operation.attrib["name"])
+				print_edge(opts, argument.attrib["type"], uname)
 		opts.output.write("\n")
 
 	# Metaobject is-a edges
