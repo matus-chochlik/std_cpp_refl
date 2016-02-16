@@ -244,8 +244,9 @@ def print_metaobject_node(opts, concepts, metaobject):
 
 	requirements = list()
 
-	requirements += [x.attrib["concept"] for x in metaobject.findall("generalization")]
-	requirements += [x.attrib["name"] for x in concepts.findall("trait[@indicates='%s']" % name)]
+	requirements += ["%s&lt;T&gt;" % x.attrib["concept"] for x in metaobject.findall("generalization")]
+	requirements += ["%s&lt;T&gt;" % x.attrib["name"] for x in concepts.findall("trait[@indicates='%s']" % name)]
+	requirements += ["%s&lt;%s&lt;T&gt;&gt;" % (x.attrib["trait"], x.attrib["operation"]) for x in metaobject.findall("constraint")]
 
 	if is_base: requirements += ["is_metaobject"]
 
@@ -255,7 +256,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 		values_in["sep"] = ";" if is_last else "&amp;&amp;"
 		opts.output.write("""
 		<TR>
-		<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="RIGHT"><B>%(item)s</B>&lt;T&gt;</TD>
+		<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="RIGHT"><B>%(item)s</B></TD>
 		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">%(sep)s</TD>
 		</TR>""" % values)
 
