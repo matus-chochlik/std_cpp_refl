@@ -490,18 +490,23 @@ def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 
 	print_edge(opts, spec_name, gene_name)
 
-def print_note_node(opts, name, text):
-	import textwrap
+def do_print_note_node(opts, name, text):
 
 	opts.output.write("""
 	edge [constraint="false" style="dotted" arrowhead="none"];""")
+
+	opts.output.write("""
+	%s [shape="note", bgcolor="WHEAT" label="%s"];""" % (name, text))
+
+def print_note_node(opts, name, text):
+	import textwrap
 
 	wrapper = textwrap.TextWrapper()
 	wrapper.width = 22
 	text = "\n".join(wrapper.wrap(text))
 
-	opts.output.write("""
-	%s [shape="note", bgcolor="WHEAT" label="%s"];""" % (name, text))
+	do_print_note_node(opts, name, text)
+
 
 def print_metaobject(opts, concepts):
 	import random

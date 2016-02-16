@@ -16,33 +16,15 @@
 	<baseobject kind="const" name="SourceLocation" label="Source\nLocation"/>
 
 	<metaobject name="Object"
+		revision="0"
 		abstract="true"
 		reflects="a base-level program declaration"
 		is_a="a concept modelled by stateless anonymous types generated
 by the compiler which allow access to metadata reflecting specific program declarations"
 	/>
 
-	<trait name="is_sequence" scope="meta" indicates="ObjectSequence"/>
-	<trait name="is_specifier" scope="meta" indicates="Specifier"/>
-
-	<trait name="has_name" scope="meta" indicates="Named"/>
-	<trait name="has_type" scope="meta" indicates="Typed"/>
-	<trait name="has_scope" scope="meta" indicates="Scoped"/>
-	<trait name="is_scope" scope="meta" indicates="Scope"/>
-	<trait name="is_alias" scope="meta" indicates="Alias"/>
-	<trait name="is_class_member" scope="meta" indicates="ClassMember"/>
-	<trait name="is_linkable" scope="meta" indicates="Linkable"/>
-
-	<trait name="is_namespace" scope="meta" indicates="Namespace"/>
-	<trait name="is_global_scope" scope="meta" indicates="GlobalScope"/>
-	<trait name="is_type" scope="meta" indicates="Type"/>
-	<trait name="is_class" scope="meta" indicates="Class"/>
-	<trait name="is_enum" scope="meta" indicates="Enum"/>
-	<trait name="is_variable" scope="meta" indicates="Variable"/>
-	<trait name="is_function" scope="meta" indicates="Function"/>
-	<trait name="is_parameter" scope="meta" indicates="Parameter"/>
-
 	<operation name="reflects_same"
+		revision="0"
 		brief="indicates if two metaobjects reflect the same base-level declaration."
 		result="BooleanConstant"
 	>
@@ -51,6 +33,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_source_location"
+		revision="0"
 		brief="returns the source location info of the declaration of $(reflected) reflected by a $(operand)."
 		result="SourceLocation"
 	>
@@ -58,6 +41,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="ObjectSequence"
+		revision="0"
 		abstract="true"
 		label="Object\nSequence"
 		reflects="an ordered sequence of metaobjects"
@@ -66,7 +50,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
+	<trait name="is_sequence"
+		revision="0"
+		scope="meta"
+		indicates="ObjectSequence"
+	/>
+
 	<operation name="get_size"
+		revision="0"
 		result="IntegralConstant"
 		integer="size_t"
 		brief="returns a number of elements in the sequence."
@@ -75,6 +66,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_element"
+		revision="0"
 		result="Object"
 		brief="returns the i-th $(result) in a $(operand)."
 	>
@@ -83,6 +75,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Named"
+		revision="0"
 		abstract="true"
 		reflects="a named declaration"
 	>
@@ -90,7 +83,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="ObjectSequence"/>
 	</metaobject>
 
+	<trait name="has_name"
+		revision="0"
+		scope="meta"
+		indicates="Named"
+	/>
+
 	<operation name="get_name"
+		revision="0"
 		result="StringConstant"
 		brief="returns the basic name of the $(reflected) reflected by a $(operand)."
 	>
@@ -98,12 +98,20 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Specifier"
+		revision="1"
 		reflects="a specifier"
 	>
 		<generalization concept="Named"/>
 	</metaobject>
 
+	<trait name="is_specifier"
+		revision="1"
+		scope="meta"
+		indicates="Specifier"
+	/>
+
 	<metaobject name="Typed"
+		revision="0"
 		abstract="true"
 		reflects="base-level declaration with a type"
 	>
@@ -111,7 +119,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Scoped"/>
 	</metaobject>
 
+	<trait name="has_type"
+		revision="0"
+		scope="meta"
+		indicates="Typed"
+	/>
+
 	<operation name="get_type"
+		revision="0"
 		result="Type"
 		brief="returns the $(result) reflecting the type of $(reflected) reflected by a $(operand)."
 	>
@@ -119,6 +134,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Scoped"
+		revision="0"
 		abstract="true"
 		reflects="a scoped declaration"
 	>
@@ -126,7 +142,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Named"/>
 	</metaobject>
 
+	<trait name="has_scope"
+		revision="0"
+		scope="meta"
+		indicates="Scoped"
+	/>
+
 	<operation name="get_scope"
+		revision="0"
 		result="Scope"
 		brief="returns the $(result) reflecting the scope of $(reflected) reflected by a $(operand)."
 	>
@@ -134,6 +157,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Scope"
+		revision="0"
 		abstract="true"
 		reflects="a scope"
 	>
@@ -141,7 +165,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Type"/>
 	</metaobject>
 
+	<trait name="is_scope"
+		revision="0"
+		scope="meta"
+		indicates="Scope"
+	/>
+
 	<metaobject name="Alias"
+		revision="0"
 		abstract="true"
 		reflects="a type or namespace alias"
 	>
@@ -149,7 +180,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Typed"/>
 	</metaobject>
 
+	<trait name="is_alias"
+		revision="0"
+		scope="meta"
+		indicates="Alias"
+	/>
+
 	<operation name="get_aliased"
+		revision="0"
 		result="Named"
 		brief="returns the $(result) reflecting the original declaration of $(reflected) reflected by a $(operand)."
 	>
@@ -157,6 +195,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="ClassMember"
+		revision="0"
 		abstract="true"
 		reflects="class member"
 	>
@@ -165,7 +204,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Class"/>
 	</metaobject>
 
+	<trait name="is_class_member"
+		revision="0"
+		scope="meta"
+		indicates="ClassMember"
+	/>
+
 	<operation name="is_public"
+		revision="0"
 		result="BooleanConstant"
 		brief="returns whether the $(reflected) reflected by a $(operand) was declared with public access."
 	>
@@ -173,6 +219,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_access_specifier"
+		revision="1"
 		result="Specifier"
 		brief="returns the $(result) reflecting the access specifier of $(reflected) reflected by a $(operand)."
 	>
@@ -180,6 +227,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Linkable"
+		revision="0"
 		abstract="true"
 		reflects="declaration with storage duration and/or linkage"
 	>
@@ -188,7 +236,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Typed"/>
 	</metaobject>
 
+	<trait name="is_linkable"
+		revision="0"
+		scope="meta"
+		indicates="Linkable"
+	/>
+
 	<operation name="is_static"
+		revision="0"
 		result="BooleanConstant"
 		brief="returns whether the $(reflected) reflected by a $(operand) was declared with the static specifier."
 	>
@@ -196,13 +251,21 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="GlobalScope"
+		revision="0"
 		reflects="the global scope"
 		label="Global\nScope"
 	>
 		<generalization concept="Scope"/>
 	</metaobject>
 
+	<trait name="is_global_scope"
+		revision="0"
+		scope="meta"
+		indicates="GlobalScope"
+	/>
+
 	<metaobject name="Namespace"
+		revision="0"
 		reflects="a namespace"
 	>
 		<generalization concept="Named"/>
@@ -210,7 +273,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Scoped"/>
 	</metaobject>
 
+	<trait name="is_namespace"
+		revision="0"
+		scope="meta"
+		indicates="Namespace"
+	/>
+
 	<metaobject name="NamespaceAlias"
+		revision="0"
 		reflects="a namespace alias"
 		label="Namespace\nAlias"
 	>
@@ -220,13 +290,21 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<metaobject name="Type"
+		revision="0"
 		reflects="a type"
 	>
 		<generalization concept="Named"/>
 		<generalization concept="Scoped"/>
 	</metaobject>
 
+	<trait name="is_type"
+		revision="0"
+		scope="meta"
+		indicates="Type"
+	/>
+
 	<operation name="get_reflected_type"
+		revision="0"
 		result="OriginalType"
 		brief="returns the the base-level type reflected by a $(operand)."
 	>
@@ -234,6 +312,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="TypeAlias"
+		revision="0"
 		label="Type\nAlias"
 		reflects="a type alias or typedef"
 	>
@@ -243,13 +322,21 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<metaobject name="Class"
+		revision="0"
 		reflects="a class"
 	>
 		<generalization concept="Type"/>
 		<generalization concept="Scope"/>
 	</metaobject>
 
+	<trait name="is_class"
+		revision="0"
+		scope="meta"
+		indicates="Class"
+	/>
+
 	<operation name="get_elaborated_type_specifier"
+		revision="1"
 		result="Specifier"
 		brief="returns a $(result) reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
@@ -257,6 +344,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_data_members"
+		revision="0"
 		result="ObjectSequence" element="DataMember"
 		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
@@ -265,8 +353,9 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_all_data_members"
+		revision="0"
 		result="ObjectSequence" element="DataMember"
-		brief="returns a $(result) of $(elements) reflecting all 
+		brief="returns a $(result) of $(elements) reflecting all
 		(including the private and protected)
 		data members of $(reflected) reflected by a $(operand)."
 	>
@@ -274,12 +363,20 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Enum"
+		revision="0"
 		reflects="an enumeration"
 	>
 		<generalization concept="Type"/>
 	</metaobject>
 
+	<trait name="is_enum"
+		revision="0"
+		scope="meta"
+		indicates="Enum"
+	/>
+
 	<metaobject name="EnumClass"
+		revision="0"
 		reflects="a strongly typed enumeration"
 	>
 		<generalization concept="Enum"/>
@@ -287,6 +384,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<metaobject name="Variable"
+		revision="0"
 		reflects="a variable"
 	>
 		<generalization concept="Named"/>
@@ -294,8 +392,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Linkable"/>
 	</metaobject>
 
+	<trait name="is_variable"
+		revision="0"
+		scope="meta"
+		indicates="Variable"
+	/>
+
 	<operation name="get_pointer"
 		uname="get_data_pointer"
+		revision="0"
 		result="Pointer"
 		brief="returns a pointer to the $(reflected) reflected by a $(operand).
 		If the variable is a class member then the pointer is a class data member pointer,
@@ -305,6 +410,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="DataMember"
+		revision="0"
 		reflects="a class data member"
 	>
 		<generalization concept="Variable"/>
@@ -312,6 +418,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<metaobject name="Function"
+		revision="1"
 		reflects="a function"
 	>
 		<generalization concept="Named"/>
@@ -319,8 +426,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Linkable"/>
 	</metaobject>
 
+	<trait name="is_function"
+		revision="1"
+		scope="meta"
+		indicates="Function"
+	/>
+
 	<operation name="get_pointer"
 		uname="get_function_pointer"
+		revision="1"
 		result="FunctionPointer"
 		brief="returns a pointer to the $(reflected) reflected by a $(operand).
 		If the function is a class member then the pointer is a class member function pointer,
@@ -330,6 +444,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_result_type"
+		revision="1"
 		result="Type"
 		brief="returns a $(result) reflecting the return type of a $(operand)."
 	>
@@ -338,6 +453,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_parameters"
 		uname="get_function_parameters"
+		revision="1"
 		result="ObjectSequence" element="Parameter"
 		brief="returns a $(result) of $(elements) reflecting the parameters of a $(operand)."
 	>
@@ -345,6 +461,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="OverloadedFunction"
+		revision="1"
 		reflects="a set of functions"
 	>
 		<generalization concept="Named"/>
@@ -352,6 +469,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</metaobject>
 
 	<operation name="get_overloads"
+		revision="1"
 		result="ObjectSequence" element="Function"
 		brief="returns a $(result) of the $(element) reflecting the concrete overloads of a $(operand)."
 	>
@@ -359,10 +477,27 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Parameter"
+		revision="1"
 		reflects="a function parameter"
 	>
 		<generalization concept="Named"/>
 		<generalization concept="Typed"/>
 		<generalization concept="Scoped"/>
 	</metaobject>
+
+	<trait name="is_parameter"
+		revision="1"
+		scope="meta"
+		indicates="Parameter"
+	/>
+
+	<metaobject name="FunctionParameter"
+		revision="1"
+		reflects="a function parameter"
+	>
+		<generalization concept="Parameter"/>
+		<constraint operation="get_scope" trait="is_function"/>
+		<order_after concept="Function"/>
+	</metaobject>
+
 </concepts>
