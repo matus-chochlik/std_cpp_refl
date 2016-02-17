@@ -99,7 +99,8 @@ class options:
 		useropts = get_argument_parser().parse_args(sys.argv[1:])
 
 		self.type_head_color = "#707070"
-		self.metaobject_head_color = "ORANGE"
+		self.abstract_metaobject_head_color = "WHEAT"
+		self.concrete_metaobject_head_color = "ORANGE"
 		self.trait_head_color = "#8080E0"
 		self.operation_head_color = "#E08080"
 		self.cell_color = "#D0D0D0"
@@ -231,11 +232,18 @@ def print_metaobject_node(opts, concepts, metaobject):
 	if opts.metaobject == name:
 		href = "hierarchy"
 
+	metaobject_head_color = opts.concrete_metaobject_head_color
+
+	try:
+		if bool(metaobject.attrib["abstract"]):
+			metaobject_head_color = opts.abstract_metaobject_head_color
+	except: pass
+
 	values = {
 		"name" : name,
 		"href" : href,
 		"typename_T": "typename T" if is_base else "Object T",
-		"head_color": opts.metaobject_head_color,
+		"head_color": metaobject_head_color,
 		"cell_color": opts.cell_color
 	}
 
