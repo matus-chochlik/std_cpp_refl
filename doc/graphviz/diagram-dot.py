@@ -91,6 +91,13 @@ def get_argument_parser():
 		default=100
 	)
 
+	argparser.add_argument(
+		"--max-revision", "-M",
+		type=int,
+		action="store",
+		default=None
+	)
+
 	return argparser
  
 class options:
@@ -107,6 +114,7 @@ class options:
 		self.gen_operations = useropts.generate_operations
 		self.gen_traits = useropts.generate_traits
 		self.revision = useropts.revision
+		self.max_revision = useropts.max_revision if useropts.max_revision else self.revision
 
 		self.traits_rank_same = useropts.trait is None
 		self.operations_rank_same = False
@@ -242,6 +250,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 	values = {
 		"name" : name,
 		"href" : href,
+		"revision": opts.revision,
 		"typename_T": "typename T" if is_base else "Object T",
 		"head_color": metaobject_head_color,
 		"cell_color": opts.cell_color
@@ -249,7 +258,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s-%(revision)d.svg">"""
 	% values)
 
 	opts.output.write("""
@@ -311,13 +320,14 @@ def print_trait_node(opts, concepts, trait):
 	values = {
 		"name" : name,
 		"href" : href,
+		"revision": opts.revision,
 		"head_color": opts.trait_head_color,
 		"cell_color": opts.cell_color
 	}
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s-%(revision)d.svg">"""
 	% values)
 
 	opts.output.write("""
@@ -382,6 +392,7 @@ def print_operation_node(opts, concepts, operation):
 		"name" : name,
 		"uname" : uname,
 		"href" : href,
+		"revision": opts.revision,
 		"result" : result,
 		"operands" : ", ".join(operands),
 		"head_color": opts.operation_head_color,
@@ -392,7 +403,7 @@ def print_operation_node(opts, concepts, operation):
 
 	opts.output.write("""
 	%(uname)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s-%(revision)d.svg">"""
 	% values)
 
 	opts.output.write("""
@@ -530,7 +541,7 @@ def do_print_note_node(opts, name, text):
 	edge [constraint="false" style="dotted" arrowhead="none"];""")
 
 	opts.output.write("""
-	%s [shape="note", bgcolor="WHEAT" label="%s"];""" % (name, text))
+	%s [shape="note" style="filled" fillcolor="#D0D0D0" label="%s"];""" % (name, text))
 
 def print_note_node(opts, name, text):
 	import textwrap
@@ -540,6 +551,46 @@ def print_note_node(opts, name, text):
 	text = "\n".join(wrapper.wrap(text))
 
 	do_print_note_node(opts, name, text)
+
+
+def print_revision_node(opts, node, revision):
+
+	try:
+		if int(node.attrib["revision"]) > revision:
+			return
+	except: pass
+
+	name = "revision_%d" % revision
+	text = "Revision %d." % revision
+	href = "overview"
+
+	if opts.metaobject:
+		href = "concept-" + opts.metaobject
+	elif opts.operation:
+		href = "operation-" + opts.operation
+	elif opts.trait:
+		href = "trait-" + opts.trait
+	elif not opts.gen_operations and not opts.gen_traits:
+		href = "hierarchy"
+	elif opts.gen_operations and not opts.gen_traits:
+		href = "operations"
+	elif not opts.gen_operations and opts.gen_traits:
+		href = "traits"
+
+	opts.output.write("""
+	%(name)s [shape="folder" style="filled" fillcolor="YELLOW" label="%(text)s" href="%(href)s-%(revision)d.svg"];""" % {
+		"name": name,
+		"text": text,
+		"href": href,
+		"revision": revision
+	})
+
+	if node is not None:
+		opts.output.write("""
+		edge [constraint="false" style="dotted" arrowhead="none"];""")
+
+		print_edge(opts, get_node_uname(node), name)
+	
 
 
 def print_metaobject(opts, concepts):
@@ -656,6 +707,12 @@ def print_metaobject(opts, concepts):
 	print_note_node(opts, "description", desc)
 	print_edge(opts, opts.metaobject, "description")
 
+	# Revisions
+	if opts.revision > 0:
+		print_revision_node(opts, metaobject, opts.revision-1)
+	if opts.revision < opts.max_revision:
+		print_revision_node(opts, metaobject, opts.revision+1)
+
 	opts.output.write("""}
 	""")
 
@@ -740,8 +797,15 @@ def print_operation(opts, concepts):
 	print_note_node(opts, "description", desc)
 	print_edge(opts, uname, "description")
 
+	# Revisions
+	if opts.revision > 0:
+		print_revision_node(opts, operation, opts.revision-1)
+	if opts.revision < opts.max_revision:
+		print_revision_node(opts, operation, opts.revision+1)
+
 	opts.output.write("""}
 	""")
+
 
 def print_trait(opts, concepts):
 	opts.output.write("""digraph %(trait)s {
@@ -788,6 +852,12 @@ def print_trait(opts, concepts):
 	desc = "Indicates that a metaobject is a %s." % indicates
 	print_note_node(opts, "description", desc)
 	print_edge(opts, opts.trait, "description")
+
+	# Revisions
+	if opts.revision > 0:
+		print_revision_node(opts, trait, opts.revision-1)
+	if opts.revision < opts.max_revision:
+		print_revision_node(opts, trait, opts.revision+1)
 
 	opts.output.write("""}
 	""")
@@ -907,6 +977,12 @@ def print_overview(opts, concepts):
 			if random.random() < coef:
 				print_concept_edge(opts, metaobject, prev_mo)
 		prev_mo = metaobject
+
+	# Revisions
+	if opts.revision > 0:
+		print_revision_node(opts, None, opts.revision-1)
+	if opts.revision < opts.max_revision:
+		print_revision_node(opts, None, opts.revision+1)
 
 	opts.output.write("""}
 	""")
