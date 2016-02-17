@@ -1,7 +1,7 @@
-XSLTPROC = xsltproc
-DOT = dot
-NEATO = neato
-REVISION = 0
+XSLTPROC ?= xsltproc
+DOT ?= dot
+NEATO ?= neato
+REVISION ?= 0
 
 sinclude tmp/concepts.mk
 sinclude tmp/traits.mk
