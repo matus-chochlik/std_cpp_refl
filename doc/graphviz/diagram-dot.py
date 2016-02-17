@@ -529,6 +529,12 @@ def print_concept_edge(opts, concept_from, concept_to):
 
 	print_edge(opts, name_from, name_to)
 
+def print_revision_edge(opts, rev_from, rev_to):
+	name_from = "revision_%d" % rev_from
+	name_to = "revision_%d" % rev_to
+
+	print_edge(opts, name_from, name_to)
+
 def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 	gene_name = generalization.attrib["concept"]
 	spec_name = specialization.attrib["name"]
@@ -541,7 +547,8 @@ def do_print_note_node(opts, name, text):
 	edge [constraint="false" style="dotted" arrowhead="none"];""")
 
 	opts.output.write("""
-	%s [shape="note" style="filled" fillcolor="#D0D0D0" label="%s"];""" % (name, text))
+	%(name)s [shape="note" style="filled" fillcolor="%(cell_color)s" label="%(text)s"];""" %
+	{"name": name, "text": text, "cell_color": opts.cell_color})
 
 def print_note_node(opts, name, text):
 	import textwrap
@@ -557,7 +564,7 @@ def print_revision_node(opts, node, revision):
 
 	try:
 		if int(node.attrib["revision"]) > revision:
-			return
+			return False
 	except: pass
 
 	name = "revision_%d" % revision
@@ -577,21 +584,51 @@ def print_revision_node(opts, node, revision):
 	elif not opts.gen_operations and opts.gen_traits:
 		href = "traits"
 
+	href_tag = ' href="%(href)s-%(rev)d.svg"' % {"href": href, "rev": revision}
+
+	if revision < opts.revision:
+		shape = "larrow"
+		color = "#FFAA00"
+	elif revision > opts.revision:
+		shape = "rarrow"
+		color = "#AAFF00"
+	else:
+		shape = "note"
+		color = opts.cell_color
+		href_tag =""
+
 	opts.output.write("""
-	%(name)s [shape="folder" style="filled" fillcolor="YELLOW" label="%(text)s" href="%(href)s-%(revision)d.svg"];""" % {
+	%(name)s [shape="%(shape)s" style="filled" fillcolor="%(color)s" label="%(text)s"%(href_tag)s];""" % {
+		"shape": shape,
+		"color": color,
 		"name": name,
 		"text": text,
-		"href": href,
-		"revision": revision
+		"href_tag": href_tag
 	})
 
 	if node is not None:
-		opts.output.write("""
-		edge [constraint="false" style="dotted" arrowhead="none"];""")
-
 		print_edge(opts, get_node_uname(node), name)
-	
 
+	return True
+	
+def print_revision_nodes(opts, node):
+
+	opts.output.write("""
+	subgraph _revisions {""")
+
+	opts.output.write("""
+	edge [constraint="false" style="dotted" arrowhead="none"];""")
+
+	print_revision_node(opts, node, opts.revision)
+	if opts.revision > 0:
+		if print_revision_node(opts, node, opts.revision-1):
+			print_revision_edge(opts, opts.revision-1, opts.revision)
+	if opts.revision < opts.max_revision:
+		if print_revision_node(opts, node, opts.revision+1):
+			print_revision_edge(opts, opts.revision, opts.revision+1)
+
+	opts.output.write("""
+	}\n""")
 
 def print_metaobject(opts, concepts):
 	import random
@@ -708,10 +745,7 @@ def print_metaobject(opts, concepts):
 	print_edge(opts, opts.metaobject, "description")
 
 	# Revisions
-	if opts.revision > 0:
-		print_revision_node(opts, metaobject, opts.revision-1)
-	if opts.revision < opts.max_revision:
-		print_revision_node(opts, metaobject, opts.revision+1)
+	print_revision_nodes(opts, metaobject)
 
 	opts.output.write("""}
 	""")
@@ -798,10 +832,7 @@ def print_operation(opts, concepts):
 	print_edge(opts, uname, "description")
 
 	# Revisions
-	if opts.revision > 0:
-		print_revision_node(opts, operation, opts.revision-1)
-	if opts.revision < opts.max_revision:
-		print_revision_node(opts, operation, opts.revision+1)
+	print_revision_nodes(opts, operation)
 
 	opts.output.write("""}
 	""")
@@ -854,10 +885,7 @@ def print_trait(opts, concepts):
 	print_edge(opts, opts.trait, "description")
 
 	# Revisions
-	if opts.revision > 0:
-		print_revision_node(opts, trait, opts.revision-1)
-	if opts.revision < opts.max_revision:
-		print_revision_node(opts, trait, opts.revision+1)
+	print_revision_nodes(opts, trait)
 
 	opts.output.write("""}
 	""")
@@ -979,10 +1007,7 @@ def print_overview(opts, concepts):
 		prev_mo = metaobject
 
 	# Revisions
-	if opts.revision > 0:
-		print_revision_node(opts, None, opts.revision-1)
-	if opts.revision < opts.max_revision:
-		print_revision_node(opts, None, opts.revision+1)
+	print_revision_nodes(opts, None)
 
 	opts.output.write("""}
 	""")
