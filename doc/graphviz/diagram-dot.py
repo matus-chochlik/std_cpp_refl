@@ -568,8 +568,11 @@ def print_revision_node(opts, node, revision):
 	except: pass
 
 	name = "revision_%d" % revision
-	text = "Revision %d." % revision
 	href = "overview"
+	if opts.revision == revision:
+		text = "This is revision %d." % revision
+	else:
+		text = "Go to revision %d." % revision
 
 	if opts.metaobject:
 		href = "concept-" + opts.metaobject
