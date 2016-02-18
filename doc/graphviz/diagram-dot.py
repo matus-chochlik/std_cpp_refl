@@ -518,10 +518,11 @@ def print_operation_node(opts, concepts, operation):
 		% (operand, name))
 
 
-def print_edge(opts, name_from, name_to):
+def print_edge(opts, name_from, name_to, attribs = None):
+	attr_str = " [%s]" % attribs if attribs is not None else ""
 	opts.output.write("""
-	%s -> %s;"""
-	% (name_from, name_to))
+	%s -> %s%s;"""
+	% (name_from, name_to, attr_str))
 
 def print_concept_edge(opts, concept_from, concept_to):
 	name_from = get_node_uname(concept_from)
@@ -532,8 +533,9 @@ def print_concept_edge(opts, concept_from, concept_to):
 def print_revision_edge(opts, rev_from, rev_to):
 	name_from = "revision_%d" % rev_from
 	name_to = "revision_%d" % rev_to
+	attribs = 'constraint="false" style="dotted" len=0.1 weight=1000'
 
-	print_edge(opts, name_from, name_to)
+	print_edge(opts, name_from, name_to, attribs)
 
 def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 	gene_name = generalization.attrib["concept"]
@@ -610,17 +612,11 @@ def print_revision_node(opts, node, revision):
 	})
 
 	if node is not None:
-		print_edge(opts, get_node_uname(node), name)
+		print_edge(opts, get_node_uname(node), name, 'constraint="false" style="dotted" arrowhead="none"')
 
 	return True
 	
 def print_revision_nodes(opts, node):
-
-	opts.output.write("""
-	subgraph _revisions {""")
-
-	opts.output.write("""
-	edge [constraint="false" style="dotted" arrowhead="none"];""")
 
 	print_revision_node(opts, node, opts.revision)
 	if opts.revision > 0:
@@ -629,9 +625,6 @@ def print_revision_nodes(opts, node):
 	if opts.revision < opts.max_revision:
 		if print_revision_node(opts, node, opts.revision+1):
 			print_revision_edge(opts, opts.revision, opts.revision+1)
-
-	opts.output.write("""
-	}\n""")
 
 def print_metaobject(opts, concepts):
 	import random
