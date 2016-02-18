@@ -746,7 +746,7 @@ def print_operation(opts, concepts):
 	nodesep=%(nodesep)f
 	sep=%(sep)f
 	fontName="Sans"
-	splines=true
+	splines=curved
 	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
@@ -831,7 +831,7 @@ def print_trait(opts, concepts):
 	nodesep=%(nodesep)f
 	sep=%(sep)f
 	fontName="Sans"
-	splines=true
+	splines=curved
 	maxiter=10000000
 
 	edge [penwidth=2.0 arrowsize=2.0 fillcolor="WHITE"];
