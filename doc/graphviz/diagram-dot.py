@@ -145,9 +145,12 @@ def iter_last(iterable):
     yield prev, True
 
 
-def in_revision(opts, node):
-	try: return int(node.attrib["revision"]) <= opts.revision
+def in_a_revision(opts, node, revision):
+	try: return int(node.attrib["revision"]) <= revision
 	except KeyError: return True
+
+def in_revision(opts, node):
+	return in_a_revision(opts, node, opts.revision)
 
 def findall(opts, parent_node, query):
 	return [x for x in parent_node.findall(query) if in_revision(opts, x)]
@@ -530,13 +533,6 @@ def print_concept_edge(opts, concept_from, concept_to):
 
 	print_edge(opts, name_from, name_to)
 
-def print_revision_edge(opts, rev_from, rev_to):
-	name_from = "revision_%d" % rev_from
-	name_to = "revision_%d" % rev_to
-	attribs = 'constraint="false" style="dotted" len=0.1 weight=1000'
-
-	print_edge(opts, name_from, name_to, attribs)
-
 def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 	gene_name = generalization.attrib["concept"]
 	spec_name = specialization.attrib["name"]
@@ -562,19 +558,9 @@ def print_note_node(opts, name, text):
 	do_print_note_node(opts, name, text)
 
 
-def print_revision_node(opts, node, revision):
+def print_revision_nodes(opts, node):
 
-	try:
-		if int(node.attrib["revision"]) > revision:
-			return False
-	except: pass
-
-	name = "revision_%d" % revision
-	href = "overview"
-	if opts.revision == revision:
-		text = "This is revision %d." % revision
-	else:
-		text = "Go to revision %d." % revision
+	name = "revisions"
 
 	if opts.metaobject:
 		href = "concept-" + opts.metaobject
@@ -588,43 +574,46 @@ def print_revision_node(opts, node, revision):
 		href = "operations"
 	elif not opts.gen_operations and opts.gen_traits:
 		href = "traits"
-
-	href_tag = ' href="%(href)s-%(rev)d.svg"' % {"href": href, "rev": revision}
-
-	if revision < opts.revision:
-		shape = "larrow"
-		color = "#FFAA00"
-	elif revision > opts.revision:
-		shape = "rarrow"
-		color = "#AAFF00"
 	else:
-		shape = "note"
-		color = opts.cell_color
-		href_tag =""
+		href = "overview"
+
+	values = {
+		"name" : name,
+		"href" : href,
+		"revision": opts.revision,
+		"link_color": "#AAFF00",
+		"cell_color": opts.cell_color
+	}
 
 	opts.output.write("""
-	%(name)s [shape="%(shape)s" style="filled" fillcolor="%(color)s" label="%(text)s"%(href_tag)s];""" % {
-		"shape": shape,
-		"color": color,
-		"name": name,
-		"text": text,
-		"href_tag": href_tag
-	})
+	%(name)s [label=<
+	<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">"""
+	% values)
+
+	opts.output.write("""
+	<TR><TD BGCOLOR="%(cell_color)s">This is revision %(revision)d.</TD></TR>""" % values)
+
+	other_revisions = []
+	if opts.revision > 0:
+		if node is None or in_a_revision(opts, node, opts.revision-1):
+			other_revisions.append(opts.revision-1)
+	if opts.revision < opts.max_revision:
+		other_revisions.append(opts.revision+1)
+
+	for other_rev in other_revisions:
+		values["other_rev"] = other_rev
+		opts.output.write("""
+		<TR><TD BGCOLOR="%(link_color)s" BORDER="1" HREF="%(href)s-%(other_rev)d.svg">Go to revision %(other_rev)d.</TD></TR>""" %
+		values)
+
+	opts.output.write("""
+	</TABLE>>
+	shape="note" style="filled" fillcolor="%(cell_color)s"
+	];""" % values)
 
 	if node is not None:
 		print_edge(opts, get_node_uname(node), name, 'constraint="false" style="dotted" arrowhead="none"')
 
-	return True
-	
-def print_revision_nodes(opts, node):
-
-	print_revision_node(opts, node, opts.revision)
-	if opts.revision > 0:
-		if print_revision_node(opts, node, opts.revision-1):
-			print_revision_edge(opts, opts.revision-1, opts.revision)
-	if opts.revision < opts.max_revision:
-		if print_revision_node(opts, node, opts.revision+1):
-			print_revision_edge(opts, opts.revision, opts.revision+1)
 
 def print_metaobject(opts, concepts):
 	import random

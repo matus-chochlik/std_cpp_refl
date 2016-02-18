@@ -3,7 +3,7 @@ SED ?= sed
 DOT ?= dot
 NEATO ?= neato
 MAX_REVISION ?= 1
-REVISIONS = 0 1
+REVISIONS = $(shell seq 0 $(MAX_REVISION))
 
 ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))
