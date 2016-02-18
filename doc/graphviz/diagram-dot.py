@@ -608,11 +608,11 @@ def print_revision_nodes(opts, node):
 
 	opts.output.write("""
 	</TABLE>>
-	shape="note" style="filled" fillcolor="%(cell_color)s"
+	shape="folder" style="filled" fillcolor="%(cell_color)s"
 	];""" % values)
 
 	if node is not None:
-		print_edge(opts, get_node_uname(node), name, 'constraint="false" style="dotted" arrowhead="none"')
+		print_edge(opts, name, get_node_uname(node), 'constraint="true" style="dotted" arrowhead="none"')
 
 
 def print_metaobject(opts, concepts):
@@ -992,7 +992,7 @@ def print_overview(opts, concepts):
 		prev_mo = metaobject
 
 	# Revisions
-	print_revision_nodes(opts, None)
+	print_revision_nodes(opts, find_metaobject(opts, concepts, "Object"))
 
 	opts.output.write("""}
 	""")
