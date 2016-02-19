@@ -399,7 +399,8 @@ def print_operation_node(opts, concepts, operation):
 		"result" : result,
 		"operands" : ", ".join(operands),
 		"head_color": opts.operation_head_color,
-		"cell_color": opts.cell_color
+		"cell_color": opts.cell_color,
+		"padding": 6
 	}
 
 	inherit_result = result in ["IntegralConstant", "BooleanConstant"]
@@ -444,7 +445,7 @@ def print_operation_node(opts, concepts, operation):
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">static constexpr const char value[N+1];</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" CELLPADDING="%(padding)d" ALIGN="LEFT">static constexpr const char value[N+1];</TD>
 			</TR>""" % values)
 		elif result == "Pointer":
 
@@ -458,35 +459,91 @@ def print_operation_node(opts, concepts, operation):
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">is_class_member_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">is_class_member_v&lt;T&gt;</TD>
 				<TD BGCOLOR="%(cell_color)s">&amp;&amp;</TD>
 			</TR>""" % values)
 
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">!is_static_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">!is_static_v&lt;T&gt;</TD>
 				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
 			</TR>""" % values)
 
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;</TD>
 				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
 			</TR>""" % values)
 
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*</TD>
 				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
 			</TR>""" % values)
 
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
-				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;*</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">get_reflected_type_t&lt;get_type_t&lt;T&gt;&gt;*</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">&gt; value;</TD>
+			</TR>""" % values)
+		elif result == "FunctionPointer":
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">const</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="LEFT">conditional_t&lt;</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">is_class_member_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s">&amp;&amp;</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">!is_static_v&lt;T&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">get_reflected_type_t&lt;get_result_type_t&lt;T&gt;&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">(get_reflected_type_t&lt;get_scope_t&lt;T&gt;&gt;::*)(P...)</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">,</TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT" CELLPADDING="%(padding)d">get_reflected_type_t&lt;get_result_type_t&lt;T&gt;&gt;</TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
+			</TR>""" % values)
+
+			opts.output.write("""
+			<TR>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2"></TD>
+				<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT" CELLPADDING="%(padding)d">(*)(P...)</TD>
 				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT"></TD>
 			</TR>""" % values)
 
@@ -499,7 +556,7 @@ def print_operation_node(opts, concepts, operation):
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" ALIGN="LEFT">typedef %(result)s type;</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" CELLPADDING="%(padding)d" ALIGN="LEFT">typedef %(result)s type;</TD>
 			</TR>""" % values)
 	
 

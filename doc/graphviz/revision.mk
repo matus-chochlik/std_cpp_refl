@@ -1,5 +1,8 @@
-diagrams-$(REVISION): $(foreach I, $(DIAGRAMS-$(REVISION)), ./out/$I-$(REVISION).svg)
-.PHONY: diagrams-$(REVISION)
+svg-diagrams-$(REVISION): $(foreach I, $(DIAGRAMS-$(REVISION)), ./out/$I-$(REVISION).svg)
+.PHONY: svg-diagrams-$(REVISION)
+
+pdf-diagrams-$(REVISION): $(foreach I, $(DIAGRAMS-$(REVISION)), ./out/$I-$(REVISION).pdf)
+.PHONY: pdf-diagrams-$(REVISION)
 
 ./tmp/%-$(REVISION).dot: ./%-dot.xsl ../concepts.xml
 	$(XSLTPROC) --stringparam revision $(REVISION) --output $@ $^

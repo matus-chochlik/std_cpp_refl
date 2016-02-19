@@ -2,6 +2,8 @@ XSLTPROC ?= xsltproc
 SED ?= sed
 DOT ?= dot
 NEATO ?= neato
+INKSCAPE ?= inkscape
+
 MAX_REVISION ?= 1
 REVISIONS = $(shell seq 0 $(MAX_REVISION))
 
@@ -9,15 +11,21 @@ ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))
 endif
 
-all: ./out/index.html diagrams
+all: ./out/index.html svg-diagrams
 .PHONY: all
 
 ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/revision-$(R).mk))
 endif
 
-diagrams: $(foreach R,$(REVISIONS), diagrams-$(R))
-.PHONY: diagrams
+pdf-diagrams: $(foreach R,$(REVISIONS), pdf-diagrams-$(R))
+.PHONY: pdf-diagrams
+
+svg-diagrams: $(foreach R,$(REVISIONS), svg-diagrams-$(R))
+.PHONY: svg-diagrams
+
+./out/%.pdf: ./out/%.svg
+	$(INKSCAPE) --export-pdf=$@ $<
 
 ./out/%.svg: ./tmp/%.svg | out
 	$(XSLTPROC) --output $@ ./dot-svg-fixup.xsl $^
@@ -49,4 +57,7 @@ out tmp:
 clean:
 	rm -rf out tmp
 
-.PHONY: clean
+clean-pdf:
+	rm -f out/*.pdf
+
+.PHONY: clean clean-pdf
