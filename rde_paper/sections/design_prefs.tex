@@ -65,6 +65,10 @@ correspond to the ontology of the base-level C++ language constructs
 which they reflect. This basically means that all existing language
 features (within reason) should be reflected and new ones should not be invented.
 
+Ontological correspondence should be the main factor driving the definition of the
+metaobject concepts and the design of their interfaces.
+
+
 \subsubsection{Efficiency}
 \label{design-efficiency}
 
@@ -74,8 +78,9 @@ should not generally be compiled-into such application nor result in
 increased compiler footprint or compilation times.
 
 The proposed reflection facility makes a completely lazy implementation of
-metaobjects possible. Invoking the reflection operator can generate only a very
-lightweight type providing a link to the reflected declaration. The actual
+metaobjects possible. Metaobjects are created only when requested and invoking
+the reflection operator can generate only a very
+lightweight type providing a link back to the reflected declaration. The actual
 metadata (like an identifier, the list of members, the scope, etc.)
  is only materialized when requested by the programmer via the
 templates which act as the metaobject API.
@@ -85,7 +90,7 @@ templates which act as the metaobject API.
 
 Although reflection-based metaprogramming should allow to implement very
 complicated meta-algorithms, simple things should be kept as simple as possible
-(but not simpler).
+(but not simpler\footnote{Credits to whoever said that.}).
 
 This can be achieved by having a solid and powerful compiler-assisted reflection
 as the foundation and by implementing a simplifying facade on top of it once
