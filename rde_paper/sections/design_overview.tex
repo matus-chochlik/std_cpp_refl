@@ -1,0 +1,26 @@
+\subsection{Basic overview}
+
+In P0194R0 (and its predecessors) we propose to add native support for
+compile-time reflection to C++ by the means of lightweight compiler-generated
+types -- {\em metaobjects} providing metadata describing various program
+declarations.
+
+The metaobjects exist only at the type-level, they do not have any constructors
+or members and cannot be instantiated. Their sole purpose is to give an identity
+to the reflected entity (namespace, class, function, variable, specifier, etc.).
+
+The metadata can be obtained by using one of the class templates which comprise
+the interface of the metaobjects. Since there are many different kinds of
+base-level reflectible declarations, the metaobjects reflecting them are
+modeling various {\em metaobject concepts}. The metaobjects can be inspected
+by {\em metaobject traits}, which indicate whether a metaobjects has or has
+not a particular property or if is falls into a particular category.
+
+We also introduce a new reflection operator -- \verb@reflexpr@ and the initial subset
+of metaobject concepts which we assume to be essential
+and which will provide a good starting point for future extensions.
+
+When finalized, these metaobjects, together with some additions to the standard
+library can later be used to implement other third-party libraries
+providing both compile-time and run-time, high-level reflection.
+

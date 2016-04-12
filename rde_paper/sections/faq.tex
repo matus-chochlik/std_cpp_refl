@@ -1,0 +1,211 @@
+\section{Frequently asked questions}
+
+\subsection{Why metaobjects, why not reflect directly?}
+
+{\textbf Q:}{\em Why should we bother with defining a set of metaobject concepts,
+let the compiler generate models of these concepts and use those to obtain
+the metadata? Why not just extend the existing type traits?}
+
+{\textbf A:} The most important reasons are the \hyperref[design-completeness]{completeness}
+and the scope of reflection.
+Type traits (as they are defined now) work just with types. A reflection facility should
+however provide much more metadata.
+It should eventually be able to reflect namespaces, functions, constructors,
+class inheritance, templates, specifiers, variables, etc.
+
+Without drastically changing the rules specifying what can or cannot be a template
+parameter, we cannot reflect C++'s second-class citizens like namespaces.
+
+This is also connected with the usability of reflection in metaprograms.
+Using types to reflect various base-level declarations, allows to
+pass (a representation of) a namespace, constructor, specifier or a parameter,
+around various \say{functions} of a metaprogram as a parameter or a return value.
+
+In order to achieve this by other means it would be necessary to make namespaces,
+etc. first-class objects or at least to allow them to become template arguments.
+
+So with type-based metaobjects we can do for example the following:
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	// do something terribly useful
+}
+
+foo<reflexpr(int)>(); // works
+foo<reflexpr(std)>(); // works
+foo<reflexpr(std::string)>(); // works
+foo<reflexpr(std::string::size_type)>(); // works
+foo<reflexpr(std::size_t)>(); // works and different from the above
+foo<reflexpr(std::pair)>(); // works
+foo<reflexpr(std::sqrt)>(); // works
+foo<reflexpr(static)>(); // works
+\end{minted}
+
+meanwhile without metaobjects:
+
+\begin{minted}{cpp}
+template <whatever Param>
+void foo(void)
+{
+	// do something terribly useful, if possible
+}
+
+foo<int>(); // works
+foo<std>(); // error?
+foo<std::string>(); // works
+foo<std::string::size_type>(); // works
+foo<std::size_t>(); // works but same as the above
+foo_tpl<std::pair>(); // works (if there are two versions of foo)
+foo<std::sqrt>(); // error?
+foo<static>(); // error?
+\end{minted}
+
+\subsection{There's already a type trait for that!}
+
+{\textbf Q:}{\em Why do you introduce a metaobject trait like
+\verb@std::meta::is_class<Metaobject>@  when there already are type traits like
+\verb@std::is_class<T>@?}
+
+{\textbf A:} The reason is consistency.
+While it is true that there are a few metaobject traits, which indicate the
+same thing as already existing type traits, omitting the metaobject trait
+in favor of the type trait would break consistency and make the interface less generic.
+
+For example the following is much more consistent and nicer,
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	if(std::meta::is_class_v<Metaobject>) { ... }
+	else if(std::meta::is_typedef_v<Metaobject>) { ... }
+	else if(std::meta::is_type_v<Metaobject>) { ... }
+	else if(std::meta::is_namespace_v<Metaobject>) { ... }
+	else if(std::meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+than,
+
+\begin{minted}{cpp}
+template <typename T, typename Metaobject>
+void foo(void)
+{
+	if(std::is_class_v<T>) { ... }
+	else if(meta::is_typedef_v<Metaobject>) { ... }
+	else if(meta::is_type_v<Metaobject>) { ... }
+	else if(meta::is_namespace_v<Metaobject>) { ... }
+	else if(meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+or even,
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	if(std::is_class_v<get_original_type_t<Metaobject>>) { ... }
+	else if(meta::is_typedef_v<Metaobject>) { ... }
+	else if(meta::is_type_v<Metaobject>) { ... }
+	else if(meta::is_namespace_v<Metaobject>) { ... }
+	else if(meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+Even more important is the problem with breaking genericity:
+
+\begin{minted}{cpp}
+template <typename Metaobject, template <class> class Trait>
+void bar(void)
+{
+	if(Trait<Metaobject>::value) { ... }
+	else { ... }
+}
+
+bar<reflexpr(std), std::meta::is_namespace>(); // works
+bar<reflexpr(std::string), std::meta::is_class>(); // works
+bar<reflexpr(std::string), std::is_class>(); // error!
+\end{minted}
+
+
+In C++ there are many examples of various expressions doing the same thing,
+this is just one of them.
+Having several options is not a bad thing, pick the one most appropriate for your
+particular use-case.
+
+
+\subsection{There's already another expression for that!}
+
+{\textbf Q:}{\em There are situations where you can do something much more
+easily without reflection than with it, like \verb@&variable@ vs.
+\verb@meta::get_pointer_v<reflexpr(variable)>@ or\\\verb@decltype(var)@ vs.
+\verb@meta::get_original_type_t<meta::get_type_t<reflexpr(var)>>@, etc.}
+
+{\textbf A:} Of course there are! There are also situations where the decision
+that you want to get a pointer to or a to get the type of a (reflected) variable
+can be separated from the actual site where you access (reflect) the variable by
+several layers of metaprogram templates. Both use-cases are valid and
+again, you should pick the most appropriate option for your situation.
+
+\subsection{Why are the metaobjects anonymous?}
+
+{\textbf Q:}{\em Why should the metaobjects be anonymous types as opposed to
+types with well defined and standardized names or concrete template classes, (possibly with some
+special kind of parameter accepting different arguments than types and constants)?}
+
+{\textbf A:} We wanted to avoid defining a specific naming convention, because it would
+be difficult to do so and very probably not user friendly (see C++ name mangling). There
+already are precedents for anonymous types -- for example C++ {\em lambdas}.
+
+Another option would be to define a concrete set of template classes like:
+
+\begin{minted}{cpp}
+namespace std {
+
+template <typename T>
+class meta_type /* Model of MetaType */
+{ };
+
+}
+\end{minted}
+
+which could work with types, classes, etc., but would not work with namespaces,
+constructors, etc. (see also the Q/A above):
+
+\begin{minted}{cpp}
+namespace std {
+
+template <something X> // problem
+class meta_constructor /* Model of MetaConstructor */
+{ };
+
+template <something X> // problem
+class meta_namespace /* Model of MetaNamespace */
+{ };
+
+}
+
+typedef std::meta_namespace<std> meta_std; // problem
+\end{minted}
+
+Instead of this, the metaobjects are anonymous and their (internal) identification
+is left to the compiler. From the user's point of view, the metaobject can be distinguished
+by the means of the metaobject traits and tags.
+
+\subsection{Reflection accessing private members?}
+
+{\textbf Q:}{\em Why do you allow reflection to bypass the class member access
+restrictions? This is like giving people nuclear weapons. I don't want people
+to have nuclear weapons[sic]!}
+
+{\textbf A:}
+This is a valid point, but there are several different ways to achieve this
+if the programmer wants to and we feel that restricting reflection only to public
+class members would severely limit its usefulness. Having said that we also
+try to design the interface to clearly indicate to the users that they break
+encapsulation.
+
+\subsection{TODO}

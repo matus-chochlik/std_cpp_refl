@@ -1,0 +1,89 @@
+\documentclass[11pt,oneside]{scrartcl}
+\usepackage[a4paper,total={7in, 9.5in}]{geometry}
+
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{chochlik@gmail.com}
+\newcommand{\doctitle}{Static reflection}
+\newcommand{\docsubtitle}{Rationale, design and evolution.}
+\newcommand{\docnum}{DxxxxR0}
+\newcommand{\docdate}{2016-04-12}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[colorlinks=false,hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage[titletoc]{appendix}
+\usepackage{siunitx}
+\usepackage{dirtytalk}
+\usepackage{color,soul}
+
+\usepackage{listings}
+\usepackage{minted}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\textbf{\docnum} -- \doctitle\\\scriptsize{\docsubtitle}}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf}
+\graphicspath{{images/}}
+\usepackage{rotating}
+
+\setcounter{tocdepth}{3} 
+
+\title{\doctitle}
+\subtitle{\docsubtitle}
+
+\author{\mchname (\mchmail)}
+
+\newcommand{\concept}[1]{\hyperref[concept-#1]{\em{#1}}}
+\newcommand{\meta}[1]{\hyperref[concept-Meta-#1]{\em{Meta-#1}}}
+
+\begin{document}
+
+\begin{tabular}{r l}
+Document number: & \docnum\\
+Date: & \docdate\\
+Project: & Programming Language C++ \\
+Audience: & Reflection (SG7) / EWG \\
+Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail}), Axel Naumann (\href{mailto:Axel.Naumann@cern.ch}{Axel.Naumann@cern.ch})\\
+\end{tabular}
+
+\begin{center}
+\vskip 2em
+{\Huge \doctitle}\\
+{\Large \docsubtitle}
+\vskip 1em
+{\em \mchname, Axel Naumann}
+\vskip 2em
+\end{center}
+
+\paragraph{Abstract}
+
+The aim of this paper is to provide the rationale driving the
+design of the static reflection facility proposed in N3996, N4111, N4451
+and P0194, to enumerate and describe its potential use-cases
+and to keep a written record of its evolution. It also answers questions
+frequently asked in regard to the proposal.
+
+\tableofcontents
+
+\input{sections/introduction.tex}
+\input{sections/design.tex}
+\input{sections/future.tex}
+\input{sections/faq.tex}
+
+\begin{appendices}
+\newpage
+\appendix
+\part*{Appendix}
+\addcontentsline{toc}{part}{Appendix}
+%\input{sections/examples.tex}
+\end{appendices}
+
+\end{document}
