@@ -2,15 +2,17 @@
 
 In P0194R0 we propose to add native support for
 compile-time reflection to C++ by the means of lightweight, compiler-generated
-types -- {\em metaobjects}, providing metadata describing various program
-declarations.
+types -- {\em metaobjects}, providing \hyperref[term-metadata]{metadata}
+describing various \hyperref[term-base-meta-level]{base-level} program declarations.
 
 The metaobjects exist only at the type-level, they do not have any constructors
-or members and cannot be instantiated. Their sole purpose is to give a
-first class identity
-to the reflected entity (namespace, typedef, function, parameter, specifier, etc.),
+or members and cannot be instantiated\footnote{It's not possible to define
+a run-time variable of metaobject type}.
+
+Their sole purpose is to give a \hyperref[term-first-class]{first class identity}
+to the reflected entity\footnote{Namespace, typedef, function, parameter, specifier, etc.},
 so that we can pass it as argument or return value in metaprograms and to
-separate the reflection of the declaration from the querying of metadata.
+separate the reflection of a declaration from the querying of metadata.
 
 The metadata can be obtained from a metaobject by using one of the class templates
 which comprise its interface.
@@ -22,6 +24,17 @@ not a particular property or if is falls into a particular category.
 
 We introduce a new reflection operator -- \verb@reflexpr@ which returns a
 metaobject type reflecting its operand.
+
+For example:
+
+\begin{minted}{cpp}
+typedef reflexpr() meta_global_scope;
+typedef reflexpr(int) meta_int;
+typedef reflexpr(std) meta_std;
+typedef reflexpr(std::size_t) meta_std_size_t;
+typedef reflexpr(std::thread) meta_std_thread;
+typedef reflexpr(std::pair) meta_std_pair;
+\end{minted}
 
 P0194R0 also defines the initial subset
 of metaobject concepts which we assume to be essential

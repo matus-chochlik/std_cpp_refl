@@ -1,6 +1,6 @@
 \section{Frequently asked questions}
 
-\subsection{Why metaobjects, why not reflect directly, with type traits?}
+\subsection{Why metaobjects, why not reflect directly with type traits?}
 \label{faq-why-metaobjects}
 
 {\textbf Q:}{\em Why should we bother with defining a set of metaobject concepts,
@@ -19,8 +19,8 @@ parameter, we cannot reflect C++'s second-class citizens like namespaces.
 
 This is also connected with the usability of reflection in metaprograms.
 Using types to reflect various base-level declarations, allows to
-pass (a representation of) a namespace, constructor, specifier or a parameter,
-around various \say{functions} of a metaprogram as a parameter or a return value.
+pass a representation of a namespace, constructor, specifier or a parameter,
+around various \say{subroutines} of a metaprogram as a parameter or a return value.
 
 In order to achieve this by other means it would be necessary to make namespaces,
 etc. first-class objects or at least to allow them to become template arguments.
@@ -63,7 +63,7 @@ foo<std::sqrt>(); // error?
 foo<static>(); // error?
 \end{minted}
 
-\subsection{OK, but why not reflect directly, by several different operators?}
+\subsection{OK, but why not reflect directly with several different operators?}
 
 {\textbf Q:}{\em Alright, we partially agree with the reasoning in the
 \hyperref[faq-why-metaobjects]{previous question}, but why don't we use several

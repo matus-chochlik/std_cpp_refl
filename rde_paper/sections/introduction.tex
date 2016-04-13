@@ -1,3 +1,103 @@
 \section{Introduction}
 
 TODO.
+
+\subsection{Terminology}
+
+In order to avoid confusion about terminology, this section provides definitions
+for several important terms used throughout the text of the paper and
+explains what we mean by using them in the context of this paper.
+
+\subsubsection{Base-level, meta-level}
+\label{term-base-meta-level}
+
+When speaking generally, the {\em meta-level} is some higher level of abstraction
+conceptually describing a lower, {\em base-level} which is the primary concern
+of our endeavors.
+
+In the context of this paper the base-level is the structure of a C++ program.
+The meta-level is an abstraction partially describing that structure,
+mainly the declarations of the program.
+
+\subsubsection{Metadata}
+\label{term-metadata}
+
+{\em Metadata} is generally a piece of data conceptually describing some other,
+{\em primary} data.
+
+In the context of this paper, metadata is data providing information
+about the base-level structure of a program.
+{\em Static} metadata is metadata which can be manipulated or reasoned
+about at compile-time by the compiler.
+
+The metadata itself can have its own structure.
+For example metadata describing the base-level declaration of a class 
+from a C++ program includes, the name of that class, its scope, list of base classes
+and members, source location information, etc.
+
+\subsubsection{Metaprogramming}
+
+{\em Metaprogramming} is a kind of programming with the ability to treat and
+manipulate other programs as data, so both the input and the output of
+a metaprogram is usually a program. The language in which metaprograms
+are written is called the {\em metalanguage} and it can be a different or the
+same language as the one used to write the primary program.
+
+C++ metaprogramming can be done both in an external language\footnote{For example a
+C++ code generator written in Python or Bash.}, in a C++ compiler plug-in,
+or in C++ itself. 
+
+When done directly in C++, metaprogramming usually takes the form of a
+{\em source code generator}\footnote{Like Qt's MOC.}, or the form of {\em preprocessor}
+or {\em template} metaprogramming.
+
+Unless stated otherwise when we say simply metaprogramming in the following text,
+we mean template metaprogramming.
+
+\subsubsection{Reflection}
+
+In the context of computer science
+the term {\em reflection} refers to the ability of a program to examine
+and possibly modify its own structure and/or behavior.
+
+When combined with metaprogramming, this can include altering the existing
+or building new data structures, doing changes to algorithms or changing the way
+a program code is interpreted\footnote{Mostly in interpreted languages.}.
+
+For the purpose of this paper reflection is the process of obtaining metadata.
+In the future the meaning can be expanded to include modification of the program
+in ways exceeding the capabilities of current template metaprogramming.
+
+\subsubsection{First class object}
+\label{term-first-class}
+
+Alternatively a first class -- {\em citizen}, {\em type} or {\em value},
+in the context of programming language design is an entity that satisfies
+the following:
+
+\begin{itemize}
+	\item{Can be stored in a named variable or a data structure.}
+	\item{Can be passed as an argument to a subroutine.}
+	\item{Can be returned as a result of a subroutine.}
+	\item{Has an intrinsic identity.}
+\end{itemize}
+
+Since this paper deals with compile-time static reflection and its use
+in template metaprogramming, we will be talking about first or second class
+citizens in this regard. In template metaprogramming we use C++'s type system
+as a standalone functional programming language \say{interpreted} by a C++
+compiler, with \say{variables} being
+represented by types (or compile-time constants),
+\say{data structures} by instantiations of templates,
+\say{subroutines} by class templates or template aliases, and
+\say{programs} by compositions of the above.
+
+For the purpose of this paper a first class object, is something that
+we can distinguish and reason about at compile-time and what can be a template
+parameter. This means that a type or a template is a first class object
+while for example a typedef or a template parameter is not\footnote{The don't
+have their own identity.}.
+
+\subsubsection{Second class object}
+
+A second class object is everything else that is not a first class object.
