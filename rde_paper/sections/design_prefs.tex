@@ -17,8 +17,8 @@ use cases.
 When completed, the proposed reflection facility should provide as much useful
 metadata as possible, reflecting various base-level
 declarations like types, namespaces, variables, functions, templates, specifiers,
-(like constness, storage-class, access, etc.), and should provide access
-to scope members (ultimately even namespace members), base classes, etc.
+(like constness, storage-class, access, etc.), should provide access
+to scope members, base classes, etc.
 
 This will make the compiler assisted reflection facility (either by itself or serving
 as the foundation for other standard or third-party libraries), a useful tool
@@ -30,7 +30,7 @@ depending on the application needs.
 \label{design-consistency}
 
 The reflection facility as a whole should be consistent, instead of being
-composed of several ad-hoc, individually-designed parts. This makes the
+composed of several ad-hoc, individually-designed parts. This will make the
 its interface much more tidy and easy to learn.
 
 \subsubsection{Encapsulation}
@@ -72,7 +72,7 @@ metaobject concepts and the design of their interfaces.
 \subsubsection{Efficiency}
 \label{design-efficiency}
 
-Reflection should not be implemented in a all-or-nothing manner.
+Reflection should be fine grained as much as possible.
 Things that are not needed for a particular application,
 should not generally be compiled-into such application nor result in
 increased compiler footprint or compilation times.
@@ -81,9 +81,10 @@ The proposed reflection facility makes a completely lazy implementation of
 metaobjects possible. Metaobjects are created only when requested and invoking
 the reflection operator can generate only a very
 lightweight type providing a link back to the reflected declaration. The actual
-metadata (like an identifier, the list of members, the scope, etc.)
- is only materialized when requested by the programmer via the
-templates which act as the metaobject API.
+metadata (like a compile-time string containing the identifier,
+the list of metaobjects reflecting class members or the scope of a declaration, etc.)
+is only materialized when requested by the programmer via the
+templates, which act as the metaobject API.
 
 \subsubsection{Ease of use}
 \label{design-ease-of-use}
@@ -100,7 +101,7 @@ the common use-cases are identified.
 \label{design-integration}
 
 Reflection should be easily
-usable with the existing compile-time introspection facilites (like the standard
+usable with the existing compile-time introspection facilites (like the
 {\em type-traits} or \verb@std::type_info@)
 already provided by the standard library and with other third-party libraries.
 
@@ -109,7 +110,8 @@ already provided by the standard library and with other third-party libraries.
 
 This term describes two distinct things in this context:
 
-First, it should be possible to add new features and to allow reflecting new declarations
+First, it should be possible to gradually add new features and to allow
+reflecting new declaration kinds
 in the future, without introducing breaking changes. The metaobjects make this
 goal easily achievable. In order to add a new piece of metadata available
 (for example the elaborated type specifier of a class) a new template \say{returning}
