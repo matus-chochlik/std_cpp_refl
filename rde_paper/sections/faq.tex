@@ -1,16 +1,17 @@
 \section{Frequently asked questions}
 
-\subsection{Why metaobjects, why not reflect directly?}
+\subsection{Why metaobjects, why not reflect directly, with type traits?}
+\label{faq-why-metaobjects}
 
 {\textbf Q:}{\em Why should we bother with defining a set of metaobject concepts,
 let the compiler generate models of these concepts and use those to obtain
 the metadata? Why not just extend the existing type traits?}
 
 {\textbf A:} The most important reasons are the \hyperref[design-completeness]{completeness}
-and the scope of reflection.
+and the \hyperref[design-scope]{scope} of reflection.
 Type traits (as they are defined now) work just with types. A reflection facility should
 however provide much more metadata.
-It should eventually be able to reflect namespaces, functions, constructors,
+It should be able to reflect namespaces, functions, constructors,
 class inheritance, templates, specifiers, variables, etc.
 
 Without drastically changing the rules specifying what can or cannot be a template
@@ -46,7 +47,7 @@ foo<reflexpr(static)>(); // works
 meanwhile without metaobjects:
 
 \begin{minted}{cpp}
-template <whatever Param>
+template <something Param>
 void foo(void)
 {
 	// do something terribly useful, if possible
@@ -61,6 +62,38 @@ foo_tpl<std::pair>(); // works (if there are two versions of foo)
 foo<std::sqrt>(); // error?
 foo<static>(); // error?
 \end{minted}
+
+\subsection{OK, but why not reflect directly, by several different operators?}
+
+{\textbf Q:}{\em Alright, we partially agree with the reasoning in the
+\hyperref[faq-why-metaobjects]{previous question}, but why don't we use several
+different operators to get the various pieces of metadata (like declaration names,
+types, scopes, etc.) directly, skipping the metaobjects?
+For example we already have \verb@decltype(expr)@ so why not add,
+\verb@declname(expr)@ or \verb@declscope(expr)@, etc.}
+
+{\textbf A:} The main reason is that there are many base-level declarations
+with various properties which we want to reflect and having a separate
+operator for everyone (there may be even several dozen) of them
+will require many new reserved keywords which can break existing code.
+
+Furthermore what would the operator reflecting for example a scope return?
+In case of class scopes it could return a type, but what if we are asking
+about the scope of a global-scope or namespace-level declaration? We would
+either end up with something like the proposed metaobjects,
+or we would have to make some other (not type-based) representation of any
+possible scope.
+In case of the latter we would loose the ability to pass the representation
+of the scope as parameters to metaprograms.
+
+The same applies to every other operation returning an expression which does
+not have first-class identity in base-level C++.
+
+It is possible that, the templates implementing metaobject operations
+will internally use compiler built-ins (just like some of the type traits
+are implemented), but these can use compiler-specific reserved keywords
+and they will all operate on the metaobjects.
+
 
 \subsection{There's already a type trait for that!}
 
@@ -126,6 +159,7 @@ void bar(void)
 }
 
 bar<reflexpr(std), std::meta::is_namespace>(); // works
+bar<reflexpr(static), std::meta::is_specifier>(); // works
 bar<reflexpr(std::string), std::meta::is_class>(); // works
 bar<reflexpr(std::string), std::is_class>(); // error!
 \end{minted}
@@ -195,17 +229,33 @@ Instead of this, the metaobjects are anonymous and their (internal) identificati
 is left to the compiler. From the user's point of view, the metaobject can be distinguished
 by the means of the metaobject traits and tags.
 
-\subsection{Reflection accessing private members?}
+\subsection{Reflection violating access restriction to class members?}
 
 {\textbf Q:}{\em Why do you allow reflection to bypass the class member access
 restrictions? This is like giving people nuclear weapons. I don't want people
-to have nuclear weapons[sic]!}
+to have nuclear weapons [sic].}
 
 {\textbf A:}
-This is a valid point, but there are several different ways to achieve this
+This is a valid point, but there are several different ways to break access restrictions
 if the programmer wants to and we feel that restricting reflection only to public
 class members would severely limit its usefulness. Having said that we also
-try to design the interface to clearly indicate to the users that they break
+try to design the interface to clearly indicate to the users that they are breaking
 encapsulation.
+
+\subsection{Why do we need typedef reflection?}
+
+{\textbf Q:}{\em Why is it necessary to distinguish between types and typedefs
+or type aliases on the meta-level when they are not distinguishable on the
+base-level? Or why do we need to reflect on syntax rather than just on semantics?}
+
+{\textbf A:}
+TODO
+
+\subsection{?}
+
+{\textbf Q:}{\em } 
+
+{\textbf A:}
+TODO
 
 \subsection{TODO}

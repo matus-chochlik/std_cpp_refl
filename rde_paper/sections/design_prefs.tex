@@ -12,7 +12,10 @@ to look in the future, not to the initial, limited subset from P0194R0.
 The metadata provided by reflection should be reusable in many situations
 and for many different purposes.
 It should not focus on or be limited only to the simple and immediately obvious
-use cases.
+use cases. New use cases, which we are not aware of at this moment, may emerge
+in the future. So having or not having a compelling use case for a particular
+feature should be a factor in the decision whether to include it, but it should
+not be the most important one.
 
 When completed, the proposed reflection facility should provide as much useful
 metadata as possible, reflecting various base-level
@@ -20,7 +23,7 @@ declarations like types, namespaces, variables, functions, templates, specifiers
 (like constness, storage-class, access, etc.), should provide access
 to scope members, base classes, etc.
 
-This will make the compiler assisted reflection facility (either by itself or serving
+This will make the compiler-assisted reflection (either by itself or serving
 as the foundation for other standard or third-party libraries), a useful tool
 in a wide range of scenarios, during both compile-time
 and run-time and under various paradigms (object-oriented, functional, etc.),
@@ -30,8 +33,8 @@ depending on the application needs.
 \label{design-consistency}
 
 The reflection facility as a whole should be consistent, instead of being
-composed of several ad-hoc, individually-designed parts. This will make the
-its interface much more tidy and easy to learn.
+composed of several ad-hoc, individually-designed parts. This will make
+its interface more tidy, coherent and easier to learn.
 
 \subsubsection{Encapsulation}
 \label{design-encapsulation}
@@ -48,14 +51,15 @@ the C++ standard template library.
 Reflection should be non-intrusive and the metaobjects should be separated
 from the base-level language declarations which they reflect.
 
-This is achieved by using both the reflection operator, which hides most of the
-\say{magic}, and allows to pass as operands expressions not valid elsewhere,
-and the metaobjects which give an first-class identity to declarations
-which are only second-class in base-level C++.
+This is achieved by using the reflection operator, which hides most of the
+\say{magic}, isolates reflection from the rest of the language,
+for example by allowing to pass expressions not valid elsewhere as operands.
 
-It allows to partially \say{reify} namespaces, specifiers, etc. without actually
+Furthermore the metaobjects giving a first-class identity to declarations
+which are only second-class in base-level C++,
+allow to partially \say{reify} namespaces, specifiers, etc. without actually
 making them first-class citizens. This in turn allows to pass their reflections around
-metaprograms as parameters or return values.
+metaprograms.
 
 \subsubsection{Ontological correspondence}
 \label{design-onto-corr}
@@ -101,7 +105,7 @@ the common use-cases are identified.
 \label{design-integration}
 
 Reflection should be easily
-usable with the existing compile-time introspection facilites (like the
+usable with the existing compile-time introspection facilities (like the standard
 {\em type-traits} or \verb@std::type_info@)
 already provided by the standard library and with other third-party libraries.
 
