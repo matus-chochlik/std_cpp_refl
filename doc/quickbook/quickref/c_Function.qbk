@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Function Function]
+[import c_Function.hpp]
+
+[concept Function] is  a __Named,  a __Typed and  a __Linkable reflecting a function.
+
+[reflexpr_Function_def]
+[heading Implementation]
+[reflexpr_Function_begin]
+[heading Traits]
+[reflexpr_Function_inherited_traits]
+[reflexpr_Function_traits]
+[heading Operations]
+[reflexpr_Function_inherited_operations]
+[reflexpr_Function_operations]
+[reflexpr_Function_end]
+
+[endsect]

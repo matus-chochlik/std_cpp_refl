@@ -8,3 +8,11 @@
 [meta_get_pointer]
 
 [endsect]
+
+
+[section:get_pointer get_pointer]
+[import o_get_pointer.hpp]
+
+[meta_get_pointer]
+
+[endsect]

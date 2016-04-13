@@ -5,37 +5,13 @@
 [def __is_sequence_t [link reflexpr.quickref.traits.is_sequence [^is_sequence_t]]]
 [def __is_sequence_v [link reflexpr.quickref.traits.is_sequence [^is_sequence_v]]]
 
-[def __is_specifier [link reflexpr.quickref.traits.is_specifier [^is_specifier]]]
-[def __is_specifier_t [link reflexpr.quickref.traits.is_specifier [^is_specifier_t]]]
-[def __is_specifier_v [link reflexpr.quickref.traits.is_specifier [^is_specifier_v]]]
-
-[def __is_namespace [link reflexpr.quickref.traits.is_namespace [^is_namespace]]]
-[def __is_namespace_t [link reflexpr.quickref.traits.is_namespace [^is_namespace_t]]]
-[def __is_namespace_v [link reflexpr.quickref.traits.is_namespace [^is_namespace_v]]]
-
-[def __is_global_scope [link reflexpr.quickref.traits.is_global_scope [^is_global_scope]]]
-[def __is_global_scope_t [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_t]]]
-[def __is_global_scope_v [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_v]]]
-
-[def __is_type [link reflexpr.quickref.traits.is_type [^is_type]]]
-[def __is_type_t [link reflexpr.quickref.traits.is_type [^is_type_t]]]
-[def __is_type_v [link reflexpr.quickref.traits.is_type [^is_type_v]]]
-
-[def __is_class [link reflexpr.quickref.traits.is_class [^is_class]]]
-[def __is_class_t [link reflexpr.quickref.traits.is_class [^is_class_t]]]
-[def __is_class_v [link reflexpr.quickref.traits.is_class [^is_class_v]]]
-
-[def __is_enum [link reflexpr.quickref.traits.is_enum [^is_enum]]]
-[def __is_enum_t [link reflexpr.quickref.traits.is_enum [^is_enum_t]]]
-[def __is_enum_v [link reflexpr.quickref.traits.is_enum [^is_enum_v]]]
-
-[def __is_variable [link reflexpr.quickref.traits.is_variable [^is_variable]]]
-[def __is_variable_t [link reflexpr.quickref.traits.is_variable [^is_variable_t]]]
-[def __is_variable_v [link reflexpr.quickref.traits.is_variable [^is_variable_v]]]
-
 [def __has_name [link reflexpr.quickref.traits.has_name [^has_name]]]
 [def __has_name_t [link reflexpr.quickref.traits.has_name [^has_name_t]]]
 [def __has_name_v [link reflexpr.quickref.traits.has_name [^has_name_v]]]
+
+[def __is_specifier [link reflexpr.quickref.traits.is_specifier [^is_specifier]]]
+[def __is_specifier_t [link reflexpr.quickref.traits.is_specifier [^is_specifier_t]]]
+[def __is_specifier_v [link reflexpr.quickref.traits.is_specifier [^is_specifier_v]]]
 
 [def __has_type [link reflexpr.quickref.traits.has_type [^has_type]]]
 [def __has_type_t [link reflexpr.quickref.traits.has_type [^has_type_t]]]
@@ -60,3 +36,35 @@
 [def __is_linkable [link reflexpr.quickref.traits.is_linkable [^is_linkable]]]
 [def __is_linkable_t [link reflexpr.quickref.traits.is_linkable [^is_linkable_t]]]
 [def __is_linkable_v [link reflexpr.quickref.traits.is_linkable [^is_linkable_v]]]
+
+[def __is_global_scope [link reflexpr.quickref.traits.is_global_scope [^is_global_scope]]]
+[def __is_global_scope_t [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_t]]]
+[def __is_global_scope_v [link reflexpr.quickref.traits.is_global_scope [^is_global_scope_v]]]
+
+[def __is_namespace [link reflexpr.quickref.traits.is_namespace [^is_namespace]]]
+[def __is_namespace_t [link reflexpr.quickref.traits.is_namespace [^is_namespace_t]]]
+[def __is_namespace_v [link reflexpr.quickref.traits.is_namespace [^is_namespace_v]]]
+
+[def __is_type [link reflexpr.quickref.traits.is_type [^is_type]]]
+[def __is_type_t [link reflexpr.quickref.traits.is_type [^is_type_t]]]
+[def __is_type_v [link reflexpr.quickref.traits.is_type [^is_type_v]]]
+
+[def __is_class [link reflexpr.quickref.traits.is_class [^is_class]]]
+[def __is_class_t [link reflexpr.quickref.traits.is_class [^is_class_t]]]
+[def __is_class_v [link reflexpr.quickref.traits.is_class [^is_class_v]]]
+
+[def __is_enum [link reflexpr.quickref.traits.is_enum [^is_enum]]]
+[def __is_enum_t [link reflexpr.quickref.traits.is_enum [^is_enum_t]]]
+[def __is_enum_v [link reflexpr.quickref.traits.is_enum [^is_enum_v]]]
+
+[def __is_variable [link reflexpr.quickref.traits.is_variable [^is_variable]]]
+[def __is_variable_t [link reflexpr.quickref.traits.is_variable [^is_variable_t]]]
+[def __is_variable_v [link reflexpr.quickref.traits.is_variable [^is_variable_v]]]
+
+[def __is_function [link reflexpr.quickref.traits.is_function [^is_function]]]
+[def __is_function_t [link reflexpr.quickref.traits.is_function [^is_function_t]]]
+[def __is_function_v [link reflexpr.quickref.traits.is_function [^is_function_v]]]
+
+[def __is_parameter [link reflexpr.quickref.traits.is_parameter [^is_parameter]]]
+[def __is_parameter_t [link reflexpr.quickref.traits.is_parameter [^is_parameter_t]]]
+[def __is_parameter_v [link reflexpr.quickref.traits.is_parameter [^is_parameter_v]]]

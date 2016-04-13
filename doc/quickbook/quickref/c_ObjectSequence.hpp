@@ -55,7 +55,7 @@ struct __get_source_location<ObjectSequence>
 {
 	
 	typedef __SourceLocation value_type; /*<
-	returns the source location info of the declaration of  reflected by a ObjectSequence.
+	returns the source location info of the declaration of an ordered sequence of metaobjects reflected by a ObjectSequence.
 	>*/
 	
 };

@@ -32,3 +32,11 @@
 [include o_get_all_data_members.qbk]
 
 [include o_get_pointer.qbk]
+
+[include o_get_pointer.qbk]
+
+[include o_get_result_type.qbk]
+
+[include o_get_parameters.qbk]
+
+[include o_get_overloads.qbk]

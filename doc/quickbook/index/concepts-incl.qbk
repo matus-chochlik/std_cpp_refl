@@ -20,3 +20,7 @@
 [def __EnumClass [link reflexpr.quickref.EnumClass [^EnumClass]]]
 [def __Variable [link reflexpr.quickref.Variable [^Variable]]]
 [def __DataMember [link reflexpr.quickref.DataMember [^DataMember]]]
+[def __Function [link reflexpr.quickref.Function [^Function]]]
+[def __OverloadedFunction [link reflexpr.quickref.OverloadedFunction [^OverloadedFunction]]]
+[def __Parameter [link reflexpr.quickref.Parameter [^Parameter]]]
+[def __FunctionParameter [link reflexpr.quickref.FunctionParameter [^FunctionParameter]]]

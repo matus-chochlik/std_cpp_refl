@@ -1,0 +1,13 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:is_function is_function]
+[import t_is_function.hpp]
+
+The [^is_function] trait indicates that
+the tested metaobject is a __Function.
+
+[meta_is_function]
+
+[endsect]

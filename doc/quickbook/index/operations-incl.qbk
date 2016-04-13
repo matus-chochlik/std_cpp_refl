@@ -64,3 +64,19 @@
 [def __get_pointer [link reflexpr.quickref.operations.get_pointer [^get_pointer]]]
 [def __get_pointer_t [link reflexpr.quickref.operations.get_pointer [^get_pointer_t]]]
 [def __get_pointer_v [link reflexpr.quickref.operations.get_pointer [^get_pointer_v]]]
+
+[def __get_pointer [link reflexpr.quickref.operations.get_pointer [^get_pointer]]]
+[def __get_pointer_t [link reflexpr.quickref.operations.get_pointer [^get_pointer_t]]]
+[def __get_pointer_v [link reflexpr.quickref.operations.get_pointer [^get_pointer_v]]]
+
+[def __get_result_type [link reflexpr.quickref.operations.get_result_type [^get_result_type]]]
+[def __get_result_type_t [link reflexpr.quickref.operations.get_result_type [^get_result_type_t]]]
+[def __get_result_type_v [link reflexpr.quickref.operations.get_result_type [^get_result_type_v]]]
+
+[def __get_parameters [link reflexpr.quickref.operations.get_parameters [^get_parameters]]]
+[def __get_parameters_t [link reflexpr.quickref.operations.get_parameters [^get_parameters_t]]]
+[def __get_parameters_v [link reflexpr.quickref.operations.get_parameters [^get_parameters_v]]]
+
+[def __get_overloads [link reflexpr.quickref.operations.get_overloads [^get_overloads]]]
+[def __get_overloads_t [link reflexpr.quickref.operations.get_overloads [^get_overloads_t]]]
+[def __get_overloads_v [link reflexpr.quickref.operations.get_overloads [^get_overloads_v]]]

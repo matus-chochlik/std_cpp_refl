@@ -40,3 +40,11 @@
 [include c_Variable.qbk]
 
 [include c_DataMember.qbk]
+
+[include c_Function.qbk]
+
+[include c_OverloadedFunction.qbk]
+
+[include c_Parameter.qbk]
+
+[include c_FunctionParameter.qbk]

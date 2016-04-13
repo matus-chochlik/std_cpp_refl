@@ -9,7 +9,7 @@
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-OPERATIONS-<xsl:value-of select="$revision"/> =<xsl:for-each select="operation[$revision >= @revision]">
+OPERATIONS-<xsl:value-of select="$revision"/> =<xsl:for-each select="operation[@from_revision &lt;= $revision]">
 	<xsl:text> </xsl:text>
 	<xsl:choose>
 		<xsl:when test="@uname"><xsl:value-of select="@uname"/></xsl:when>

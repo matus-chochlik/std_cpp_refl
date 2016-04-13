@@ -29,6 +29,18 @@ constexpr bool get_pointer_v = get_pointer<T>::value;
 
 template <typename T>
 const bool get_pointer_v = get_pointer<T>::value;
+template <typename T>
+__requires __Function<T>
+struct get_pointer
+{
+
+	typedef __FunctionPointer type; /*<
+	returns a pointer to the a function reflected by a Function.   If the function is a class member then the pointer is a class member function pointer,   otherwise it is a plain function pointer.
+	>*/
+};
+
+template <typename T>
+using get_pointer_t = typename get_pointer<T>::type;
 
 __namespace_meta_end
 //]

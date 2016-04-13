@@ -9,7 +9,7 @@
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-TRAITS-<xsl:value-of select="$revision"/> =<xsl:for-each select="trait[$revision >= @revision]">
+TRAITS-<xsl:value-of select="$revision"/> =<xsl:for-each select="trait[@from_revision &lt;= $revision]">
 	<xsl:text> </xsl:text><xsl:value-of select="@name"/>
 </xsl:for-each>
 

@@ -1,0 +1,21 @@
+
+[/ Copyright 2015 Matus Chochlik.                             ]
+
+
+[section:Parameter Parameter]
+[import c_Parameter.hpp]
+
+[concept Parameter] is  a __Named,  a __Typed and  a __Scoped reflecting a function parameter.
+
+[reflexpr_Parameter_def]
+[heading Implementation]
+[reflexpr_Parameter_begin]
+[heading Traits]
+[reflexpr_Parameter_inherited_traits]
+[reflexpr_Parameter_traits]
+[heading Operations]
+[reflexpr_Parameter_inherited_operations]
+[reflexpr_Parameter_operations]
+[reflexpr_Parameter_end]
+
+[endsect]

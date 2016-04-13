@@ -3,21 +3,9 @@
 
 [include t_is_sequence.qbk]
 
-[include t_is_specifier.qbk]
-
-[include t_is_namespace.qbk]
-
-[include t_is_global_scope.qbk]
-
-[include t_is_type.qbk]
-
-[include t_is_class.qbk]
-
-[include t_is_enum.qbk]
-
-[include t_is_variable.qbk]
-
 [include t_has_name.qbk]
+
+[include t_is_specifier.qbk]
 
 [include t_has_type.qbk]
 
@@ -30,3 +18,19 @@
 [include t_is_class_member.qbk]
 
 [include t_is_linkable.qbk]
+
+[include t_is_global_scope.qbk]
+
+[include t_is_namespace.qbk]
+
+[include t_is_type.qbk]
+
+[include t_is_class.qbk]
+
+[include t_is_enum.qbk]
+
+[include t_is_variable.qbk]
+
+[include t_is_function.qbk]
+
+[include t_is_parameter.qbk]
