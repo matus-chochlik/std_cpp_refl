@@ -118,44 +118,54 @@ as \say{data} in metaprograms -- something that can be a template parameter.
 This means that a type or a template is for our purposes a first class object:
 
 \begin{minted}{cpp}
-struct type_a { };
-struct type_b { };
+struct value_a { };
+struct value_b { };
 
-template <typename Param>
-struct identity
+template <typename Param> struct identity
 {
 	typedef Param result;
 };
 
-// the are distinguishable
-assert(!std::is_same_v<type_a, type_b>, "");
-assert(!std::is_same_v<identity<type_a>, identity<type_b>>, "");
+// are equality comparable and they are distinguishable
+assert(!std::is_same_v<value_a, value_b>, "");
+assert(!std::is_same_v<identity<value_a>, identity<value_b>>, "");
 
 // they can be stored in named "variables" ...
-using x = type_a;
+using x = value_a;
 
 // ... while maintaining their identity
-assert(std::is_same_v<type_a, x>, "");
+assert(std::is_same_v<value_a, x>, "");
 
 // they can be passed as parameters to subroutines
-identity<type_a>;
-identity<type_b>;
+identity<value_a>;
+identity<value_b>;
 
 // they can be returned from subroutines
-using y = identity<type_a>::result;
+using y = identity<value_a>::result;
+using z = identity<value_b>::result;
+
+// ... while still maintaining their identity
+assert(std::is_same_v<value_a, y>, "");
+assert(std::is_same_v<value_b, z>, "");
+// and still being distinguishable
+assert(!std::is_same_v<y, z>, "");
 \end{minted}
 
 
-On the other hand a namespace, a typedef or a template parameter is not.
+On the other hand a namespace, a typedef or a template parameter do not have
+some or any of these properties.
 
 \begin{minted}{cpp}
-namespace foo { }
+namespace std { }
+namespace foo = std;
 using bar = unsigned;
 using baz = unsigned;
 
 // the are not distinguishable
-assert(std::is_same_v<bar, baz>, "");
-assert(!std::is_same_v<identity<bar>, identity<baz>>, "");
+std::is_same_v<bar, baz>;
+std::is_same_v<identity<bar>, identity<baz>>;
+// or not even comparable
+std::is_same_v<std, foo>;
 
 template <typename Param>
 struct identity
@@ -164,6 +174,7 @@ struct identity
 };
 
 // or they cannot be passed as arguments
+identity<std>;
 identity<foo>;
 
 // nor returned as a result
@@ -172,3 +183,14 @@ namespace y = identity<foo>::result;
 
 From the above follows, that a {\em second class object} is everything else that
 is not a first class object.
+
+\subsubsection{Reification}
+\label{term-reification}
+
+Or \say{thingification}, is making something real, bringing it into being as an
+entity with its own identity, or making something concrete.
+
+In regard to programming languages, reification is often defined as making
+a concept in the language a first-class object. So in the context of C++ template
+metaprogramming a type is reified, but a namespace or a specifier is not.
+
