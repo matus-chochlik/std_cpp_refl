@@ -51,7 +51,7 @@ the C++ standard template library.
 Reflection is non-intrusive and the metaobjects are separated
 from the base-level language declarations which they reflect.
 
-This is achieved by using the reflection operator, which hides most of the
+This is achieved by using the reflection operator which hides most of the
 \say{magic}, isolates reflection from the rest of the language,
 for example by allowing to pass expressions not valid elsewhere as operands.
 
@@ -65,7 +65,7 @@ metaprograms.
 \label{design-onto-corr}
 
 The meta-level 
-corresponds to the ontology of the base-level C++ language constructs
+corresponds to the ontology of the base-level C++ language
 which it reflects. This basically means that all important existing language
 features\footnote{Within reason, we certainly do not want to reflect every token
 in a C++ program.} will evenually be reflected by appropriate metaobjects,
@@ -85,13 +85,14 @@ are not compiled into its program code nor result in
 increased compiler footprint or compilation times.
 
 The proposed reflection facility makes a completely lazy implementation of
-metaobjects possible. Metaobjects are created only when requested and invoking
-the reflection operator can generate only a very
-lightweight type providing a link back to the reflected declaration. The actual
+metaobjects possible. Metaobjects are created only when requested and
+the reflection operator is able to generate very
+lightweight types providing internal links back to the reflected declaration.
+The actual
 metadata\footnote{Like a compile-time string containing the identifier,
 the list of metaobjects reflecting class members or the scope of a declaration,
-etc.} is only materialized when requested by the programmer via the
-templates which act as the metaobject API.
+etc.} is materialized only when requested by the programmer via the
+templates which act as the metaobject interface.
 
 \subsubsection{Ease of use}
 \label{design-ease-of-use}
@@ -108,9 +109,9 @@ the common use-cases are identified.
 \label{design-integration}
 
 The proposed reflection facility is easily
-usable with the existing compile-time introspection facilities\footnote{Like the
+usable with the existing compile-time introspection utilities\footnote{Like the
 {\em type-traits} or \texttt{typeid} and \texttt{std::type\_info}.}
-already provided by the standard library and with other third-party libraries.
+already provided by the standard library and by other third-party libraries.
 
 \subsubsection{Extensibility}
 \label{design-extensibility}
@@ -143,7 +144,7 @@ concept bool Specifier = Named<T> && is_specifier_v<T>;
 } // namespace meta
 \end{minted}
 
-The it is necessary to extend the list of expressions which can appear
+Then it is necessary to extend the list of expressions which can appear
 as operands to \verb@reflexpr@ to include specifiers, so that the following
 is valid code:
 
@@ -176,9 +177,9 @@ Then we can use the new features:
 class foo { };
 
 static_assert(is_same_v<
-	meta::get_elaborated_type_specifier<reflexpr(foo)>,
+	meta::get_elaborated_type_specifier_t<reflexpr(foo)>,
 	reflexpr(class)
-, "");
+>, "");
 \end{minted}
 
 The secondary meaning of \say{extensibility}, is that
