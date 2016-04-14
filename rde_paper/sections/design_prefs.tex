@@ -9,46 +9,46 @@ to look in the future, not to the initial, limited subset from P0194R0.
 \subsubsection{Completeness and reusability}
 \label{design-completeness}
 
-The metadata provided by reflection should be reusable in many situations
+The metadata provided by reflection is reusable in many situations
 and for many different purposes.
-It should not focus on or be limited only to the simple and immediately obvious
-use cases. New use cases, which we are not aware of at this moment, may emerge
+It does not focus on nor is limited only to the simple and immediately obvious
+use cases. New use cases which we are not aware of at this moment, may emerge
 in the future. So having or not having a compelling use case for a particular
-feature should be a factor in the decision whether to include it, but it should
+feature is a factor in the decision whether to include it, but it should
 not be the most important one.
 
-When completed, the proposed reflection facility should provide as much useful
+When completed, the proposed reflection facility will provide as much useful
 metadata as possible, reflecting various base-level
-declarations like types, namespaces, variables, functions, templates, specifiers,
-(like constness, storage-class, access, etc.), should provide access
-to scope members, base classes, etc.
+declarations like types, namespaces, variables, functions, templates,
+specifiers\footnote{Like constness, storage-class, access, etc.} and
+will provide access to scope members, base classes, etc.
 
-This will make the compiler-assisted reflection (either by itself or serving
-as the foundation for other standard or third-party libraries), a useful tool
-in a wide range of scenarios, during both compile-time
-and run-time and under various paradigms (object-oriented, functional, etc.),
-depending on the application needs.
+This will make the compiler-assisted reflection\footnote{Eeither by itself or
+serving as the foundation for other standard or third-party libraries.} a useful
+tool in a wide range of scenarios during both compile-time
+and run-time and under various paradigms\footnote{Object-oriented, functional,
+etc.} depending on the application needs.
 
 \subsubsection{Consistency}
 \label{design-consistency}
 
-The reflection facility as a whole should be consistent, instead of being
-composed of several ad-hoc, individually-designed parts. This will make
+The reflection facility as a whole is consistent, instead of being
+composed of several ad-hoc, individually-designed parts. This makes
 its interface more tidy, coherent and easier to learn.
 
 \subsubsection{Encapsulation}
 \label{design-encapsulation}
 
-The metadata should not be exposed directly
-to the user by compiler built-ins, operators or special expressions.
-Instead it should be accessible through conceptually well-defined interfaces,
+The metadata is not exposed directly to the user by compiler many different
+built-ins, operators or special expressions.
+Instead it is be accessible through conceptually well-defined interfaces,
 inspired by the existing {\em type-traits}, already present in
 the C++ standard template library.
 
 \subsubsection{Stratification}
 \label{design-stratification}
 
-Reflection should be non-intrusive and the metaobjects should be separated
+Reflection is non-intrusive and the metaobjects are separated
 from the base-level language declarations which they reflect.
 
 This is achieved by using the reflection operator, which hides most of the
@@ -64,38 +64,41 @@ metaprograms.
 \subsubsection{Ontological correspondence}
 \label{design-onto-corr}
 
-The meta-level facilities should
-correspond to the ontology of the base-level C++ language constructs
-which they reflect. This basically means that all existing language
-features (within reason) should be reflected and new ones should not be invented.
+The meta-level 
+corresponds to the ontology of the base-level C++ language constructs
+which it reflects. This basically means that all important existing language
+features\footnote{Within reason, we certainly do not want to reflect every token
+in a C++ program.} will evenually be reflected by appropriate metaobjects,
+but new ones not having an equivalent in the base-level language\footnote{At least
+conceptually.} will not be invented.
 
-Ontological correspondence should be the main factor driving the definition of the
-metaobject concepts and the design of their interfaces.
+Ontological correspondence is one of the main factors driving the definition of the
+individual metaobject concepts and the design of their interfaces.
 
 
 \subsubsection{Efficiency}
 \label{design-efficiency}
 
-Reflection should be fine grained as much as possible.
+The proposed reflection is fine grained as much as possible.
 Things that are not needed for a particular application,
-should not generally be compiled-into such application nor result in
+are not compiled into its program code nor result in
 increased compiler footprint or compilation times.
 
 The proposed reflection facility makes a completely lazy implementation of
 metaobjects possible. Metaobjects are created only when requested and invoking
 the reflection operator can generate only a very
 lightweight type providing a link back to the reflected declaration. The actual
-metadata (like a compile-time string containing the identifier,
-the list of metaobjects reflecting class members or the scope of a declaration, etc.)
-is only materialized when requested by the programmer via the
-templates, which act as the metaobject API.
+metadata\footnote{Like a compile-time string containing the identifier,
+the list of metaobjects reflecting class members or the scope of a declaration,
+etc.} is only materialized when requested by the programmer via the
+templates which act as the metaobject API.
 
 \subsubsection{Ease of use}
 \label{design-ease-of-use}
 
 Although reflection-based metaprogramming should allow to implement very
-complicated meta-algorithms, simple things should be kept as simple as possible
-(but not simpler\footnote{Credits to whoever said that.}).
+complicated meta-algorithms, simple things should be kept as simple as possible,
+but not simpler\footnote{Credits to whoever said that.}.
 
 This can be achieved by having a solid and powerful compiler-assisted reflection
 as the foundation and by implementing a simplifying facade on top of it once
@@ -105,8 +108,8 @@ the common use-cases are identified.
 \label{design-integration}
 
 Reflection should be easily
-usable with the existing compile-time introspection facilities (like the standard
-{\em type-traits} or \verb@std::type_info@)
+usable with the existing compile-time introspection facilities\footnote{Like the
+standard {\em type-traits} or \texttt{std::type\_info}.}
 already provided by the standard library and with other third-party libraries.
 
 \subsubsection{Extensibility}
@@ -117,8 +120,8 @@ This term describes two distinct things in this context:
 First, it should be possible to gradually add new features and to allow
 reflecting new declaration kinds
 in the future, without introducing breaking changes. The metaobjects make this
-goal easily achievable. In order to add a new piece of metadata available
-(for example the elaborated type specifier of a class) a new template \say{returning}
+goal easily achievable. In order to add a new piece of metadata available\footnote{
+For example the elaborated type specifier of a class} a new template \say{returning}
 it can be added to the interface of the metaobject. In order to allow the reflection
 of a previously unsupported declaration (like a specifier) a new type of metaobject
 can be added and the list of possible operands of the reflection operator

@@ -30,7 +30,7 @@ explains what we mean when using them in the context of this paper.
 \label{term-base-meta-level}
 
 When speaking generally, the {\em meta-level} is some higher level of abstraction
-conceptually describing a lower, {\em base-level} which is the primary concern
+conceptually describing a lower, {\em base-level} which is the primary subject
 of our endeavors.
 
 In the context of this paper the base-level is the structure of a C++ program.
@@ -109,9 +109,9 @@ the following:
 \end{itemize}
 
 Since this paper deals with compile-time static reflection and its use
-in template metaprogramming, we will be talking about first or second class
+in template metaprogramming, we will be talking about first- or second- class
 citizens in this regard. 
-For the purpose of this paper a first class object is something that
+For the purpose of this paper a first-class object is something that
 we can distinguish and reason about at compile-time and what can be passed around
 as \say{data} in metaprograms -- something that can be a template parameter.
 
@@ -181,14 +181,15 @@ identity<foo>;
 namespace y = identity<foo>::result;
 \end{minted}
 
-From the above follows, that a {\em second class object} is everything else that
-is not a first class object.
+From the above follows, that a {\em second-class object} is everything else that
+is not a first-class object.
 
 \subsubsection{Reification}
 \label{term-reification}
 
-Or \say{thingification}, is making something real, bringing it into being as an
-entity with its own identity, or making something concrete.
+Generally speaking {\em reification} or \say{thingification}\footnote{From latin \say{rei}, the dative form of \say{res} -- a thing.}, is making something
+real, bringing it into being as an entity with its own identity,
+or making something concrete.
 
 In regard to programming languages, reification is often defined as making
 a concept in the language a first-class object. So in the context of C++ template
