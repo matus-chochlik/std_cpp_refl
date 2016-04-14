@@ -8,17 +8,17 @@ let the compiler generate models of these concepts and use those to obtain
 the metadata? Why not just extend the existing type traits?}
 
 {\textbf A:} The most important reasons are the \hyperref[design-completeness]{completeness} and the scope of reflection.
-Type traits (as they are defined now) work just with types. A reflection facility should
-however provide much more metadata.
+Type traits\footnote{As they are defined now.} work just with types.
+A reflection facility should however provide much more metadata.
 It should be able to reflect namespaces, functions, constructors,
 class inheritance, templates, specifiers, variables, etc.
 
 Without drastically changing the rules specifying what can or cannot be a template
-parameter, we cannot reflect C++'s second-class citizens like namespaces.
+parameter, we cannot reflect C++'s second-class declarations like namespaces.
 
 This is also connected with the usability of reflection in metaprograms.
 Using types to reflect various base-level declarations, allows to
-pass a representation of a namespace, constructor, specifier or a parameter,
+pass a representation of a namespace, a constructor, aspecifier or a parameter,
 around various \say{subroutines} of a metaprogram as a parameter or a return value.
 
 In order to achieve this by other means it would be necessary to make namespaces,
@@ -37,7 +37,7 @@ foo<reflexpr(int)>(); // works
 foo<reflexpr(std)>(); // works
 foo<reflexpr(std::string)>(); // works
 foo<reflexpr(std::string::size_type)>(); // works
-foo<reflexpr(std::size_t)>(); // works and different from the above
+foo<reflexpr(std::size_t)>(); // works and is different from the above
 foo<reflexpr(std::pair)>(); // works
 foo<reflexpr(std::sqrt)>(); // works
 foo<reflexpr(static)>(); // works
@@ -73,7 +73,7 @@ For example we already have \verb@decltype(expr)@ so why not add,
 
 {\textbf A:} The main reason is that there are many base-level declarations
 with various properties which we want to reflect and having a separate
-operator for everyone (there may be even several dozen) of them
+operator for every one of them\footnote{There may be even several dozen.},
 will require many new reserved keywords which can break existing code.
 
 Furthermore what would the operator reflecting for example a scope return?
@@ -88,9 +88,9 @@ of the scope as parameters to metaprograms.
 The same applies to every other operation returning an expression which does
 not have first-class identity in base-level C++.
 
-It is possible that, the templates implementing metaobject operations
-will internally use compiler built-ins (just like some of the type traits
-are implemented), but these can use compiler-specific reserved keywords
+It is possible that, the templates implementing the metaobject operations
+will internally use compiler built-ins\footnote{Just like some of the type traits
+are implemented.}, but these can use compiler-specific reserved keywords
 and they will all operate on the metaobjects.
 
 
@@ -238,7 +238,7 @@ to have nuclear weapons [sic].}
 This is a valid point, but there are several different ways to break access restrictions
 if the programmer wants to and we feel that restricting reflection only to public
 class members would severely limit its usefulness. Having said that we also
-try to design the interface to clearly indicate to the users that they are breaking
+try to design the interface to indicate to the users that they are breaking
 encapsulation.
 
 \subsection{Why do we need typedef reflection?}
@@ -252,9 +252,33 @@ TODO
 
 \subsection{Why \meta{ObjectSequence}s? Why not replace them with typelists?}
 
-{\textbf Q:}{\em } 
+{\textbf Q:}{\em Why do you define the \meta{ObjectSequence} concept and its
+operations? There are type-lists proposed for the inclusion into the standard,
+why not use those?}
 
-{\textbf A:}
-TODO
+{\textbf A:} The reason why we use \meta{ObjectSequence}s is efficiency.
+Operations like \verb@get_data_members@ currently return metaobjects, i.e.
+very lightweight types representing a whole set of metaobjects, without actually
+instantiating the elements eagerly.
+
+So for example if we wanted the reflection of the first\footnote{zero-th}
+data member of a class having hundreds of member we could do:
+
+\begin{minted}{cpp}
+get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
+\end{minted}
+
+This operation would involve the instatiation of two metaobjects:
+\begin{enumerate}
+	\item the \meta{ObjectSequence} and
+	\item the \meta{DataMember} reflecting the first data member.
+\end{enumerate}
+
+On the other hand if this operation returned a typelist of metaobjects,
+then all metaobjects would have to be generated, even if most of them
+were not used afterwards.
+
+What we can do is to add an operation converting a \meta{ObjectSequence}
+into a type-list on demand.
 
 \subsection{TODO}
