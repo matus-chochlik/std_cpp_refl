@@ -1,12 +1,30 @@
 \section{Introduction}
 
-TODO.
+This paper accompanies the P0194Rx papers which we want to keep brief, technical
+and to the point and which will eventually result in the final wording to be
+included into the standard if this proposal is accepted.
+
+We are writing this paper with several goals in mind:
+
+\begin{itemize}
+\item To define and explain the reflection-related terminology.
+\item To keep a written record of the rationale behind the design of the
+proposed static reflection facility.
+\item To keep the answers to the frequently asked questions about
+the decisions we've made in this proposal in one place so that we can avoid
+having to write them over and over from scratch in various discussions\footnote{
+Also to help us remember what the answers were.}.
+\item To enumerate and describe the use cases for the various features
+which we included in the proposal.
+\item To provide concrete examples of usage.
+\item To discuss the possibilities of the evolution of reflection in the future.
+\end{itemize}
 
 \subsection{Terminology}
 
 In order to avoid confusion about terminology, this section provides definitions
 for several important terms used throughout the text of the paper and
-explains what we mean by using them in the context of this paper.
+explains what we mean when using them in the context of this paper.
 
 \subsubsection{Base-level, meta-level}
 \label{term-base-meta-level}
@@ -51,7 +69,15 @@ When done directly in C++, metaprogramming usually takes the form of a
 {\em source code generator}\footnote{Like Qt's MOC.}, or the form of {\em preprocessor}
 or {\em template} metaprogramming.
 
-Unless stated otherwise when we say simply metaprogramming in the following text,
+In template metaprogramming we use C++'s type system
+as a standalone functional programming language \say{interpreted} by a C++
+compiler, with \say{variables} being
+represented by types (or compile-time constants),
+\say{data structures} by instantiations of templates,
+\say{subroutines} by class templates or template aliases, and
+algorithms or \say{programs} by compositions of the above.
+
+Unless stated otherwise when we say \say{metaprogramming} in the following text,
 we mean template metaprogramming.
 
 \subsubsection{Reflection}
@@ -60,18 +86,18 @@ In the context of computer science
 the term {\em reflection} refers to the ability of a program to examine
 and possibly modify its own structure and/or behavior.
 
-When combined with metaprogramming, this can include altering the existing
-or building new data structures, doing changes to algorithms or changing the way
+When combined with metaprogramming, this can include modification of the existing
+or the definition of new data structures, doing changes to algorithms or changing the way
 a program code is interpreted\footnote{Mostly in interpreted languages.}.
 
 For the purpose of this paper reflection is the process of obtaining metadata.
 In the future the meaning can be expanded to include modification of the program
 in ways exceeding the capabilities of current template metaprogramming.
 
-\subsubsection{First class object}
+\subsubsection{First class object, second class object}
 \label{term-first-class}
 
-Alternatively a first class -- {\em citizen}, {\em type} or {\em value},
+Also known as first class -- {\em citizen}, {\em type}, {\em entity} or {\em value},
 in the context of programming language design is an entity that satisfies
 the following:
 
@@ -79,25 +105,70 @@ the following:
 	\item{Can be stored in a named variable or a data structure.}
 	\item{Can be passed as an argument to a subroutine.}
 	\item{Can be returned as a result of a subroutine.}
-	\item{Has an intrinsic identity.}
+	\item{Has an intrinsic identity making the entity unique and distinguishable.}
 \end{itemize}
 
 Since this paper deals with compile-time static reflection and its use
 in template metaprogramming, we will be talking about first or second class
-citizens in this regard. In template metaprogramming we use C++'s type system
-as a standalone functional programming language \say{interpreted} by a C++
-compiler, with \say{variables} being
-represented by types (or compile-time constants),
-\say{data structures} by instantiations of templates,
-\say{subroutines} by class templates or template aliases, and
-\say{programs} by compositions of the above.
+citizens in this regard. 
+For the purpose of this paper a first class object is something that
+we can distinguish and reason about at compile-time and what can be passed around
+as \say{data} in metaprograms -- something that can be a template parameter.
 
-For the purpose of this paper a first class object, is something that
-we can distinguish and reason about at compile-time and what can be a template
-parameter. This means that a type or a template is a first class object
-while for example a typedef or a template parameter is not\footnote{The don't
-have their own identity.}.
+This means that a type or a template is for our purposes a first class object:
 
-\subsubsection{Second class object}
+\begin{minted}{cpp}
+struct type_a { };
+struct type_b { };
 
-A second class object is everything else that is not a first class object.
+template <typename Param>
+struct identity
+{
+	typedef Param result;
+};
+
+// the are distinguishable
+assert(!std::is_same_v<type_a, type_b>, "");
+assert(!std::is_same_v<identity<type_a>, identity<type_b>>, "");
+
+// they can be stored in named "variables" ...
+using x = type_a;
+
+// ... while maintaining their identity
+assert(std::is_same_v<type_a, x>, "");
+
+// they can be passed as parameters to subroutines
+identity<type_a>;
+identity<type_b>;
+
+// they can be returned from subroutines
+using y = identity<type_a>::result;
+\end{minted}
+
+
+On the other hand a namespace, a typedef or a template parameter is not.
+
+\begin{minted}{cpp}
+namespace foo { }
+using bar = unsigned;
+using baz = unsigned;
+
+// the are not distinguishable
+assert(std::is_same_v<bar, baz>, "");
+assert(!std::is_same_v<identity<bar>, identity<baz>>, "");
+
+template <typename Param>
+struct identity
+{
+	typedef Param result;
+};
+
+// or they cannot be passed as arguments
+identity<foo>;
+
+// nor returned as a result
+namespace y = identity<foo>::result;
+\end{minted}
+
+From the above follows, that a {\em second class object} is everything else that
+is not a first class object.
