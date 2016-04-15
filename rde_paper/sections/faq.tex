@@ -3,11 +3,11 @@
 \subsection{Why metaobjects, why not reflect directly with type traits?}
 \label{faq-why-metaobjects}
 
-{\textbf Q:}{\em Why should we bother with defining a set of metaobject concepts,
+\textbf{Q:} {\em Why should we bother with defining a set of metaobject concepts,
 let the compiler generate models of these concepts and use those to obtain
 the metadata? Why not just extend the existing type traits?}
 
-{\textbf A:} The most important reasons are the \hyperref[design-completeness]{completeness} and the scope of reflection.
+\textbf{A:} The most important reasons are the \hyperref[design-completeness]{completeness} and the scope of reflection.
 Type traits\footnote{As they are defined now.} work just with types.
 A reflection facility should however provide much more metadata.
 It should be able to reflect namespaces, functions, constructors,
@@ -64,19 +64,19 @@ foo<static>(); // error?
 
 \subsection{OK, but why not reflect directly with several different operators?}
 
-{\textbf Q:}{\em Alright, we partially agree with the reasoning in the
+\textbf{Q:} {\em Alright, we partially agree with the reasoning in the
 \hyperref[faq-why-metaobjects]{previous question}, but why don't we use several
 different operators to get the various pieces of metadata (like declaration names,
 types, scopes, etc.) directly, skipping the metaobjects?
 For example we already have \verb@decltype(expr)@ so why not add,
 \verb@declname(expr)@ or \verb@declscope(expr)@, etc.}
 
-{\textbf A:} The main reason is that there are many base-level declarations
+\textbf{A:} The main reason is that there are many base-level declarations
 with various properties which we want to reflect and having a separate
 operator for every one of them\footnote{There may be even several dozen.},
 will require many new reserved keywords which can break existing code.
 
-Furthermore what would the operator reflecting for example a scope return?
+And still, what would the operator reflecting for example a scope return?
 In case of class scopes it could return a type, but what if we are asking
 about the scope of a global-scope or namespace-level declaration? We would
 either end up with something like the proposed metaobjects,
@@ -95,12 +95,12 @@ and they will all operate on the metaobjects.
 
 \subsection{Creating a separate type for each metaobject is so heavyweight.}
 
-{\textbf Q:}{\em Isn't the creation of a new type for each metaobject too
-heavyweight? Won't that lead to unacceptable increases in the memory footprint
+\textbf{Q:} {\em Isn't the creation of a new type for each metaobject too
+heavyweight? Won't it lead to unacceptable increases in the memory footprint
 and compilation times?}
 
-{\textbf A:} This might have been a problem if the metaobjects were regular
-types and if reflection implementation was too coarse-grained or too eager.
+\textbf{A:} This might have been a problem if the metaobjects were regular
+types and if the implementation was too coarse-grained or too eager.
 
 For example if upon the invocation of \verb@reflexpr(std::string)@, the representations
 of all the metadata related to the \verb@std::string@ type\footnote{Like
@@ -112,19 +112,66 @@ This is however {\em not} the case.
 The metaobjects need to be types just enough so that they can be used
 as template arguments\footnote{Similar to the \texttt{void} type}.
 They don't need to have any name, scope, implicitly generated constructors,
-assignment operators, run-time type information, etc. All they need to have
-is a separate identity and their internal representation needs to have a
-reference or pointer to the internal representation of the declarations\footnote{
-Which the compiler needs to maintain anyway, regardless of reflection.}
-which they are reflecting.
+destructors, assignment operators, virtual method tables, run-time type information,
+etc. All they need to have is a unique identity and their internal representations
+need to point to the internal representations of the declarations\footnote
+{Which the compiler needs to maintain anyway, regardless of reflection.}
+which they reflect.
+
+Also our proposal allows very fine granularity. The result of \verb@reflexpr@
+can be a very lightweight type, as we just described and the individual
+\say{attributes} like the name, scope, members, specifiers, etc. related
+to the metaobject are materialized only when requested by one of the operations
+defined for that particular metaobject concept, like \verb@get_name@,
+\verb@get_scope@, \verb@get_data_members@, etc.
+
+\subsection{Creating a separate type for each string is so heavyweight.}
+
+\textbf{Q:} {\em Isn't the creation of a new type for each string returned
+for example from the \verb@get_name@ operation too heavyweight?
+Won't that lead to unacceptable increases in the memory footprint
+and compilation times?}
+
+\textbf{A:} The answer is that we {\em do not} insist on creating a separate
+type for each string returned by reflection. What we insist on is that we
+should have the ability to reason about and manipulate the strings at compile-time.
+A static, \verb@constexpr@-initialized, zero-terminated array of \verb@char@s
+gives us this ability.
+
+So for example the implementation of the \verb@get_name@ operation should
+{\em be equivalent} to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+template <Named T>
+struct get_name
+{
+	typedef const char value_type[N+1];
+	static constexpr const char value[N+1] = {...,'\0'};
+};
+\end{minted}
+
+Some members of the committee suggested that for example the
+\texttt{basic\_string\_constant} from N4236 or some other compile-time
+string representation which eventually makes it to the standard could
+be used to implement the \verb@get_name@ operation,
+but this in just an option not a requirement for our part.
+We trust in the ability of the compiler vendors to pick and
+implement the best option and to use all the tricks at their disposal
+to make expressions like;
+
+\begin{minted}{cpp}
+std::string(std::meta::get_name_v<reflexpr(std::pair)>);
+\end{minted}
+
+as efficient as possible.
 
 \subsection{There's already a type trait for that!}
 
-{\textbf Q:}{\em Why do you introduce a metaobject trait like
+\textbf{Q:} {\em Why do you introduce a metaobject trait like
 \verb@std::meta::is_class<Metaobject>@  when there already are type traits like
 \verb@std::is_class<T>@?}
 
-{\textbf A:} The reason is consistency.
+\textbf{A:} The reason is consistency.
 While it is true that there are a few metaobject traits, which indicate the
 same thing as already existing type traits, omitting the metaobject trait
 in favor of the type trait would break consistency and make the interface less generic.
@@ -196,12 +243,12 @@ particular use-case.
 
 \subsection{There's already another expression for that!}
 
-{\textbf Q:}{\em There are situations where you can do something much more
+\textbf{Q:} {\em There are situations where you can do something much more
 easily without reflection than with it, like \verb@&variable@ vs.
 \verb@meta::get_pointer_v<reflexpr(variable)>@ or\\\verb@decltype(var)@ vs.
 \verb@meta::get_original_type_t<meta::get_type_t<reflexpr(var)>>@, etc.}
 
-{\textbf A:} Of course there are! There are also situations where the decision
+\textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
 can be separated from the actual site where you access (reflect) the variable by
 several layers of metaprogram templates. Both use-cases are valid and
@@ -209,11 +256,11 @@ again, you should pick the most appropriate option for your situation.
 
 \subsection{Why are the metaobjects anonymous?}
 
-{\textbf Q:}{\em Why should the metaobjects be anonymous types as opposed to
+\textbf{Q:} {\em Why should the metaobjects be anonymous types as opposed to
 types with well defined and standardized names or concrete template classes, (possibly with some
 special kind of parameter accepting different arguments than types and constants)?}
 
-{\textbf A:} We wanted to avoid defining a specific naming convention, because it would
+\textbf{A:} We wanted to avoid defining a specific naming convention, because it would
 be difficult to do so and very probably not user friendly (see C++ name mangling). There
 already are precedents for anonymous types -- for example C++ {\em lambdas}.
 
@@ -254,11 +301,11 @@ by the means of the metaobject traits and tags.
 
 \subsection{Reflection violating access restriction to class members?}
 
-{\textbf Q:}{\em Why do you allow reflection to bypass the class member access
+\textbf{Q:} {\em Why do you allow reflection to bypass the class member access
 restrictions? This is like giving people nuclear weapons. I don't want people
 to have nuclear weapons [sic].}
 
-{\textbf A:}
+\textbf{A:}
 This is a valid point, but there are several different ways to break access restrictions
 if the programmer wants to and we feel that restricting reflection only to public
 class members would severely limit its usefulness. Having said that we also
@@ -267,20 +314,20 @@ encapsulation.
 
 \subsection{Why do we need typedef reflection?}
 
-{\textbf Q:}{\em Why is it necessary to distinguish between types and typedefs
+\textbf{Q:} {\em Why is it necessary to distinguish between types and typedefs
 or type aliases on the meta-level when they are not distinguishable on the
 base-level? Or why do we need to reflect on syntax rather than just on semantics?}
 
-{\textbf A:}
+\textbf{A:}
 TODO
 
 \subsection{Why \meta{ObjectSequence}s? Why not replace them with typelists?}
 
-{\textbf Q:}{\em Why do you define the \meta{ObjectSequence} concept and its
+\textbf{Q:} {\em Why do you define the \meta{ObjectSequence} concept and its
 operations? There are type-lists proposed for the inclusion into the standard,
 why not use those?}
 
-{\textbf A:} The reason why we use \meta{ObjectSequence}s is efficiency.
+\textbf{A:} The reason why we use \meta{ObjectSequence}s is efficiency.
 Operations like \verb@get_data_members@ currently return metaobjects, i.e.
 very lightweight types representing a whole set of metaobjects, without actually
 instantiating the elements eagerly.
@@ -292,7 +339,7 @@ data member of a class having hundreds of member we could do:
 get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
 \end{minted}
 
-This operation would involve the instatiation of two metaobjects:
+This operation would involve the creation of two metaobjects:
 \begin{enumerate}
 	\item the \meta{ObjectSequence} and
 	\item the \meta{DataMember} reflecting the first data member.
@@ -305,4 +352,3 @@ were not used afterwards.
 What we can do is to add an operation converting a \meta{ObjectSequence}
 into a type-list on demand.
 
-\subsection{TODO}

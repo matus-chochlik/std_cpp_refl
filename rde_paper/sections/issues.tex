@@ -1,4 +1,23 @@
 \section{Unresolved issues}
 
+\subsection{Anonymous declarations}
+
+\textbf{Q:} {\em How should anonymous namespaces, nested structs, unions or
+the global scope for that matter be reflected?}
+
+\textbf{A:} In our opinion all such declarations should be reflected by
+metaobjects which are not \meta{Named}.
+
+So for example the \meta{GlobalScope} is a \meta{Namespace}, but
+the \verb@has_name@ trait should return \verb@false@ and the \verb@get_name@
+operation would be either undefined or return an empty string.
+
+On the other hand, even anonymous namespaces, classes or unions are scopes,
+so the metaobjects reflecting them should conform to the \meta{Scope} concept.
+
+Same reasoning applies to anonymous namespaces, nested structs or unions.
+
+\subsection{Interaction with concepts and attributes}
+
 TODO.
 
