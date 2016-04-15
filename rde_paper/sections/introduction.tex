@@ -127,16 +127,20 @@ as \say{data} in metaprograms -- something that can be a template parameter.
 This means that a type or a template is for our purposes a first-class object:
 
 \begin{minted}{cpp}
+// compile-time "values"
 struct value_a { };
 struct value_b { };
 
-template <typename Param> struct identity
+// a compile time "subroutine"
+template <typename Param>
+struct identity
 {
 	typedef Param result;
 };
 
-// are equality comparable and they are distinguishable
+// "values" are equality comparable and they are distinguishable
 assert(!std::is_same_v<value_a, value_b>, "");
+// and can be used for overloading
 assert(!std::is_same_v<identity<value_a>, identity<value_b>>, "");
 
 // they can be stored in named "variables" ...
@@ -165,16 +169,11 @@ On the other hand a namespace, a typedef or a template parameter do not have
 some or any of these properties.
 
 \begin{minted}{cpp}
+// other entities
 namespace std { }
 namespace foo = std;
 using bar = unsigned;
 using baz = unsigned;
-
-// the are not distinguishable
-std::is_same_v<bar, baz>;
-std::is_same_v<identity<bar>, identity<baz>>;
-// or not even comparable
-std::is_same_v<std, foo>;
 
 template <typename Param>
 struct identity
@@ -182,12 +181,25 @@ struct identity
 	typedef Param result;
 };
 
-// or they cannot be passed as arguments
+// they are not distinguishable
+std::is_same_v<bar, baz>;
+// and cannot be used for overloading
+std::is_same_v<identity<bar>, identity<baz>>;
+
+// or not even comparable
+std::is_same_v<std, foo>;
+
+// or they cannot be passed as arguments to subroutines
 identity<std>;
 identity<foo>;
 
 // nor returned as a result
 namespace y = identity<foo>::result;
+
+// those which can be returned ...
+using z = identity<bar>::result;
+// ... do not maintain their unique identity
+std::is_same_v<z, baz>;
 \end{minted}
 
 From the above follows, that a {\em second-class object} is everything else that

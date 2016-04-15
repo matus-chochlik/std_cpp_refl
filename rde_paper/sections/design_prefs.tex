@@ -98,8 +98,9 @@ templates which act as the metaobject interface.
 \label{design-ease-of-use}
 
 Although reflection-based metaprogramming should allow to implement very
-complicated meta-algorithms, simple things should be kept as simple as possible,
-but not simpler\footnote{Credits to whoever said that.}.
+complicated meta-algorithms, we try to adhere to the principle that things
+should be kept as simple as possible, but not simpler\footnote{Credits to
+whoever said that.}.
 
 This can be achieved by having a solid and powerful compiler-assisted reflection
 as the foundation and by implementing a simplifying facade on top of it once
@@ -109,7 +110,7 @@ the common use-cases are identified.
 \label{design-integration}
 
 The proposed reflection facility is easily
-usable with the existing compile-time introspection utilities\footnote{Like the
+usable with the existing introspection utilities\footnote{Like the
 {\em type-traits} or \texttt{typeid} and \texttt{std::type\_info}.}
 already provided by the standard library and by other third-party libraries.
 
@@ -176,7 +177,7 @@ Then we can use the new features:
 \begin{minted}{cpp}
 class foo { };
 
-static_assert(is_same_v<
+static_assert(meta::reflects_same_v<
 	meta::get_elaborated_type_specifier_t<reflexpr(foo)>,
 	reflexpr(class)
 >, "");
