@@ -5,7 +5,7 @@
 \textbf{Q:} {\em How should anonymous namespaces, nested structs, unions or
 the global scope for that matter be reflected?}
 
-\textbf{A:} In our opinion all such declarations should be reflected by
+In our opinion all such declarations should be reflected by
 the same metaobjects as their named counterparts, but without conforming
 to the \meta{Named} concept.
 
@@ -17,6 +17,47 @@ On the other hand, even anonymous namespaces, classes or unions are scopes,
 so the metaobjects reflecting them should conform to the \meta{Scope} concept.
 
 Same reasoning applies to anonymous namespaces, nested structs or unions.
+
+\subsection{Alternatives for breaking access restrictions}
+\label{issue-breaking-access}
+
+\textbf{Q:} {\em Some people were objecting to reflection being able to break
+access restrictions. Would this capability be more acceptable if it had to be
+explicitly allowed or if it could be denied?}
+
+Breaking class member access restrictions is important for many use cases,
+like non-intrusive serialization of third-party classes, which may include
+the serialization of non-public data-members.
+But there may be situations where the programmer would like to prevent
+reflection from having access to non-public members.
+
+This may be achieved either by annotating such members by an attribute;
+
+\begin{minted}[tabsize=4]{cpp}
+class very_private
+{
+private:
+	[[nonreflectable]] int _really_secret;
+public:
+	/* ... */
+};
+\end{minted}
+
+or by explicitly allowing access to reflection, for example by extending
+the \verb@friend@ mechanism:
+
+\begin{minted}[tabsize=4]{cpp}
+class not_so_private
+{
+private:
+	friend reflexpr;
+	int _public_secret;
+public:
+	/* ... */
+};
+\end{minted}
+
+If this is deemed necessary, then we favor the first option.
 
 \subsection{Interaction with concepts and attributes}
 

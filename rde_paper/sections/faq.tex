@@ -105,7 +105,7 @@ types and if the implementation was too coarse-grained or too eager.
 
 For example if upon the invocation of \verb@reflexpr(std::string)@, the representations
 of all the metadata related to the \verb@std::string@ type\footnote{Like
-the compile-time representation of its name, the metaobjects reflecting its scope
+the compile-time representation of its name and the metaobjects reflecting its scope
 or its members.} were generated immediately.
 
 This is however {\em not} the case.
@@ -363,7 +363,7 @@ when simply using the ampersand operator directly would be enough.
 Both cases are valid and again you should pick the most appropriate option
 for your situation.
 
-\subsection{All this additional options make it hard for the novices.}
+\subsection{All these additional options make it hard for the novices.}
 
 \textbf{Q:} {\em This reflection proposal is too complex to be learned by
 beginning C++ programmers and the novices might start to use unnecesarily
@@ -387,13 +387,13 @@ a[1] = 123.456;
 
 Doing mistakes is a part of being a beginner in something.
 
-C++ is a complex\footnote{No pun intended.} language which means that
-the underlying reflection mechanism must also be complex in order to capture
+C++ is a complex\footnote{No pun intended, really.} language which means that
+the reflection mechanism also must be expressive enough to capture
 the complexity of the base-level.
 However we do expect that once static reflection is available and the most
 common use cases are identified a more convenient and straightforward
-fa\c{c}ade will be implemented on top of it for simple and common things,
-while maintaining the usability of reflection in more complicated use cases.
+fa\c{c}ade will be added on top of it for simple and common things,
+while maintaining the usability of reflection in more elaborate use cases.
 
 \subsection{Why are the metaobjects anonymous?}
 
@@ -407,40 +407,40 @@ already are precedents for anonymous types -- for example C++ {\em lambdas}.
 
 Another option would be to define a concrete set of template classes like:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 namespace std {
 
-template <typename T>
-class meta_type /* Model of MetaType */
-{ };
+	template <typename T>
+	class meta_type /* Model of MetaType */
+	{ };
 
-}
+} // namespace std
 \end{minted}
 
 which could work with types, classes, etc., but would not work with namespaces,
 constructors, etc. (see also the Q/A above):
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 namespace std {
 
-template <something X> // problem
-class meta_constructor /* Model of MetaConstructor */
-{ };
+	template <something X> // problem
+	class meta_constructor /* Model of Meta-Constructor */
+	{ };
 
-template <something X> // problem
-class meta_namespace /* Model of MetaNamespace */
-{ };
+	template <something X> // problem
+	class meta_namespace /* Model of Meta-Namespace */
+	{ };
 
-}
+} // namespace std
 
 typedef std::meta_namespace<std> meta_std; // problem
 \end{minted}
 
 Instead of this, the metaobjects are anonymous and their (internal) identification
 is left to the compiler. From the user's point of view, the metaobject can be distinguished
-by the means of the metaobject traits and tags.
+by the means of the metaobject traits.
 
-\subsection{Reflection violating access restriction to class members?}
+\subsection{Reflection violating access restrictions to class members?}
 
 \textbf{Q:} {\em Why do you allow reflection to bypass the class member access
 restrictions? This is like giving people nuclear weapons. I don't want people
@@ -449,9 +449,39 @@ to have nuclear weapons [sic].}
 \textbf{A:}
 This is a valid point, but there are several different ways to break access restrictions
 if the programmer wants to and we feel that restricting reflection only to public
-class members would severely limit its usefulness. Having said that we also
-try to design the interface to indicate to the users that they are breaking
-encapsulation.
+class members would severely limit its usefulness in implementing things like
+non-intrusive serialization, object-relational mapping, etc.
+
+Having said that we also try to design the interface to indicate to the users
+that they are breaking encapsulation. For example the \say{basic} operation
+for getting class members -- \verb@get_data_members@, returns only the
+reflections of {\em public} class data members. To get access to all data members
+including the private or protected ones, the \verb@get_all_data_members@\footnote
+{We are open to suggestions for a better, more expressive or dissuasive name.}
+operation has to be used.
+
+Furthermore the \verb@is_public@ trait can be used to test if a class member
+is publicly accessible or not.
+
+See also \hyperref[issue-breaking-access]{the issues section}.
+
+\subsection{We need to get around access restrictions, but not in reflection.}
+
+\textbf{Q:} {\em OK, we understand that there are use cases where we need
+to get around access restrictions, but why do this in reflection?
+Why don't we use some other, unrelated, \say{magic} operator for that?}
+
+\textbf{A:}
+In our opinion if want\footnote{and we do!} to add a way of sneaking past
+access restrictions, then reflection is the perfect place to do it.
+
+Reflection is like a way to look at a program from a higher dimension,
+not perceivable from the base-level itself. The access restrictions are in
+the base-level language for a reason and having to go through the meta-level
+to get around them seems appropriate.
+
+Another reason for not using an operator -- a reserved identifier, is to avoid
+causing conflicts with names in existing code.
 
 \subsection{Why do we need typedef reflection?}
 
@@ -460,7 +490,7 @@ or type aliases on the meta-level when they are not distinguishable on the
 base-level? Or why do we need to reflect on syntax rather than just on semantics?}
 
 \textbf{A:}
-TODO
+TODO: a very solid use-case
 
 \subsection{Why \meta{ObjectSequence}s? Why not replace them with typelists?}
 
