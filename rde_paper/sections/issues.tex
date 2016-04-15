@@ -6,7 +6,8 @@
 the global scope for that matter be reflected?}
 
 \textbf{A:} In our opinion all such declarations should be reflected by
-metaobjects which are not \meta{Named}.
+the same metaobjects as their named counterparts, but without conforming
+to the \meta{Named} concept.
 
 So for example the \meta{GlobalScope} is a \meta{Namespace}, but
 the \verb@has_name@ trait should return \verb@false@ and the \verb@get_name@

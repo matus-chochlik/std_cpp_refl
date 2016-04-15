@@ -14,11 +14,12 @@ It should be able to reflect namespaces, functions, constructors,
 class inheritance, templates, specifiers, variables, etc.
 
 Without drastically changing the rules specifying what can or cannot be a template
-parameter, we cannot reflect C++'s second-class declarations like namespaces.
+parameter, we cannot properly reflect C++'s second-class declarations like
+namespaces.
 
 This is also connected with the usability of reflection in metaprograms.
 Using types to reflect various base-level declarations, allows to
-pass a representation of a namespace, a constructor, aspecifier or a parameter,
+pass a representation of a namespace, a constructor, a specifier or a parameter,
 around various \say{subroutines} of a metaprogram as a parameter or a return value.
 
 In order to achieve this by other means it would be necessary to make namespaces,
@@ -251,8 +252,148 @@ easily without reflection than with it, like \verb@&variable@ vs.
 \textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
 can be separated from the actual site where you access (reflect) the variable by
-several layers of metaprogram templates. Both use-cases are valid and
-again, you should pick the most appropriate option for your situation.
+several layers of metaprogram templates.
+
+Consider for example the following pseudo-code:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+void handle_var(const char* name, const T* ptr)
+{
+	/* ... */
+}
+
+template <MetaVariable MV>
+void handle_meta_var(void)
+{
+	// this may be true only in a fraction of cases
+	if(some_logic())
+	{
+		// we need the pointer just here
+		handle_var(
+			meta::get_name_v<MV>,
+			meta::get_pointer_v<MV>
+		);
+	}
+}
+
+template <MetaClass MC>
+void handle_meta_class(void);
+
+template <MetaType MT>
+void handle_meta_type(void);
+
+template <MetaVariable MV>
+void handle_meta_ns(void);
+
+template <Metaobject MO>
+void generic_func_1(void)
+{
+	// this may be true only in a fraction of cases
+	if(meta::is_variable_v<MO>)
+	{
+		handle_meta_var<MO>();
+	}
+	else if(meta:is_class_v<MO>)
+	{
+		handle_meta_class<MO>();
+	}
+	else if(meta:is_type_v<MO>)
+	{
+		handle_meta_type<MO>();
+	}
+	else if(meta:is_namespace_v<MO>)
+	{
+		handle_meta_ns<MO>();
+	}
+}
+
+template <Metaobject MO>
+void generic_func_2(void)
+{
+	if(some_trait_v<MO>)
+	{
+		generic_func_1<MO>();
+	}
+	else ...
+}
+
+// ... generic_func_3 - generic_func_19 ...
+// all eventually calling generic_func_1
+
+template <Metaobject MO>
+void generic_func_20(void)
+{
+	if(some_logic())
+	{
+		generic_func_19<MO>();
+	}
+	else
+	{
+		generic_func_15<MO>();
+	}
+}
+
+void main(int argc, const char** argv)
+{
+	std::string str;
+	generic_func_20<reflexpr(str)>();
+	generic_func_18<reflexpr(std)>();
+	generic_func_19<reflexpr(argc)>();
+	generic_func_20<reflexpr(std::pair)>();
+	// etc.
+
+	return 0;
+}
+\end{minted}
+
+In this case we actually need the pointer or a reference to a variable
+only in a fraction of cases, deep inside of the (meta-)program.
+
+If we didn't have the \verb@get_pointer@ operation, we would have to
+get the pointer very early and pass it through the whole algorithm.
+Furthermore in many cases there would not be any meaningful pointer to
+get so we would have pass \verb@nullptr@. Now imagine that there were more
+metaobjects, and potentially more pointers to pass around.
+
+Having said this, we of course do not force anybody to use \verb@get_pointer@
+when simply using the ampersand operator directly would be enough.
+
+Both cases are valid and again you should pick the most appropriate option
+for your situation.
+
+\subsection{All this additional options make it hard for the novices.}
+
+\textbf{Q:} {\em This reflection proposal is too complex to be learned by
+beginning C++ programmers and the novices might start to use unnecesarily
+complicated expressions to do simple things, like doing
+\verb@get_pointer_v<reflexpr(x)>@ instead of \verb@&x@.}
+
+\textbf{A:} 
+A novice could equally do:
+
+\begin{minted}{cpp}
+double a[2];
+*(a+int(-exp(complex<double>(0, M_PI)).real())) = 123.456;
+\end{minted}
+
+instead of
+
+\begin{minted}{cpp}
+double a[2];
+a[1] = 123.456;
+\end{minted}
+
+Doing mistakes is a part of being a beginner in something.
+
+C++ is a complex\footnote{No pun intended.} language which means that
+the underlying reflection mechanism must also be complex in order to capture
+the complexity of the base-level.
+However we do expect that once static reflection is available and the most
+common use cases are identified a more convenient and straightforward
+fa\c{c}ade will be implemented on top of it for simple and common things,
+while maintaining the usability of reflection in more complicated use cases.
 
 \subsection{Why are the metaobjects anonymous?}
 
@@ -328,12 +469,12 @@ operations? There are type-lists proposed for the inclusion into the standard,
 why not use those?}
 
 \textbf{A:} The reason why we use \meta{ObjectSequence}s is efficiency.
-Operations like \verb@get_data_members@ currently return metaobjects, i.e.
-very lightweight types representing a whole set of metaobjects, without actually
-instantiating the elements eagerly.
+Operations like \verb@get_data_members@ are currently designed to return
+metaobjects, i.e.  very lightweight types representing a whole set of
+other metaobjects, without actually instantiating the elements eagerly.
 
-So for example if we wanted the reflection of the first\footnote{zero-th}
-data member of a class having hundreds of member we could do:
+So for example if we wanted the reflection of just the first\footnote
+{zero-th} data member of a class having hundreds of members we could do:
 
 \begin{minted}{cpp}
 get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
@@ -350,5 +491,5 @@ then all metaobjects would have to be generated, even if most of them
 were not used afterwards.
 
 What we can do is to add an operation converting a \meta{ObjectSequence}
-into a type-list on demand.
+into a typelist on demand.
 
