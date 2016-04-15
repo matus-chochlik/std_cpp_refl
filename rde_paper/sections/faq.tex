@@ -93,6 +93,30 @@ will internally use compiler built-ins\footnote{Just like some of the type trait
 are implemented.}, but these can use compiler-specific reserved keywords
 and they will all operate on the metaobjects.
 
+\subsection{Creating a separate type for each metaobject is so heavyweight.}
+
+{\textbf Q:}{\em Isn't the creation of a new type for each metaobject too
+heavyweight? Won't that lead to unacceptable increases in the memory footprint
+and compilation times?}
+
+{\textbf A:} This might have been a problem if the metaobjects were regular
+types and if reflection implementation was too coarse-grained or too eager.
+
+For example if upon the invocation of \verb@reflexpr(std::string)@, the representations
+of all the metadata related to the \verb@std::string@ type\footnote{Like
+the compile-time representation of its name, the metaobjects reflecting its scope
+or its members.} were generated immediately.
+
+This is however {\em not} the case.
+
+The metaobjects need to be types just enough so that they can be used
+as template arguments\footnote{Similar to the \texttt{void} type}.
+They don't need to have any name, scope, implicitly generated constructors,
+assignment operators, run-time type information, etc. All they need to have
+is a separate identity and their internal representation needs to have a
+reference or pointer to the internal representation of the declarations\footnote{
+Which the compiler needs to maintain anyway, regardless of reflection.}
+which they are reflecting.
 
 \subsection{There's already a type trait for that!}
 

@@ -39,7 +39,7 @@ its interface more tidy, coherent and easier to learn.
 \subsubsection{Encapsulation}
 \label{design-encapsulation}
 
-The metadata is not exposed directly to the user by compiler many different
+The metadata is not exposed directly to the user by many different compiler
 built-ins, operators or special expressions.
 Instead it is be accessible through conceptually well-defined interfaces,
 inspired by the existing {\em type-traits}, already present in
@@ -68,7 +68,7 @@ The meta-level
 corresponds to the ontology of the base-level C++ language
 which it reflects. This basically means that all important existing language
 features\footnote{Within reason, we certainly do not want to reflect every token
-in a C++ program.} will evenually be reflected by appropriate metaobjects,
+in a C++ program.} will eventually be reflected by appropriate metaobjects,
 but new ones not having an equivalent in the base-level language\footnote{At least
 conceptually.} will not be invented.
 
