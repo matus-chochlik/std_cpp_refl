@@ -109,7 +109,7 @@ inside of which the reflection operator was invoked.
 
 For example:
 
-\begin{minted}{cpp}
+\begin{minted}[tabsize=4]{cpp}
 void foobar(void)
 {
 	// reflects this particular overload of the foobar function
@@ -155,4 +155,25 @@ public:
 };
 
 typedef reflexpr(this::function) _meta_fn; // error
+\end{minted}
+
+\subsubsection{Templates}
+
+If the \verb@this::template@ expression was used as the argument of the reflection
+operator, then it would return a \meta{Template} reflecting the class (or function)
+template inside of which the reflection operator was invoked.
+
+For example:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename First, typename Second, typename Third>
+struct triplet
+{
+	// reflects the template not the instantiation
+	using _meta_tpl = reflexpr(this::template);
+
+	// reflects the instantiation not the template
+	using _meta_cls = reflexpr(this::class);
+};
 \end{minted}
