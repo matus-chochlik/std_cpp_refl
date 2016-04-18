@@ -490,8 +490,37 @@ causing conflicts with names in existing code.
 or type aliases on the meta-level when they are not distinguishable on the
 base-level? Or why do we need to reflect on syntax rather than just on semantics?}
 
-\textbf{A:}
-TODO: a very solid use-case
+\textbf{A:} Our preferred answer is that it's better to have more information
+then less. Being able to distinguish typedefs or aliases on the meta-level,
+brings additional information about what the programmer meant, not just how
+it is implemented;
+\begin{itemize}
+	\item \verb@size_type@ vs. \verb@unsigned@,
+	\item \verb@rank_type@ vs. \verb@short@,
+	\item \verb@const_iterator@ vs. \verb@const Element*@,
+	\item \verb@height_cm@ vs. \verb@float@,
+	\item \verb@pid_t@ vs. \verb@int@,
+	\item \verb@sighandler_t@ vs. \verb@void (*)(int)@,
+	\item etc.
+\end{itemize}
+
+If we reflect on typedefs or aliases we still know the underlying types,
+the opposite is not true.  
+
+Having this information is important\footnote{or at least very nice to have}
+in several use cases.
+
+\begin{itemize}
+	\item Debugging or trace messages (containing function signatures)
+		are much more readable and informative if they also contain 
+		the typedef names of parameter types, return values or variables,
+		not just their underlying types.
+	\item Cross-platform serialization or remote procedure calls may require
+		typedef names instead of native type names which vary between
+		platforms.
+\end{itemize}
+
+TODO: mention some other use-cases
 
 \subsection{Why \meta{ObjectSequence}s? Why not replace them with typelists?}
 
