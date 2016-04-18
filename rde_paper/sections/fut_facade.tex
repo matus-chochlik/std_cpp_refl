@@ -43,7 +43,10 @@ The \verb@for_each@ function should sequentially call a specified
 a \meta{ObjectSequence}. It should {\em be equivalent} to the following:
 
 \begin{minted}[tabsize=4]{cpp}
-template <typename MetaobjectSequence, typename UnaryFunction>
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <typename MetaObjectSequence, typename UnaryFunction>
 void for_each(UnaryFunction func)
 {
 	func(identity<Metaobject1>());
@@ -52,16 +55,43 @@ void for_each(UnaryFunction func)
 	func(identity<MetaobjectN>());
 }
 \end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
 
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-	for_each<get_data_members_t<reflexpr(my_class)>>(
-		[](auto idmo)
-		{
-			using MO = decltype(idmo)::type;
-			...
-		}
-	);
+meta::for_each<meta::get_data_members_t<reflexpr(my_class)>>(
+	[](auto idmo)
+	{
+		using MO = decltype(idmo)::type;
+		...
+	}
+);
+\end{minted}
+
+\subsubsection{\texttt{unpack\_sequence}}
+
+The \verb@unpack_sequence@ template should instantiate the provided variadic
+template with metaobjects from a specified \meta{ObjectSequence} as template
+arguments. It should be equivalent to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <typename MetaObjectSequence, template <typename ...> class Template>
+struct unpack_sequence
+{
+	typedef Template<Metaobject1, Metaobject2, ... MetaobjectN> type;
+};
+
+template <typename MetaObjectSequence, template <typename ...> class Template>
+using unpack_sequence_t =
+	typename unpack_sequence<MetaobjectSequence, Template>::type;
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
 \end{minted}
 
