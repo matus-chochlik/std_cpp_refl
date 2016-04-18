@@ -1,0 +1,67 @@
+\subsection{Higher-level primitives}
+
+In this section we describe several useful metaprogramming utilities which
+could be added later to the standard library to simplify the use of the basic
+reflection primitives in certain cases.
+ 
+\subsubsection{\texttt{identity}}
+
+The \verb@identity@ template should be defined as follows:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename X>
+struct identity
+{
+	typedef X type;
+};
+\end{minted}
+
+The primary purpose of \verb@identity@ is to wrap types which {\em cannot} be
+instantiated\footnote{like the metaobjects returned by \texttt{reflexpr}}
+into a template which still carries information about these types, but
+{\em can} be used to create run-time variables.
+
+For example:
+
+\begin{minted}[tabsize=4]{cpp}
+using MO = reflexpr(int);
+
+void v; // error
+MO mo; // error
+
+identity<void> idv; // OK
+identity<MO> idmo; // OK
+\end{minted}
+ 
+This can be used for example to pass metaobjects into lambda functions,
+templated constructors or operators. 
+
+\subsubsection{\texttt{for\_each}}
+
+The \verb@for_each@ function should sequentially call a specified
+\verb@UnaryFunction@ on instances of \verb@identity@-wrapped metaobjects from
+a \meta{ObjectSequence}. It should {\em be equivalent} to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename MetaobjectSequence, typename UnaryFunction>
+void for_each(UnaryFunction func)
+{
+	func(identity<Metaobject1>());
+	func(identity<Metaobject2>());
+	/* ... */
+	func(identity<MetaobjectN>());
+}
+\end{minted}
+
+For example:
+
+\begin{minted}[tabsize=4]{cpp}
+	for_each<get_data_members_t<reflexpr(my_class)>>(
+		[](auto idmo)
+		{
+			using MO = decltype(idmo)::type;
+			...
+		}
+	);
+\end{minted}
+
