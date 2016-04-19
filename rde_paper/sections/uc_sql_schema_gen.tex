@@ -1,0 +1,91 @@
+\subsection{SQL schema generation}
+
+We need to create an SQL/DDL (data definition language) script for creating a schema
+with tables which will be storing the values of all structures in namespace C++ \verb@foo@
+having names starting with \verb@persistent_@:
+
+\begin{minted}[tabsize=4]{cpp}
+
+const char* translate_to_sql(const std::string& type_name)
+{
+	if(type_name == "int")
+		return "INTEGER";
+	if(type_name == "float")
+		return "FLOAT";
+	/* .. etc. */
+}
+
+struct create_table_column_from
+{
+	template <typename MetaMemVar>
+	void operator()(identity<MetaMemVar>)
+	{
+		if(!meta::is_variable_v<MetaMemVar>) return;
+
+		std::cout << meta::get_name_v<MetaMemVar> << " ";
+
+		std::cout << translate_to_sql(
+			meta::get_name_v<meta::get_type_t<MetaMemVar>>
+		);
+
+		if(starts_with(get_name_v<MetaMemVar>, "id_"))
+		{
+			std::cout << " PRIMARY KEY";
+		}
+		std::cout << "," << std::endl;
+	}
+};
+
+struct create_table_from
+{
+	const char* schema_name;
+
+	template <typename MetaClass>
+	void operator()(identity<MetaClass>)
+	{
+		if(!meta::is_class_v<MetaClass>) return;
+
+		if(!starts_with(
+			get_name_v<MetaClass>,
+			"persistent_"
+		)) return;
+
+		std::cout << "CREATE TABLE "
+		          << schema_name << "."
+			  << strip_prefix("persistent_", get_name_v<MetaClass>)
+			  << "(" << std::endl;
+
+		meta::for_each<meta::get_data_members_t<MetaClass>>(
+			create_table_column_from()
+		);
+
+		std::cout << ");"
+	}
+};
+
+struct create_schema_from
+{
+	template <typename MetaNamespace>
+	void operator()(identity<MetaNamespace>)
+	{
+		std::cout << "CREATE SCHEMA "
+			  << get_name_v<MetaNamespace>
+			  << ";" << std::endl;
+
+		meta::for_each<meta::get_member_types<MetaNamespace>>(
+			create_table_from{meta::get_name_v<MetaNamespace>}
+		);
+	}
+};
+
+int main(void)
+{
+	create_schema_from create;
+	create(identity<reflexpr(foo)>());
+	return 0;
+}
+
+\end{minted}
+
+Furthermore reflection could be used to implement actual object-relational mapping,
+together with a library like \verb@SOCI@, \verb@ODBC@, \verb@libpq@ or similar.

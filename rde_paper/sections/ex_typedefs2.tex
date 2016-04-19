@@ -1,0 +1,50 @@
+\subsubsection{Class alias reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflexpr>
+#include <iostream>
+
+struct foo { };
+using bar = foo;
+
+int main(void)
+{
+	using namespace std;
+
+	typedef reflexpr(bar) meta_bar;
+
+	static_assert(is_metaobject_v<meta_bar>, "");
+	static_assert(meta::is_type_v<meta_bar>, "");
+	static_assert(meta::is_class_v<meta_bar>, "");
+	static_assert(meta::is_alias_v<meta_bar>, "");
+
+	static_assert(is_same_v<meta::get_reflected_type_t<meta_bar>, bar>, "");
+
+	static_assert(meta::has_name_v<meta_bar>, "");
+	cout << meta::get_name_v<meta_bar> << endl;
+
+	typedef meta::get_aliased_t<meta_bar> meta_foo;
+
+	static_assert(is_metaobject_v<meta_foo>, "");
+	static_assert(meta::is_type_v<meta_foo>, "");
+	static_assert(meta::is_class_v<meta_foo>, "");
+	static_assert(!meta::is_alias_v<meta_foo>, "");
+
+	static_assert(is_same_v<meta::get_reflected_type_t<meta_foo>, foo>, "");
+
+	static_assert(meta::has_name_v<meta_foo>, "");
+	cout << meta::get_name_v<meta_foo> << endl;
+
+	return 0;
+}
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+bar
+foo
+\end{verbatim}
+
+Note that \texttt{meta\_bar} is both a \meta{Alias} and \meta{Class}.
+
