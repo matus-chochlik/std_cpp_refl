@@ -1,4 +1,5 @@
 \subsection{Reversing reflection}
+\label{fut-reverse-reflection}
 
 The \verb@reflexpr@ operator allows to obtain the meta-level representation
 of a base-level declaration. But what if we wanted to do the opposite: to
@@ -152,5 +153,15 @@ Combined with the fact that all metaobjects are first-class
 entities this would make a very powerful feature, which would essentially
 allow to sort of reify all reflectable declarations, even those which are
 second-class without actually reifying them at the base-level\footnote
-{At the cost of the round-trip through the meta-level\footnotemark.}
-\footnotetext{This sounds like a line from $H{\lambda}LF-LIFE^2$.}.
+{At the cost of the round-trip through the meta-level.}
+
+The the name of the \verb@reflexpr@ operator works nicely in both directions:
+\begin{itemize}
+\item Base$\rightarrow$Meta -level: {\em reflect} an expression.
+\item Meta$\rightarrow$Base -level: get {\em reflected} expression.
+\end{itemize}
+
+We are however also considering to use another name for the reverse operator.
+So far \verb@decltype(Metaobject)@\footnote{which works nicely for metaobjects
+reflecting types, but not otherwise} and
+\verb@unreflexpr(Metaobject)@\footnote{see the Acknowledgements} were suggested.
