@@ -72,6 +72,21 @@ meta::for_each<meta::get_data_members_t<reflexpr(my_class)>>(
 );
 \end{minted}
 
+There are some cases where we would like to have the ability to interrupt
+the traversal if some condition is met, for example if the user-defined
+function returns \verb@true@.
+
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <typename MetaObjectSequence, typename UnaryFunction>
+void for_each_until(UnaryFunction func)
+{
+	if(func(identity<Metaobject1>())) return;
+	if(func(identity<Metaobject2>())) return;
+	/* ... */
+	if(func(identity<MetaobjectN>())) return;
+}
+\end{minted}
+
 \subsubsection{\texttt{unpack\_sequence}}
 
 The \verb@unpack_sequence@ template should instantiate the provided variadic
