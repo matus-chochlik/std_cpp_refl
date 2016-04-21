@@ -1,0 +1,175 @@
+\subsection{Structure data member transformations}
+\label{use-case-struct-transf}
+
+We need to create a new structure which has data members with the same or similar
+names as an original structure, but we need to change some of the properties
+of the data members, usually their types.
+
+For example we need to transform a structure like:
+
+\begin{minted}[tabsize=4]{cpp}
+struct foo
+{
+	bool b;
+	char c;
+	double d;
+	float f;
+	string s;
+};
+\end{minted}
+
+into
+
+\begin{minted}[tabsize=4]{cpp}
+struct rdbs_table_placeholder_foo
+{
+	column_placeholder<bool>::type b;
+	column_placeholder<char>::type c;
+	column_placeholder<double>::type d;
+	column_placeholder<float>::type f;
+	column_placeholder<string>::type s;
+};
+\end{minted}
+
+or create a structure-of-arrays, which was one of the \say{targeted use cases}
+from the committee's CFP~\cite{ISOCPP-N3814}: 
+
+\begin{minted}[tabsize=4]{cpp}
+struct soa_foo
+{
+	vector<bool> bs;
+	vector<char> cs;
+	vector<double> sd;
+	vector<float> fs;
+	vector<string> ss;
+};
+\end{minted}
+
+The primary obstacle in implementing this use case with the help of reflection
+is at the moment the fact that we do not have the ability to create C++
+identifiers \say{programmatically}, at least not without the help of
+the preprocessor.
+
+We either have to add the ability to create identifiers from compile-time strings
+which may be fairly complicated , or look for some simpler workarounds.
+
+First, let's say that we have a magic operator \verb@identifier@ which creates an
+identifier from a compile time string, so that:
+
+\begin{minted}[tabsize=4]{cpp}
+identifier("long") identifier("foo")(int i, int j);
+\end{minted}
+
+would be equivalent to 
+
+\begin{minted}[tabsize=4]{cpp}
+long foo(int i, int j);
+\end{minted}
+
+With the help of multiple inheritance and the
+\hyperref[fut-facade]{\texttt{expand\_sequence}} helper template described
+in section \ref{fut-facade}, we can create a new structure that is
+nearly equivalent to \verb@soa_foo@ via metaprogramming:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaDataMember>
+struct soa_single_member
+{
+	// vector<T> Xs;
+	// assuming that we have a ct_concat function which
+	// does compile-time concatenation of two strings
+	vector<meta::get_original_type_t<meta::get_type_t<MetaDataMember>>>
+		identifier(ct_concat(meta::get_name_v<MetaDataMember>, "s"));
+
+	/* constructors, forwarding parameters to the vector, ... */
+};
+
+template <typename ... MetaDataMembers>
+struct soa_inherit_all
+ : soa_single_member<MetaDataMembers>...
+{ /* constructors forwarding parameters to the inherited soa_single_members */ };
+
+template <typename T>
+struct soa
+ : meta::expand_sequence_t<
+	meta::get_data_members_t<reflexpr(T)>,
+	soa_inherit_all
+> { /* constructors indirectly forwarding parameters to soa_inherit_all */ };
+
+using soa_foo = soa<foo>;
+\end{minted}
+
+If we don't want to implement the magic operator \verb@identfier@ or expose it
+to the users directly, we could add a new operation \verb@named_mem_var@
+for \meta{Named} metaobjects equivalent to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+template <MetaNamed MO, typename X>
+struct named_mem_var
+{
+	struct type
+	{
+		// same as
+		// X identifier(meta::get_name_v<MO>);
+		X __builtin_identifier_of(MO);
+
+		template <typename ... P>
+		type(P&& ... p)
+		 : __builtin_identifier_of(MO)(forward<P>(p)...) 
+		{ }
+	};
+};
+
+template <MetaNamed MO, typename X>
+using named_mem_var = typename named_mem_var_t<MO, X>::type;
+\end{minted}
+
+So for example the specialization of \verb@named_mem_var@ for the reflection
+of \verb@foo::c@ would look like this:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename X>
+struct named_mem_var<reflexpr(foo::c), X>
+{
+	struct type
+	{
+		X c;
+
+		template <typename ... P>
+		type(P&& ... p)
+		 : c(forward<P>(p)...) 
+		{ }
+	};
+};
+\end{minted}
+
+We can then combine the specializations of \verb@named_mem_var<...>::type@
+via multiple inheritance as before:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename MetaDataMember>
+using soa_single_member = meta::named_mem_var_t<
+	MetaDataMember,
+	vector<meta::get_original_type_t<meta::get_type_t<MetaDataMember>>>
+>;
+
+template <typename ... MetaDataMember>
+struct soa_inherit_all
+ : soa_single_member<MetaDataMembers>...
+{ /* constructors forwarding parameters to the inherited soa_single_members */ };
+
+template <typename T>
+struct soa
+ : meta::expand_sequence_t<
+	meta::get_data_members_t<reflexpr(T)>,
+	soa_inherit_all
+> { /* constructors indirectly forwarding parameters to soa_inherit_all */ };
+
+using soa_foo = soa<foo>;
+\end{minted}
+
+Note that with this workaround we don't have the ability to change the name
+of the data members from \verb@c@ to \verb@cs@, etc., but the \verb@named_mem_var@
+template is potentially much simpler to implement.

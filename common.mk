@@ -26,6 +26,7 @@ $(blddir)/%.bib: %.bib | $(blddir)
 
 $(blddir)/%.bbl: $(blddir)/%.bib $(blddir)/%.tex
 	cd $(blddir) && \
+		pdflatex $(latexopts) $(notdir $<) && \
 		bibtex $* && \
 	cd $(wrkdir)
 
