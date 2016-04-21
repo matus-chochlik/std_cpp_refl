@@ -6,7 +6,7 @@
 \newcommand{\doctitle}{Static reflection}
 \newcommand{\docsubtitle}{Rationale, design and evolution.}
 \newcommand{\docnum}{DxxxxR0}
-\newcommand{\docdate}{2016-04-20}
+\newcommand{\docdate}{2016-04-21}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -17,6 +17,7 @@
 \usepackage{dirtytalk}
 \usepackage{color,soul}
 \usepackage{enumitem}
+\usepackage{cite}
 
 \usepackage{listings}
 \usepackage{minted}
@@ -67,8 +68,9 @@ Reply-to: & \mchname (\href{mailto:\mchmail}{\mchmail}), Axel Naumann (\href{mai
 \paragraph{Abstract}
 
 The aim of this paper is to provide the rationale driving the
-design of the static reflection facility proposed in P0194
-(and its predecessors N3996, N4111 and N4451),
+design of the static reflection facility proposed in P0194~\cite{Chochlik-P0194R0}
+(and its predecessors N3996~\cite{Chochlik-N3996}, N4111~\cite{Chochlik-N4111},
+N4451~\cite{Chochlik-N4451} and N4452~\cite{Chochlik-N4452}),
 to enumerate and describe its potential use-cases
 and to keep a written record of its evolution. It also answers questions
 frequently asked in regard to the proposal.
@@ -83,6 +85,8 @@ frequently asked in regard to the proposal.
 \input{sections/issues.tex}
 \input{sections/faq.tex}
 \input{sections/acknowledgements.tex}
+
+\input{sections/references.tex}
 
 \begin{appendices}
 \newpage

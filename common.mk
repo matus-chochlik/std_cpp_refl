@@ -21,6 +21,16 @@ $(blddir)/%.tex: %.tex | $(blddir)/sections
 $(blddir)/%.sty: %.sty | $(blddir)
 	cp $< $@
 
+$(blddir)/%.bib: %.bib | $(blddir)
+	cp $< $@
+
+$(blddir)/%.bbl: $(blddir)/%.bib $(blddir)/%.tex
+	cd $(blddir) && \
+		bibtex $* && \
+	cd $(wrkdir)
+
+
+
 $(blddir)/%.pdf: $(blddir)/%.tex $(blddir)/%.tex.d $(blddir)/minted.sty | $(blddir)
 	cp -rf images $(blddir) || true
 	cd $(blddir) && \
