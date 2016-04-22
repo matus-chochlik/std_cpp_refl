@@ -53,10 +53,9 @@ the preprocessor.
 We either have to add the ability to create identifiers from compile-time strings
 which may be fairly complicated, or look for some simpler workarounds.
 
-First, let's say that we have a magic operator, say
-\verb@identifier(const char (&)[N])@\footnote{we do not insist on this particular
-name in case it should be implemented}, which \say{creates} an identifier from
-a compile-time string, so that:
+First, let's say that we have a magic operator, like \verb@identifier@ as
+described in \ref{fut-op-identifier1} , which \say{creates} an identifier from
+a compile-time string, so that for example:
 
 \begin{minted}[tabsize=4]{cpp}
 identifier("long") identifier("foo")(int i, int j);
@@ -66,6 +65,36 @@ would be equivalent to
 
 \begin{minted}[tabsize=4]{cpp}
 long foo(int i, int j);
+\end{minted}
+
+To copy a name of another declaration from a metaobject reflecting it,
+we can use the \verb@get_name@ operation, which returns a \verb@constexpr@
+array of \verb@char@s:
+
+\begin{minted}[tabsize=4]{cpp}
+struct bar
+{
+	int foo;
+};
+
+using meta_bar_foo = reflexpr(bar::foo);
+
+long identifier(meta::get_name_v<meta_bar_foo>)(int i, int j);
+\end{minted}
+
+In order to do anything more complex than just
+copying the identifiers of other declarations we would need a compile-time
+string manipulation library implementing for example functions for
+compile-time string concatenation, like \verb@ct_concat@:
+
+\begin{minted}[tabsize=4]{cpp}
+int identifier(ct_concat("get_", meta::get_name_v<meta_bar_foo>))(const bar&);
+\end{minted}
+
+which would be equivalent to:
+
+\begin{minted}[tabsize=4]{cpp}
+int get_foo(const bar&);
 \end{minted}
 
 With the help of multiple inheritance and the
@@ -79,8 +108,6 @@ template <typename MetaDataMember>
 struct soa_single_member
 {
 	// vector<T> Xs;
-	// assuming that we have a ct_concat function which
-	// does compile-time concatenation of two strings
 	vector<meta::get_original_type_t<meta::get_type_t<MetaDataMember>>>
 		identifier(ct_concat(meta::get_name_v<MetaDataMember>, "s"));
 
@@ -102,37 +129,22 @@ struct soa
 using soa_foo = soa<foo>;
 \end{minted}
 
-If we don't want to implement the magic operator \verb@identifier@ or expose it
-to the users directly, we could add a new operation \verb@named_mem_var@
-for \meta{Named} metaobjects equivalent to the following:
+If we don't want to implement the magic operator \verb@identifier@,
+we could instead add a new template \verb@named_data_member@
+for \meta{Named} metaobjects, described in greater detail in section
+\ref{fut-named-member-X}:
 
 \begin{minted}[tabsize=4]{cpp}
 template <MetaNamed MO, typename X>
-struct named_mem_var
-{
-	struct type
-	{
-		// same as
-		// X identifier(meta::get_name_v<MO>);
-		X __builtin_identifier_of(MO);
-
-		template <typename ... P>
-		type(P&& ... p)
-		 : __builtin_identifier_of(MO)(forward<P>(p)...) 
-		{ }
-	};
-};
-
-template <MetaNamed MO, typename X>
-using named_mem_var = typename named_mem_var_t<MO, X>::type;
+struct named_data_member;
 \end{minted}
 
-So for example the specialization of \verb@named_mem_var@ for the reflection
-of \verb@foo::c@ would look like this:
+A specialization of \verb@named_data_member@ for a metaobject reflecting
+for example \verb@foo::c@, would look like this:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
-struct named_mem_var<reflexpr(foo::c), X>
+struct named_data_member<reflexpr(foo::c), X>
 {
 	struct type
 	{
@@ -146,13 +158,13 @@ struct named_mem_var<reflexpr(foo::c), X>
 };
 \end{minted}
 
-We can then combine the specializations of \verb@named_mem_var<...>::type@
+We can then combine the specializations of \verb@named_data_member<...>::type@
 via multiple inheritance as before:
 
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename MetaDataMember>
-using soa_single_member = meta::named_mem_var_t<
+using soa_single_member = meta::named_data_member_t<
 	MetaDataMember,
 	vector<meta::get_original_type_t<meta::get_type_t<MetaDataMember>>>
 >;
@@ -173,5 +185,8 @@ using soa_foo = soa<foo>;
 \end{minted}
 
 Note that with this workaround we don't have the ability to change the name
-of the data members from \verb@c@ to \verb@cs@, etc., but the \verb@named_mem_var@
+of the data members from \verb@c@ to \verb@cs@, etc., but the \verb@named_data_member@
 template is potentially much simpler to implement.
+
+For a more detailed discussion on the possibilities of identifier generation
+see section \ref{fut-ident-gen}.
