@@ -6,6 +6,7 @@ could be added later to the standard library to simplify the use of the basic
 reflection primitives in certain cases.
  
 \subsubsection{\texttt{identity}}
+\label{fac-identity}
 
 The \verb@identity@ template should be defined as follows:
 
@@ -38,6 +39,7 @@ This can be used for example to pass metaobjects into lambda functions,
 templated constructors or operators. 
 
 \subsubsection{\texttt{for\_each}}
+\label{fac-for-each}
 
 The \verb@for_each@ function should sequentially call a specified
 \verb@UnaryFunction@ on instances of \verb@identity@-wrapped metaobjects from
@@ -88,6 +90,7 @@ void for_each_until(UnaryFunction func)
 \end{minted}
 
 \subsubsection{\texttt{unpack\_sequence}}
+\label{fac-unpack-sequence}
 
 The \verb@unpack_sequence@ template should instantiate the provided variadic
 template with metaobjects from a specified \meta{ObjectSequence} as template

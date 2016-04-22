@@ -45,16 +45,18 @@ struct soa_foo
 };
 \end{minted}
 
-The primary obstacle in implementing this use case with the help of reflection
+The primary obstacle to implementing this use case with the help of reflection
 is at the moment the fact that we do not have the ability to create C++
 identifiers \say{programmatically}, at least not without the help of
 the preprocessor.
 
 We either have to add the ability to create identifiers from compile-time strings
-which may be fairly complicated , or look for some simpler workarounds.
+which may be fairly complicated, or look for some simpler workarounds.
 
-First, let's say that we have a magic operator \verb@identifier@ which creates an
-identifier from a compile time string, so that:
+First, let's say that we have a magic operator, say
+\verb@identifier(const char (&)[N])@\footnote{we do not insist on this particular
+name in case it should be implemented}, which \say{creates} an identifier from
+a compile-time string, so that:
 
 \begin{minted}[tabsize=4]{cpp}
 identifier("long") identifier("foo")(int i, int j);
@@ -67,8 +69,8 @@ long foo(int i, int j);
 \end{minted}
 
 With the help of multiple inheritance and the
-\hyperref[fut-facade]{\texttt{expand\_sequence}} helper template described
-in section \ref{fut-facade}, we can create a new structure that is
+\hyperref[fac-unpack-sequence]{\texttt{unpack\_sequence}} helper template described
+in section \ref{fac-unpack-sequence}, we can create a new structure that is
 nearly equivalent to \verb@soa_foo@ via metaprogramming:
 
 \begin{minted}[tabsize=4]{cpp}
@@ -92,7 +94,7 @@ struct soa_inherit_all
 
 template <typename T>
 struct soa
- : meta::expand_sequence_t<
+ : meta::unpack_sequence_t<
 	meta::get_data_members_t<reflexpr(T)>,
 	soa_inherit_all
 > { /* constructors indirectly forwarding parameters to soa_inherit_all */ };
@@ -100,7 +102,7 @@ struct soa
 using soa_foo = soa<foo>;
 \end{minted}
 
-If we don't want to implement the magic operator \verb@identfier@ or expose it
+If we don't want to implement the magic operator \verb@identifier@ or expose it
 to the users directly, we could add a new operation \verb@named_mem_var@
 for \meta{Named} metaobjects equivalent to the following:
 
@@ -162,7 +164,7 @@ struct soa_inherit_all
 
 template <typename T>
 struct soa
- : meta::expand_sequence_t<
+ : meta::unpack_sequence_t<
 	meta::get_data_members_t<reflexpr(T)>,
 	soa_inherit_all
 > { /* constructors indirectly forwarding parameters to soa_inherit_all */ };
