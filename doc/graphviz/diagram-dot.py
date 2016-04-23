@@ -85,17 +85,24 @@ def get_argument_parser():
 	)
 
 	argparser.add_argument(
+		"--revision-nodes", "-RN",
+		type=bool,
+		action="store",
+		default=True
+	)
+
+	argparser.add_argument(
 		"--revision", "-R",
 		type=int,
 		action="store",
-		default=100
+		default=None
 	)
 
 	argparser.add_argument(
 		"--max-revision", "-M",
 		type=int,
 		action="store",
-		default=None
+		default=100
 	)
 
 	return argparser
@@ -113,6 +120,7 @@ class options:
 		self.cell_color = "#D0D0D0"
 		self.gen_operations = useropts.generate_operations
 		self.gen_traits = useropts.generate_traits
+		self.revision_nodes = useropts.revision_nodes
 		self.revision = useropts.revision
 		self.max_revision = useropts.max_revision if useropts.max_revision else self.revision
 
@@ -787,7 +795,8 @@ def print_metaobject(opts, concepts):
 	print_edge(opts, opts.metaobject, "description")
 
 	# Revisions
-	print_revision_nodes(opts, metaobject)
+	if opts.revision_nodes:
+		print_revision_nodes(opts, metaobject)
 
 	opts.output.write("""}
 	""")
@@ -874,7 +883,8 @@ def print_operation(opts, concepts):
 	print_edge(opts, uname, "description")
 
 	# Revisions
-	print_revision_nodes(opts, operation)
+	if opts.revision_nodes:
+		print_revision_nodes(opts, operation)
 
 	opts.output.write("""}
 	""")
@@ -927,7 +937,8 @@ def print_trait(opts, concepts):
 	print_edge(opts, opts.trait, "description")
 
 	# Revisions
-	print_revision_nodes(opts, trait)
+	if opts.revision_nodes:
+		print_revision_nodes(opts, trait)
 
 	opts.output.write("""}
 	""")
@@ -1049,7 +1060,8 @@ def print_overview(opts, concepts):
 		prev_mo = metaobject
 
 	# Revisions
-	print_revision_nodes(opts, find_metaobject(opts, concepts, "Object"))
+	if opts.revision_nodes:
+		print_revision_nodes(opts, find_metaobject(opts, concepts, "Object"))
 
 	opts.output.write("""}
 	""")
