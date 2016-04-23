@@ -9,7 +9,7 @@
 <xsl:output method="text"/>
 
 <xsl:template match="/concepts">
-CONCEPTS-<xsl:value-of select="$revision"/> =<xsl:for-each select="metaobject[@from_revision &lt;= $revision]">
+CONCEPTS-<xsl:value-of select="$revision"/> =<xsl:for-each select="metaobject[@since_revision &lt;= $revision]">
 	<xsl:text> </xsl:text><xsl:value-of select="@name"/>
 </xsl:for-each>
 

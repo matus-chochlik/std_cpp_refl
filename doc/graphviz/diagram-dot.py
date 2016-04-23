@@ -146,7 +146,7 @@ def iter_last(iterable):
 
 
 def in_a_revision(opts, node, revision):
-	try: return int(node.attrib["revision"]) <= revision
+	try: return int(node.attrib["since_revision"]) <= revision
 	except KeyError: return True
 
 def in_revision(opts, node):
