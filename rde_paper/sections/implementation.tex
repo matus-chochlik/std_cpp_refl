@@ -1,16 +1,16 @@
 \section{Experimental implementation}
 
 A fork of the clang compiler with a initial, partial, experimental implementation
-of this proposal can be found on github \cite{clang-reflexpr-impl}.
+of this proposal can be found on github \cite{ReflexprImplementation}.
 The modified compiler can be built by following the instructions listed
-in \cite{clang-getting-started}, but instead of checking out the official clang
+in \cite{ClangGettingStarted}, but instead of checking out the official clang
 repository, the sources on the \texttt{mirror-reflection} branch of the modified
 repository should be used.
 
 The implementation required changes (mostly additions) to roughly 3500 lines
 of code in the compiler plus circa 540 lines in the \texttt{<reflexpr>} header.
 
-All examples listed in Appendix \ref{section-reflexpr-examples} are working with
+All examples listed in section \ref{working-examples} are working with
 the modified compiler.
 
 This particular implementation works by generating and adding new \texttt{CXXRecordDecl}s,
