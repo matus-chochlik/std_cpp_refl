@@ -114,3 +114,36 @@ using unpack_sequence_t =
 } // namespace meta
 \end{minted}
 
+If we wanted only members satisfying an unary predicate, the following
+variant of \verb@unpack_sequence@ could be used:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <
+	typename MetaObjectSequence,
+	template <typename ...> class Template,
+	template <typename> class Predicate
+>
+struct unpack_sequence_if
+{
+	typedef Template<...> type;
+};
+
+template <
+	typename MetaObjectSequence,
+	template <typename ...> class Template,
+	template <typename> class Predicate
+>
+using unpack_sequence_if_t =
+	typename unpack_sequence_if<
+		MetaobjectSequence,
+		Template,
+		Predicate
+	>::type;
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+
