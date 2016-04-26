@@ -86,7 +86,7 @@ def get_argument_parser():
 
 	argparser.add_argument(
 		"--revision-nodes", "-RN",
-		type=bool,
+		type=BoolArgValue,
 		action="store",
 		default=True
 	)
@@ -967,6 +967,7 @@ def print_overview(opts, concepts):
 
 	# Other concepts
 	if opts.gen_traits or opts.gen_operations:
+		print_concept_node(opts, concepts, "ConstantValue", "ConstantValue")
 		print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
 	if opts.gen_operations:
 		print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")

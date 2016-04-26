@@ -4,6 +4,7 @@ DOT ?= dot
 NEATO ?= neato
 INKSCAPE ?= inkscape
 
+REVISION_NODES ?= True
 MAX_REVISION ?= 1
 REVISIONS = $(shell seq 0 $(MAX_REVISION))
 

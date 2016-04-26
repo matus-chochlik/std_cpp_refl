@@ -4,6 +4,7 @@
 	<baseobject kind="type" name="Pointer"/>
 	<baseobject kind="type" name="size_t"/>
 
+	<baseobject kind="const" name="ConstantValue" label="Constant\nValue"/>
 	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
 	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
 	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
@@ -411,6 +412,29 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Scope"/>
 	</metaobject>
 
+	<metaobject name="Constant"
+		since_revision="1"
+		abstract="true"
+		reflects="a compile-time constant value"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+	</metaobject>
+
+	<trait name="is_constant"
+		since_revision="1"
+		scope="meta"
+		indicates="Constant"
+	/>
+
+	<operation name="get_constant"
+		since_revision="1"
+		result="ConstantValue"
+		brief="returns the value of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Constant"/>
+	</operation>
+
 	<metaobject name="Variable"
 		since_revision="0"
 		reflects="a variable"
@@ -457,8 +481,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="1"
 		reflects="an enum value"
 	>
-		<generalization concept="Named"/>
-		<generalization concept="Typed"/>
+		<generalization concept="Constant"/>
 		<generalization concept="ScopeMember"/>
 		<constraint operation="get_type" trait="is_enum"/>
 		<order_after concept="Enum"/>
@@ -469,14 +492,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		scope="meta"
 		indicates="EnumValue"
 	/>
-
-	<operation name="get_constant"
-		since_revision="1"
-		result="IntegralConstant"
-		brief="returns the value of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="EnumValue"/>
-	</operation>
 
 	<metaobject name="Function"
 		since_revision="2"
