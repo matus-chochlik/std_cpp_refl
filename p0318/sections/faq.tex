@@ -629,6 +629,23 @@ objects also requires all of the metaobjects in the sequence to be instantiated
 even if only a few of them will actually be used. See also the previous
 question for more details on this.
 
+\subsection{Why not return fully qualified names?}
+
+\textbf{Q:} {\em Why doesn't the \texttt{get\_name} operation return fully
+qualified names instead of base names?}
+
+\textbf{A:} This is because it is much easier to generate full names from
+base names by using metaprogramming, than to do the reverse -- to parse the
+base name from a fully qualified and decorated name at compile-time.
+
+Also there are several possibilities how the full name can be formatted;
+should it contain any whitespaces, if so where and how many?, should the
+\verb@const@ and \verb@volatile@ qualifiers be put before or after the type
+name?, etc.
+
+These details shouldn't be handled by the basic reflection facility, but by
+a higher-level library.
+
 \subsection{What about the use cases from the committee's CFP?}
 
 \textbf{Q:} {\em How does this proposal handle the targeted use cases
