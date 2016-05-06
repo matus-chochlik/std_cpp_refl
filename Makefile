@@ -2,7 +2,7 @@
 blddir = $(PWD)/_bld
 outdir = $(PWD)/_out
 
-components = p0194 n4451 n4452 n4111 n3996 gcc-plugin
+components = P0318 P0194R0 N4451 N4452 N4111 N3996
 
 all: $(components)
 
