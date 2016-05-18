@@ -1,0 +1,12 @@
+body {
+	color: #000000;
+	background-color: #FFFFFF; 
+	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
+	padding: 2em;
+}
+
+table.header th {
+	text-align: right;
+	padding-right: 1em;
+}
+
