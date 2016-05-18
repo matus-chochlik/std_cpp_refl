@@ -1,6 +1,6 @@
 body {
-	color: #000000;
-	background-color: #FFFFFF; 
+	color: black;
+	background-color: white; 
 	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
 	padding: 2em;
 }
@@ -8,5 +8,21 @@ body {
 table.header th {
 	text-align: right;
 	padding-right: 1em;
+	vertical-align: top;
+}
+
+table.references th {
+	text-align: right;
+	padding-right: 1em;
+}
+
+table.references td a {
+	color: black;
+	font-style: oblique;
+	text-decoration: none;
+}
+
+table.references td a:hover {
+	text-decoration: underline;
 }
 
