@@ -16,13 +16,41 @@ table.references th {
 	padding-right: 1em;
 }
 
+table.references td {
+	font-style: oblique;
+}
+
 table.references td a {
 	color: black;
-	font-style: oblique;
 	text-decoration: none;
 }
 
 table.references td a:hover {
+	color: black;
 	text-decoration: underline;
 }
 
+blockquote.std {
+	color: black;
+	background-color: #F1F1F1;
+	border: 1px solid #D1D1D1;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+span.section_name {
+	float: right;
+	font-weight: bold;
+}
+pre code {
+	font-family: "Hack", "OCR A Extended", "Consolas", "Lucida Console", monospace;
+	line-height: 1.1em;
+	font-size: small;
+	-moz-tab-size: 2;
+	-o-tab-size: 16;
+	tab-size: 2;
+}
+
+pre {
+	background-color: #F0F0F0;
+}

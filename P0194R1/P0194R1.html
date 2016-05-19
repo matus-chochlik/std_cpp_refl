@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE
+	html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
@@ -29,10 +31,18 @@
 <h2>Table of Contents</h2>
 <nav id="TOC">
 	<ul>
-		<li><a href="#introduction">Introduction</a></li>
-		<li><a href="#revisions">Revision history</a></li>
-		<li><a href="#wording">Proposed wording</a></li>
-		<li><a href="#acks">Acknowledgments</a></li>
+		<li><a href="#introduction">Introduction</a>
+		</li>
+		<li><a href="#revisions">Revision history</a>
+		</li>
+		<li><a href="#wording">Proposed wording</a>
+			<ul>
+				<li><a href="#reflection">Reflection</a>
+				</li>
+			</ul>
+		</li>
+		<li><a href="#acks">Acknowledgments</a>
+		</li>
 	</ul>
 </nav>
 
@@ -48,8 +58,34 @@
 
 <h2 id="wording">Proposed wording</h2>
 
+<h3 id="reflection">Reflection</h3>
+
 <p>TODO
 </p>
+
+<blockquote class="std">
+	<h3>? Reflection <span class="section_name">[reflection]</span></h3>
+
+	<pre><code>
+	namespace std {
+	namespace experimental {
+
+	template <typename T>
+	struct is_metaobject : integral_constant<bool, ...> { };
+
+	template <typename T>
+	constexpr bool is_metaobject_v = is_metaobject<T>::value;
+
+	namespace meta {
+
+	} // namespace meta
+	} // namespace experimental
+	} // namespace std
+	</code></pre>
+
+	<p>TODO
+	</p>
+</blockquote>
 
 <h2 id="acks">Acknowledgments</h2>
 
@@ -81,7 +117,7 @@
 	<th>[N4111]</th>
 	<td>
 	<a href="https://isocpp.org/files/papers/n4111.pdf">
-		Chochlík M. -- N4111 - Static reflection (revision 2),
+		Chochlík M. -- N4111 - Static reflection (revision 2)
 	</a>
   </td>
 </tr>
@@ -90,7 +126,7 @@
 	<th>[N3996]</th>
 	<td>
 	<a href="https://isocpp.org/files/papers/n3996.pdf">
-		Chochlík M. -- N3996 - Static reflection,
+		Chochlík M. -- N3996 - Static reflection
 	</a>
   </td>
 </tr>
