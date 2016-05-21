@@ -1,4 +1,8 @@
-<?xml version="1.0"?>
+<!DOCTYPE
+	html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
@@ -23,7 +27,7 @@
 
 <h1>Static reflection</h1>
 
-
+<!--Table of Contents -->
 <h2>Table of Contents</h2>
 <div id="TOC">
 	<ul>
@@ -86,63 +90,7 @@
 
 	<h4>?.3 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
 
-	<pre><code>
-namespace std {
-
-template &lt;typename T&gt; struct is_metaobject;
-
-namespace meta {
-
-// <em>metaobject traits</em>
-template &lt;typename T&gt; struct is_sequence;
-template &lt;typename T&gt; struct has_name;
-template &lt;typename T&gt; struct has_type;
-template &lt;typename T&gt; struct has_scope;
-template &lt;typename T&gt; struct is_scope;
-template &lt;typename T&gt; struct is_alias;
-template &lt;typename T&gt; struct is_class_member;
-template &lt;typename T&gt; struct is_linkable;
-template &lt;typename T&gt; struct is_global_scope;
-template &lt;typename T&gt; struct is_namespace;
-template &lt;typename T&gt; struct is_type;
-template &lt;typename T&gt; struct is_class;
-template &lt;typename T&gt; struct is_enum;
-template &lt;typename T&gt; struct is_variable;
-
-// 
-template &lt;typename T&gt;
-  constexpr bool is_sequence_v = is_sequence::value;
-template &lt;typename T&gt;
-  constexpr bool has_name_v = has_name::value;
-template &lt;typename T&gt;
-  constexpr bool has_type_v = has_type::value;
-template &lt;typename T&gt;
-  constexpr bool has_scope_v = has_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_scope_v = is_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_alias_v = is_alias::value;
-template &lt;typename T&gt;
-  constexpr bool is_class_member_v = is_class_member::value;
-template &lt;typename T&gt;
-  constexpr bool is_linkable_v = is_linkable::value;
-template &lt;typename T&gt;
-  constexpr bool is_global_scope_v = is_global_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_namespace_v = is_namespace::value;
-template &lt;typename T&gt;
-  constexpr bool is_type_v = is_type::value;
-template &lt;typename T&gt;
-  constexpr bool is_class_v = is_class::value;
-template &lt;typename T&gt;
-  constexpr bool is_enum_v = is_enum::value;
-template &lt;typename T&gt;
-  constexpr bool is_variable_v = is_variable::value;
-
-
-} namespace meta
-} namespace std
-</code></pre>
+	<object class="htmlc" name="synopsis" type="text/html" data="synopsis.htmlc"></object>
 
 	<h4>?.4 The reflection operator<span class="section_name">[reflection.reflexpr]</span></h4>
 

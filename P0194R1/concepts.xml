@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf8"?>
+<concepts>
+	<baseobject kind="type" name="OriginalType"/>
+	<baseobject kind="type" name="Pointer"/>
+	<baseobject kind="type" name="size_t"/>
+
+	<baseobject kind="const" name="ConstantValue" label="Constant\nValue"/>
+	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
+	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
+	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
+	<baseobject kind="const" name="SourceLocation" label="Source\nLocation"/>
+
+	<metaobject name="Object"
+		since_revision="0"
+		abstract="true"
+		reflects="a base-level program declaration"
+		is_a="a concept modelled by stateless anonymous types generated
+by the compiler which allow access to metadata reflecting specific program declarations"
+	/>
+
+	<operation name="reflects_same"
+		since_revision="0"
+		brief="indicates if two metaobjects reflect the same base-level declaration."
+		result="BooleanConstant"
+	>
+		<argument type="Object"/>
+		<argument type="Object"/>
+	</operation>
+
+	<operation name="get_source_location"
+		since_revision="0"
+		brief="returns the source location info of the declaration of $(reflected) reflected by a $(operand)."
+		result="SourceLocation"
+	>
+		<argument type="Object"/>
+	</operation>
+
+	<metaobject name="ObjectSequence"
+		since_revision="0"
+		abstract="true"
+		label="Object\nSequence"
+		reflects="an ordered sequence of metaobjects"
+		brief="is an ordered sequence of metaobjects."
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<trait name="is_sequence"
+		since_revision="0"
+		scope="meta"
+		indicates="ObjectSequence"
+	/>
+
+	<operation name="get_size"
+		since_revision="0"
+		result="IntegralConstant"
+		integer="size_t"
+		brief="returns a number of elements in the sequence."
+	>
+		<argument type="ObjectSequence"/>
+	</operation>
+
+	<operation name="get_element"
+		since_revision="0"
+		result="Object"
+		brief="returns the i-th $(result) in a $(operand)."
+	>
+		<argument type="ObjectSequence"/>
+		<argument type="size_t" name="Index"/>
+	</operation>
+
+	<metaobject name="Revertible"
+		since_revision="1"
+		abstract="true"
+		reflects="a revertible declaration"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="ObjectSequence"/>
+	</metaobject>
+
+	<trait name="is_revertible"
+		since_revision="1"
+		scope="meta"
+		indicates="Revertible"
+	/>
+
+	<metaobject name="Named"
+		since_revision="0"
+		abstract="true"
+		reflects="a named declaration"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="ObjectSequence"/>
+	</metaobject>
+
+	<trait name="has_name"
+		since_revision="0"
+		scope="meta"
+		indicates="Named"
+	/>
+
+	<operation name="get_name"
+		since_revision="0"
+		result="StringConstant"
+		brief="returns the basic name of the $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Named"/>
+	</operation>
+
+	<metaobject name="Specifier"
+		since_revision="2"
+		reflects="a specifier"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+	<trait name="is_specifier"
+		since_revision="2"
+		scope="meta"
+		indicates="Specifier"
+	/>
+
+	<metaobject name="Typed"
+		since_revision="0"
+		abstract="true"
+		reflects="base-level declaration with a type"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="ScopeMember"/>
+	</metaobject>
+
+	<trait name="has_type"
+		since_revision="0"
+		scope="meta"
+		indicates="Typed"
+	/>
+
+	<operation name="get_type"
+		since_revision="0"
+		result="Type"
+		brief="returns the $(result) reflecting the type of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Typed"/>
+	</operation>
+
+	<metaobject name="ScopeMember"
+		since_revision="0"
+		abstract="true"
+		reflects="a scoped declaration"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="Named"/>
+	</metaobject>
+
+	<trait name="has_scope"
+		since_revision="0"
+		scope="meta"
+		indicates="ScopeMember"
+	/>
+
+	<operation name="get_scope"
+		since_revision="0"
+		result="Scope"
+		brief="returns the $(result) reflecting the scope of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="ScopeMember"/>
+	</operation>
+
+	<metaobject name="Scope"
+		since_revision="0"
+		abstract="true"
+		reflects="a scope"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="Type"/>
+	</metaobject>
+
+	<trait name="is_scope"
+		since_revision="0"
+		scope="meta"
+		indicates="Scope"
+	/>
+
+	<metaobject name="Alias"
+		since_revision="0"
+		abstract="true"
+		reflects="a type or namespace alias"
+	>
+		<generalization concept="Named"/>
+		<order_after concept="Typed"/>
+	</metaobject>
+
+	<trait name="is_alias"
+		since_revision="0"
+		scope="meta"
+		indicates="Alias"
+	/>
+
+	<operation name="get_aliased"
+		since_revision="0"
+		result="Named"
+		brief="returns the $(result) reflecting the original declaration of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Alias"/>
+	</operation>
+
+	<metaobject name="ClassMember"
+		since_revision="0"
+		abstract="true"
+		reflects="class member"
+	>
+		<generalization concept="ScopeMember"/>
+		<constraint operation="get_scope" trait="is_class"/>
+		<order_after concept="Class"/>
+	</metaobject>
+
+	<trait name="is_class_member"
+		since_revision="0"
+		scope="meta"
+		indicates="ClassMember"
+	/>
+
+	<operation name="is_public"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with public access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<operation name="get_access_specifier"
+		since_revision="2"
+		result="Specifier"
+		brief="returns the $(result) reflecting the access specifier of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<metaobject name="Linkable"
+		since_revision="0"
+		abstract="true"
+		reflects="declaration with storage duration and/or linkage"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="ScopeMember"/>
+		<order_after concept="Typed"/>
+	</metaobject>
+
+	<trait name="is_linkable"
+		since_revision="0"
+		scope="meta"
+		indicates="Linkable"
+	/>
+
+	<operation name="is_static"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with the static specifier."
+	>
+		<argument type="Linkable"/>
+	</operation>
+
+	<metaobject name="GlobalScope"
+		since_revision="0"
+		reflects="the global scope"
+		label="Global\nScope"
+	>
+		<generalization concept="Scope"/>
+	</metaobject>
+
+	<trait name="is_global_scope"
+		since_revision="0"
+		scope="meta"
+		indicates="GlobalScope"
+	/>
+
+	<metaobject name="Namespace"
+		since_revision="0"
+		reflects="a namespace"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<trait name="is_namespace"
+		since_revision="0"
+		scope="meta"
+		indicates="Namespace"
+	/>
+
+	<metaobject name="NamespaceAlias"
+		since_revision="0"
+		reflects="a namespace alias"
+		label="Namespace\nAlias"
+	>
+		<generalization concept="Namespace"/>
+		<generalization concept="Alias"/>
+		<constraint operation="get_aliased" trait="is_namespace"/>
+	</metaobject>
+
+	<metaobject name="Type"
+		since_revision="0"
+		reflects="a type"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<trait name="is_type"
+		since_revision="0"
+		scope="meta"
+		indicates="Type"
+	/>
+
+	<operation name="get_reflected_type"
+		since_revision="0"
+		result="OriginalType"
+		brief="returns the the base-level type reflected by a $(operand)."
+	>
+		<argument type="Type"/>
+	</operation>
+
+	<metaobject name="TypeAlias"
+		since_revision="0"
+		label="Type\nAlias"
+		reflects="a type alias or typedef"
+	>
+		<generalization concept="Type"/>
+		<generalization concept="Alias"/>
+		<constraint operation="get_aliased" trait="is_type"/>
+	</metaobject>
+
+	<metaobject name="Class"
+		since_revision="0"
+		reflects="a class"
+	>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
+	</metaobject>
+
+	<trait name="is_class"
+		since_revision="0"
+		scope="meta"
+		indicates="Class"
+	/>
+
+	<operation name="get_elaborated_type_specifier"
+		since_revision="2"
+		result="Specifier"
+		brief="returns a $(result) reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_data_members"
+		since_revision="0"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting
+		the public data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_all_data_members"
+		since_revision="0"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting all
+		(including the private and protected)
+		data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_member_types"
+		since_revision="1"
+		result="ObjectSequence" element="MemberType"
+		brief="returns a $(result) of $(elements) reflecting
+		the public member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_all_member_types"
+		since_revision="1"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting all
+		(including the private and protected)
+		member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<metaobject name="Enum"
+		since_revision="0"
+		reflects="an enumeration"
+	>
+		<generalization concept="Type"/>
+	</metaobject>
+
+	<trait name="is_enum"
+		since_revision="0"
+		scope="meta"
+		indicates="Enum"
+	/>
+
+	<metaobject name="EnumClass"
+		since_revision="0"
+		reflects="a strongly typed enumeration"
+	>
+		<generalization concept="Enum"/>
+		<generalization concept="Scope"/>
+	</metaobject>
+
+	<metaobject name="Constant"
+		since_revision="1"
+		abstract="true"
+		reflects="a compile-time constant value"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+	</metaobject>
+
+	<trait name="is_constant"
+		since_revision="1"
+		scope="meta"
+		indicates="Constant"
+	/>
+
+	<operation name="get_constant"
+		since_revision="1"
+		result="ConstantValue"
+		brief="returns the value of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Constant"/>
+	</operation>
+
+	<metaobject name="Variable"
+		since_revision="0"
+		reflects="a variable"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Linkable"/>
+	</metaobject>
+
+	<trait name="is_variable"
+		since_revision="0"
+		scope="meta"
+		indicates="Variable"
+	/>
+
+	<operation name="get_pointer"
+		uname="get_data_pointer"
+		since_revision="0"
+		result="Pointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the variable is a class member then the pointer is a class data member pointer,
+		otherwise it is a plain pointer."
+	>
+		<argument type="Variable"/>
+	</operation>
+
+	<metaobject name="DataMember"
+		since_revision="0"
+		reflects="a class data member"
+	>
+		<generalization concept="Variable"/>
+		<generalization concept="ClassMember"/>
+	</metaobject>
+
+	<metaobject name="MemberType"
+		since_revision="1"
+		reflects="a class member type (typedef, class, union, enum)"
+	>
+		<generalization concept="Type"/>
+		<generalization concept="ClassMember"/>
+	</metaobject>
+
+	<metaobject name="EnumValue"
+		since_revision="1"
+		reflects="an enum value"
+	>
+		<generalization concept="Constant"/>
+		<generalization concept="ScopeMember"/>
+		<constraint operation="get_type" trait="is_enum"/>
+		<order_after concept="Enum"/>
+	</metaobject>
+
+	<trait name="is_enum_value"
+		since_revision="1"
+		scope="meta"
+		indicates="EnumValue"
+	/>
+
+	<metaobject name="Function"
+		since_revision="2"
+		reflects="a function"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Linkable"/>
+	</metaobject>
+
+	<trait name="is_function"
+		since_revision="2"
+		scope="meta"
+		indicates="Function"
+	/>
+
+	<operation name="get_pointer"
+		uname="get_function_pointer"
+		since_revision="2"
+		result="FunctionPointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the function is a class member then the pointer is a class member function pointer,
+		otherwise it is a plain function pointer."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_result_type"
+		since_revision="2"
+		result="Type"
+		brief="returns a $(result) reflecting the return type of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_parameters"
+		uname="get_function_parameters"
+		since_revision="2"
+		result="ObjectSequence" element="FunctionParameter"
+		brief="returns a $(result) of $(elements) reflecting the parameters of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<metaobject name="OverloadedFunction"
+		since_revision="2"
+		reflects="a set of functions"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="get_overloads"
+		since_revision="2"
+		result="ObjectSequence" element="Function"
+		brief="returns a $(result) of the $(element) reflecting the concrete overloads of a $(operand)."
+	>
+		<argument type="OverloadedFunction"/>
+	</operation>
+
+	<metaobject name="Parameter"
+		since_revision="2"
+		reflects="a function parameter"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<trait name="is_parameter"
+		since_revision="2"
+		scope="meta"
+		indicates="Parameter"
+	/>
+
+	<metaobject name="FunctionParameter"
+		since_revision="2"
+		reflects="a function parameter"
+	>
+		<generalization concept="Parameter"/>
+		<constraint operation="get_scope" trait="is_function"/>
+		<order_after concept="Function"/>
+	</metaobject>
+
+</concepts>
