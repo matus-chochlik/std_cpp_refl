@@ -2,7 +2,69 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
-	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<style>
+body {
+	color: black;
+	background-color: white; 
+	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
+	padding: 2em;
+}
+
+table.header th {
+	text-align: right;
+	padding-right: 1em;
+	vertical-align: top;
+}
+
+table.references th {
+	text-align: right;
+	padding-right: 1em;
+}
+
+table.references td {
+	font-style: oblique;
+}
+
+table.references td a {
+	color: black;
+	text-decoration: none;
+}
+
+table.references td a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+blockquote.std {
+	color: black;
+	background-color: #F1F1F1;
+	border: 1px solid #D1D1D1;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+span.section_name {
+	float: right;
+	font-weight: bold;
+}
+pre code {
+	font-family: "Hack", "OCR A Extended", "Consolas", "Lucida Console", monospace;
+	line-height: 1.1em;
+	font-size: small;
+	-moz-tab-size: 2;
+	-o-tab-size: 16;
+	tab-size: 2;
+}
+
+pre {
+	background-color: #F0F0F0;
+}
+
+object.htmlc {
+	width: 100%;
+	height: auto;
+}
+</style>
 	<title>P0194R1 -- Static reflection</title>
 </head>
 <body>

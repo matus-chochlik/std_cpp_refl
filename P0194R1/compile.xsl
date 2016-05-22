@@ -10,8 +10,14 @@
 <xsl:template match="*">
 <xsl:choose>
 	<xsl:when test="name(.)='object' and @class='htmlc'">
-		<xsl:variable name="content" />
 		<xsl:copy-of select="document(@data)"/>
+	</xsl:when>
+	<xsl:when test="name(.)='link' and @rel='stylesheet'">
+		<xsl:variable
+			name="href"
+			select="concat(substring-before(@href,'.css'),'.htmlc')"
+		/>
+		<xsl:copy-of select="document($href)"/>
 	</xsl:when>
 	<xsl:otherwise>
 	<xsl:copy>
