@@ -54,6 +54,13 @@
 
 <h2 id="wording">Proposed wording</h2>
 
+<p>Insert a new element in Table 1, <em>C++ library headers</em> of
+[general.namespaces], named <code>&lt;experimental/reflexpr&gt;</code>.
+</p>
+
+<p>Insert a new section:
+</p>
+
 <blockquote class="std">
 	<h3>? Compile-time reflection <span class="section_name">[refl]</span></h3>
 
@@ -71,12 +78,17 @@
 	purpose and provides a single piece of metadata.
 	</p>
 
+	<h4>?.2 Metaobject concepts<span class="section_name">[refl.concepts]</span></h4>
+
 	Metaobjects reflecting different kinds of declarations conform to different
 	<em>metaobject concepts</em> and have different interfaces -- sets of templates
 	applicable on the metaobjects. Another set of templates -- the <em>metaobject
 	traits</em> can be used to determine which concepts a metaobject conforms to.
 
-	<h4>?.2 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
+	Metaobject concepts form a generalization-specialization hierarchy, with
+	<code>meta::Object</code> being the common generalization for all metaobjects.
+
+	<h4>?.3 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
 
 	<p>A <em>MetaobjectTrait</em> describes a property of a metaobject type,
 	typically it indicates if a metaobject conforms to a particular
@@ -87,6 +99,20 @@
 	and publicly and unambiguously derived, directly or indirectly from
 	<code>true_type</code> or <code>false_type</code>.
 	</p>
+
+	<p>A new <em>UnaryTypeTrait</em> -- <code>is_metaobject</code> should be added
+	to section 20.11.2 to distinguish between metaobject types generated
+	by the compiler and all other types.
+
+<pre><code>
+namespace std {
+namespace experimental {
+
+template &lt;typename T&gt; struct is_metaobject;
+
+} // namespace experimental
+} // namespace std
+</code></pre>
 
 	<h4>?.3 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
 

@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
+<!--
+Autmatically generated file. Do not modify manually all changes will be lost.
+-->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
@@ -112,6 +115,13 @@ object.htmlc {
 
 <h2 id="wording">Proposed wording</h2>
 
+<p>Insert a new element in Table 1, <em>C++ library headers</em> of
+[general.namespaces], named <code>&lt;experimental/reflexpr&gt;</code>.
+</p>
+
+<p>Insert a new section:
+</p>
+
 <blockquote class="std">
 	<h3>? Compile-time reflection <span class="section_name">[refl]</span></h3>
 
@@ -129,12 +139,17 @@ object.htmlc {
 	purpose and provides a single piece of metadata.
 	</p>
 
+	<h4>?.2 Metaobject concepts<span class="section_name">[refl.concepts]</span></h4>
+
 	Metaobjects reflecting different kinds of declarations conform to different
 	<em>metaobject concepts</em> and have different interfaces -- sets of templates
 	applicable on the metaobjects. Another set of templates -- the <em>metaobject
 	traits</em> can be used to determine which concepts a metaobject conforms to.
 
-	<h4>?.2 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
+	Metaobject concepts form a generalization-specialization hierarchy, with
+	<code>meta::Object</code> being the common generalization for all metaobjects.
+
+	<h4>?.3 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
 
 	<p>A <em>MetaobjectTrait</em> describes a property of a metaobject type,
 	typically it indicates if a metaobject conforms to a particular
@@ -146,64 +161,112 @@ object.htmlc {
 	<code>true_type</code> or <code>false_type</code>.
 	</p>
 
+	<p>A new <em>UnaryTypeTrait</em> -- <code>is_metaobject</code> should be added
+	to section 20.11.2 to distinguish between metaobject types generated
+	by the compiler and all other types.
+
+</p><pre><code>
+namespace std {
+namespace experimental {
+
+template &lt;typename T&gt; struct is_metaobject;
+
+} // namespace experimental
+} // namespace std
+</code></pre>
+
 	<h4>?.3 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
 
 	<pre><code>
 namespace std {
-
-template &lt;typename T&gt; struct is_metaobject;
-
+namespace experimental
 namespace meta {
 
+// <em>metaobject concepts</em>
+template &lt;typename T&gt; concept bool Object;
+template &lt;Object T&gt; concept bool ObjectSequence;
+template &lt;Object T&gt; concept bool Revertible;
+template &lt;Object T&gt; concept bool Named;
+template &lt;Object T&gt; concept bool Typed;
+template &lt;Object T&gt; concept bool ScopeMember;
+template &lt;Object T&gt; concept bool Scope;
+template &lt;Object T&gt; concept bool Alias = Named&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool ClassMember = ScopeMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Linkable = Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool GlobalScope = Scope&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Namespace = Named&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool NamespaceAlias = Namespace&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Type = Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool TypeAlias = Type&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Class = Type&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Enum = Type&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool EnumClass = Enum&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Constant = Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Variable = Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; Linkable&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool DataMember = Variable&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool MemberType = Type&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool EnumValue = Constant&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
+
+
 // <em>metaobject traits</em>
-template &lt;typename T&gt; struct is_sequence;
-template &lt;typename T&gt; struct has_name;
-template &lt;typename T&gt; struct has_type;
-template &lt;typename T&gt; struct has_scope;
-template &lt;typename T&gt; struct is_scope;
-template &lt;typename T&gt; struct is_alias;
-template &lt;typename T&gt; struct is_class_member;
-template &lt;typename T&gt; struct is_linkable;
-template &lt;typename T&gt; struct is_global_scope;
-template &lt;typename T&gt; struct is_namespace;
-template &lt;typename T&gt; struct is_type;
-template &lt;typename T&gt; struct is_class;
-template &lt;typename T&gt; struct is_enum;
-template &lt;typename T&gt; struct is_variable;
+template &lt;Object T&gt; struct is_sequence;
+template &lt;Object T&gt; struct is_revertible;
+template &lt;Object T&gt; struct has_name;
+template &lt;Object T&gt; struct has_type;
+template &lt;Object T&gt; struct has_scope;
+template &lt;Object T&gt; struct is_scope;
+template &lt;Object T&gt; struct is_alias;
+template &lt;Object T&gt; struct is_class_member;
+template &lt;Object T&gt; struct is_linkable;
+template &lt;Object T&gt; struct is_global_scope;
+template &lt;Object T&gt; struct is_namespace;
+template &lt;Object T&gt; struct is_type;
+template &lt;Object T&gt; struct is_class;
+template &lt;Object T&gt; struct is_enum;
+template &lt;Object T&gt; struct is_constant;
+template &lt;Object T&gt; struct is_variable;
+template &lt;Object T&gt; struct is_enum_value;
 
 // 
-template &lt;typename T&gt;
-  constexpr bool is_sequence_v = is_sequence::value;
-template &lt;typename T&gt;
-  constexpr bool has_name_v = has_name::value;
-template &lt;typename T&gt;
-  constexpr bool has_type_v = has_type::value;
-template &lt;typename T&gt;
-  constexpr bool has_scope_v = has_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_scope_v = is_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_alias_v = is_alias::value;
-template &lt;typename T&gt;
-  constexpr bool is_class_member_v = is_class_member::value;
-template &lt;typename T&gt;
-  constexpr bool is_linkable_v = is_linkable::value;
-template &lt;typename T&gt;
-  constexpr bool is_global_scope_v = is_global_scope::value;
-template &lt;typename T&gt;
-  constexpr bool is_namespace_v = is_namespace::value;
-template &lt;typename T&gt;
-  constexpr bool is_type_v = is_type::value;
-template &lt;typename T&gt;
-  constexpr bool is_class_v = is_class::value;
-template &lt;typename T&gt;
-  constexpr bool is_enum_v = is_enum::value;
-template &lt;typename T&gt;
-  constexpr bool is_variable_v = is_variable::value;
+template &lt;Object T&gt;
+  constexpr bool is_sequence_v = is_sequence&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_revertible_v = is_revertible&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool has_name_v = has_name&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool has_type_v = has_type&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool has_scope_v = has_scope&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_scope_v = is_scope&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_alias_v = is_alias&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_class_member_v = is_class_member&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_linkable_v = is_linkable&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_global_scope_v = is_global_scope&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_namespace_v = is_namespace&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_type_v = is_type&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_class_v = is_class&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_enum_v = is_enum&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_constant_v = is_constant&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_variable_v = is_variable&lt;T&gt;::value;
+template &lt;Object T&gt;
+  constexpr bool is_enum_value_v = is_enum_value&lt;T&gt;::value;
 
 
-} namespace meta
-} namespace std
+} // namespace meta
+} // namespace experimental
+} // namespace std
 </code></pre>
 
 	<h4>?.4 The reflection operator<span class="section_name">[reflection.reflexpr]</span></h4>

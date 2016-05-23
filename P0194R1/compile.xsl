@@ -7,6 +7,16 @@
 >
 <xsl:output method="xml"/>
 
+<xsl:template match="/html">
+<xsl:comment>
+Autmatically generated file. Do not modify manually all changes will be lost.
+</xsl:comment>
+<xsl:copy>
+	<xsl:copy-of select="@*"/>
+	<xsl:apply-templates/>
+</xsl:copy>
+</xsl:template>
+
 <xsl:template match="*">
 <xsl:choose>
 	<xsl:when test="name(.)='object' and @class='htmlc'">
@@ -20,10 +30,10 @@
 		<xsl:copy-of select="document($href)"/>
 	</xsl:when>
 	<xsl:otherwise>
-	<xsl:copy>
-		<xsl:copy-of select="@*"/>
-		<xsl:apply-templates/>
-	</xsl:copy>
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates/>
+		</xsl:copy>
 	</xsl:otherwise>
 </xsl:choose>
 </xsl:template>
