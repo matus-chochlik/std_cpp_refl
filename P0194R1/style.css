@@ -5,6 +5,42 @@ body {
 	padding: 2em;
 }
 
+table {
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+th {
+	border: 2px solid black;
+}
+
+td {
+	border: 1px solid black;
+}
+
+th, td {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+table.header {
+	border: none;
+}
+
+table.references {
+	border: none;
+}
+
+table.header th,
+table.header td {
+	border: none;
+}
+
+table.references th,
+table.references td {
+	border: none;
+}
+
 table.header th {
 	text-align: right;
 	padding-right: 1em;

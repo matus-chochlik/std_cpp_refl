@@ -16,6 +16,12 @@
 	<xsl:variable name="n" select="count(preceding-sibling::metaobject[@since_revision &lt;= $revision])"/>
 	&lt;h5&gt;?.4.<xsl:value-of select="$n+1"/> &lt;code&gt;<xsl:value-of select="@name"/>&lt;/code&gt;&lt;/h5&gt;
 
+	<xsl:if test="@is_a">
+	<xsl:text>&lt;p&gt;&lt;code&gt;meta::</xsl:text>
+	<xsl:value-of select="@name"/>&lt;/code&gt; is <xsl:value-of select="@is_a"/>.
+	<xsl:text>&lt;/p&gt;</xsl:text>
+	</xsl:if>
+
 	&lt;pre&gt;&lt;code&gt;
 	<xsl:text>template &amp;lt;</xsl:text>
 	<xsl:choose>
