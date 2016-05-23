@@ -21,15 +21,7 @@ namespace meta {
 <xsl:when test="@name='Object'">typename</xsl:when>
 <xsl:otherwise>Object</xsl:otherwise>
 </xsl:choose>
-<xsl:text> T&amp;gt; concept bool </xsl:text><xsl:value-of select="@name"/>
-<xsl:if test="generalization[not(@optional='true') and not(@concept='Object')]">
-<xsl:text> = </xsl:text>
-<xsl:for-each select="generalization[not(@optional='true') and not(@concept='Object')]">
-	<xsl:if test="position() != 1"> &amp;amp;&amp;amp; </xsl:if>
-	<xsl:value-of select="@concept"/><xsl:text>&amp;lt;T&amp;gt;</xsl:text>
-</xsl:for-each>
-<xsl:text> &amp;amp;&amp;amp; ... </xsl:text>
-</xsl:if>;
+<xsl:text> T&amp;gt; concept bool </xsl:text><xsl:value-of select="@name"/>;
 </xsl:for-each>
 
 // &lt;em&gt;metaobject traits&lt;/em&gt;

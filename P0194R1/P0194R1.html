@@ -139,8 +139,6 @@ object.htmlc {
 	purpose and provides a single piece of metadata.
 	</p>
 
-	<h4>?.2 Metaobject concepts<span class="section_name">[refl.concepts]</span></h4>
-
 	Metaobjects reflecting different kinds of declarations conform to different
 	<em>metaobject concepts</em> and have different interfaces -- sets of templates
 	applicable on the metaobjects. Another set of templates -- the <em>metaobject
@@ -149,7 +147,7 @@ object.htmlc {
 	Metaobject concepts form a generalization-specialization hierarchy, with
 	<code>meta::Object</code> being the common generalization for all metaobjects.
 
-	<h4>?.3 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
+	<h4>?.2 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
 
 	<p>A <em>MetaobjectTrait</em> describes a property of a metaobject type,
 	typically it indicates if a metaobject conforms to a particular
@@ -190,22 +188,22 @@ template &lt;Object T&gt; concept bool Named;
 template &lt;Object T&gt; concept bool Typed;
 template &lt;Object T&gt; concept bool ScopeMember;
 template &lt;Object T&gt; concept bool Scope;
-template &lt;Object T&gt; concept bool Alias = Named&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool ClassMember = ScopeMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Linkable = Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool GlobalScope = Scope&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Namespace = Named&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool NamespaceAlias = Namespace&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Type = Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool TypeAlias = Type&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Class = Type&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Enum = Type&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool EnumClass = Enum&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Constant = Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool Variable = Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; Linkable&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool DataMember = Variable&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool MemberType = Type&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt; &amp;&amp; ... ;
-template &lt;Object T&gt; concept bool EnumValue = Constant&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; ... ;
+template &lt;Object T&gt; concept bool Alias;
+template &lt;Object T&gt; concept bool ClassMember;
+template &lt;Object T&gt; concept bool Linkable;
+template &lt;Object T&gt; concept bool GlobalScope;
+template &lt;Object T&gt; concept bool Namespace;
+template &lt;Object T&gt; concept bool NamespaceAlias;
+template &lt;Object T&gt; concept bool Type;
+template &lt;Object T&gt; concept bool TypeAlias;
+template &lt;Object T&gt; concept bool Class;
+template &lt;Object T&gt; concept bool Enum;
+template &lt;Object T&gt; concept bool EnumClass;
+template &lt;Object T&gt; concept bool Constant;
+template &lt;Object T&gt; concept bool Variable;
+template &lt;Object T&gt; concept bool DataMember;
+template &lt;Object T&gt; concept bool MemberType;
+template &lt;Object T&gt; concept bool EnumValue;
 
 
 // <em>metaobject traits</em>
@@ -269,7 +267,195 @@ template &lt;Object T&gt;
 } // namespace std
 </code></pre>
 
-	<h4>?.4 The reflection operator<span class="section_name">[reflection.reflexpr]</span></h4>
+	<h4>?.4 Metaobject concepts<span class="section_name">[refl.concepts]</span></h4>
+
+	<div>
+	<h5>?.4.1 <code>Object</code></h5>
+
+	<pre><code>
+	template &lt;typename T&gt; concept bool Object =
+	  is_metaobject_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.2 <code>ObjectSequence</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool ObjectSequence =
+	  is_sequence_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.3 <code>Revertible</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Revertible =
+	  is_revertible_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.4 <code>Named</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Named =
+	  has_name_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.5 <code>Typed</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Typed =
+	  has_type_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.6 <code>ScopeMember</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool ScopeMember =
+	  has_scope_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.7 <code>Scope</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Scope =
+	  is_scope_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.8 <code>Alias</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Alias =
+	  Named&lt;T&gt; &amp;&amp; is_alias_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.9 <code>ClassMember</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool ClassMember =
+	  ScopeMember&lt;T&gt; &amp;&amp; is_class_member_v&lt;T&gt; &amp;&amp; Class&lt;get_scope_t&lt;T&gt;&gt;;
+	</code></pre>
+
+
+	<h5>?.4.10 <code>Linkable</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Linkable =
+	  Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; is_linkable_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.11 <code>GlobalScope</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool GlobalScope =
+	  Scope&lt;T&gt; &amp;&amp; is_global_scope_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.12 <code>Namespace</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Namespace =
+	  Named&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; is_namespace_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.13 <code>NamespaceAlias</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool NamespaceAlias =
+	  Namespace&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; Namespace&lt;get_aliased_t&lt;T&gt;&gt;;
+	</code></pre>
+
+
+	<h5>?.4.14 <code>Type</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Type =
+	  Named&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; is_type_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.15 <code>TypeAlias</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool TypeAlias =
+	  Type&lt;T&gt; &amp;&amp; Alias&lt;T&gt; &amp;&amp; Type&lt;get_aliased_t&lt;T&gt;&gt;;
+	</code></pre>
+
+
+	<h5>?.4.16 <code>Class</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Class =
+	  Type&lt;T&gt; &amp;&amp; Scope&lt;T&gt; &amp;&amp; is_class_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.17 <code>Enum</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Enum =
+	  Type&lt;T&gt; &amp;&amp; is_enum_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.18 <code>EnumClass</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool EnumClass =
+	  Enum&lt;T&gt; &amp;&amp; Scope&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.19 <code>Constant</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Constant =
+	  Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; is_constant_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.20 <code>Variable</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool Variable =
+	  Named&lt;T&gt; &amp;&amp; Typed&lt;T&gt; &amp;&amp; Linkable&lt;T&gt; &amp;&amp; is_variable_v&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.21 <code>DataMember</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool DataMember =
+	  Variable&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.22 <code>MemberType</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool MemberType =
+	  Type&lt;T&gt; &amp;&amp; ClassMember&lt;T&gt;;
+	</code></pre>
+
+
+	<h5>?.4.23 <code>EnumValue</code></h5>
+
+	<pre><code>
+	template &lt;Object T&gt; concept bool EnumValue =
+	  Constant&lt;T&gt; &amp;&amp; ScopeMember&lt;T&gt; &amp;&amp; is_enum_value_v&lt;T&gt; &amp;&amp; Enum&lt;get_type_t&lt;T&gt;&gt;;
+	</code></pre>
+
+</div>
+
+	<h4>?.5 The reflection operator<span class="section_name">[reflection.reflexpr]</span></h4>
 
 	<p>TODO
 	</p>
