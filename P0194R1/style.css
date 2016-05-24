@@ -78,6 +78,10 @@ span.section_name {
 	float: right;
 	font-weight: bold;
 }
+pre {
+	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
+	line-height: 1.1em;
+}
 pre code {
 	font-family: "Hack", "OCR A Extended", "Consolas", "Lucida Console", monospace;
 	line-height: 1.1em;
