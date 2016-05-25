@@ -55,6 +55,7 @@ namespace meta {
 <xsl:text> T&amp;gt; concept bool </xsl:text><xsl:value-of select="@name"/>;
 </xsl:for-each>
 
+<!--
 // &lt;em&gt;metaobject traits&lt;/em&gt;
 <xsl:for-each select="trait[@since_revision &lt;= $revision]">
 <xsl:text>template &amp;lt;Object T&amp;gt; struct </xsl:text><xsl:value-of select="@name"/>;
@@ -64,6 +65,7 @@ namespace meta {
 <xsl:text>template &amp;lt;Object T&amp;gt;
   constexpr bool </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>&amp;lt;T&amp;gt;::value;
 </xsl:for-each>
+-->
 
 // &lt;em&gt;metaobject operations&lt;/em&gt;
 <xsl:for-each select="/concepts/metaobject[@since_revision &lt;= $revision]">

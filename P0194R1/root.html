@@ -88,6 +88,11 @@ Introduces an experimental implementation of the reflection operator in clang.
 Drops the context-dependent reflection from N4111 (will be re-introduced later).
 </p>
 
+<h4>Revision 5 (P0194R1)</h4>
+
+Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
+classification is now done by using the concepts.
+
 <h2 id="wording">Proposed wording</h2>
 
 <p>Insert a new element in Table 1, <em>C++ library headers</em> of
@@ -112,8 +117,8 @@ Drops the context-dependent reflection from N4111 (will be re-introduced later).
 	describing various properties of the reflected declaration through
 	a set of templates.
 
-	The <em>metaobject</em> types themselves are opaque, without any internal
-	structure and they cannot be instantiated.
+	The <em>metaobject</em> types themselves are opaque, without any visible
+	internal structure and they cannot be instantiated.
 	</p>
 
 	<p>The metaobjects shall be generated on demand by the compiler as
@@ -126,27 +131,21 @@ Drops the context-dependent reflection from N4111 (will be re-introduced later).
 	collectively referred to as <em>metaobject operations</em>.
 	</p>
 
-	Metaobjects reflecting different kinds of declarations conform to different
+	<p>Metaobjects reflecting different kinds of declarations conform to different
 	<em>metaobject concepts</em> and have different interfaces — sets of templates
-	applicable on the metaobjects. Another set of templates — the <em>metaobject
-	traits</em> can be used to determine which concepts a metaobject conforms to.
+	applicable on the metaobjects. These concepts can also be used for
+	metaobject classification.
 
-	Metaobject concepts form a generalization-specialization hierarchy, with
+	<p>Metaobject concepts form a generalization-specialization hierarchy, with
 	<code>meta::Object</code> being the common generalization for all metaobjects.
-
-	<p>A <em>MetaobjectTrait</em> describes a property of a metaobject type,
-	typically it indicates if a metaobject conforms to a particular
-	<em>metaobject concept</em>.
-	
-	It shall be a class template that takes one template type argument.
-	It shall be <code>DefaultConstructible</code>, <code>CopyConstructible</code>
-	and publicly and unambiguously derived, directly or indirectly from
-	<code>true_type</code> or <code>false_type</code>.
 	</p>
+
+	<h4>?.2 Metaobject trait<span class="section_name">[refl.trait]</span></h4>
 
 	<p>A new <em>UnaryTypeTrait</em> — <code>is_metaobject</code> shall be added
 	to section [meta.unary.cat] to distinguish between metaobject types generated
 	by the compiler and all other types.
+	</p>
 
 <pre><code>
 namespace std {
@@ -157,23 +156,6 @@ template &lt;typename T&gt; struct is_metaobject;
 } // namespace experimental
 } // namespace std
 </code></pre>
-
-	<h4>?.2 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
-
-	<object class="htmlc" name="synopsis" type="text/html" data="synopsis.htmlc"></object>
-
-	<h4>?.3 Metaobject traits<span class="section_name">[refl.traits]</span></h4>
-
-	<p>The <em>MetaobjectTrait</em> templates require their argument
-	to be models of the <code>meta::Object</code> concept. The <code>is_metaobject</code>
-	type trait can be used to distinguish valid metaobjects from other types.
-	</p>
-	<p>If a type <code>T</code> is a model of a particular metaobject concept
-	as listed in the table below, then the matching trait template shall
-	inherit from <code>true_type</code>, otherwise it shall inherit from
-	<code>false_type</code>.
-
-	<object class="htmlc" name="traits" type="text/html" data="traits.htmlc"></object>
 
 <pre>
 [Example:
@@ -188,27 +170,10 @@ is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
 — end example]
 </pre>
 
-<pre>
-[Example:
-<code>
-meta::is_sequence_v&lt;int&gt;;                                        // <em>error</em>
-meta::is_sequence_v&lt;reflexpr(int)&gt;;                              // false
-meta::is_sequence_v&lt;reflexpr(string)&gt;;                           // false
-meta::is_sequence_v&lt;meta::get_data_members_t&lt;reflexpr(string)&gt;&gt;; // true
-</code>
-— end example]
-</pre>
+	<h4>?.3 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
 
-<pre>
-[Example:
-<code>
-meta::has_name_v&lt;int&gt;;                                        // <em>error</em>
-meta::has_name_v&lt;reflexpr(int)&gt;;                              // true
-meta::has_name_v&lt;reflexpr(string)&gt;;                           // true
-meta::has_name_v&lt;meta::get_data_members_t&lt;reflexpr(string)&gt;&gt;; // false
-</code>
-— end example]
-</pre>
+	<object class="htmlc" name="synopsis" type="text/html" data="synopsis.htmlc"></object>
+
 
 	<h4>?.4 Metaobject concepts<span class="section_name">[refl.concepts]</span></h4>
 
