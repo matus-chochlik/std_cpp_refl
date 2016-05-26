@@ -84,11 +84,17 @@ namespace meta {
 
 <xsl:if test="/concepts/metaobject[@name=$result]">
 <xsl:call-template name="template-args-decl"/>
+  using <xsl:value-of select="@name"/>_m = typename <xsl:value-of select="@name"/>
+<xsl:call-template name="template-args-list"/>::type;
+</xsl:if>
+
+<xsl:if test="@result = 'OriginalType'">
+<xsl:call-template name="template-args-decl"/>
   using <xsl:value-of select="@name"/>_t = typename <xsl:value-of select="@name"/>
 <xsl:call-template name="template-args-list"/>::type;
 </xsl:if>
 
-<xsl:if test="@result!='Pointer' and @result!='SourceLocation' and not(/concepts/metaobject[@name=$result])">
+<xsl:if test="@result!='Pointer' and @result!='SourceLocation' and @result!='OriginalType' and not(/concepts/metaobject[@name=$result])">
 <xsl:call-template name="template-args-decl"/>
   constexpr auto <xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>
 <xsl:call-template name="template-args-list"/>::value;
