@@ -402,6 +402,39 @@ constexpr bool b4 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // tru
 
 	<h5>?.6.3 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
 
+	<p>If a metaobject conforming to the <code>meta::Revertible</code> concept
+	is passed as the argument to the <code>reflexpr</code> operator,
+	then this invocation shall have the same effect as if the name of the
+	original declaration reflected by the metaobject was used.
+	</p>
+
+	<p>For instance if a <code>meta::Type</code> is passed as the argument,
+	then <code>reflexpr</code> should return the reflected type.
+	In this case the result of reverse reflection is the same as the result
+	of the <code>meta::get_reflected_type</code> operation.
+	</p>
+
+<pre>
+[Example:
+<code>
+using meta_int = reflexpr(int);
+is_same_t&lt;int, reflexpr(meta_int)&gt;; // true
+is_same_t&lt;int, meta::get_reflected_type_t&lt;meta_int&gt;&gt;; // true
+
+reflexpr(meta_int) x = 123;   // valid (same as int x;)
+
+struct my_struct
+{
+	reflexpr(meta_int) i; // valid (same as int i;)
+};
+</code>
+— end example]
+</pre>
+
+[Note: If a metaobject not conforming to the <code>meta::Revertible</code> concept
+is passed to the <code>reflexpr</code> operator then the result is undefined.
+— end note]
+
 </blockquote>
 
 <h2 id="acks">Acknowledgments</h2>

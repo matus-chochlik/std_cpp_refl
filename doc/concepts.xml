@@ -307,6 +307,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<generalization concept="Named" optional="true"/>
 		<generalization concept="ScopeMember"/>
+		<generalization concept="Revertible"/>
 	</metaobject>
 
 	<trait name="is_type"
