@@ -12,26 +12,31 @@
 <xsl:text>&lt;div&gt;</xsl:text>
 <xsl:text>&lt;table&gt;
 </xsl:text>
-<xsl:text>&lt;tr&gt;&lt;th&gt;Concept&lt;/th&gt;&lt;th&gt;Additional requirements&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+<xsl:text>&lt;tr&gt;
+&lt;th&gt;Concept&lt;/th&gt;
+&lt;th&gt;Requirements&lt;/th&gt;
+&lt;th&gt;Optional restrictions&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
 </xsl:text>
 
 <xsl:for-each select="/concepts/metaobject[@since_revision &lt;= $revision]">
 
 &lt;tr&gt;&lt;td&gt;
 &lt;pre&gt;&lt;code&gt;
-<xsl:text>template &amp;lt;</xsl:text>
-<xsl:choose>
-	<xsl:when test="@name='Object'">typename</xsl:when>
-	<xsl:otherwise>Object</xsl:otherwise>
-</xsl:choose>
-<xsl:text> T&amp;gt;
-concept bool </xsl:text><xsl:value-of select="@name"/>;
+<xsl:text>template &amp;lt;typename T&gt;</xsl:text>
+concept bool <xsl:value-of select="@name"/>;
 <xsl:text>&lt;/code&gt;&lt;/pre&gt;</xsl:text>
 <xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
-	<xsl:for-each select="generalization[not(@optional='true') and not(@concept='Object')]">
+	<xsl:for-each select="generalization[not(@optional='true')]">
 		<xsl:text>&lt;code&gt;</xsl:text>
 		<xsl:value-of select="@concept"/><xsl:text>&amp;lt;T&amp;gt;</xsl:text>
 		<xsl:text>&lt;/code&gt;&lt;br/&gt;</xsl:text>
+	</xsl:for-each>
+	<xsl:for-each select="not_a">
+		<xsl:text>&lt;code&gt;not(</xsl:text>
+		<xsl:value-of select="@concept"/><xsl:text>&amp;lt;T&amp;gt;</xsl:text>
+		<xsl:text>)&lt;/code&gt;&lt;br/&gt;</xsl:text>
 	</xsl:for-each>
 	<xsl:for-each select="constraint">
 		<xsl:if test="@operation and @trait">
@@ -43,6 +48,12 @@ concept bool </xsl:text><xsl:value-of select="@name"/>;
 		</xsl:if>
 	</xsl:for-each>
 	<xsl:if test="@name='Object'">&lt;code&gt;is_metaobject_v&amp;lt;T&amp;gt;&lt;/code&gt;&lt;br/&gt;</xsl:if>
+<xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
+	<xsl:for-each select="generalization[@optional='true']">
+		<xsl:text>&lt;code&gt;</xsl:text>
+		<xsl:value-of select="@concept"/><xsl:text>&amp;lt;T&amp;gt;</xsl:text>
+		<xsl:text>&lt;/code&gt;&lt;br/&gt;</xsl:text>
+	</xsl:for-each>
 <xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
 <xsl:choose>
 	<xsl:when test="@is_a">

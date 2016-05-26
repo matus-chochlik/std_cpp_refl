@@ -108,14 +108,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<metaobject name="Specifier"
-		since_revision="2"
-		reflects="a specifier"
+		since_revision="1"
+		reflects="a specifier (const, virtual, static, noexcept, public, etc.)"
 	>
 		<generalization concept="Named"/>
 	</metaobject>
 
 	<trait name="is_specifier"
-		since_revision="2"
+		since_revision="1"
 		scope="meta"
 		indicates="Specifier"
 	/>
@@ -229,7 +229,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	</operation>
 
 	<operation name="get_access_specifier"
-		since_revision="2"
+		since_revision="1"
 		result="Specifier"
 		brief="returns the $(result) reflecting the access specifier of $(reflected) reflected by a $(operand)."
 	>
@@ -260,12 +260,23 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Linkable"/>
 	</operation>
 
+	<metaobject name="Namespace"
+		since_revision="0"
+		reflects="a namespace"
+	>
+		<generalization concept="Named" optional="true"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember" optional="true"/>
+	</metaobject>
+
 	<metaobject name="GlobalScope"
 		since_revision="0"
 		reflects="the global scope"
 		label="Global\nScope"
 	>
-		<generalization concept="Scope"/>
+		<generalization concept="Namespace"/>
+		<not_a concept="Named"/>
+		<not_a concept="ScopeMember"/>
 	</metaobject>
 
 	<trait name="is_global_scope"
@@ -273,15 +284,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		scope="meta"
 		indicates="GlobalScope"
 	/>
-
-	<metaobject name="Namespace"
-		since_revision="0"
-		reflects="a namespace"
-	>
-		<generalization concept="Named"/>
-		<generalization concept="Scope"/>
-		<generalization concept="ScopeMember"/>
-	</metaobject>
 
 	<trait name="is_namespace"
 		since_revision="0"
@@ -303,7 +305,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a type"
 	>
-		<generalization concept="Named"/>
+		<generalization concept="Named" optional="true"/>
 		<generalization concept="ScopeMember"/>
 	</metaobject>
 

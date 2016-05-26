@@ -179,6 +179,24 @@ is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
 
 	<object class="htmlc" name="concepts" type="text/html" data="concepts.htmlc"></object>
 
+	<p>[Note: Metaobjects reflecting anonymous types, anonymous namespaces
+	or the global scope do not satisfy the <code>meta::Named</code> concept.
+	This means that they do not implement the <code>meta::get_name</code> operation.
+	— end note]
+	</p>
+
+	<p>[Note: Metaobjects reflecting the global scope do not satisfy the
+	<code>meta::ScopeMember</code> concept.
+	This means that they do not implement the <code>meta::get_scope</code> operation.
+	— end note]
+	</p>
+
+	<p>[Note: Metaobjects reflecting strongly-typed enumerations conform
+	to the <code>meta::Scope</code> concept, regular enumerations do not.
+	— end note]
+	</p>
+
+
 <pre>
 [Example:
 <code>
@@ -327,12 +345,62 @@ meta::get_name_v&lt;reflexpr(std::string::npos)&gt;;                            
 — end example]
 </pre>
 
+<pre>
+[Example:
+<code>
+auto l = [](void) { };
+meta::get_name_v&lt;reflexpr(::)&gt;;           // "error"
+meta::get_name_v&lt;reflexpr(decltype(l))&gt;;  // "error"
+</code>
+— end example]
+</pre>
+
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
 	<p>TODO
 	</p>
 
-	<h5>?.6.1 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
+	<h5>?.6.1 Redeclarations<span class="section_name">[refl.reflexpr.redecl]</span></h5>
+
+	<p>The meta data queried by <code>reflexpr</code> depends on the point of invocation
+	of the operator; only declarations in front of the invocation will be visible.
+	Subsequent invocations are independent of prior invocations, as if all compiler
+	generated types were unique to each <code>reflexpr</code> invocation.
+	</p>
+
+<pre>
+[Example:
+<code>
+struct foo;
+using meta_foo_fwd1 = reflexpr(foo);
+constexpr size_t n1 = get_size_v&lt;get_data_members_t&lt;meta_foo_fwd1&gt;&gt;; // 0
+
+struct foo;
+using meta_foo_fwd2 = reflexpr(foo);
+constexpr size_t n2 = get_size_v&lt;get_data_members_t&lt;meta_foo_fwd2&gt;&gt;; // 0
+
+constexpr bool b1 = is_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;;             // <em>unspecified</em>
+constexpr bool b2 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;; // true
+
+struct foo { int a,b,c,d; };
+using meta_foo = reflexpr(foo);
+constexpr size_t n3 = get_size_v&lt;get_data_members_t&lt;meta_foo&gt;&gt;;      // 4
+
+constexpr bool b3 = is_same_v&lt;meta_foo_fwd1, meta_foo&gt;;             // false
+constexpr bool b4 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
+</code>
+— end example]
+</pre>
+
+	<h5>?.6.2 Required header<span class="section_name">[refl.reflexpr.header]</span></h5>
+
+	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
+	of <code>reflexpr</code>, the program is ill-formed.
+	This header file defines the templates implementing the operations
+	on metaobjects as described above.
+	</p>
+
+	<h5>?.6.3 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
 
 </blockquote>
 
