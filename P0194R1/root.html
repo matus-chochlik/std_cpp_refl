@@ -392,7 +392,8 @@ meta::get_name_v&lt;reflexpr(decltype(l))&gt;;  // "error"
     </p>
     <p>
       The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>
-      is ill-formed. [Note:
+      is ill-formed. [Note:</p>
+      <pre>
       <code>
         reflexpr() // reflects the global namespace
         reflexpr(::) // reflects the global namespace
@@ -406,6 +407,7 @@ meta::get_name_v&lt;reflexpr(decltype(l))&gt;;  // "error"
         reflexpr(std::vector) // ill-formed
         reflexpr(is_same_&lt;void,void&gt;) // ill-formed
       </code>
+      </pre><p>
 — end note]
     </p>
     <p>If the operand is an <em>access-specifier</em>, then the result of
