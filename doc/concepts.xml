@@ -69,19 +69,20 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="size_t" name="Index"/>
 	</operation>
 
-	<metaobject name="Revertible"
+	<metaobject name="Reversible"
 		since_revision="1"
 		abstract="true"
-		reflects="a revertible declaration"
+		is_a="a metaobject that can be reverted to the original declaration"
+		reflects="a reversible declaration"
 	>
 		<generalization concept="Object"/>
 		<order_after concept="ObjectSequence"/>
 	</metaobject>
 
-	<trait name="is_revertible"
+	<trait name="is_reversible"
 		since_revision="1"
 		scope="meta"
-		indicates="Revertible"
+		indicates="Reversible"
 	/>
 
 	<metaobject name="Named"
@@ -307,7 +308,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<generalization concept="Named" optional="true"/>
 		<generalization concept="ScopeMember"/>
-		<generalization concept="Revertible"/>
+		<generalization concept="Reversible"/>
 	</metaobject>
 
 	<trait name="is_type"
