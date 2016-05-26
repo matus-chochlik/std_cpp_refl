@@ -555,6 +555,14 @@ concept bool EnumValue;
 		</p></td></tr>
 </table></div>
 
+<pre>
+[Example:
+<code>
+TODO
+</code>
+— end example]
+</pre>
+
 	<h4>?.5 Metaobject operations<span class="section_name">[refl.ops]</span></h4>
 
 	A <em>MetaobjectOperation</em> returns a single piece of metadata describing
@@ -717,6 +725,26 @@ struct get_constant;
 	</td></tr><tr><td><pre><code>template &lt;Variable T&gt;
 struct get_pointer;
 </code></pre></td><td>returns a pointer to the a variable reflected by a <code>meta::<em>Variable</em></code>.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.</td><td>a regular or class data member pointer</td></tr></table></div>
+
+	<p>The <code>get_name</code> operation returns the type, alias, namespace, etc.
+	name without any qualifiers, asterisks, ampersands, angle or square brackets, etc.
+	</p>
+
+<pre>
+[Example:
+<code>
+using foo = int;
+using bar = foo;
+namespace std = baz;
+
+meta::get_name_v&lt;reflexpr(int)&gt;;    // "int"
+meta::get_name_v&lt;reflexpr(std)&gt;;    // "std"
+meta::get_name_v&lt;reflexpr(foo)&gt;;    // "foo"
+meta::get_name_v&lt;reflexpr(bar)&gt;;    // "bar"
+meta::get_name_v&lt;reflexpr(baz)&gt;;    // "baz"
+</code>
+— end example]
+</pre>
 
 <pre>
 [Example:

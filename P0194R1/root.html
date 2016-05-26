@@ -179,6 +179,14 @@ is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
 
 	<object class="htmlc" name="concepts" type="text/html" data="concepts.htmlc"></object>
 
+<pre>
+[Example:
+<code>
+TODO
+</code>
+— end example]
+</pre>
+
 	<h4>?.5 Metaobject operations<span class="section_name">[refl.ops]</span></h4>
 
 	A <em>MetaobjectOperation</em> returns a single piece of metadata describing
@@ -282,6 +290,26 @@ struct MetaobjectOperation
 	<h5>?.5.7 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
 
 	<object class="htmlc" name="concepts" type="text/html" data="operations.htmlc"></object>
+
+	<p>The <code>get_name</code> operation returns the type, alias, namespace, etc.
+	name without any qualifiers, asterisks, ampersands, angle or square brackets, etc.
+	</p>
+
+<pre>
+[Example:
+<code>
+using foo = int;
+using bar = foo;
+namespace std = baz;
+
+meta::get_name_v&lt;reflexpr(int)&gt;;    // "int"
+meta::get_name_v&lt;reflexpr(std)&gt;;    // "std"
+meta::get_name_v&lt;reflexpr(foo)&gt;;    // "foo"
+meta::get_name_v&lt;reflexpr(bar)&gt;;    // "bar"
+meta::get_name_v&lt;reflexpr(baz)&gt;;    // "baz"
+</code>
+— end example]
+</pre>
 
 <pre>
 [Example:
