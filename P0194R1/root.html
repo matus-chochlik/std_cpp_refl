@@ -357,8 +357,60 @@ meta::get_name_v&lt;reflexpr(decltype(l))&gt;;  // "error"
 
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
-	<p>TODO
+	<p>The value of the <code>reflexpr</code> is a type satisfying <code>meta::Object</code>
+      and other <code>meta</code> concepts, depending on the operand.
+      The returned type is implementation defined.
+      Meta-operations on it describe the operand.
+    </p>
+    <p>
+      The <code>reflexpr</code> operator takes an <em>id-expression</em> (5.1), or
+      <em>access-specifier</em> (10) as operand, or nothing.
+      The <em>id-expression</em> must be uniquely resolved through regular lookup, as if used
+      outside of the <code>reflexpr</code> operator.
+      Otherwise, the expression is ill-formed.
 	</p>
+      <ul>
+        <li>If the operand is a <em>typedef-name</em>, the result will be satisfying
+          <code>TypeAlias</code>.</li>
+        <li>Otherwise, if the operand is a <em>class-name</em>, the result will be satisfying
+          <code>Class</code>.</li>
+        <li>Otherwise, if the operand is a <em>enum-name</em>, the result will be satisfying
+          <code>EnumClass</code> if the <em>enum-name</em> refers to a <em>scoped
+          enumerator</em> (7.2), or <code>Enum</code> if the <em>enum-name</em> refers to an
+          <em>unscoped enumerator</em>.</li>
+        <li>Otherwise, if the operand is a <em>type-name</em>, the result will be satisfying
+          <code>Type</code>.</li>
+        <li>Otherwise, if the operand is the name of a <em>namespace-alias-declaration</em>,
+          the result will be satisfying <code>NamespaceAlias</code>.</li>
+        <li>Otherwise, if the operand is a <em>namespace-name</em>, the result will be
+          satisfying <code>Namespace</code>.</li>
+      </ul>
+    <p>
+      If the <em>id-expression</em> is a <em>type-name</em>, and the scope of its declaration
+      is a class, then the result of <code>reflexpr</code> is also satisfying
+      <code>MemberType</code>.
+    </p>
+    <p>
+      The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>
+      is ill-formed. [Note:
+      <code>
+        reflexpr() // reflects the global namespace
+        reflexpr(::) // reflects the global namespace
+        reflexpr(std) // reflects the namespace
+        reflexpr(std::size_t) // reflects the type
+        reflexpr(std::launch) // reflects the enum type
+        reflexpr(std::vector&lt;int&gt;) // reflects the class
+
+        reflexpr(1) // ill-formed
+        reflexpr(std::sin) // ill-formed
+        reflexpr(std::vector) // ill-formed
+        reflexpr(is_same_&lt;void,void&gt;) // ill-formed
+      </code>
+— end note]
+    </p>
+    <p>If the operand is an <em>access-specifier</em>, then the result of
+      <code>reflexpr</code> is satisfying <code>Specifier</code>.
+    </p>
 
 	<h5>?.6.1 Redeclarations<span class="section_name">[refl.reflexpr.redecl]</span></h5>
 
