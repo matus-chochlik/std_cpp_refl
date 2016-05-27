@@ -143,6 +143,8 @@ object.htmlc {
 		</li>
 		<li><a href="#wording">Proposed wording</a>
 		</li>
+		<li><a href="#discussion">Discussion</a>
+		</li>
 		<li><a href="#acks">Acknowledgments</a>
 		</li>
 	</ul>
@@ -196,10 +198,24 @@ Drops the context-dependent reflection from N4111 (will be re-introduced later).
 
 <h4>Revision 5 (P0194R1)</h4>
 
-Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
-classification is now done by using the concepts.
+<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
+classification is now done by using the concepts. We assume that the following
+syntax of the concept specification is implemented:
+</p>
 
-<h2 id="wording">Proposed wording</h2>
+<pre><code>
+template &lt;T&gt;
+constexpr bool Concept = <em>unspecified</em>;
+</code></pre>
+
+<p>and also assuming that the Concepts TS Issue 29 is resolved and that
+<code>bool(Concept&lt;T&gt;)</code> is generally usable boolean expression.</p>
+
+
+<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+
+
+</p><h2 id="wording">Proposed wording</h2>
 
 <p>Insert a new element in Table 1, <em>C++ library headers</em> of
 [general.namespaces], named <code>&lt;experimental/reflexpr&gt;</code>.
@@ -589,14 +605,40 @@ concept bool EnumValue;
 	<p>[<span class="note">Note:</span> Metaobjects reflecting anonymous types, anonymous
 	namespaces or the global scope do not satisfy the <code>meta::Named</code> concept.
 	This means that they do not implement the <code>meta::get_name</code> operation.
-	<span class="note">— end note</span>]
+	See below. <span class="note">— end note</span>]
 	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+static_assert(meta::Named&lt;reflexpr(int)&gt;, "");
+static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
+
+auto l = [](void) { };
+static_assert(!meta::Named&lt;reflexpr()&gt;, "");
+static_assert(!meta::Named&lt;reflexpr(::)&gt;, "");
+static_assert(!meta::Named&lt;reflexpr(decltype(l))&gt;, "");
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<p>[<span class="note">Note:</span> Metaobjects reflecting the global scope do not satisfy
 	the <code>meta::ScopeMember</code> concept.
 	This means that they do not implement the <code>meta::get_scope</code> operation.
-	<span class="note">— end note</span>]
+	See below. <span class="note">— end note</span>]
 	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+static_assert(meta::ScopeMember&lt;reflexpr(int)&gt;, "");
+static_assert(meta::ScopeMember&lt;reflexpr(string)&gt;, "");
+
+static_assert(!meta::ScopeMember&lt;reflexpr(::)&gt;, "");
+static_assert(!meta::ScopeMember&lt;reflexpr(decltype(l))&gt;, "");
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<p>[<span class="note">Note: </span> Metaobjects reflecting strongly-typed enumerations
 	conform to the <code>meta::Scope</code> concept, regular enumerations do not.
@@ -607,7 +649,17 @@ concept bool EnumValue;
 <pre>
 [<span class="note">Example:</span>
 <code>
-TODO
+enum weak_enum { a, b, c };
+enum class scoped_enum { d, e, f };
+
+using meta_we = reflexpr(weak_enum);
+using meta_se = reflexpr(scoped_enum);
+
+static_assert(meta::Enum&lt;meta_we&gt;, "");
+static_assert(meta::Enum&lt;meta_se&gt;, "");
+
+static_assert(!meta::Scope&lt;meta_we&gt;, "");
+static_assert( meta::Scope&lt;meta_se&gt;, "");
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -847,13 +899,18 @@ meta::get_name_v&lt;reflexpr(baz)&gt;    // "baz"
 <pre>
 [<span class="note">Example:</span>
 <code>
-meta::get_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                                // "vector"
-meta::get_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                      // "size_t"
-meta::get_name_v&lt;reflexpr(std::vector&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;     // ""
-meta::get_name_v&lt;reflexpr(std::vector&lt;int&gt;* (*pfoo)(std::vector&lt;double&gt;&amp;))&gt; // "pfoo"
-meta::get_name_v&lt;reflexpr(std::vector&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;     // "foo"
-meta::get_name_v&lt;reflexpr(std::chrono)&gt;                                     // "chrono"
-meta::get_name_v&lt;reflexpr(std::nothrow)&gt;                                    // "nothrow"
+using meta::get_name_v;
+
+get_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
+get_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "size_t"
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* (*pfoo)(std::set&lt;double&gt;&amp;))&gt; // "pfoo"
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;  // "foo"
+get_name_v&lt;reflexpr(std::chrono)&gt;                               // "chrono"
+get_name_v&lt;reflexpr(std::launch)&gt;                               // "launch"
+get_name_v&lt;reflexpr(static)&gt;                                    // "static"
+get_name_v&lt;reflexpr(public)&gt;                                    // "public"
+get_name_v&lt;reflexpr(class)&gt;                                     // "class"
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -864,12 +921,17 @@ meta::get_name_v&lt;reflexpr(std::nothrow)&gt;                                  
 <pre>
 [<span class="note">Example:</span>
 <code>
-meta::get_name_v&lt;reflexpr(const std::sin)&gt;    // "sin"  (in the future)
-meta::get_name_v&lt;reflexpr(const std::pair)&gt;   // "pair" (in the future)
-meta::get_name_v&lt;reflexpr(std::string::npos)&gt; // "npos" (in the future)
+meta::get_name_v&lt;reflexpr(const std::sin)&gt;    // "sin"     (in the future)
+meta::get_name_v&lt;reflexpr(const std::pair)&gt;   // "pair"    (in the future)
+meta::get_name_v&lt;reflexpr(std::string::npos)&gt; // "npos"    (in the future)
+meta::get_name_v&lt;reflexpr(std::nothrow)&gt;      // "nothrow" (in the future)
 </code>
 <span class="note">— end example</span>]
 </pre>
+
+	<p>The <code>meta::get_name</code> operation cannot be invoked on Metaobjects
+	which do not conform to the <code>meta::Named</code> concept.
+	</p>
 
 <pre>
 [<span class="note">Example:</span>
@@ -881,18 +943,132 @@ meta::get_name_v&lt;reflexpr(decltype(l))&gt;  // <em>ill-formed</em>
 <span class="note">— end example</span>]
 </pre>
 
-<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by <code>get_data_members</code>,
-<code>get_all_data_members</code>, <code>get_member_types</code> and
-<code>get_all_member_type</code> should not include metaobjects reflecting
-inherited class members.
-<span class="note">— end note</span>]
-</p>
+	<p>[<span class="note">Note:</span> The metaobjects in a
+	<code>meta::ObjectSequence</code> should be ordered according
+	to the order of their declarations.
+	<span class="note">— end note</span>]
+	</p>
 
-<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-releted metadata.
-One is using the <code>meta::Specifier</code> concept and its operations which is
-more generic, and another using the boolean operations like <code>meta::is_static</code>,
-<code>meta::is_public</code>, etc. which may be more convenient in simpler use-cases.
-<span class="note">— end note</span>]</p>
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	typedef int t1;
+	typedef float t2;
+
+	t1 a, b, c;
+	t2 d;
+};
+
+using meta_foo = reflexpr(foo);
+
+using meta::get_element_m;
+using meta::get_data_members_m;
+using meta::get_member_types_m;
+
+get_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
+get_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
+
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
+
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_data_members</code>, <code>meta::get_all_data_members</code>,
+	<code>meta::get_member_types</code> and <code>meta::get_all_member_types</code>
+	shall not include metaobjects reflecting inherited class members.
+	<span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	typedef int attr_t;
+	attr_t a, b, c, d;
+};
+
+struct bar : foo
+{
+	float e, f;
+};
+
+using meta_foo = reflexpr(foo);
+using meta_bar = reflexpr(bar);
+
+using meta::get_size_v;
+using meta::get_data_members_m;
+using meta::get_member_types_m;
+
+get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt; // 4
+get_size_v&lt;get_data_members_m&lt;meta_bar&gt;&gt; // 2
+
+get_size_v&lt;get_member_types_m&lt;meta_foo&gt;&gt; // 1
+get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span>
+	The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
+	shall contain only the metaobjects reflecting publicly accessible class members.
+
+	The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_all_data_members</code> and <code>meta::get_all_member_types</code>
+	shall contain metaobjects reflecting all class members including those
+	which are not publicly accessible otherwise.
+	<span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+private:
+	typedef int _attr_t;
+	_attr_t _a, _b, _c;
+public:
+	typedef float value_type;
+	typedef size_t size_type;
+	value_type d;
+};
+
+using meta_foo = reflexpr(foo);
+
+using meta::get_size_v;
+using meta::get_name_v;
+using meta::get_element_m;
+using meta::get_data_members_m;
+using meta::get_all_data_members_m;
+using meta::get_member_types_m;
+using meta::get_all_member_types_m;
+
+get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt;     // 1
+get_size_v&lt;get_all_data_members_m&lt;meta_foo&gt;&gt; // 4
+
+get_size_v&lt;get_member_types_m&lt;meta_foo&gt;&gt;     // 2
+get_size_v&lt;get_all_member_types_m&lt;meta_foo&gt;&gt; // 3
+
+get_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt;     // "d"
+get_name_v&lt;get_element_m&lt;get_all_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "_a"
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-releted metadata.
+	One is using the <code>meta::Specifier</code> concept and its operations which is
+	more generic, and another using the boolean operations like <code>meta::is_static</code>,
+	<code>meta::is_public</code>, etc. which may be more convenient in simpler use-cases.
+	<span class="note">— end note</span>]</p>
 
 <pre>
 [<span class="note">Example:</span>
@@ -906,12 +1082,15 @@ public:
 };
 
 using meta_S = reflexpr(S);
-using meta_S_i = meta::get_element_m&lt;meta::get_class_members_m&lt;meta_S&gt;, 0&gt;;
-using meta_S_f = meta::get_element_m&lt;meta::get_class_members_m&lt;meta_S&gt;, 1&gt;;
+using meta_S_i = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 0&gt;;
+using meta_S_f = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 1&gt;;
 
-meta::reflects_same_v&lt;reflexpr(private),meta::get_access_specifer_m&lt;meta_S_i&gt;&gt;  // true
-meta::reflects_same_v&lt;reflexpr(public), meta::get_access_specifer_m&lt;meta_S_i&gt;&gt;  // false
-meta::reflects_same_v&lt;reflexpr(public), meta::get_access_specifer_m&lt;meta_S_f&gt;&gt;  // true
+using meta::reflects_same_v;
+using meta::get_access_specifer_m;
+
+reflects_same_v&lt;reflexpr(private),get_access_specifer_m&lt;meta_S_i&gt;&gt;  // true
+reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_i&gt;&gt;  // false
+reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_f&gt;&gt;  // true
 
 meta::is_private&lt;meta_S_i&gt; // true
 meta::is_public&lt;meta_S_i&gt;  // false
@@ -923,10 +1102,10 @@ meta::is_public&lt;meta_S_f&gt;  // true
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
 	<p>The value of the <code>reflexpr</code> is a type satisfying <code>meta::Object</code>
-      and other <code>meta</code> concepts, depending on the operand.
-      The returned type is implementation defined.
-      Meta-operations on it describe the operand.
-    </p>
+	and other <code>meta</code> concepts, depending on the operand.
+	The returned type is implementation defined.
+	Meta-operations on it describe the operand.
+	</p>
     <p>
       The <code>reflexpr</code> operator takes an <em>id-expression</em> (5.1), or
       <em>access-specifier</em> (10) as operand, or nothing.
@@ -991,6 +1170,9 @@ reflexpr(is_same_&lt;void,void&gt;) // <em>ill-formed</em>
 <pre>
 [<span class="note">Example:</span>
 <code>
+using meta::get_size_v;
+using meta::get_data_members_m;
+
 struct foo;
 using meta_foo_fwd1 = reflexpr(foo);
 constexpr size_t n1 = get_size_v&lt;get_data_members_m&lt;meta_foo_fwd1&gt;&gt;; // 0
@@ -999,15 +1181,17 @@ struct foo;
 using meta_foo_fwd2 = reflexpr(foo);
 constexpr size_t n2 = get_size_v&lt;get_data_members_m&lt;meta_foo_fwd2&gt;&gt;; // 0
 
-constexpr bool b1 = is_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;;             // <em>unspecified</em>
-constexpr bool b2 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;; // true
+using meta::reflects_same_v;
+
+constexpr bool b1 = is_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;;       // <em>unspecified</em>
+constexpr bool b2 = reflects_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;; // true
 
 struct foo { int a,b,c,d; };
 using meta_foo = reflexpr(foo);
 constexpr size_t n3 = get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt;;      // 4
 
-constexpr bool b3 = is_same_v&lt;meta_foo_fwd1, meta_foo&gt;;             // false
-constexpr bool b4 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
+constexpr bool b3 = is_same_v&lt;meta_foo_fwd1, meta_foo&gt;;       // false
+constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -1016,8 +1200,8 @@ constexpr bool b4 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // tru
 
 	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
 	of <code>reflexpr</code>, the program is ill-formed.
-	This header file defines the templates implementing the operations
-	on metaobjects as described above.
+	This header file defines the concepts and the templates implementing
+	the operations on metaobjects as described above.
 	</p>
 
 	<h5>?.6.3 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
@@ -1029,7 +1213,7 @@ constexpr bool b4 = meta::reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // tru
 	</p>
 
 	<p>For instance if a <code>meta::Type</code> is passed as the argument,
-	then <code>reflexpr</code> should return the reflected type.
+	then <code>reflexpr</code> shall yield the reflected type.
 	In this case the result of reverse reflection is the same as the result
 	of the <code>meta::get_reflected_type</code> operation.
 	</p>
@@ -1052,11 +1236,19 @@ struct my_struct
 </pre>
 
 <p>[<span class="note">Note:</span> If a metaobject not conforming to the <code>meta::Revertible</code> concept
-is passed to the <code>reflexpr</code> operator then the result is undefined.
+is passed to the <code>reflexpr</code> operator then the result is (for the moment) undefined.
 <span class="note">— end note</span>]
 </p>
 
 </blockquote>
+
+<h2 id="discussion">Discussion</h2>
+
+<p>TODO: standard static strings
+</p>
+
+<p>TODO: metaobject sequences vs. standard typelists
+</p>
 
 <h2 id="acks">Acknowledgments</h2>
 
