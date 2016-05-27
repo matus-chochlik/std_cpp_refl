@@ -124,7 +124,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="Typed"
 		since_revision="0"
 		abstract="true"
-		reflects="base-level declaration with a type"
+		reflects="base-level declaration with a type (for example a variable)"
 	>
 		<generalization concept="Object"/>
 		<order_after concept="ScopeMember"/>
@@ -147,7 +147,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="ScopeMember"
 		since_revision="0"
 		abstract="true"
-		reflects="a scoped declaration"
+		reflects="a declaration nested in a scope (like the global scope,
+		namespace, class, strongly-typed enums, etc.)"
 	>
 		<generalization concept="Object"/>
 		<order_after concept="Named"/>
@@ -200,7 +201,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_aliased"
 		since_revision="0"
 		result="Named"
-		brief="returns the $(result) reflecting the original declaration of $(reflected) reflected by a $(operand)."
+		brief="returns the $(result) reflecting the original declaration
+		of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Alias"/>
 	</operation>
@@ -224,7 +226,25 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_public"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand) was declared with public access."
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared with public access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<operation name="is_protected"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared with protected access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<operation name="is_private"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand) was declared with private access."
 	>
 		<argument type="ClassMember"/>
 	</operation>
@@ -350,9 +370,10 @@ by the compiler which allow access to metadata reflecting specific program decla
 	/>
 
 	<operation name="get_elaborated_type_specifier"
-		since_revision="2"
+		since_revision="1"
 		result="Specifier"
-		brief="returns a $(result) reflecting the elaborated type specifier (class,struct,union,...) of $(reflected) reflected by a $(operand)."
+		brief="returns a $(result) reflecting the elaborated type specifier
+		(class,struct,union,...) of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
 	</operation>

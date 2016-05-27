@@ -43,7 +43,7 @@ concept bool <xsl:value-of select="@name"/>;
 			<xsl:variable name="trait" select="@trait"/>
 			<xsl:text>&lt;code&gt;</xsl:text>
 			<xsl:value-of select="/concepts/trait[@name=$trait]/@indicates"/><xsl:text>&amp;lt;</xsl:text>
-			<xsl:value-of select="@operation"/><xsl:text>_t&amp;lt;T&amp;gt;&amp;gt;</xsl:text>
+			<xsl:value-of select="@operation"/><xsl:text>_m&amp;lt;T&amp;gt;&amp;gt;</xsl:text>
 			<xsl:text>&lt;/code&gt;&lt;br/&gt;</xsl:text>
 		</xsl:if>
 	</xsl:for-each>
