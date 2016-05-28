@@ -460,6 +460,46 @@ meta::get_name_v&lt;reflexpr(std::nothrow)&gt;      // "nothrow" (in the future)
 <span class="note">— end example</span>]
 </pre>
 
+	<p>Template type parameters are also considered to be type aliases:
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+template &lt;typename A, typename B&gt;
+void foo(A a, B b)
+{
+	using meta::get_name_v;
+	using meta::get_aliased_m;
+
+	using mA = reflexpr(A);
+	using mB = reflexpr(B);
+
+	cout &lt;&lt; "1:" &lt;&lt; get_name_v&lt;mA&gt; &lt;&lt; endl;
+	cout &lt;&lt; "2:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
+	cout &lt;&lt; "3:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;get_aliased_m&lt;mA&gt;&gt;&gt; &lt;&lt; endl;
+
+	cout &lt;&lt; "4:" &lt;&lt; get_name_v&lt;mB&gt; &lt;&lt; endl;
+	cout &lt;&lt; "5:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
+}
+
+using rank_t = int;
+rank_t a = 123;
+float b = 45.67;
+
+foo(a, b);
+</code>
+produces the following output:
+<code>
+1:A
+2:rank_t
+3:int
+4:B
+5:float
+</code>
+<span class="note">— end example</span>]
+</pre>
+
 	<p>The <code>meta::get_name</code> operation cannot be invoked on Metaobjects
 	which do not conform to the <code>meta::Named</code> concept.
 	</p>
