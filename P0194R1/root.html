@@ -94,7 +94,7 @@ Drops the context-dependent reflection from N4111 (will be re-introduced later).
 
 <p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
 classification is now done by using the concepts. We assume that the following
-syntax of the concept specification is implemented:
+syntax of the Concepts specification is implemented:
 </p>
 
 <pre><code>
@@ -103,7 +103,16 @@ constexpr bool Concept = <em>unspecified</em>;
 </code></pre>
 
 <p>and also assuming that the Concepts TS Issue 29 is resolved and that
-<code>bool(Concept&lt;T&gt;)</code> is generally usable boolean expression.</p>
+<code>Concept&lt;T&gt;</code> is generally usable boolean expression,
+so that the following is valid code:</p>
+
+<pre><code>
+static_assert(Concept&lt;T&gt;, " ... ");
+
+using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
+
+if(Concept&lt;T&gt;) { /* ... */  }
+</code></pre>
 
 
 <p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
@@ -620,6 +629,61 @@ meta::is_public&lt;meta_S_f&gt;  // true
 </code>
 <span class="note">— end example</span>]
 </pre>
+
+	<h5>?.5.8 Utility operations<span class="section_name">[refl.ops.util]</span></h5>
+
+	The <code>unpack_sequence</code> operation applicable on models of
+	<code>meta::ObjectSequence</code> shall be added to the <code>&lt;reflexpr&gt;</code>
+	header and should be <em>equivalent</em> to:
+
+<pre><code>
+namespace std {
+namespace experimental {
+namespace meta {
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+struct unpack_sequence
+{
+	typedef Tpl&lt;
+		get_element_m&lt;Seq, 0&gt;,
+		get_element_m&lt;Seq, 1&gt;,
+		<em>...,</em>
+		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
+	&gt; type;
+};
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
+
+} // namespace meta
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	int a,
+	bool b;
+	char c;
+	double d;
+}
+
+template &lt;meta::DataMember ... MDM&gt;
+using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
+
+using X = meta::unpack_sequence_t&lt;
+	meta::get_data_members&lt;reflexpr(foo)&gt;,
+	helper
+&gt;;
+
+is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
 
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
