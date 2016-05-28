@@ -70,14 +70,14 @@ T min(const T& a, const T& b)
 {
 	log()   << "function: min<"
 	        << get_name_v<get_aliased_t<reflexpr(T)>>
-		<< ">("
+	        << ">("
 	        << get_name_v<reflexpr(a)> << ": "
 	        << get_name_v<get_aliased_t<get_type_t<reflexpr(a)>>>
 	        << " = " << a
 	        << get_name_v<reflexpr(b)> << ": "
 	        << get_name_v<get_aliased_t<get_type_t<reflexpr(b)>>>
 	        << " = " << b
-		<< ")" << std::endl
+	        << ")" << std::endl
 
 	T result = a<b?a:b;
 

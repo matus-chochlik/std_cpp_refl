@@ -41,7 +41,7 @@ access control, etc.,
 
 \end{itemize}
 
-Some of the use cases listed here are described in more detail in section
+Some of the use cases listed above are described in more detail in section
 \ref{use-cases-examples}.
 
 There are several approaches to the implementation of the mentioned functionality.
@@ -72,4 +72,38 @@ Another way to automate these tasks is to use reflection and metaprogramming.
 Metaprogramming is the tool for transforming one program into another based
 on some meta-algorithm and reflection provides the input data for that algorithm
 directly from the compiler without the need for an external source code parser.
+
+For example if we want to log the execution of a function, reflection may
+be used as a source of metadata:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename T>
+T min(const T& a, const T& b)
+{
+	log()   << "function: min<"
+	        << get_name_v<get_aliased_t<reflexpr(T)>>
+	        << ">("
+	        << get_name_v<reflexpr(a)> << ": "
+	        << get_name_v<get_aliased_t<get_type_t<reflexpr(a)>>>
+	        << " = " << a
+	        << get_name_v<reflexpr(b)> << ": "
+	        << get_name_v<get_aliased_t<get_type_t<reflexpr(b)>>>
+	        << " = " << b
+	        << ")" << std::endl
+
+	return a<b?a:b;
+}
+\end{minted}
+
+Calling the \verb@min@ function:
+
+\begin{minted}[tabsize=4]{cpp}
+double m = min(12.34, 23.45);
+\end{minted}
+
+would produce the following log entry:
+
+\begin{verbatim}
+function: min<double>(a: double = 12.34, b: double = 23.45)
+\end{verbatim}
 
