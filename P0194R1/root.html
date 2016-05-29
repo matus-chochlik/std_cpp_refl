@@ -751,7 +751,7 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 
 	<h5>?.6.3 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
 
-	<p>If a <em>Metaobject</em> conforming to the <code>meta::Revertible</code> concept
+	<p>If a <em>Metaobject</em> conforming to the <code>meta::Reversible</code> concept
 	is passed as the argument to the <code>reflexpr</code> operator,
 	then this invocation has the same effect as if the name of the
 	original declaration reflected by the <em>Metaobject</em> was used.
@@ -781,7 +781,7 @@ struct my_struct
 </pre>
 
 <p>Passing a <em>Metaobject</em> to the <code>reflexpr</code> operator is ill-formed,
-unless the <em>Metaobject </em>conforms to the <code>meta::Revertible</code> concept.
+unless the <em>Metaobject </em>conforms to the <code>meta::Reversible</code> concept.
 <span class="note">— end note</span>]
 </p>
 
