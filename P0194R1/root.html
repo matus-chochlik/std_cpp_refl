@@ -107,6 +107,8 @@ namespace std {
 namespace experimental {
 
 template &lt;typename T&gt; struct is_metaobject;
+template &lt;typename T&gt; constexpr bool is_metaobject_v
+  = is_metaobject&lt;T&gt;::value;
 
 } // namespace experimental
 } // namespace std
