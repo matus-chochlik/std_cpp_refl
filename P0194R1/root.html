@@ -780,8 +780,8 @@ struct my_struct
 <span class="note">— end example</span>]
 </pre>
 
-<p>[<span class="note">Note:</span> If a <em>Metaobject</em> not conforming to the <code>meta::Revertible</code> concept
-is passed to the <code>reflexpr</code> operator then the result is (for the moment) undefined.
+<p>Passing a <em>Metaobject</em> to the <code>reflexpr</code> operator is ill-formed,
+unless the <em>Metaobject </em>conforms to the <code>meta::Revertible</code> concept.
 <span class="note">— end note</span>]
 </p>
 
