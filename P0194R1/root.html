@@ -706,7 +706,8 @@ reflexpr(is_same_v&lt;void,void&gt;) // <em>ill-formed</em>
 	<h5>?.6.1 Redeclarations<span class="section_name">[refl.reflexpr.redecl]</span></h5>
 
 	<p>The meta data queried by <code>reflexpr</code> depends on the point of invocation
-	of the operator; only declarations in front of the invocation will be visible.
+	of the operator; only declarations appearing in the translation unit before the invocation of the
+	<code>reflexpr</code> operator will be visible.
 	Subsequent invocations are independent of prior invocations, as if all compiler
 	generated types were unique to each <code>reflexpr</code> invocation.
 	</p>
