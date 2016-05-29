@@ -210,7 +210,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="ClassMember"
 		since_revision="0"
 		abstract="true"
-		reflects="class member"
+		reflects="a class member"
 	>
 		<generalization concept="ScopeMember"/>
 		<constraint operation="get_scope" trait="is_class"/>
