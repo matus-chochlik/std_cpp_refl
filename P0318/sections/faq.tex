@@ -531,10 +531,16 @@ why not use those?}
 \textbf{A:} The reason why we use \meta{ObjectSequence}s is efficiency.
 Operations like \verb@get_data_members@ are currently designed to return
 metaobjects --  very lightweight types representing a whole set of
-other metaobjects, without actually instantiating the elements eagerly.
+other metaobjects, without actually instantiating the elements eagerly,
+unlike typelists which would require that all contained
+metaobjects are generated as a part of the definition of the typelist.
+There are use cases where returning a typelist directly would be much
+less efficient than returning the lightweight metaobject sequence.
 
-So for example if we wanted the reflection of just the first\footnote
-{zero-th} data member of a class having hundreds of members we could do:
+For example the user might want to test a big set of classes and find those,
+which have a precise number of members or find those which have multiple base
+classes or just get the metaobject reflecting only the first\footnote
+{zero-th} data member of a class having hundreds of members:
 
 \begin{minted}{cpp}
 get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
@@ -551,7 +557,17 @@ then all metaobjects would have to be generated, even if most of them
 were not used afterwards.
 
 What we can do is to add an operation converting a \meta{ObjectSequence}
-into a typelist on demand.
+into a typelist on demand, which can be implemented trivially with the
+\verb@meta::unpack_sequence@ template:
+
+\begin{minted}{cpp}
+template &lt;typename ... T&gt;
+struct type_list { /* ... */ };
+
+
+template &lt;ObjectSequence MOS&gt;
+using convert_to_list = unpack_sequence&lt;MOS, type_list&gt;;
+\end{minted}
 
 \subsection{Why not reflect with constexpr instances of the same type?}
 
