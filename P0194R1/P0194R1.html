@@ -150,10 +150,25 @@ object.htmlc {
 	</ul>
 </div>
 
-<h2 id="introduction">Introduction</h2>
+<div id="introduction">
+<h2>Introduction</h2>
 
-<p>TODO
+<p>This paper is the fifth revision of the proposal to add support for
+compile-time reflection to standard C++. We propose that the compiler shall
+generate <em>metaobjects</em> — representations of certain program declarations,
+which can be reasoned-about at compile time. These metaobjects can then be
+used, through a set of <em>operations</em> to obtain various pieces of metadata,
+like declaration names, lists of scope members, information about specifiers,
+and so on. The <em>metaobjects</em> are implemented as anonymous types
+conforming to defined concepts, and the operations are implemented as class
+templates.
 </p>
+
+<p>This paper is accompanied by another paper — P0318R0, which discusses the
+use cases, rationale, design decisions, future evolution of the proposed reflection
+facility and contains multiple examples of use.
+</p>
+</div>
 
 <div id="revisions">
 <h2>Revision history</h2>
@@ -221,8 +236,24 @@ using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
 if(Concept&lt;T&gt;) { /* ... */  }
 </code></pre>
 
-<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>,
+the <code>meta::Constant</code> and <code>meta::Specifier</code> concepts,
+and several new operations have been added.
 </p>
+
+<p>The aliases for the operation templates returning metaobjects had previously
+the <code>_t</code> suffix; this has been changed to the <code>_m</code> suffix.
+</p>
+<pre>
+For example:
+<code>
+get_type_t -&gt; get_type_m
+get_scope_t -&gt; get_scope_m
+get_aliased_t -&gt; get_aliased_m
+get_data_members_t -&gt; get_data_members_m
+</code>
+etc.
+</pre>
 </div>
 
 <h2 id="wording">Proposed wording</h2>
@@ -1352,18 +1383,52 @@ is passed to the <code>reflexpr</code> operator then the result is (for the mome
 
 <h3><code>ObjectSequence</code>s vs. <em>typelists</em></h3>
 
-<p>TODO: 
+<p>Part of the feedback from the meeting in Jacksonville was, that we should
+replace the metaobject sequences with standard typelists. However, we would
+like to keep the <code>meta::ObjectSequence</code> concept and make it
+explicitly convertible to a typelist on demand.
 </p>
 
-<p>TODO: standard static strings
+<p>The reason for this is that models of <code>meta::ObjectSequence</code>
+can be very lightweight types and do not require the generation of the contained
+metaobjects eagerly, unlike typelists which require that all contained
+metaobjects are generated as a part of the definition of the typelist.
+There are use cases where returning a typelist directly would be much
+less efficient than returning the lightweight metaobject sequence.
 </p>
+
+<p>For example the user might want to test a big set of classes and find those,
+which have a precise number of members or find those which have multiple base
+classes.
+With metaobject sequences this would require that for each of the tested
+classes one metaobject sequence is generated and the <code>meta::get_size</code>
+operation is invoked. On the other hand if typelists were returned directly,
+then for each tested class all metaobjects reflecting the members would
+have to be generated and expanded into the typelist, even if they were never used
+in any other way besides being counted.
+</p>
+
+<p>The conversion from a <code>meta::ObjectSequence</code> to a typelist
+can be implemented trivially with the <code>meta::unpack_sequence</code>
+template:
+</p>
+
+<pre><code>
+template &lt;typename ... T&gt;
+struct type_list { /* ... */ };
+
+
+template &lt;ObjectSequence MOS&gt;
+using convert_to_list = unpack_sequence&lt;MOS, type_list&gt;;
+</code></pre>
 
 </div>
 
 <div id="acks">
 <h2>Acknowledgments</h2>
 
-<p>TODO
+<p>Thanks to Ricardo Fabiano de Andrade, Roland Bock and Klaim - Joël Lamotte
+who provided very valuable feedback, criticism and suggestions.
 </p>
 </div>
 <div id="ref-P0194R0">

@@ -1,0 +1,19 @@
+<div id="introduction">
+<h2>Introduction</h2>
+
+<p>This paper is the fifth revision of the proposal to add support for
+compile-time reflection to standard C++. We propose that the compiler shall
+generate <em>metaobjects</em> — representations of certain program declarations,
+which can be reasoned-about at compile time. These metaobjects can then be
+used, through a set of <em>operations</em> to obtain various pieces of metadata,
+like declaration names, lists of scope members, information about specifiers,
+and so on. The <em>metaobjects</em> are implemented as anonymous types
+conforming to defined concepts, and the operations are implemented as class
+templates.
+</p>
+
+<p>This paper is accompanied by another paper — P0318R0, which discusses the
+use cases, rationale, design decisions, future evolution of the proposed reflection
+facility and contains multiple examples of use.
+</p>
+</div>

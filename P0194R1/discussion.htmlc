@@ -3,10 +3,43 @@
 
 <h3><code>ObjectSequence</code>s vs. <em>typelists</em></h3>
 
-<p>TODO: 
+<p>Part of the feedback from the meeting in Jacksonville was, that we should
+replace the metaobject sequences with standard typelists. However, we would
+like to keep the <code>meta::ObjectSequence</code> concept and make it
+explicitly convertible to a typelist on demand.
 </p>
 
-<p>TODO: standard static strings
+<p>The reason for this is that models of <code>meta::ObjectSequence</code>
+can be very lightweight types and do not require the generation of the contained
+metaobjects eagerly, unlike typelists which require that all contained
+metaobjects are generated as a part of the definition of the typelist.
+There are use cases where returning a typelist directly would be much
+less efficient than returning the lightweight metaobject sequence.
 </p>
+
+<p>For example the user might want to test a big set of classes and find those,
+which have a precise number of members or find those which have multiple base
+classes.
+With metaobject sequences this would require that for each of the tested
+classes one metaobject sequence is generated and the <code>meta::get_size</code>
+operation is invoked. On the other hand if typelists were returned directly,
+then for each tested class all metaobjects reflecting the members would
+have to be generated and expanded into the typelist, even if they were never used
+in any other way besides being counted.
+</p>
+
+<p>The conversion from a <code>meta::ObjectSequence</code> to a typelist
+can be implemented trivially with the <code>meta::unpack_sequence</code>
+template:
+</p>
+
+<pre><code>
+template &lt;typename ... T&gt;
+struct type_list { /* ... */ };
+
+
+template &lt;ObjectSequence MOS&gt;
+using convert_to_list = unpack_sequence&lt;MOS, type_list&gt;;
+</code></pre>
 
 </div>
