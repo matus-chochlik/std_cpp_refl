@@ -55,7 +55,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		result="IntegralConstant"
 		integer="size_t"
-		brief="returns a number of elements in the sequence."
+		brief="returns the number of elements in the sequence."
 	>
 		<argument type="ObjectSequence"/>
 	</operation>
@@ -124,7 +124,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="Typed"
 		since_revision="0"
 		abstract="true"
-		reflects="base-level declaration with a type (for example a variable)"
+		reflects="a base-level declaration with a type (for example a variable)"
 	>
 		<generalization concept="Object"/>
 		<order_after concept="ScopeMember"/>
@@ -210,7 +210,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="ClassMember"
 		since_revision="0"
 		abstract="true"
-		reflects="class member"
+		reflects="a class member"
 	>
 		<generalization concept="ScopeMember"/>
 		<constraint operation="get_scope" trait="is_class"/>
@@ -260,7 +260,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="Linkable"
 		since_revision="0"
 		abstract="true"
-		reflects="declaration with storage duration and/or linkage"
+		reflects="a declaration with storage duration and/or linkage"
 	>
 		<generalization concept="Named"/>
 		<generalization concept="ScopeMember"/>
