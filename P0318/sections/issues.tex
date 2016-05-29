@@ -66,6 +66,79 @@ public:
 
 If this is deemed necessary, then we favor the first option.
 
+Another option is to explicitly ask permission when accessing class members,
+which are considered private or protected in a particular context.
+This can be done either by using a new variant of the access operation
+like \verb@get_private_pointer@ and \verb@get_protected_pointer@
+vs. \verb@get_pointer@:
+
+\begin{minted}[tabsize=4]{cpp}
+class mycls
+{
+private:
+	typedef int _my_t;
+	_my_t _secret;
+public:
+	typedef value_type;
+	value_type value ;
+	/* ... */
+};
+
+using meta_mycls = reflexpr(meta_mycls);
+using meta_mycls_dm = meta::get_all_data_members_m<meta_mycls>;
+using meta_mycls_mt = meta::get_all_member_types_m<meta_mycls>;
+
+using meta::get_element_m;
+using meta::get_pointer_t;
+using meta::get_private_pointer_t;
+
+get_private_pointer_v<get_element_m<meta_mycls_dm, 0>>; // OK, asking nicely
+get_pointer_v<get_element_m<meta_mycls_dm, 0>>; // error, member is private
+get_pointer_v<get_element_m<meta_mycls_dm, 1>>; // OK, member is public
+
+using meta::get_reflected_type_t;
+using meta::get_private_reflected_type_t;
+
+get_private_reflected_type_t<get_element_m<meta_mycls_mt, 0>>; // OK, asking nicely
+get_reflected_type_t<get_element_m<meta_mycls_mt, 0>>; // error, member is private
+get_reflected_type_t<get_element_m<meta_mycls_mt, 1>>; // OK, member is public
+\end{minted}
+
+However this approach would not scale very well because it requires three\footnote
+{or at least two} variants of all such operations.
+
+A better alternative to the above might be to use a special variant of the
+\hyperref[fut-reverse-reflection]{reverse reflection operator} like
+\verb@reflexpr(private, Metaobject)@ and \verb@reflexpr(protected, Metaobject)@\\
+vs. \verb@reflexpr(Metaobject)@:
+
+\begin{minted}[tabsize=4]{cpp}
+class mycls
+{
+private:
+	typedef int _my_t;
+	_my_t _secret;
+public:
+	typedef value_type;
+	value_type value ;
+	/* ... */
+};
+
+using meta_mycls = reflexpr(meta_mycls);
+using meta_mycls_dm = meta::get_all_data_members_m<meta_mycls>;
+using meta_mycls_mt = meta::get_all_member_types_m<meta_mycls>;
+
+// un-reflect the data members
+reflexpr(private, get_element_m<meta_mycls_dm, 0>); // OK, asking nicely
+reflexpr(get_element_m<meta_mycls_dm, 0>); // error, member is private
+reflexpr(get_element_m<meta_mycls_dm, 1>); // OK, member is public
+
+// un-reflect the member types
+reflexpr(private, get_element_m<meta_mycls_mt, 0>); // OK, asking nicely
+reflexpr(get_element_m<meta_mycls_mt, 0>); // error, member is private
+reflexpr(get_element_m<meta_mycls_mt, 1>); // OK, member is public
+\end{minted}
+
 \subsection{Interaction with attributes}
 
 \textbf{Q:} {\em Should we even reflect attributes? If so, how will the reflection
