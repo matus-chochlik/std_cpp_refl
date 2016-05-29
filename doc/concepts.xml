@@ -260,7 +260,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="Linkable"
 		since_revision="0"
 		abstract="true"
-		reflects="declaration with storage duration and/or linkage"
+		reflects="a declaration with storage duration and/or linkage"
 	>
 		<generalization concept="Named"/>
 		<generalization concept="ScopeMember"/>
