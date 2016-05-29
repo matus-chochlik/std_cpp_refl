@@ -63,7 +63,7 @@ concept bool <xsl:value-of select="@name"/>;
 	</xsl:when>
 	<xsl:when test="@brief">
 		<xsl:text>&lt;p&gt;&lt;code&gt;meta::</xsl:text>
-		<xsl:value-of select="@name"/>&lt;/code&gt; <xsl:value-of select="@brief"/>.
+		<xsl:value-of select="@name"/>&lt;/code&gt; <xsl:value-of select="@brief"/>
 		<xsl:text>&lt;/p&gt;</xsl:text>
 	</xsl:when>
 	<xsl:when test="@reflects">
