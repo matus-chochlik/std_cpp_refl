@@ -2,12 +2,13 @@ XSLTPROC ?= xsltproc
 REVISION = 1
 
 CONCEPTS = ../doc/concepts.xml
-HTMLCS = style.htmlc \
+GEN_HTMLCS = style.htmlc \
 	synopsis.htmlc concepts.htmlc traits.htmlc operations.htmlc
+PER_HTMLCS = revisions.htmlc discussion.htmlc acks.htmlc references.htmlc
 
 all: P0194R1.html
 
-P0194R1.html: compile.xsl root.html $(HTMLCS) Makefile
+P0194R1.html: compile.xsl root.html $(PER_HTMLCS) $(GEN_HTMLCS) Makefile
 	$(XSLTPROC) --html --nonet -o $@ compile.xsl root.html
 
 %.htmlc: %-htmlc.xsl $(CONCEPTS) Makefile
@@ -18,4 +19,4 @@ style.htmlc: style.css
 	cat $< >> $@
 	echo "</style>" >> $@
 
-.INTERMEDIATE: $(HTMLCS)
+.INTERMEDIATE: $(GEN_HTMLCS)

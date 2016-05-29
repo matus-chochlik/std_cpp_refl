@@ -49,74 +49,7 @@
 <p>TODO
 </p>
 
-<h2 id="revisions">Revision history</h2>
-
-<h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
-
-<p>Describes the method of static reflection
-by the means of compiler-generated anonymous types. Introduces the first version
-of the metaobject concepts and some possiblities of their implementation.
-Also includes discussion about the motivation and the design rationale for the proposal.
-</p>
-
-<h4>Revision 2 (<a href="#ref-N4111">N4111</a>)</h4>
-
-<p>Refines the metaobject concepts and introduces
-a concrete implementation of their interface by the means of templates similar
-to the standard type traits. Describes some additions to the standard library
-(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
-Answers some questions from the discussion about N3996 and expands the design
-rationale.
-</p>
-
-<h4>Revision 3 (<a href="#ref-N4451">N4451</a>)</h4>
-
-<p>Incorporates the feedback from the discussion
-about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
-definitions, removes some of the additions to the standard library added in the previous revisions.
-Adds context-dependent reflection.
-</p>
-
-<h4>Revision 4 (<a href="#ref-P0194R0">P0194R0</a>)</h4>
-
-<p>Further refines the concepts from N4111; prefixes
-the names of the metaobject operations with <code>get_</code>, adds new operations,
-replaces the metaobject category tags with new metaobject traits.
-Introduces a nested namespace <code>std::meta</code> which contains most
-of the reflection-related additions to the standard library.
-Rephrases definition of meta objects using Concepts Lite. Specifies the
-reflection operator name — <code>reflexpr</code>.
-Introduces an experimental implementation of the reflection operator in clang.
-Drops the context-dependent reflection from N4111 (will be re-introduced later).
-</p>
-
-<h4>Revision 5 (P0194R1)</h4>
-
-<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
-classification is now done by using the concepts. We assume that the following
-syntax of the Concepts specification is implemented:
-</p>
-
-<pre><code>
-template &lt;T&gt;
-constexpr bool Concept = <em>unspecified</em>;
-</code></pre>
-
-<p>and also assuming that the Concepts TS Issue 29 is resolved and that
-<code>Concept&lt;T&gt;</code> is generally usable boolean expression,
-so that the following is valid code:</p>
-
-<pre><code>
-static_assert(Concept&lt;T&gt;, " ... ");
-
-using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
-
-if(Concept&lt;T&gt;) { /* ... */  }
-</code></pre>
-
-
-<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
-
+<object class="htmlc" name="revisions" type="text/html" data="revisions.htmlc"></object>
 
 <h2 id="wording">Proposed wording</h2>
 
@@ -868,58 +801,10 @@ is passed to the <code>reflexpr</code> operator then the result is (for the mome
 
 </blockquote>
 
-<h2 id="discussion">Discussion</h2>
+<object class="htmlc" type="text/html" data="discussion.htmlc"></object>
 
-<p>TODO: standard static strings
-</p>
-
-<p>TODO: metaobject sequences vs. standard typelists
-</p>
-
-<h2 id="acks">Acknowledgments</h2>
-
-<p>TODO
-</p>
-
-<h2>References</h2>
-
-<table class="references">
-<tr id="ref-P0194R0">
-	<th>[P0194R0]</th>
-	<td>
-	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
-		Chochlík M., Naumann A. — P0194R0 - Static reflection (revision 4)
-	</a>
-  </td>
-</tr>
-
-<tr id="ref-N4451">
-	<th>[N4451]</th>
-	<td>
-	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4451.pdf">
-		Chochlík M. — N4451 - Static reflection (revision 3)
-  </a>
-  </td>
-</tr>
-
-<tr id="ref-N4111">
-	<th>[N4111]</th>
-	<td>
-	<a href="https://isocpp.org/files/papers/n4111.pdf">
-		Chochlík M. — N4111 - Static reflection (revision 2)
-	</a>
-  </td>
-</tr>
-
-<tr id="ref-N3996">
-	<th>[N3996]</th>
-	<td>
-	<a href="https://isocpp.org/files/papers/n3996.pdf">
-		Chochlík M. — N3996 - Static reflection
-	</a>
-  </td>
-</tr>
-</table>
+<object class="htmlc" type="text/html" data="acks.htmlc"></object>
+<object class="htmlc" type="text/html" data="references.htmlc"></object>
 
 </body>
 </html>

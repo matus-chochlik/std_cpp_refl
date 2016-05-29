@@ -1,0 +1,41 @@
+<div id="ref-P0194R0">
+<h2>References</h2>
+
+<table class="references">
+<tr>
+	<th>[P0194R0]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
+		Chochlík M., Naumann A. — P0194R0 - Static reflection (revision 4)
+	</a>
+  </td>
+</tr>
+
+<tr id="ref-N4451">
+	<th>[N4451]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4451.pdf">
+		Chochlík M. — N4451 - Static reflection (revision 3)
+  </a>
+  </td>
+</tr>
+
+<tr id="ref-N4111">
+	<th>[N4111]</th>
+	<td>
+	<a href="https://isocpp.org/files/papers/n4111.pdf">
+		Chochlík M. — N4111 - Static reflection (revision 2)
+	</a>
+  </td>
+</tr>
+
+<tr id="ref-N3996">
+	<th>[N3996]</th>
+	<td>
+	<a href="https://isocpp.org/files/papers/n3996.pdf">
+		Chochlík M. — N3996 - Static reflection
+	</a>
+  </td>
+</tr>
+</table>
+</div>

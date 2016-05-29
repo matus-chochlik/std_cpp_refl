@@ -155,7 +155,8 @@ object.htmlc {
 <p>TODO
 </p>
 
-<h2 id="revisions">Revision history</h2>
+<div id="revisions">
+<h2>Revision history</h2>
 
 <h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
 
@@ -220,11 +221,11 @@ using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
 if(Concept&lt;T&gt;) { /* ... */  }
 </code></pre>
 
-
 <p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+</p>
+</div>
 
-
-</p><h2 id="wording">Proposed wording</h2>
+<h2 id="wording">Proposed wording</h2>
 
 <p>Insert a new element in Table 1, <em>C++ library headers</em> of
 [general.namespaces], named <code>&lt;experimental/reflexpr&gt;</code>.
@@ -1346,23 +1347,30 @@ is passed to the <code>reflexpr</code> operator then the result is (for the mome
 
 </blockquote>
 
+<div>
 <h2 id="discussion">Discussion</h2>
+
+<h3><code>ObjectSequence</code>s vs. <em>typelists</em></h3>
+
+<p>TODO: 
+</p>
 
 <p>TODO: standard static strings
 </p>
 
-<p>TODO: metaobject sequences vs. standard typelists
-</p>
+</div>
 
-<h2 id="acks">Acknowledgments</h2>
+<div id="acks">
+<h2>Acknowledgments</h2>
 
 <p>TODO
 </p>
-
+</div>
+<div id="ref-P0194R0">
 <h2>References</h2>
 
 <table class="references">
-<tr id="ref-P0194R0">
+<tr>
 	<th>[P0194R0]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
@@ -1398,6 +1406,7 @@ is passed to the <code>reflexpr</code> operator then the result is (for the mome
   </td>
 </tr>
 </table>
+</div>
 
 </body>
 </html>
