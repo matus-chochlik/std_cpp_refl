@@ -124,7 +124,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<metaobject name="Typed"
 		since_revision="0"
 		abstract="true"
-		reflects="base-level declaration with a type (for example a variable)"
+		reflects="a base-level declaration with a type (for example a variable)"
 	>
 		<generalization concept="Object"/>
 		<order_after concept="ScopeMember"/>
