@@ -75,7 +75,7 @@ string enum_to_string(Enum enum_value)
 	using MetaEnum = reflexpr(Enum);
 
 	// traverse the members until the function returns true
-	meta::for_each_until<meta::get_enum_members_t<MetaEnum>>(
+	meta::for_each_until<meta::get_enum_members_m<MetaEnum>>(
 		enum_to_string_helper<Enum>{enum_value, result}
 	);
 
@@ -111,7 +111,7 @@ Enum string_to_enum(const string& enum_name)
 
 	using MetaEnum = reflexpr(Enum);
 
-	meta::for_each_until<meta::get_enum_members_t<MetaEnum>>(
+	meta::for_each_until<meta::get_enum_members_m<MetaEnum>>(
 		string_to_enum_helper<Enum>{enum_name, result}
 	);
 
@@ -129,7 +129,7 @@ Enum string_to_enum(const string& enum_name)
 {
 	Enum result;
 
-	meta::for_each_until<meta::get_enum_members_t<reflexpr(Enum)>>(
+	meta::for_each_until<meta::get_enum_members_m<reflexpr(Enum)>>(
 		[&enum_name, &result](auto meta_ev)
 		{
 			using MetaEnumValue = decltype(meta_ev)::type;

@@ -25,8 +25,8 @@ using MT = reflexpr(int);
 // Now we arrived to a point where we need
 // to get the base-level type reflected by `MT`.
 
-// Instead of using get_original_type ...
-using T = get_original_type_t<MT>;
+// Instead of using get_reflected_type ...
+using T = get_reflected_type_t<MT>;
 
 // we could do:
 static_assert(meta::is_revertible_v<MT> && meta::is_type_v<MT>, "");
@@ -49,7 +49,7 @@ using MV = reflexpr(foo::str); // Meta-Variable
 
 // ... lots of code here ...
 // using namespace foo;
-using namespace reflexpr(get_scope_t<MV>);
+using namespace reflexpr(get_scope_m<MV>);
 
 // [foo::]bar(foo::str);
 bar(reflexpr(MV));
@@ -124,7 +124,7 @@ struct my_struct
 };
 
 // Meta-DataMember
-using MDM = get_element_t<get_data_members_t<reflexpr(foo::bar)>, 0>;
+using MDM = get_element_m<get_data_members_m<reflexpr(foo::bar)>, 0>;
 
 my_struct x {123, 45.67f};
 

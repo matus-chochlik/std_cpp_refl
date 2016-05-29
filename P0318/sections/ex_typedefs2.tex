@@ -23,7 +23,7 @@ int main(void)
 	static_assert(meta::has_name_v<meta_bar>, "");
 	cout << meta::get_name_v<meta_bar> << endl;
 
-	typedef meta::get_aliased_t<meta_bar> meta_foo;
+	typedef meta::get_aliased_m<meta_bar> meta_foo;
 
 	static_assert(is_metaobject_v<meta_foo>, "");
 	static_assert(meta::is_type_v<meta_foo>, "");

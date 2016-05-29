@@ -176,7 +176,7 @@ Then we can use the new features:
 class foo { };
 
 static_assert(meta::reflects_same_v<
-	meta::get_elaborated_type_specifier_t<reflexpr(foo)>,
+	meta::get_elaborated_type_specifier_m<reflexpr(foo)>,
 	reflexpr(class)
 >, "");
 \end{minted}

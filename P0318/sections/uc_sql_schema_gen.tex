@@ -25,7 +25,7 @@ struct create_table_column_from
 		std::cout << meta::get_name_v<MetaMemVar> << " ";
 
 		std::cout << translate_to_sql(
-			meta::get_name_v<meta::get_type_t<MetaMemVar>>
+			meta::get_name_v<meta::get_type_m<MetaMemVar>>
 		);
 
 		if(starts_with(get_name_v<MetaMemVar>, "id_"))
@@ -55,7 +55,7 @@ struct create_table_from
 			  << strip_prefix("persistent_", get_name_v<MetaClass>)
 			  << "(" << std::endl;
 
-		meta::for_each<meta::get_data_members_t<MetaClass>>(
+		meta::for_each<meta::get_data_members_m<MetaClass>>(
 			create_table_column_from()
 		);
 

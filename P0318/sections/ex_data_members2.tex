@@ -23,14 +23,14 @@ int do_print_data_member(void)
 {
 	using namespace std;
 
-	typedef meta::get_element_t<Metaobjects, I> metaobj;
+	typedef meta::get_element_m<Metaobjects, I> metaobj;
 
 	cout	<< I << ": "
 		<< (meta::is_public_v<metaobj>?"public":"non-public")
 		<< " "
 		<< (meta::is_static_v<metaobj>?"static":"")
 		<< " "
-		<< meta::get_name_v<meta::get_type_t<metaobj>>
+		<< meta::get_name_v<meta::get_type_m<metaobj>>
 		<< " "
 		<< meta::get_name_v<metaobj>
 		<< endl;
@@ -63,7 +63,7 @@ void print_data_members(void)
 
 	cout<< "Public data members of " << meta::get_name_v<MetaClass> << endl;
 
-	do_print_data_members<meta::get_data_members_t<MetaClass>>();
+	do_print_data_members<meta::get_data_members_m<MetaClass>>();
 }
 
 template <typename MetaClass>
@@ -73,7 +73,7 @@ void print_all_data_members(void)
 
 	cout << "All data members of " << meta::get_name_v<MetaClass> << endl;
 
-	do_print_data_members<meta::get_all_data_members_t<MetaClass>>();
+	do_print_data_members<meta::get_all_data_members_m<MetaClass>>();
 }
 
 int main(void)

@@ -23,13 +23,13 @@ described in section \ref{fac-unpack-sequence}:
 template <DataMember ... MDM>
 struct soa_helper
 {
-	std::vector<meta::get_original_type_t<meta::get_type_t<MDM>>>
+	std::vector<meta::get_reflected_type_t<meta::get_type_m<MDM>>>
 	identifier("vec_%1", MDM)...;
 };
 
 template <typename T>
 using soa = meta::unpack_sequence_t<
-	meta::get_data_members_t<reflexpr(T)>,
+	meta::get_data_members_m<reflexpr(T)>,
 	soa_helper
 >;
 \end{minted}
@@ -41,7 +41,7 @@ With the \say{reversible reflection} feature described in section
 template <DataMember ... MDM>
 struct soa_helper
 {
-	std::vector<reflexpr(meta::get_type_t<MDM>)>
+	std::vector<reflexpr(meta::get_type_m<MDM>)>
 	identifier("vec_%1", MDM)...;
 };
 \end{minted}

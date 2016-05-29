@@ -82,7 +82,7 @@ bool generic_equal(const T& a, const T& b)
 	using metaT = reflexpr(T);
 	bool result = true;
 
-	meta::for_each<meta::get_all_data_members_t<metaT>>(
+	meta::for_each<meta::get_all_data_members_m<metaT>>(
 		compare_data_members<T>{a, b, result}
 	);
 
@@ -118,13 +118,13 @@ std::size_t generic_hash(const T& a)
 {
 	std::size_t result = 0u;
 
-	meta::for_each<meta::get_all_data_members_t<reflexpr(T)>>(
+	meta::for_each<meta::get_all_data_members_m<reflexpr(T)>>(
 		[&result,&a](auto meta_dm)
 		{
 			using MetaDataMem = decltype(meta_dm)::type;
-			using MetaT = meta::get_type_t<MetaDataMem>;
+			using MetaT = meta::get_type_m<MetaDataMem>;
 
-			using T = meta::get_original_type_t<MetaT>;
+			using T = meta::get_reflected_type_t<MetaT>;
 			// or T = reflexpr(metaT);
 
 			auto mem_ptr = meta::get_pointer_v<MetaDataMem>;

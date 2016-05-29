@@ -29,10 +29,10 @@ int main(void)
 	static_assert(meta::has_scope_v<meta_foo_bar_baz>, "");
 	static_assert(meta::has_scope_v<meta_foobar>, "");
 
-	typedef meta::get_scope_t<meta_int> meta_int_s;
-	typedef meta::get_scope_t<meta_foo_bar> meta_foo_bar_s;
-	typedef meta::get_scope_t<meta_foo_bar_baz> meta_foo_bar_baz_s;
-	typedef meta::get_scope_t<meta_foobar> meta_foobar_s;
+	typedef meta::get_scope_m<meta_int> meta_int_s;
+	typedef meta::get_scope_m<meta_foo_bar> meta_foo_bar_s;
+	typedef meta::get_scope_m<meta_foo_bar_baz> meta_foo_bar_baz_s;
+	typedef meta::get_scope_m<meta_foobar> meta_foobar_s;
 
 	static_assert(meta::is_scope_v<meta_int_s>, "");
 	static_assert(meta::is_scope_v<meta_foo_bar_s>, "");

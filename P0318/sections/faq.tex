@@ -211,7 +211,7 @@ or even,
 template <typename Metaobject>
 void foo(void)
 {
-	if(std::is_class_v<get_original_type_t<Metaobject>>) { ... }
+	if(std::is_class_v<get_reflected_type_t<Metaobject>>) { ... }
 	else if(meta::is_typedef_v<Metaobject>) { ... }
 	else if(meta::is_type_v<Metaobject>) { ... }
 	else if(meta::is_namespace_v<Metaobject>) { ... }
@@ -247,7 +247,7 @@ particular use case.
 \textbf{Q:} {\em There are situations where you can do something much more
 easily without reflection than with it, like \verb@&variable@ vs.
 \verb@meta::get_pointer_v<reflexpr(variable)>@ or\\\verb@decltype(var)@ vs.
-\verb@meta::get_original_type_t<meta::get_type_t<reflexpr(var)>>@, etc.}
+\verb@meta::get_reflected_type_t<meta::get_type_m<reflexpr(var)>>@, etc.}
 
 \textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
@@ -543,7 +543,7 @@ classes or just get the metaobject reflecting only the first\footnote
 {zero-th} data member of a class having hundreds of members:
 
 \begin{minted}{cpp}
-get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
+get_element_m<get_data_members_m<reflexpr(my_class)>, 0>;
 \end{minted}
 
 This operation would involve the creation of two metaobjects:
@@ -584,8 +584,8 @@ In other words why don't we instead of:
 using mo = reflexpr(my_ns::my_class);
 
 std::cout << meta::get_name_v<mo> << std::endl;
-std::cout << meta::get_name_v<meta::get_scope_t<mo>> << std::endl;
-meta::for_each<meta::get_data_members_t<mo>>(my_func);
+std::cout << meta::get_name_v<meta::get_scope_m<mo>> << std::endl;
+meta::for_each<meta::get_data_members_m<mo>>(my_func);
 \end{minted}
 
 do something like one of the following:
