@@ -55,7 +55,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		result="IntegralConstant"
 		integer="size_t"
-		brief="returns a number of elements in the sequence."
+		brief="returns the number of elements in the sequence."
 	>
 		<argument type="ObjectSequence"/>
 	</operation>
