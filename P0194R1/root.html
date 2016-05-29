@@ -378,20 +378,6 @@ get_name_v&lt;reflexpr(class)&gt;                                     // "class"
 <span class="note">— end example</span>]
 </pre>
 
-	<p>The same as above also holds for future extensions.
-	</p>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-meta::get_name_v&lt;reflexpr(const std::sin)&gt;    // "sin"     (in the future)
-meta::get_name_v&lt;reflexpr(const std::pair)&gt;   // "pair"    (in the future)
-meta::get_name_v&lt;reflexpr(std::string::npos)&gt; // "npos"    (in the future)
-meta::get_name_v&lt;reflexpr(std::nothrow)&gt;      // "nothrow" (in the future)
-</code>
-<span class="note">— end example</span>]
-</pre>
-
 	<p>Template type parameters are also considered to be type aliases:
 	</p>
 
