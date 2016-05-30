@@ -61,7 +61,7 @@ from a C++ program includes;
 \item list of data members,
 \item list of nested types like typedefs, classes and enums,
 \item the elaborted type specifier,
-\item source location information,
+\item source location information~\cite{ISOCPP-N4519},
 \item etc.
 \end{itemize}
 
@@ -94,7 +94,7 @@ we mean template metaprogramming.
 
 \subsubsection{Reflection}
 
-In the context of computer science
+In the context of computer science,
 the term {\em reflection} refers to the ability of a program to examine
 and possibly modify its own structure and/or behavior.
 
@@ -102,15 +102,16 @@ When combined with metaprogramming, this can include modification of the existin
 or the definition of new data structures, doing changes to algorithms or changing the way
 a program code is interpreted\footnote{Mostly in interpreted languages.}.
 
-For the purpose of this paper reflection is the process of obtaining metadata.
+For the purpose of this paper, reflection is the process of obtaining metadata.
 In the future the meaning can be expanded to include modification of the program
 in ways exceeding the capabilities of current template metaprogramming.
 
 \subsubsection{First-class object, second-class object}
 \label{term-first-class}
 
-Also known as first-class -- {\em citizen}, {\em type}, {\em entity} or {\em value},
-in the context of programming language design is an entity that satisfies
+First-class objects are also known as first-class {\em citizens}, {\em types},
+{\em entities} or {\em values}.
+In the context of programming language design they describe an entity that satisfies
 the following:
 
 \begin{itemize}
@@ -127,7 +128,7 @@ For the purpose of this paper a first-class object is something that
 we can distinguish and reason about at compile-time and what can be passed around
 as \say{data} in metaprograms -- something that can be a template parameter.
 
-This means that a type or a template is for our purposes a first-class object:
+This means that a type or a template instance is for our purposes a first-class object:
 
 \begin{minted}{cpp}
 // compile-time "values"
