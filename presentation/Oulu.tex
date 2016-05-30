@@ -1,0 +1,101 @@
+\documentclass[compress,table,xcolor=table]{beamer}
+\mode<presentation>
+\usetheme{Montpellier}
+\hypersetup{pdfstartview={Fit}}
+
+\usecolortheme{spruce}
+\useoutertheme{smoothbars}
+
+\setbeamertemplate{bibliography item}[text]
+\usepackage[utf8]{inputenc}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{dirtytalk}
+\usepackage{multirow}
+
+\definecolor{light-gray}{gray}{0.95}
+
+\usepackage{listings}
+\lstset{
+backgroundcolor = \color{light-gray},
+basicstyle=\footnotesize\ttfamily,
+language=C++,
+breaklines=true,
+tabsize=2,
+escapeinside={(*@}{@*)}
+}
+
+\usepackage{url}
+
+\setlist[itemize,1]{label=$\bullet$,leftmargin=1em}
+\setlist[itemize,2]{label=$\circ$,leftmargin=1em}
+\setlist[itemize,3]{label=$\diamond$,leftmargin=1em}
+
+\begin{document}
+
+\title{Static reflection}
+\section{Static reflection}
+
+\subsection{Overview}
+
+\begin{frame}
+\frametitle{Key concepts -- {\em Metaobject}}
+  \begin{itemize}
+    \small
+    \item A representation of a base-level program declaration\footnote
+      {only some of these are part of the initial proposal}:
+    \begin{itemize}
+      \scriptsize
+      \item the global scope, a namespace,
+      \item a type, a class, an enumeration,
+      \item a namespace or type alias,
+      \item a template,
+      \item a variable, a class data member,
+      \item a function, a constructor, an operator,
+      \item a template parameter, a function parameter,
+      \item \ldots
+    \end{itemize}
+    \item Gives a first-class identity to the reflected entity
+    \begin{itemize}
+      \scriptsize
+      \item Can be stored in a \say{variable}.
+      \item Can be passed as an argument or a return value around a metaprogram.
+      \item Allows to separate the reflection of a declaration from
+      the querying of the metadata.
+    \end{itemize}
+    \item Can be reasoned-about at compile-time.
+    \item Conform to various {\em concepts}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Key concepts -- {\em Metaobject operations}}
+  \begin{itemize}
+    \small
+    \item Compile-time operations adding functionality to the {\em metaobjects}.
+    \item One or several of their arguments are {\em metaobjects}.
+    \item The return value can be one of the following:
+    \begin{itemize}
+      \footnotesize
+      \item Metadata in the form of:
+      \begin{itemize}
+        \item boolean constants,
+        \item integral constants,
+        \item enumeration constants,
+        \item string constants,
+        \item other (class data member pointers, \ldots),
+      \end{itemize}
+      \item Metaobjects reflecting:
+      \begin{itemize}
+        \item scope,
+        \item class data members, class member typedefs, class inheritance,
+        \item parameters, the return value,
+        \item aliased declarations,
+        \item various specifiers,
+        \item \ldots
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\end{document}
