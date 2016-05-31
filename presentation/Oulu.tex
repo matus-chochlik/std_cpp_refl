@@ -13,11 +13,8 @@
 \usepackage{dirtytalk}
 \usepackage{multirow}
 
-\definecolor{light-gray}{gray}{0.95}
-
 \usepackage{listings}
 \lstset{
-backgroundcolor = \color{light-gray},
 basicstyle=\scriptsize\ttfamily,
 language=C++,
 breaklines=true,
@@ -220,7 +217,7 @@ escapeinside={(*@}{@*)}
 	assert(meta_person.scope().get_name() == "sample");
         \end{lstlisting}
 	\item A type erasure (not using virtual functions)
-	\item Polymorphic reflection layer (using virtual function)
+	\item Polymorphic reflection layer (using virtual functions)
         \begin{lstlisting}{cpp}
 	for_each(
 	    reflected_global_scope()->members(),
@@ -281,7 +278,8 @@ escapeinside={(*@}{@*)}
       \item \ldots
     \end{itemize}
     \item Freely access metadata; name, type information, scope information, etc.
-    \item Explicitly request access when {\em manipulating} the base-level:
+    \item Explicitly request access\footnote{and make that easily
+      \texttt{grep}pable in the code} when {\em manipulating} the base-level:
     \begin{itemize}
       \footnotesize
         \item Special variant of the operations:
@@ -292,10 +290,9 @@ escapeinside={(*@}{@*)}
           \item does not scale very well
         \end{itemize}
         \item Use reverse reflection\footnote{more on that in a second} instead:
-        \begin{itemize}
-          \scriptsize
-          \item \verb@reflexpr(private, reflexpr(MyClass::_private_member))@
-        \end{itemize}
+        \begin{lstlisting}{cpp}
+	reflexpr((*@\alert{private,}@*) meta_MyClass_private_member);
+        \end{lstlisting}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -371,20 +368,20 @@ escapeinside={(*@}{@*)}
     \end{itemize}
     \item Reverse reflection -- as if the reflected declaration was used:
     \begin{itemize}
-      \item Already possible:
+      \item Already in the proposal:
       \begin{lstlisting}{cpp}
 	using meta_int = reflexpr(int);
 	// same as: int i = 123;
-	reflexpr(meta_int) i = 123;
+	(*@\alert{reflexpr(meta\_int)}@*) i = 123;
       \end{lstlisting}
       \item In the future (among other things):
       \begin{lstlisting}{cpp}
 	struct S { int i; };
 	S s{123};
 	// same as: s.i == 123
-	assert(s.reflexpr(reflexpr(S::i)) == 123);
+	assert(s.(*@\alert{reflexpr(reflexpr(S::i))}@*) == 123);
 	// same as: std::string str;
-	reflexpr(reflexpr(std))::string str;
+	(*@\alert{reflexpr(reflexpr(std))}@*)::string str;
       \end{lstlisting}
     \end{itemize}
   \end{itemize}
@@ -395,28 +392,64 @@ escapeinside={(*@}{@*)}
 \frametitle{Identifier formatting}
   \small
   \begin{itemize}
-    \item The ability to generate identifiers\footnote{without the preprocessor}
-       programmatically is important for several use cases.
+    \item The ability to generate identifiers programmatically\footnote{without
+       the preprocessor} is important for several use cases.
     \begin{itemize}
       \footnotesize
       \item Structure-of-arrays generators
       \item Object-relational mapping
       \item \ldots
     \end{itemize}
-    \item Let's use special operator like \verb@identifier@\footnote{let the
-      bike-shedding begin} with a format string literal
+    \item Let's use special operator, say \verb@identifier@\footnote{let the
+      bike-shedding begin}, with a format string literal
       and a set of \verb@meta::Named@ metaobjects:
       \begin{lstlisting}{cpp}
 	struct bar { int foo; };
 	using m_bar = reflexpr(bar);
 	using m_foo = reflexpr(bar::foo);
 
-	int identifier("baz");                   //int baz;
-	int identifier("%1", m_bar);             //int bar;
-	int identifier("%2_%1", m_bar, m_foo);   //int foo_bar;
-	int identifier("my_%1_%2", m_bar, m_foo);//int my_bar_foo;
+	int (*@\alert{identifier("baz")}@*);               //int baz;
+	int (*@\alert{identifier("\%1", m\_bar)}@*);          //int bar;
+	int (*@\alert{identifier("\%2\_\%1", m\_bar, m\_foo)}@*);  //int foo_bar;
+	int (*@\alert{identifier("my\_\%1\_\%2", m\_bar, m\_foo)}@*);//int my_bar_foo;
       \end{lstlisting}
-\end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Variadic composition}
+\begin{frame}[fragile]
+\frametitle{Variadic composition}
+  \scriptsize
+  \begin{itemize}
+    \item Allows more straightforward implementation of structure transformations:
+    \begin{itemize}
+      \item suppose we have a \verb@struct@ which we want to transform;
+      \begin{lstlisting}{cpp}
+	struct original { T1 attr1; T2 attr2; T3 attr3; };
+      \end{lstlisting}
+      \item with the following helper using identifier generation and variadic
+        composition,
+      \begin{lstlisting}{cpp}
+	template <DataMember ... MDM> struct soa_helper {
+	    std::vector<reflexpr(meta::get_type_t<MDM>)>
+	        (*@\alert{identifier("vec\_\%1", MDM)...}@*);
+	};
+      \end{lstlisting}
+      \item instantiating the \verb@soa_helper@:
+      \begin{lstlisting}{cpp}
+	using mdm = get_data_members_m<reflexpr(original)>;
+	using soa_orig = expand_sequence_t<mdm, soa_helper>;
+      \end{lstlisting}
+      \item would result in the following structure:
+      \begin{lstlisting}{cpp}
+	struct {
+	    std::vector<T1> vec_attr1;
+	    std::vector<T2> vec_attr2;
+	    std::vector<T3> vec_attr3;
+	};
+      \end{lstlisting}
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \subsection{Context-dependent reflection}
@@ -427,17 +460,19 @@ escapeinside={(*@}{@*)}
     \item Would allow to obtain metadata based on the context in which the
       reflection operator is invoked, instead of on the declaration name:
     \begin{itemize}
+      \footnotesize
       \item \verb@reflexpr(this::namespace)@ -- the innermost enclosing namespace.
       \item \verb@reflexpr(this::class)@ -- the innermost enclosing class.
       \item \verb@reflexpr(this::template)@ -- the innermost enclosing template.
       \item \verb@reflexpr(this::function)@ -- the enclosing function.
     \end{itemize}
     \item Helpful in several distinct use cases
-      \begin{itemize}
-        \item Logging
-        \item Implementation of aspects
+    \begin{itemize}
+      \footnotesize
+        \item Implementation of logging
+        \item Implementation of cross-cutting aspects
         \item \ldots
-      \end{itemize}
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
