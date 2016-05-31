@@ -429,6 +429,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		indicates="Enum"
 	/>
 
+	<operation name="get_enum_values"
+		since_revision="1"
+		result="ObjectSequence" element="Constant"
+		brief="returns a $(result) of $(elements) reflecting all
+		enum values of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Enum"/>
+	</operation>
+
 	<metaobject name="EnumClass"
 		since_revision="0"
 		reflects="a strongly typed enumeration"

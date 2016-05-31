@@ -11,6 +11,7 @@
 <xsl:template name="expand-variables">
 <xsl:param name="text"/>
 <xsl:param name="result"/>
+<xsl:param name="element"/>
 <xsl:param name="operand"/>
 	<xsl:choose>
 	<xsl:when test="contains($text, '$(')">
@@ -23,6 +24,12 @@
 		<xsl:value-of select="$result"/>
 		<xsl:text>&lt;/em&gt;</xsl:text>
 		<xsl:text>&lt;/code&gt;</xsl:text>
+	</xsl:when>
+	<xsl:when test="$variable = 'elements'">
+		<xsl:text>&lt;code&gt;</xsl:text>meta::<xsl:text>&lt;em&gt;</xsl:text>
+		<xsl:value-of select="$element"/>
+		<xsl:text>&lt;/em&gt;</xsl:text>
+		<xsl:text>&lt;/code&gt;(s)</xsl:text>
 	</xsl:when>
 	<xsl:when test="$variable = 'operand'">
 		<xsl:text>&lt;code&gt;</xsl:text>meta::<xsl:text>&lt;em&gt;</xsl:text>
@@ -39,6 +46,7 @@
 	<xsl:call-template name="expand-variables">
 		<xsl:with-param name="text" select="substring-after(substring-after($text, '$('), ')')"/>
 		<xsl:with-param name="result" select="$result"/>
+		<xsl:with-param name="element" select="$element"/>
 		<xsl:with-param name="operand" select="$operand"/>
 	</xsl:call-template>
 
@@ -97,15 +105,22 @@ struct <xsl:value-of select="@name"/>;
 <xsl:call-template name="expand-variables">
 	<xsl:with-param name="text" select="@brief"/>
 	<xsl:with-param name="result" select="@result"/>
+	<xsl:with-param name="element" select="@element"/>
 	<xsl:with-param name="operand" select="argument[1]/@type"/>
 </xsl:call-template>
 
 <xsl:variable name="result" select="@result"/>
+<xsl:variable name="element" select="@element"/>
 
 <xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
 <xsl:choose>
 	<xsl:when test="/concepts/metaobject[@name=$result]">
 		&lt;code&gt;meta::&lt;em&gt;<xsl:value-of select="$result"/>&lt;/em&gt;&lt;/code&gt;
+		<xsl:if test="/concepts/metaobject[@name=$element]">
+		<xsl:text>of &lt;code&gt;meta::&lt;em&gt;</xsl:text> 
+		<xsl:value-of select="$element"/>
+		<xsl:text>&lt;/em&gt;&lt;/code&gt;(s)</xsl:text>
+		</xsl:if>
 	</xsl:when>
 	<xsl:when test="@result='BooleanConstant'">a boolean constant</xsl:when>
 	<xsl:when test="@result='IntegralConstant'">

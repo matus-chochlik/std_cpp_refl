@@ -386,6 +386,7 @@ template &lt;Class T&gt; struct get_data_members;
 template &lt;Class T&gt; struct get_all_data_members;
 template &lt;Class T&gt; struct get_member_types;
 template &lt;Class T&gt; struct get_all_member_types;
+template &lt;Enum T&gt; struct get_enum_values;
 template &lt;Constant T&gt; struct get_constant;
 template &lt;Variable T&gt; struct get_pointer;
 
@@ -427,6 +428,8 @@ template &lt;Class T&gt;
   using get_member_types_m = typename get_member_types&lt;T&gt;::type;
 template &lt;Class T&gt;
   using get_all_member_types_m = typename get_all_member_types&lt;T&gt;::type;
+template &lt;Enum T&gt;
+  using get_enum_values_m = typename get_enum_values&lt;T&gt;::type;
 template &lt;Constant T&gt;
   constexpr auto get_constant_v = get_constant&lt;T&gt;::value;
 template &lt;Variable T&gt;
@@ -836,21 +839,21 @@ struct get_size;
 struct get_element;
 </code></pre></td><td>returns the i-th <code>meta::<em>Object</em></code> in a <code>meta::<em>ObjectSequence</em></code>.</td><td>
 		<code>meta::<em>Object</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+		</td></tr><tr><td><pre><code>template &lt;Named T&gt;
 struct get_name;
 </code></pre></td><td>returns the basic name of the a named declaration reflected by a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Typed T&gt;
 struct get_type;
 </code></pre></td><td>returns the <code>meta::<em>Type</em></code> reflecting the type of a base-level declaration with a type (for example a variable) reflected by a <code>meta::<em>Typed</em></code>.</td><td>
 		<code>meta::<em>Type</em></code>
-	</td></tr><tr><td><pre><code>template &lt;ScopeMember T&gt;
+		</td></tr><tr><td><pre><code>template &lt;ScopeMember T&gt;
 struct get_scope;
 </code></pre></td><td>returns the <code>meta::<em>Scope</em></code> reflecting the scope of a declaration nested in a scope (like the global scope,   namespace, class, strongly-typed enums, etc.) reflected by a <code>meta::<em>ScopeMember</em></code>.</td><td>
 		<code>meta::<em>Scope</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Alias T&gt;
+		</td></tr><tr><td><pre><code>template &lt;Alias T&gt;
 struct get_aliased;
 </code></pre></td><td>returns the <code>meta::<em>Named</em></code> reflecting the original declaration   of a type or namespace alias reflected by a <code>meta::<em>Alias</em></code>.</td><td>
 		<code>meta::<em>Named</em></code>
-	</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
+		</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
 struct is_public;
 </code></pre></td><td>returns whether the a class member reflected by a <code>meta::<em>ClassMember</em></code>   was declared with public access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
 struct is_protected;
@@ -860,7 +863,7 @@ struct is_private;
 struct get_access_specifier;
 </code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier of a class member reflected by a <code>meta::<em>ClassMember</em></code>.</td><td>
 		<code>meta::<em>Specifier</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Linkable T&gt;
+		</td></tr><tr><td><pre><code>template &lt;Linkable T&gt;
 struct is_static;
 </code></pre></td><td>returns whether the a declaration with storage duration and/or linkage reflected by a <code>meta::<em>Linkable</em></code> was declared with the static specifier.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Type T&gt;
 struct get_reflected_type;
@@ -868,23 +871,27 @@ struct get_reflected_type;
 struct get_elaborated_type_specifier;
 </code></pre></td><td>returns a <code>meta::<em>Specifier</em></code> reflecting the elaborated type specifier   (class,struct,union,...) of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>Specifier</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+		</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_data_members;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of elements reflecting   the public data members of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting   the public data members of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+		of <code>meta::<em>DataMember</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_all_data_members;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of elements reflecting all   (including the private and protected)   data members of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting all   (including the private and protected)   data members of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+		of <code>meta::<em>DataMember</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_member_types;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of elements reflecting   the public member types of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting   the public member types of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+		of <code>meta::<em>MemberType</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_all_member_types;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of elements reflecting all   (including the private and protected)   member types of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting all   (including the private and protected)   member types of a class reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-	</td></tr><tr><td><pre><code>template &lt;Constant T&gt;
+		of <code>meta::<em>DataMember</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Enum T&gt;
+struct get_enum_values;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Constant</em></code>(s) reflecting all   enum values of an enumeration reflected by a <code>meta::<em>Enum</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>Constant</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Constant T&gt;
 struct get_constant;
 </code></pre></td><td>returns the value of a compile-time constant value reflected by a <code>meta::<em>Constant</em></code>.</td><td>
 		a constant value of an unspecified, integer or enum type
