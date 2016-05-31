@@ -1,9 +1,9 @@
 \documentclass[compress,table,xcolor=table]{beamer}
 \mode<presentation>
-\usetheme{Montpellier}
+\usetheme{Warsaw}
 \hypersetup{pdfstartview={Fit}}
 
-\usecolortheme{spruce}
+\usecolortheme{crane}
 \useoutertheme{smoothbars}
 
 \setbeamertemplate{bibliography item}[text]
@@ -34,12 +34,12 @@ escapeinside={(*@}{@*)}
 \begin{document}
 
 \title{Static reflection}
-\section{Static reflection}
 
-\subsection{Overview}
+\section{Overview}
 
+\subsection{Metaobject}
 \begin{frame}
-\frametitle{Key concepts -- {\em Metaobject}}
+\frametitle{Overview -- {\em Metaobject}}
   \begin{itemize}
     \small
     \item A representation of a base-level program declaration\footnote
@@ -68,8 +68,9 @@ escapeinside={(*@}{@*)}
   \end{itemize}
 \end{frame}
 
+\subsection{Metaobject operations}
 \begin{frame}
-\frametitle{Key concepts -- {\em Metaobject operations}}
+\frametitle{Overview -- {\em Metaobject operations}}
   \begin{itemize}
     \small
     \item Compile-time operations adding functionality to the {\em metaobjects}.
@@ -97,5 +98,44 @@ escapeinside={(*@}{@*)}
     \end{itemize}
   \end{itemize}
 \end{frame}
+
+\subsection{Metaobject concepts}
+\begin{frame}
+\frametitle{Overview -- {\em Metaobject concepts}}
+  \begin{itemize}
+    \small
+    \item Determine the category of a metaobject (what does it reflect).
+    \item Determine which operations can be invoked on a metaobject.
+  \end{itemize}
+\end{frame}
+
+\section{Notable features}
+
+\subsection{Typedef reflection}
+\begin{frame}
+\frametitle{Typedef reflection}
+\Huge TODO
+\end{frame}
+
+\section{Future extensions}
+
+\subsection{Reverse reflection}
+\begin{frame}
+\frametitle{Reverse reflection}
+\Huge TODO
+\end{frame}
+
+\subsection{Context-dependent reflection}
+\begin{frame}
+\frametitle{Context-dependent reflection}
+\Huge TODO
+\end{frame}
+
+\subsection{Identifier formatting}
+\begin{frame}
+\frametitle{Identifier formatting}
+\Huge TODO
+\end{frame}
+
 
 \end{document}
