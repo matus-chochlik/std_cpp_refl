@@ -451,8 +451,9 @@ by the compiler which allow access to metadata reflecting specific program decla
 		abstract="true"
 		reflects="a compile-time constant value"
 	>
-		<generalization concept="Named"/>
 		<generalization concept="Typed"/>
+		<generalization concept="Named" optional="true"/>
+		<generalization concept="ScopeMember" optional="true"/>
 	</metaobject>
 
 	<trait name="is_constant"
