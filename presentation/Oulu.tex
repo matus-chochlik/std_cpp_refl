@@ -7,19 +7,30 @@
 \useoutertheme{smoothbars}
 
 \setbeamertemplate{bibliography item}[text]
+\logo{%
+  \usebeamerfont{footline}%
+  \usebeamercolor[fg]{footline}%
+  \hspace{1em}%
+  \small{\insertframenumber/}\scriptsize{\inserttotalframenumber}
+}
+
+
 \usepackage[utf8]{inputenc}
 \usepackage{caption}
 \usepackage{enumitem}
 \usepackage{dirtytalk}
 \usepackage{multirow}
 
+\definecolor{light-gray}{gray}{0.85}
+
 \usepackage{listings}
 \lstset{
-basicstyle=\scriptsize\ttfamily,
-language=C++,
-breaklines=true,
-tabsize=2,
-escapeinside={(*@}{@*)}
+  backgroundcolor = \color{light-gray},
+  basicstyle=\scriptsize\ttfamily,
+  language=C++,
+  breaklines=true,
+  tabsize=2,
+  escapeinside={(*@}{@*)}
 }
 
 \usepackage{url}
@@ -234,6 +245,7 @@ escapeinside={(*@}{@*)}
 \section{Notable features}
 
 \subsection{Typedef reflection}
+
 \begin{frame}[fragile]
 \frametitle{Typedef reflection}
   \small
@@ -260,7 +272,153 @@ escapeinside={(*@}{@*)}
     \end{itemize}
     \item Typedef reflection is an optional feature, it is always possible to get
       to the underlying type, the inverse is not true.
+  \end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Typedef reflection -- unnamed \texttt{struct}}
+  \footnotesize
+  \begin{itemize}
+    \item Let's suppose that we have the following \verb@typedef@ to an unnamed
+      \verb@struct@\footnote{possibly in third-party code}:
+    \begin{lstlisting}{cpp}
+	typedef struct { int a, b, c; } my_struct;
+    \end{lstlisting}
+    \item We want to serialize instances of this \verb@struct@ for network transport,
+      including the type name in the data format:
+      \begin{lstlisting}{cpp}{
+	cout << "{" << '"' << "type" << '"' << ": " << '"'
+	     << get_name_v<reflexpr(my_struct)>
+	     << '"' << ", " << '"' << "attr" << '"' << ": {";
+	/* ... */
+	cout << "}}";
+      \end{lstlisting}
+    \item Output without \verb@typedef@ reflection:
+    \begin{lstlisting}
+	{"type": (*@\alert{""}@*), "attr": { ... }}
+    \end{lstlisting}
+    \item Output with \verb@typedef@ reflection:
+    \begin{lstlisting}
+	{"type": (*@\alert{"my\_struct"}@*), "attr": { ... }}
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Typedef reflection -- inter-platform differences}
+  \footnotesize
+  \begin{itemize}
+    \item Let's suppose that we have the following declarations:
+    \begin{lstlisting}{cpp}
+	#if PLATFORM_X
+	  typedef int       int32_t;
+	  typedef long      int64_t;
+	#elif PLATFORM_Y
+	  typedef long      int32_t;
+	  typedef long long int64_t;
+	#endif
+	struct abc { int64_t a, b, c; };
+    \end{lstlisting}
+    \item We serialize instances of this \verb@struct@ on platform X and
+      send them over the network to platform Y:
+    \item Without typedef reflection:
+    \begin{lstlisting}
+	"attr": {"a": {"t": "(*@\alert{long}@*)", "v": "(*@\alert{92233720368547758}@*)"},...}
+    \end{lstlisting}
+    \item With typedef reflection:
+    \begin{lstlisting}
+	"attr": {"a": {"t":"(*@\alert{int64\_t}@*)","v": "(*@\alert{92233720368547758}@*)"},...}
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Typedef reflection -- inter-platform differences (cont.)}
+  \footnotesize
+  \begin{itemize}
+  \item \ldots meanwhile at the receiving end on platform Y:
+    \begin{itemize}
+    \item Without typedef reflection
+      \begin{lstlisting}{cpp}
+	json_obj obj = json_obj::from_string(json_str);
+	auto attr = obj["attr"]["a"];
+	/* ... */
+	if(attr["t"] == "long") {
+	   (*@\alert{long}@*) tmp;
+	   attr["v"] >> tmp; // (*@\alert{32-bit int overflow?, exception?}@*)
+	} /* ... */
+      \end{lstlisting}
+    \item With typedef reflection
+      \begin{lstlisting}{cpp}
+	json_obj obj = json_obj::from_string(json_str);
+	auto attr = obj["attr"]["a"];
+	/* ... */
+	if(attr["t"] == "int64_t") {
+	   (*@\alert{int64\_t}@*) tmp;
+	   attr["v"] >> tmp; // (*@\alert{A-OK}@*)
+	} /* ... */
+      \end{lstlisting}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Typedef reflection -- Diagnostics}
+  \footnotesize
+  \begin{itemize}
+  \item We want to log each call of this function:
+    \begin{lstlisting}{cpp}
+	void foo(std::string::iterator i, std::string::iterator e)
+	{
+	    auto mp0 = reflexpr(i)(*@\footnote{direct variable reflection, in the future}@*);
+	    auto mp1 = reflexpr(e);
+	    log() << "foo("
+	          << get_name_v<get_type_m<mp0>>
+	          << " "
+	          << get_name_v<mp0>
+	          << ","
+	          << get_name_v<get_type_m<mp1>>
+	          << " "
+	          << get_name_v<mp1>
+	          << ")";
+	    /* ... */
+	}
+	std::string s
+	foo(s.begin(), s.end());
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Typedef reflection -- Diagnostics (cont.)}
+  \footnotesize
+  \begin{itemize}
+  \item Output without typedef reflection:
+    \begin{lstlisting}{cpp}
+	foo(const char* i, const char* e)
+	// or
+	foo(__normal_iterator i, __normal_iterator e)
+	// or
+	foo(__gnu_cxx::__normal_iterator<char*, std::basic_string<char> > i, __gnu_cxx::__normal_iterator<char*, std::basic_string<char> > e)
+    \end{lstlisting}
+    \begin{itemize}
+      \scriptsize
+      \item Depends on the platform, compiler and the used implementation of
+        the standard library.
+      \item May even depend on build configuration (debug/release, 32-bit/64-bit)
+    \end{itemize}
+  \item Output with typedef reflection:
+    \begin{lstlisting}{cpp}
+	foo(iterator i, iterator e)
+	// or (with a touch of metaprogramming)
+	foo(std::string::iterator i, std::string::iterator e)
+    \end{lstlisting}
+    \begin{itemize}
+      \scriptsize
+      \item Same on every platform
+      \item Same for every build configuration
+      \item Preserves semantic meaning
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
