@@ -14,6 +14,8 @@
   \small{\insertframenumber/}\scriptsize{\inserttotalframenumber}
 }
 
+\definecolor{alert-color}{rgb}{0.40, 0.15, 0.50}
+\setbeamercolor{alerted text}{fg=alert-color}
 
 \usepackage[utf8]{inputenc}
 \usepackage{caption}
@@ -21,11 +23,11 @@
 \usepackage{dirtytalk}
 \usepackage{multirow}
 
-\definecolor{light-gray}{gray}{0.85}
+\definecolor{listing-bgcolor}{rgb}{0.85, 0.85, 1.00}
 
 \usepackage{listings}
 \lstset{
-  backgroundcolor = \color{light-gray},
+  backgroundcolor = \color{listing-bgcolor},
   basicstyle=\scriptsize\ttfamily,
   language=C++,
   breaklines=true,
@@ -43,68 +45,213 @@
 
 \begin{document}
 
-\title{Static reflection}
+\title{P0194R1 -- Static reflection}
 
-\section{Overview}
+\section{Intro}
 
-\subsection{Metaobject}
 \begin{frame}
-\frametitle{{\em Metaobject}}
+\begin{center}
+  \Huge
+  \textbf{P0194} -- {\em Static reflection}\\
+  \normalsize
+  \vspace{3em}
+  Mat\'{u}\v{s} Chochl\'{i}k\\
+  Axel Naumann
+\end{center}
+\end{frame}
+
+\subsection{Proposal}
+
+\begin{frame}[fragile]
+\frametitle{{\em Call for Compile-Time Reflection Proposals} -- \textbf{N3814}}
+  \large
   \begin{itemize}
-    \small
-    \item A representation of a base-level program declaration\footnote
-      {only some of these are part of the initial proposal}:
+    \item Targeted use cases:
     \begin{itemize}
-      \scriptsize
-      \item the global scope, a namespace,
-      \item a type, a class, an enumeration,
-      \item a namespace or type alias,
-      \item a template,
-      \item a variable, a class data member,
-      \item a function, a constructor, an operator,
-      \item a template parameter, a function parameter,
-      \item \ldots
+      \item \textbf{Generation of common functions}
+      \begin{itemize}
+        \scriptsize
+        \item comparison operators,
+        \item serialization functions,
+        \item hash functions,
+        \item \ldots
+      \end{itemize}
+      \item \textbf{Type transformations}
+      \begin{itemize}
+        \scriptsize
+        \item {\em struct-of-arrays},
+        \item object-relational mapping,
+        \item \ldots
+      \end{itemize}
+      \item \textbf{Compile-time context information}
+      \begin{itemize}
+        \scriptsize
+        \item replacement for \verb@__FILE__@, \verb@__LINE__@, \ldots
+      \end{itemize}
+      \item \textbf{Enumeration of other entities}
+      \begin{itemize}
+        \scriptsize
+        \item types in a namespace
+        \item parameters of a function
+        \item global variables in a namespace
+        \item enumerators in an enumeration
+        \item \ldots
+      \end{itemize}
     \end{itemize}
-    \item Gives a first-class identity to the reflected entity
-    \begin{itemize}
-      \scriptsize
-      \item Can be stored in a \say{variable}.
-      \item Can be passed as an argument or a return value around a metaprogram.
-      \item Allows to separate the reflection of a declaration from
-      the querying of the metadata.
-    \end{itemize}
-    \item Can be reasoned-about at compile-time.
-    \item Metaobjects conform to various {\em concepts}.
   \end{itemize}
 \end{frame}
 
-\subsection{Metaobject operations}
 \begin{frame}
-\frametitle{{\em Metaobject operations}}
+\frametitle{Static reflection proposal}
   \begin{itemize}
-    \small
-    \item Compile-time operations adding functionality to the {\em metaobjects}.
-    \item One or several of their arguments are {\em metaobjects}.
-    \item The return value can be one of the following:
+    \large
+    \item \textbf{Current iteration}
     \begin{itemize}
-      \footnotesize
-      \item Metadata in the form of:
+      \item \textbf{P0194R1} -- {\em Static reflection (rev.5)} {\small -- wording}
+      \item \textbf{P0385R0} -- {\em Static reflection: {\small Rationale, design and evolution}}
+    \end{itemize}
+    \normalsize
+    \item Previous revisions\footnote{see the revision history in P0194R1}
+    \begin{itemize}
+      \small
+      \item \textbf{P0194R0} -- {\em Static reflection (rev.4)}
+      \item \textbf{N4451} -- {\em Static reflection (rev.3)}
+      \item \textbf{N4452} -- {\em A case for strong static reflection}
+      \item \textbf{N4111} -- {\em Static reflection (rev.2)}
+      \item \textbf{P3996} -- {\em Static reflection (rev.1)}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{Overview}
+
+\subsection{Metaobjects}
+\begin{frame}
+\frametitle{{\em Metaobject} -- abstract definition}
+  \large
+  \begin{itemize}
+    \item \textbf{{\em A representation of a base-level program declaration.}}
+    \item \textbf{Gives a first-class identity to the reflected entity.}
+    \begin{itemize}
+      \small
+      \item Can be stored in a \say{variable}.
+      \item Can be passed as an argument or a return value in a metaprogram.
+      \item Separates the reflection of a declaration from
+      the querying of the metadata.
+    \end{itemize}
+    \item \textbf{Can be reasoned-about at compile-time.}
+    \item In some cases allows to \say{go back} to the reflected declaration.
+    \item Conforms to one of the {\em metaobject concepts}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{{\em Metaobjects} -- implementation}
+  \large
+  \begin{itemize}
+    \item \textbf{As anonymous implementation-defined types.}
+    \begin{itemize}
+      \small
+      \item have first-class identity at compile-time
+      \item lightweight
+      \item no visible internal structure
+      \item creation of run-time objects of these types is not required
+      \item can be implemented as template-wrapped constants 
+      \begin{lstlisting}
+	template <__metaobject_id MoId> struct __metaobject;
+      \end{lstlisting}
+    \end{itemize}
+    \item Returned by the \textbf{reflexpr} operator.
+    \begin{lstlisting}[basicstyle=\normalsize\ttfamily]
+	using meta_global_scope = (*@\alert{reflexpr}@*)(::);
+	using meta_std = (*@\alert{reflexpr}@*)(std);
+	using meta_int = (*@\alert{reflexpr}@*)(int);
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Metaobject kinds}
+    \large
+    \begin{columns}[T]
+      \begin{column}{0.50\textwidth}
       \begin{itemize}
-        \item boolean constants,
-        \item integral constants,
-        \item enumeration constants,
-        \item string constants,
-        \item other (class data member pointers, \ldots),
+        \item \textbf{In the current proposal}
+        \begin{itemize}
+          \normalsize
+          \item the global scope,
+          \item a namespace,
+          \item a type,
+          \item a class,
+          \item a class data member,
+          \item an enumeration,
+          \item an enumeration value,
+          \item a namespace or type alias,
+          \item a specifier.
+        \end{itemize}
       \end{itemize}
-      \item Metaobjects reflecting:
+      \end{column}
+      \begin{column}{0.45\textwidth}
       \begin{itemize}
-        \item scope,
-        \item class data members, class member typedefs, class inheritance,
-        \item parameters, the return value,
-        \item aliased declarations,
-        \item various specifiers,
-        \item \ldots
+        \item Future extensions\footnotemark
+        \begin{itemize}
+          \normalsize
+          \item a template,
+          \item a variable
+          \item a function,
+          \item a constructor,
+          \item an operator,
+          \item a template parameter,
+          \item a function parameter,
+          \item \ldots
+        \end{itemize}
       \end{itemize}
+      \end{column}
+    \end{columns}
+    \footnotetext{using same principles}
+\end{frame}
+
+\subsection{Metaobject operations}
+\begin{frame}[fragile]
+\frametitle{{\em Metaobject operations}}
+  \large
+  \begin{itemize}
+    \item \textbf{Compile-time operations adding functionality to the {\em metaobjects}.}
+    \item One or several of their arguments are {\em metaobjects}.
+    \item Return compile-time metadata or other metaobjects.
+    \item \textbf{Implemented as class templates:}
+    \begin{lstlisting}[basicstyle=\normalsize\ttfamily]
+	using meta_str = reflexpr(std::string);
+	(*@\alert{get\_name\_v}@*)<meta_str>;          // "string"
+	using meta_std = (*@\alert{get\_scope\_m}@*)<meta_str>;
+	(*@\alert{get\_name\_v}@*)<meta_std>;          // "std"
+	(*@\alert{reflected\_type\_t}@*)<meta_str> str("blah");
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{{\em Metaobject operations} -- \say{return values}}
+  \large
+  \begin{itemize}
+    \item \textbf{Compile-time metadata} in the form of:
+    \begin{itemize}
+      \normalsize
+      \item boolean constants,
+      \item integral constants,
+      \item enumerator constants,
+      \item string constants,
+      \item other (data member pointers, \ldots)
+    \end{itemize}
+    \item \textbf{Metaobjects} reflecting:
+    \begin{itemize}
+      \normalsize
+      \item scope,
+      \item class data members, class member typedefs, class inheritance,
+      \item parameters, the return value,
+      \item aliased declarations,
+      \item various specifiers,
+      \item \ldots
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -113,14 +260,14 @@
 \begin{frame}
 \frametitle{{\em Metaobject concepts}}
   \begin{itemize}
-    \small
-    \item Determine the category of a metaobject (what does it reflect).
-    \item Determine which operations can be invoked on a metaobject.
+    \item Determine the \textbf{category} of a metaobject -- \textbf{what does it reflect}.
+    \item \large \textbf{Determine which operations can be invoked on a metaobject.}
   \end{itemize}
   \begin{columns}
     \scriptsize
     \begin{column}{0.35\textwidth}
       \begin{itemize}
+      \setlength\itemsep{0.1em}
       \item \texttt{Object}
       \item \texttt{ObjectSequence}
       \item \texttt{Reversible}
@@ -137,6 +284,7 @@
     \end{column}
     \begin{column}{0.35\textwidth}
       \begin{itemize}
+      \setlength\itemsep{0.1em}
       \item \texttt{Namespace}
       \item \texttt{GlobalScope}
       \item \texttt{NamespaceAlias}
@@ -154,138 +302,124 @@
   \end{columns}
 \end{frame}
 
-\section{Interface}
-
-\subsection{Template metaprogramming}
 \begin{frame}[fragile]
-\frametitle{Template metaprogramming}
-  \small
+\frametitle{{\em Metaobject concepts}}
   \begin{itemize}
-    \item Tried paradigm with approx. 15 years of experience.
-    \item The pros and cons are generally known.
-    \item Lots of existing TMP libraries and utilities.
-    \item How does the above translate into valid C++?
-    \begin{itemize}
-      \footnotesize
-      \item {\em Metaobjects} -- anonymous types generated by the compiler on-demand
-      when the \texttt{\textbf{reflexpr}} operator is invoked --
-      \textbf{Cannot be instantiated}.
-      \item {\em Metaobject concepts} -- C++ Concepts
-      \item {\em Metaobject operations} -- class templates
-    \end{itemize}
-    \item Consistent with the existing type-traits and other standard and
-      third-party metaprogramming utilities.
-    \item Allows to implement the metaobjects as constants wrapped into a
-    lightweight class template:
-    \begin{lstlisting}{cpp}
-	template <__metaobject_id MoId> struct __metaobject;
+    \item \textbf{Distinguishing metaobjects} from other types -- \textbf{the
+    \texttt{is\_metaobject} type trait}:
+    \begin{lstlisting}
+	template <typename T> is_metaobject 
+	 : integral_constant<bool, (*@{\em implementation-defined}@*)> { };
+
+	template <typename T> constexpr bool is_metaobject_v
+	 = is_metaobject<T>::value;
+    \end{lstlisting}
+    \item \textbf{The \texttt{meta::Object} concept:}
+    \begin{lstlisting}
+	template <typename T> concept bool Object
+	 = is_metaobject_v<T>;
+    \end{lstlisting}
+    \item All other \textbf{metaobjects form a} generalization-specialization
+      \textbf{hierarchy} and have additional requirements:
+    \begin{lstlisting}
+	template <typename T> concept bool Named
+	 = Object<T> && (*@{\em implementation-defined}@*);
     \end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\subsection{Other paradigms}
 \begin{frame}[fragile]
-\frametitle{Other paradigms}
+\frametitle{{\em Metaobject sequences}}
   \begin{itemize}
-    \item C++11/14 brought support for new compile-time metaprogramming paradigms.
+    \item Lightweight \say{handle} to an ordered sequence of metaobjects.
     \begin{itemize}
-      \small
-      \item Constexpr metaprogramming -- Boost.Hana \& co.
-      \item The metaobject types can be wrapped into a named template which
-        can be used as the parameter for \texttt{constexpr} functions:
-      \begin{lstlisting}{cpp}
-	template <meta::Object M> struct metaobject { };
-
-	template <meta::Named M>
-	constexpr const char* get_name(metaobject<M>);
-      \end{lstlisting}
-      \item Or a constant metaobject id can be directly exposed later:
-      \begin{lstlisting}{cpp}
-	template <metaobject_id MoId> struct metaobject { };
-
-	template <metaobject_id M>
-	constexpr const char* get_name(metaobject<M>);
-      \end{lstlisting}
+      \footnotesize
+      \item class or namespace members,
+      \item list of storage class specifiers,
+      \item list of base class inheritance specifiers,
+      \item \ldots
     \end{itemize}
+    \item \textbf{Does not instantiate \say{contained} metaobjects eagerly.}
+    \item Definition:
+    \begin{lstlisting}
+	template <typename T> concept bool ObjectSequence
+	 = Object<T> && (*@{\em implementation-defined}@*);
+    \end{lstlisting}
+    \item \textbf{Operations:}
+    \begin{lstlisting}
+	template <ObjectSequence S>           struct get_size;
+	template <ObjectSequence S, size_t I> struct get_element;
+
+	template <ObjectSequence S, template <class...> class Tpl>
+	struct unpack_sequence;
+    \end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\subsection{Other paradigms}
+\section{Interface}
+
+\subsection{Header}
 \begin{frame}[fragile]
-\frametitle{Other paradigms}
+\frametitle{\em The \texttt{<reflexpr>} header file}
   \begin{itemize}
-    \item The Mirror reflection utilities\footnote
-      {\tiny{\url{http://kifri.fri.uniza.sk/~chochlik/mirror-lib/html/}}}
-      show that it is possible to implement other interfaces on top of the TMP layer.
-      \begin{itemize}
-        \small
-        \item Compile-time OOP-like layer
-        \begin{lstlisting}{cpp}
-	auto meta_person = reflected_type<sample::person>();
-	assert(meta_person.is_class());
-	assert(meta_person.get_name() == "person");
-	assert(meta_person.scope().is_namespace());
-	assert(meta_person.scope().get_name() == "sample");
-        \end{lstlisting}
-	\item A type erasure (not using virtual functions)
-	\item Polymorphic reflection layer (using virtual functions)
-        \begin{lstlisting}{cpp}
-	for_each(
-	    reflected_global_scope()->members(),
-	    [](const shared<meta_named>& mo)
-	    {
-	        std::cout << mo->get_name() << std::endl;
-	    }
-	);
-        \end{lstlisting}
-      \end{itemize}
+    \item \textbf{Must be included} prior to the use of \texttt{reflexpr}.
+    \item Defines the metaobject concepts.
+    \item Implements the metaobject operations.
+    \item All \textbf{reflection-related declarations go to} the \textbf{namespace
+    \texttt{std::meta}}, \textbf{except for} the \textbf{\texttt{is\_metaobject} trait}:
+    \begin{lstlisting}
+	namespace std {
+	  template <typename T> is_metaobject;
+
+	  namespace meta {
+	    template <typename T> concept bool Object;
+	    template <Object T> concept bool Named;
+	    ...
+	    template <Named MO> struct get_name;
+	    ...
+	  } // namespace meta
+	} // namespace std
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\subsection{Why TMP interface?}
+\begin{frame}[fragile]
+\frametitle{Why a template metaprogramming interface?}
+  \large
+  \begin{itemize}
+    \item \textbf{Tried paradigm} with approximately 15 years of experience.
+    \item The pros and cons are generally known.
+    \item Lots of \textbf{existing TMP libraries} and utilities.
+    \item \textbf{Consistent with} the existing \textbf{type-traits} and other
+      standard and third-party metaprogramming utilities.
+    \item \textbf{Other interfaces}, both compile-time and run-time \textbf{can}
+      and will \textbf{be implemented on top of the TMP interface}.
+    \begin{lstlisting}
+	template <Object MO> struct metaobject;
+
+	template <Object MO>
+	constexpr auto get_name(metaobject<MO>) {
+	    return meta::get_name_v<MO>;
+	}
+    \end{lstlisting}
   \end{itemize}
 \end{frame}
 
 \section{Notable features}
 
 \subsection{Typedef reflection}
-
-\begin{frame}[fragile]
-\frametitle{Typedef reflection}
-  \small
-  \begin{itemize}
-    \item Why do we need typedef reflection\footnote{and alias reflection
-      in general}?
-    \begin{itemize}
-      \footnotesize
-      \item {\em Typedefs to unnamed \verb@struct@s} -- we need to recognize
-      and refer to them somehow.
-      \item Semantic meaning -- important in many use cases. For example
-        \verb@int_64@ means \say{64-bit} while \verb@long@ does not generally
-	express this.
-      \item {\em Platform independence}
-        \begin{itemize}
-          \item Commonly used types like \verb@size_t@, \verb@string::iterator@
-          and many more are defined differently on different platforms.
-          \item Without typedef reflection cross-platform name
-          lookups can get difficult.
-        \end{itemize}
-      \item {\em Diagnostics and logging} -- many compilers already use typedef
-        names in diagnostic messages for good reasons. Reflection-based logging
-        facilities may want to do the same.
-    \end{itemize}
-    \item Typedef reflection is an optional feature, it is always possible to get
-      to the underlying type, the inverse is not true.
-  \end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]
 \frametitle{Typedef reflection -- unnamed \texttt{struct}}
-  \footnotesize
+  \small
   \begin{itemize}
-    \item Let's suppose that we have the following \verb@typedef@ to an unnamed
+    \item Suppose that we have the following \verb@typedef@ to an unnamed
       \verb@struct@\footnote{possibly in third-party code}:
-    \begin{lstlisting}{cpp}
+    \begin{lstlisting}{cpp}[basicstyle=\small\ttfamily]
 	typedef struct { int a, b, c; } my_struct;
     \end{lstlisting}
-    \item We want to serialize instances of this \verb@struct@ for network transport,
-      including the type name in the data format:
+    \item \textbf{We want to serialize instances} of this \verb@struct@
+      for network transport, \textbf{including the type name} in the data format:
       \begin{lstlisting}{cpp}{
 	cout << "{" << '"' << "type" << '"' << ": " << '"'
 	     << get_name_v<reflexpr(my_struct)>
@@ -293,12 +427,12 @@
 	/* ... */
 	cout << "}}";
       \end{lstlisting}
-    \item Output without \verb@typedef@ reflection:
-    \begin{lstlisting}
-	{"type": (*@\alert{""}@*), "attr": { ... }}
+    \item Output \textbf{without \texttt{typedef}} reflection:
+    \begin{lstlisting}[basicstyle=\small\ttfamily]
+	{"type":        (*@\alert{""}@*), "attr": { ... }}
     \end{lstlisting}
-    \item Output with \verb@typedef@ reflection:
-    \begin{lstlisting}
+    \item Output \textbf{with \texttt{typedef}} reflection:
+    \begin{lstlisting}[basicstyle=\small\ttfamily]
 	{"type": (*@\alert{"my\_struct"}@*), "attr": { ... }}
     \end{lstlisting}
   \end{itemize}
@@ -306,39 +440,39 @@
 
 \begin{frame}[fragile]
 \frametitle{Typedef reflection -- inter-platform differences}
-  \footnotesize
+  \small
   \begin{itemize}
     \item Let's suppose that we have the following declarations:
     \begin{lstlisting}{cpp}
 	#if PLATFORM_X
 	  typedef int       int32_t;
-	  typedef long      int64_t;
+	  typedef (*@\alert{long}@*)       int64_t;
 	#elif PLATFORM_Y
 	  typedef long      int32_t;
-	  typedef long long int64_t;
+	  typedef (*@\alert{long long}@*)   int64_t;
 	#endif
-	struct abc { int64_t a, b, c; };
+	struct abc { (*@\alert{int64\_t}@*) a, b, c; };
     \end{lstlisting}
-    \item We serialize instances of this \verb@struct@ on platform X and
+    \item We serialize instances of this \verb@struct@ \textbf{on platform X} and
       send them over the network to platform Y:
-    \item Without typedef reflection:
-    \begin{lstlisting}
-	"attr": {"a": {"t": "(*@\alert{long}@*)", "v": "(*@\alert{92233720368547758}@*)"},...}
+    \item \textbf{Without \texttt{typedef}} reflection:
+    \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+	"attr":{"a":{"t":"(*@\alert{long}@*)", "v":"(*@\alert{92233720368547758}@*)"},...}
     \end{lstlisting}
-    \item With typedef reflection:
-    \begin{lstlisting}
-	"attr": {"a": {"t":"(*@\alert{int64\_t}@*)","v": "(*@\alert{92233720368547758}@*)"},...}
+    \item \textbf{With \texttt{typedef}} reflection:
+    \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+	"attr":{"a":{"t":"(*@\alert{int64\_t}@*)","v":"(*@\alert{92233720368547758}@*)"},...}
     \end{lstlisting}
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Typedef reflection -- inter-platform differences (cont.)}
-  \footnotesize
+  \small
   \begin{itemize}
-  \item \ldots meanwhile at the receiving end on platform Y:
+  \item \ldots meanwhile at the receiving end \textbf{on platform Y}:
     \begin{itemize}
-    \item Without typedef reflection
+    \item \textbf{Without \texttt{typedef}} reflection
       \begin{lstlisting}{cpp}
 	json_obj obj = json_obj::from_string(json_str);
 	auto attr = obj["attr"]["a"];
@@ -348,7 +482,7 @@
 	   attr["v"] >> tmp; // (*@\alert{32-bit int overflow?, exception?}@*)
 	} /* ... */
       \end{lstlisting}
-    \item With typedef reflection
+    \item \textbf{With \texttt{typedef}} reflection
       \begin{lstlisting}{cpp}
 	json_obj obj = json_obj::from_string(json_str);
 	auto attr = obj["attr"]["a"];
@@ -363,274 +497,53 @@
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Typedef reflection -- Diagnostics}
-  \footnotesize
+\frametitle{Typedef reflection -- Diagnostics and logging}
   \begin{itemize}
-  \item We want to log each call of this function:
-    \begin{lstlisting}{cpp}
-	void foo(std::string::iterator i, std::string::iterator e)
-	{
-	    auto mp0 = reflexpr(i)(*@\footnote{direct variable reflection, in the future}@*);
-	    auto mp1 = reflexpr(e);
-	    log() << "foo("
-	          << get_name_v<get_type_m<mp0>>
-	          << " "
-	          << get_name_v<mp0>
-	          << ","
-	          << get_name_v<get_type_m<mp1>>
-	          << " "
-	          << get_name_v<mp1>
-	          << ")";
-	    /* ... */
-	}
-	std::string s
-	foo(s.begin(), s.end());
-    \end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Typedef reflection -- Diagnostics (cont.)}
-  \footnotesize
-  \begin{itemize}
-  \item Output without typedef reflection:
-    \begin{lstlisting}{cpp}
-	foo(const char* i, const char* e)
-	// or
-	foo(__normal_iterator i, __normal_iterator e)
-	// or
-	foo(__gnu_cxx::__normal_iterator<char*, std::basic_string<char> > i, __gnu_cxx::__normal_iterator<char*, std::basic_string<char> > e)
-    \end{lstlisting}
+  \item We want to log function calls -- why not \textbf{use reflection to get
+    type names}, source location info, etc.
+  \item Output \textbf{without \texttt{typedef}} reflection:
     \begin{itemize}
-      \scriptsize
-      \item Depends on the platform, compiler and the used implementation of
+      \footnotesize
+      \item Depends on the platform, compiler and the implementation of
         the standard library.
-      \item May even depend on build configuration (debug/release, 32-bit/64-bit)
+      \item May depend on build configuration (debug/release, 32-bit/64-bit)
     \end{itemize}
-  \item Output with typedef reflection:
-    \begin{lstlisting}{cpp}
-	foo(iterator i, iterator e)
-	// or (with a touch of metaprogramming)
-	foo(std::string::iterator i, std::string::iterator e)
-    \end{lstlisting}
+  \item Output \textbf{with \texttt{typedef}} reflection:
     \begin{itemize}
-      \scriptsize
+      \small
       \item Same on every platform
       \item Same for every build configuration
       \item Preserves semantic meaning
+      \item Matches the names in output to what is used in the code.
     \end{itemize}
   \end{itemize}
+  \large
+  If compiler error diagnostic output is aware of typedef names,
+    \textbf{why shouldn't reflection do the same?}
 \end{frame}
 
 \subsection{Non-public member reflection}
 \begin{frame}[fragile]
 \frametitle{Non-public member reflection}
-  \small
   \begin{itemize}
-    \item Necessary for several use cases (serialization, etc.)
-    \item Obtaining metaobjects reflecting non-public class members:
+    \item \textbf{Necessary for several use cases} (serialization, etc.)
+    \item Guidance from JAX: {\em Non-public reflection yes, but {\em greppable}.}
+    \item \textbf{Variants of operations} for {\em obtaining} the reflections
+      of the non-public members:
     \begin{itemize}
       \footnotesize
-      \item \verb@get_data_members@ vs. \verb@get_all_data_members@
-      \item \verb@get_member_types@ vs. \verb@get_all_member_types@
+      \item \texttt{get\_data\_members} vs. \texttt{\alert{get\_all\_data\_members}}
+      \item \texttt{get\_member\_types} vs. \texttt{\alert{get\_all\_member\_types}}
       \item \ldots
+    \end{itemize}
+    \item Variants of operations for {\em going back} to the base-level?
+    \begin{itemize}
+      \footnotesize
+      \item \texttt{get\_pointer} vs. \texttt{\alert{get\_nonpublic\_pointer}}
+      \item \texttt{get\_reflected\_type} vs. \texttt{\alert{get\_nonpublic\_reflected\_type}}
+      \item {\em greppable}, but does not scale very well
     \end{itemize}
     \item Freely access metadata; name, type information, scope information, etc.
-    \item Explicitly request access\footnote{and make that easily
-      \texttt{grep}pable in the code} when {\em manipulating} the base-level:
-    \begin{itemize}
-      \footnotesize
-        \item Special variant of the operations:
-        \begin{itemize}
-          \scriptsize
-          \item \verb@get_pointer@ vs. \verb@get_private_pointer@
-          \item \verb@get_reflected_type@ vs. \verb@get_private_reflected_type@
-          \item does not scale very well
-        \end{itemize}
-        \item Use reverse reflection\footnote{more on that in a second} instead:
-        \begin{lstlisting}{cpp}
-	reflexpr((*@\alert{private,}@*) meta_MyClass_private_member);
-        \end{lstlisting}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\section{Future extensions}
-
-\subsection{Additional concepts}
-\begin{frame}
-\frametitle{Additional concepts and operations}
-  \begin{itemize}
-    \small
-    \item Concepts for metaobjects reflecting language features not covered
-    by the initial proposal.
-  \end{itemize}
-  \begin{columns}
-    \scriptsize
-    \begin{column}{0.35\textwidth}
-      \begin{itemize}
-      \item \texttt{OverloadedFunction}
-      \item \texttt{Function}
-      \item \texttt{Constructor}
-      \item \texttt{Operator}
-      \item \texttt{FunctionParameter}
-      \item \texttt{Annotation}
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.40\textwidth}
-      \begin{itemize}
-      \item \texttt{Template}
-      \item \texttt{TemplateParameter}
-      \item \texttt{TemplateTypeParameter}
-      \item \texttt{TemplateNonTypeParameter}
-      \item \texttt{TemplateTemplateParameter}
-      \item \ldots
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \begin{itemize}
-    \small
-    \item Additional operations working on these concepts.
-  \end{itemize}
-  \begin{columns}
-    \scriptsize
-    \begin{column}{0.45\textwidth}
-      \begin{itemize}
-      \item \texttt{get\_overloads}
-      \item \texttt{get\_function\_parameters}
-      \item \texttt{get\_result\_type}
-      \item \texttt{get\_storage\_class\_specifiers}
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.40\textwidth}
-      \begin{itemize}
-      \item \texttt{get\_instantiation}
-      \item \texttt{get\_template}
-      \item \texttt{get\_template\_parameters}
-      \item \ldots
-      \end{itemize}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\subsection{Reverse reflection}
-\begin{frame}[fragile]
-\frametitle{Reverse reflection}
-  \small
-  \begin{itemize}
-    \item What happens when a metaobject is passed as the argument
-      to \texttt{reflexpr}?
-    \begin{itemize}
-      \item If the metaobject is not a model of \texttt{Reversible} -- ill-formed.
-      \item If the metaobject is a \texttt{Reversible} -- {\em reverse reflection}.
-    \end{itemize}
-    \item Reverse reflection -- as if the reflected declaration was used:
-    \begin{itemize}
-      \item Already in the proposal:
-      \begin{lstlisting}{cpp}
-	using meta_int = reflexpr(int);
-	// same as: int i = 123;
-	(*@\alert{reflexpr(meta\_int)}@*) i = 123;
-      \end{lstlisting}
-      \item In the future (among other things):
-      \begin{lstlisting}{cpp}
-	struct S { int i; };
-	S s{123};
-	// same as: s.i == 123
-	assert(s.(*@\alert{reflexpr(reflexpr(S::i))}@*) == 123);
-	// same as: std::string str;
-	(*@\alert{reflexpr(reflexpr(std))}@*)::string str;
-      \end{lstlisting}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\subsection{Identifier formatting}
-\begin{frame}[fragile]
-\frametitle{Identifier formatting}
-  \small
-  \begin{itemize}
-    \item The ability to generate identifiers programmatically\footnote{without
-       the preprocessor} is important for several use cases.
-    \begin{itemize}
-      \footnotesize
-      \item Structure-of-arrays generators
-      \item Object-relational mapping
-      \item \ldots
-    \end{itemize}
-    \item Let's use special operator, say \verb@identifier@\footnote{let the
-      bike-shedding begin}, with a format string literal
-      and a set of \verb@meta::Named@ metaobjects:
-      \begin{lstlisting}{cpp}
-	struct bar { int foo; };
-	using m_bar = reflexpr(bar);
-	using m_foo = reflexpr(bar::foo);
-
-	int (*@\alert{identifier("baz")}@*);               //int baz;
-	int (*@\alert{identifier("\%1", m\_bar)}@*);          //int bar;
-	int (*@\alert{identifier("\%2\_\%1", m\_bar, m\_foo)}@*);  //int foo_bar;
-	int (*@\alert{identifier("my\_\%1\_\%2", m\_bar, m\_foo)}@*);//int my_bar_foo;
-      \end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\subsection{Variadic composition}
-\begin{frame}[fragile]
-\frametitle{Variadic composition}
-  \scriptsize
-  \begin{itemize}
-    \item Allows more straightforward implementation of structure transformations:
-    \begin{itemize}
-      \item suppose we have a \verb@struct@ which we want to transform;
-      \begin{lstlisting}{cpp}
-	struct original { T1 attr1; T2 attr2; T3 attr3; };
-      \end{lstlisting}
-      \item with the following helper using identifier generation and variadic
-        composition,
-      \begin{lstlisting}{cpp}
-	template <DataMember ... MDM> struct soa_helper {
-	    std::vector<reflexpr(meta::get_type_t<MDM>)>
-	        (*@\alert{identifier("vec\_\%1", MDM)...}@*);
-	};
-      \end{lstlisting}
-      \item instantiating the \verb@soa_helper@:
-      \begin{lstlisting}{cpp}
-	using mdm = get_data_members_m<reflexpr(original)>;
-	using soa_orig = expand_sequence_t<mdm, soa_helper>;
-      \end{lstlisting}
-      \item would result in the following structure:
-      \begin{lstlisting}{cpp}
-	struct {
-	    std::vector<T1> vec_attr1;
-	    std::vector<T2> vec_attr2;
-	    std::vector<T3> vec_attr3;
-	};
-      \end{lstlisting}
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\subsection{Context-dependent reflection}
-\begin{frame}[fragile]
-\frametitle{Context-dependent reflection}
-  \small
-  \begin{itemize}
-    \item Would allow to obtain metadata based on the context in which the
-      reflection operator is invoked, instead of on the declaration name:
-    \begin{itemize}
-      \footnotesize
-      \item \verb@reflexpr(this::namespace)@ -- the innermost enclosing namespace.
-      \item \verb@reflexpr(this::class)@ -- the innermost enclosing class.
-      \item \verb@reflexpr(this::template)@ -- the innermost enclosing template.
-      \item \verb@reflexpr(this::function)@ -- the enclosing function.
-    \end{itemize}
-    \item Helpful in several distinct use cases
-    \begin{itemize}
-      \footnotesize
-        \item Implementation of logging
-        \item Implementation of cross-cutting aspects
-        \item \ldots
-    \end{itemize}
   \end{itemize}
 \end{frame}
 
