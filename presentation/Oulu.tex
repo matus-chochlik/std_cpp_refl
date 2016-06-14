@@ -159,9 +159,6 @@
       \item no visible internal structure
       \item creation of run-time objects of these types is not required
       \item can be implemented as template-wrapped constants 
-      \begin{lstlisting}
-	template <__metaobject_id MoId> struct __metaobject;
-      \end{lstlisting}
     \end{itemize}
     \item Returned by the \textbf{reflexpr} operator.
     \begin{lstlisting}[basicstyle=\normalsize\ttfamily]
@@ -210,7 +207,7 @@
       \end{itemize}
       \end{column}
     \end{columns}
-    \footnotetext{using the same principles}
+    \footnotetext{Using the same principles. See also N4111}
 \end{frame}
 
 \subsection{Metaobject operations}
@@ -431,6 +428,7 @@
     \item Requires a new keyword -- \texttt{reflexpr}.
     \begin{itemize}
       \item We did some checking -- \say{reflexpr} is not a very common word.
+      \item Zero occurrences in ACTCD16\footnote{\url{http://www.tomazos.com/actcd16/}}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -439,7 +437,7 @@
 \frametitle{Design -- the ugly}
   \large
   \begin{itemize}
-    \item It's complex
+    \item It's template metaprogramming\footnote{for the moment \ldots}
     \begin{itemize}
       \item May be too verbose for some use cases -- can\footnote{and will} be
       solved by implementing a simplifying fa\c{c}ade.
@@ -559,9 +557,7 @@
       \item Matches the names in output to what is used in the code.
     \end{itemize}
   \end{itemize}
-  \Large
-  If compiler diagnostic output is aware of typedef names,
-    \textbf{why shouldn't reflection do the same?}
+  \Large Compiler diagnostics use typedefs for a good reason. Same holds for reflection.
 \end{frame}
 
 \subsection{Non-public member reflection}
@@ -578,7 +574,8 @@
       \item \texttt{get\_member\_types} vs. \texttt{\alert{get\_all\_member\_types}}
       \item \ldots
     \end{itemize}
-    \item Variants of operations for {\em going back} to the base-level?
+    \item Variants of operations for {\em going back} to the base-level?\footnote
+     {not in the proposal at the moment}
     \begin{itemize}
       \footnotesize
       \item \texttt{get\_pointer} vs. \texttt{\alert{get\_nonpublic\_pointer}}
@@ -648,7 +645,6 @@ reflexpr(is_same_v<void,void>) // ill-formed
 	  int a,
 	  bool b;
 	  char c;
-	  double d;
 	};
 
 	template <meta::DataMember ... MDM> using (*@\alert{helper}@*)
@@ -658,7 +654,7 @@ reflexpr(is_same_v<void,void>) // ill-formed
 	  meta::get_data_members<reflexpr(foo)>, (*@\alert{helper}@*)
 	>;
 
-	is_same_v<X, tuple<int,bool,char,double>>; // 1
+	is_same_v<X, tuple<int,bool,char>>; // true
 \end{lstlisting}
 \end{frame}
 
@@ -685,17 +681,19 @@ reflexpr(is_same_v<void,void>) // ill-formed
 \end{lstlisting}
 \end{frame}
 
-\section{Issues}
+\section{Conclusion}
 
 \begin{frame}
 \begin{center}
 \Huge
 Thanks for your attention\\
-\textbf{That's all folks!}\footnote{not really}
+\textbf{That's all folks!}\footnote{not really, but we are not going there}
 \end{center}
 \end{frame}
 
-\subsection{Unnamed named}
+\section{Issues}
+
+\subsection{Open design decisions}
 \begin{frame}[fragile]
 \frametitle{Unnamed named}
   \begin{itemize}
@@ -735,8 +733,6 @@ using meta_X = get_type_m<reflexpr(outer.inner)>;
 \Large The following are \textbf{future extensions}, not part of this
 proposal. We want to lay the foundation before we paint the walls!\\
 \normalsize
-\vspace{2em}
-You have been warned.
 \end{center}
 \end{frame}
 
