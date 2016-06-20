@@ -391,7 +391,8 @@
     \item \textbf{Consistent with} the existing \textbf{type-traits} and other
       standard and third-party metaprogramming utilities.
     \item \textbf{Other interfaces}, both compile-time and run-time \textbf{can}
-      and will \textbf{be implemented on top of the TMP interface}.
+      and will \textbf{be implemented on top of\footnote{or parallel to, using
+      the same machinery} the TMP interface}.
     \begin{lstlisting}
 	template <Object MO> struct metaobject;
 
@@ -617,7 +618,7 @@
 \begin{frame}[fragile]
 \frametitle{Using the reflexpr operator}
 
-Valid operands for the \texttt{reflexpr} operator:
+\textbf{Valid operands} for the \texttt{reflexpr} operator:
 \begin{lstlisting}[basicstyle=\small\ttfamily]
 reflexpr() // reflects the global namespace
 reflexpr(::) // reflects the global namespace
@@ -628,7 +629,7 @@ reflexpr(std::launch) // reflects the enum type
 reflexpr(std::vector<int>) // reflects the class
 \end{lstlisting}
 
-Some of these will become valid in the future:
+\textbf{Some} of these \textbf{will become valid} in the future:
 \begin{lstlisting}[basicstyle=\small\ttfamily]
 reflexpr(1) // ill-formed
 reflexpr(std::sin) // ill-formed
@@ -642,7 +643,7 @@ reflexpr(is_same_v<void,void>) // ill-formed
 \frametitle{Getting class member types}
 \begin{lstlisting}[basicstyle=\small\ttfamily]
 	struct foo {
-	  int a,
+	  int a;
 	  bool b;
 	  char c;
 	};
@@ -662,7 +663,7 @@ reflexpr(is_same_v<void,void>) // ill-formed
 \begin{frame}[fragile]
 \frametitle{Getting class member names}
 \begin{lstlisting}[basicstyle=\small\ttfamily]
-	struct foo { int a, bool b; char c; double d; };
+	struct foo { int a; bool b; char c; double d; };
 
 	template <meta::DataMember...MDM> struct (*@\alert{helper}@*) {
 	  static const char** get(void) {
@@ -687,7 +688,7 @@ reflexpr(is_same_v<void,void>) // ill-formed
 \begin{center}
 \Huge
 Thanks for your attention\\
-\textbf{That's all folks!}\footnote{not really, but we are not going there}
+\textbf{That's all folks!}\footnote{not really, but we want to finish before the sunset}
 \end{center}
 \end{frame}
 
@@ -722,6 +723,48 @@ using meta_X = get_type_m<reflexpr(outer.inner)>;
         \item Add a new operation -- \verb@bool(meta::is_unnamed<X>::value)@?
       \end{itemize}
     \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{Implementation}
+
+\subsection{Constant value-based metaobjects}
+\begin{frame}[fragile]
+\frametitle{New implementation in \texttt{clang}}
+  \large
+  \begin{itemize}
+    \item \textbf{New fundamental type \texttt{\_\_metaobject\_id}} -- basically
+      a ripped-off of \texttt{long}.
+    \item \textbf{New operator \texttt{\_\_reflexpr}} -- same arguments as
+      \texttt{reflexpr}, returns \texttt{\_\_metaobject\_id}.
+    \item A metaobject is implemented as:
+    \begin{lstlisting}[basicstyle=\ttfamily\normalsize]
+	template <__metaobject_id MoId>
+	struct __metaobject;
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \large
+  \begin{itemize}
+    \item \textbf{Operations implemented by built-ins:}
+    \begin{lstlisting}[basicstyle=\ttfamily\normalsize]
+	constexpr __metaobject_id
+	__metaobj_get_scope(__metaobject_id);
+    \end{lstlisting}
+    \item \textbf{Wrapped into templates:}
+    \begin{lstlisting}[basicstyle=\ttfamily\normalsize]
+	template <typename MO>
+	struct get_scope;
+
+	template <__metaobject_id MoId>
+	struct get_scope<__metaobject<MoId>> {
+	    typedef __metaobject<
+	       __metaobj_get_scope(MoId)
+	    > type;
+	};
+    \end{lstlisting}
   \end{itemize}
 \end{frame}
 
