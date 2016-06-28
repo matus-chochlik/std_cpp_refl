@@ -1,0 +1,69 @@
+- Named even if anonymous (+is_anonymous operation?).
+- Only direct (type and namespace) alias reflection.
+- Add the `get_display_name` operation to Named.
+- meta::GlobalScope should be a meta::ScopeMember (and a meta::Named).
+- Access to private class members:
+  - Getting lists of members
+    - Additional parameter to `get_data_members`, `get_member_types`, ...
+    - Additional operation allowing access to private members in a sequence:
+      - `include_nonpublic_m<get_data_members_m<reflexpr(...)>>`
+  - Getting back to the base-level from a metaobject.
+    - Additional parameter to `get_pointer`,`get_reflected_type`, ...
+    - Additional parameter to `(un)reflexpr`?
+    - Additional operation explicitly allowing access?
+      - meta::Accessible concept ?
+      - `is_publicly_accessible` operation on meta::Reversible?
+      - `get_pointer_v<access_nonpublic_m<Metaobject>>`
+
+- Concept for user-defined declarations (as opposed to built-ins, the global
+  scope, specifiers, etc.)
+  - Only MOs satisfying this concept would have the source location operations
+    - `get_source_file`
+    - `get_source_line`
+    - `get_source_column`
+  - meta::Declared?
+  - meta::UserDeclared?
+  - meta::UserDefined?
+
+- Rename the reverse variant of `reflexpr` to `unreflexpr`? - improves
+  greppability, helps to distinguish reflection from reverse reflection.
+
+- Mention why we require the reflexpr header (can help implementations)
+
+- Examples for simple use cases and possible simplified interfaces
+  - get full type name (including formatting options for whitespaces, const,...)
+
+Implementation
+
+- Reflect private, protected, public specifiers
+- Reflect enum (and enum class?)
+- At least a basic implementation of reflects_same.
+
+Additional nice to have features:
+
+- Identifier generation
+  - Possible names/spellings for the operator:
+    - reflexpr("fmtstr", MO...)
+    - unreflexpr("fmtstr", MO...) -- the best IMO
+    - reflexpr_ident
+    - reflident
+    - makeident
+    - identifier
+- Variadic composition
+- Construction of Metaobjects without reflection?
+  - or modification of existing Metaobjects ?
+  - Motivation: replace the type of a reflected variable with a typedef
+  - replace_type_m<reflexpr(my_var), reflexpr(std::size_t)>
+  - would loose the reversibility capability?
+
+- Generalized *lazy* typelists to replace metaobject sequences
+  - `get_size`
+  - `get_element`
+  - `unpack_typelist`
+  - User-defined construction of such typelists:
+    - `make_typelist<T...>` ?
+  - we technically can do just with MoSeqs in reflection.
+
+- Strong typedefs.
+  - Conversions
+

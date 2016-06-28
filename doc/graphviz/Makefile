@@ -5,8 +5,8 @@ NEATO ?= neato
 INKSCAPE ?= inkscape
 
 REVISION_NODES ?= True
-MAX_REVISION ?= 1
-REVISIONS = $(shell seq 0 $(MAX_REVISION))
+MAX_REVISION ?= 2
+REVISIONS = $(shell seq 1 $(MAX_REVISION))
 
 ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))
@@ -29,7 +29,7 @@ svg-diagrams: $(foreach R,$(REVISIONS), svg-diagrams-$(R))
 	$(INKSCAPE) --export-pdf=$@ $<
 
 ./out/%.svg: ./tmp/%.svg | out
-	$(XSLTPROC) --output $@ ./dot-svg-fixup.xsl $^
+	$(XSLTPROC) --nonet --output $@ ./dot-svg-fixup.xsl $^
 
 ./out/index.html: index.html | out
 	cp $< $@
