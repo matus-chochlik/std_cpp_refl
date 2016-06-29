@@ -27,17 +27,12 @@
 
 - Rename the reverse variant of `reflexpr` to `unreflexpr`? - improves
   greppability, helps to distinguish reflection from reverse reflection.
+  Also simplifies the implementation, and can be used for identifier generation.
 
 - Mention why we require the reflexpr header (can help implementations)
 
 - Examples for simple use cases and possible simplified interfaces
   - get full type name (including formatting options for whitespaces, const,...)
-
-Implementation
-
-- Reflect private, protected, public specifiers
-- Reflect enum (and enum class?)
-- At least a basic implementation of reflects_same.
 
 Additional nice to have features:
 
