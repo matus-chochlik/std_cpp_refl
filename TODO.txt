@@ -24,6 +24,7 @@
   - meta::Declared?
   - meta::UserDeclared?
   - meta::UserDefined?
+  - Or just a new operation `meta::is_user_defined` or `meta::has_declaration`
 
 - Rename the reverse variant of `reflexpr` to `unreflexpr`? - improves
   greppability, helps to distinguish reflection from reverse reflection.
@@ -40,6 +41,7 @@ Additional nice to have features:
   - Possible names/spellings for the operator:
     - reflexpr("fmtstr", MO...)
     - unreflexpr("fmtstr", MO...) -- the best IMO
+    - idreflexpr("fmtstr", MO...) -- the second best ?
     - reflexpr_ident
     - reflident
     - makeident
