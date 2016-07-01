@@ -116,6 +116,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Named"/>
 	</operation>
 
+	<operation name="get_display_name"
+		since_revision="2"
+		result="StringConstant"
+		brief="returns the display name of the $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Named"/>
+	</operation>
+
 	<metaobject name="Specifier"
 		since_revision="1"
 		reflects="a specifier (const, virtual, static, noexcept, public, etc.)"
