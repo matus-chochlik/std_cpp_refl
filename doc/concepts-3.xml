@@ -541,4 +541,88 @@ by the compiler which allow access to metadata reflecting specific program decla
 		scope="meta"
 		indicates="EnumValue"
 	/>
+
+	<metaobject name="Function"
+		since_revision="3"
+		reflects="a function"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="Linkable"/>
+	</metaobject>
+
+	<trait name="is_function"
+		since_revision="3"
+		scope="meta"
+		indicates="Function"
+	/>
+
+	<operation name="get_pointer"
+		uname="get_function_pointer"
+		since_revision="3"
+		result="FunctionPointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the function is a class member then the pointer is a class member function pointer,
+		otherwise it is a plain function pointer."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_result_type"
+		since_revision="3"
+		result="Type"
+		brief="returns a $(result) reflecting the return type of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<operation name="get_parameters"
+		uname="get_function_parameters"
+		since_revision="3"
+		result="ObjectSequence" element="FunctionParameter"
+		brief="returns a $(result) of $(elements) reflecting the parameters of a $(operand)."
+	>
+		<argument type="Function"/>
+	</operation>
+
+	<metaobject name="OverloadedFunction"
+		since_revision="3"
+		reflects="a set of functions"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="get_overloads"
+		since_revision="3"
+		result="ObjectSequence" element="Function"
+		brief="returns a $(result) of the $(element) reflecting the concrete overloads of a $(operand)."
+	>
+		<argument type="OverloadedFunction"/>
+	</operation>
+
+	<metaobject name="Parameter"
+		since_revision="3"
+		reflects="a function parameter"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<trait name="is_parameter"
+		since_revision="3"
+		scope="meta"
+		indicates="Parameter"
+	/>
+
+	<metaobject name="FunctionParameter"
+		since_revision="3"
+		reflects="a function parameter"
+	>
+		<generalization concept="Parameter"/>
+		<constraint operation="get_scope" trait="is_function"/>
+		<order_after concept="Function"/>
+	</metaobject>
+
 </concepts>
