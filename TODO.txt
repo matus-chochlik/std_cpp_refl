@@ -1,4 +1,3 @@
-- Named even if anonymous (+is_anonymous operation?).
 - Only direct (type and namespace) alias reflection.
 - Add the `get_display_name` operation to Named.
 - meta::GlobalScope should be a meta::ScopeMember (and a meta::Named).
