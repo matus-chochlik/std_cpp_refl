@@ -1,0 +1,77 @@
+\subsection{Metaobject unique ID}
+\label{fut-metaobject-uid}
+
+In order to accommodate different programming paradigms, it may be advantageous
+to represent metaobjects as both types {\em and} optionally also as
+\verb@constexpr@ {\em values} and have the ability to convert between these
+representations.
+
+The compile-time value representation of a metaobject could be defined as:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+class object_uid
+{
+public:
+	constexpr object_uid(void) noexcept;
+	constexpr object_uid(const object_uid&) noexcept;
+
+	friend constexpr
+	bool operator == (object_uid, object_uid) noexcept;
+
+	friend constexpr
+	bool operator != (object_uid, object_uid) noexcept;
+
+	friend constexpr
+	bool operator <  (object_uid, object_uid) noexcept;
+};
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+
+The actual identifier could internally be something like a constant value of
+\verb@int@, \verb@std::size_t@ or \verb@std::intptr_t@ storing an index, a hash
+or an encoded (and possibly encrypted) pointer to the internal representation
+of the metaobject in the compiler or something similar.
+This would however be a hidden implementation detail.
+
+The advantage of the \verb@object_uid@ is that we could represent heterogeneous
+metaobjects -- different types, as \verb@constexpr@ instances of a homogeneous
+type and store them in \verb@constexpr@ data structures and use them with
+\verb@constexpr@ functions.
+
+Instances of \verb@object_uid@ could be queried from a metaobject by a new
+operation, implemented by the following template:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Object T>
+struct get_uid
+{
+	constexpr const object_uid value = /* ... */;
+};
+
+template <Object T>
+constexpr object_uid get_uid_v = get_uid<T>::value;
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+
+As long as an instance of \verb@meta::object_uid@ stayed \verb@constexpr@, it would
+also be possible to convert it back to a metaobject (type), for example by using
+a new version of the reflection operator \verb@reflexpr@:
+
+\begin{minted}[tabsize=4]{cpp}
+// pseudocode
+constexpr Object reflexpr(meta::object_uid);
+\end{minted}
+
+This feature would make the use of reflection more convenient in some use cases
+or under some paradigms and could help to simplify the implementation of the
+higher-level fa\c{c}ades.

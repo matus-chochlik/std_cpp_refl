@@ -1,0 +1,105 @@
+\subsubsection{Class data members (2)}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflexpr>
+#include <iostream>
+
+struct foo
+{
+private:
+	int _i, _j;
+public:
+	static constexpr const bool b = true;
+	float x, y, z;
+private:
+	static double d;
+};
+
+template <typename ... T>
+void eat(T ... ) { }
+
+template <typename Metaobjects, std::size_t I>
+int do_print_data_member(void)
+{
+	using namespace std;
+
+	typedef meta::get_element_m<Metaobjects, I> metaobj;
+
+	cout	<< I << ": "
+		<< (meta::is_public_v<metaobj>?"public":"non-public")
+		<< " "
+		<< (meta::is_static_v<metaobj>?"static":"")
+		<< " "
+		<< meta::get_name_v<meta::get_type_m<metaobj>>
+		<< " "
+		<< meta::get_name_v<metaobj>
+		<< endl;
+
+	return 0;
+}
+
+template <typename Metaobjects, std::size_t ... I>
+void do_print_data_members(std::index_sequence<I...>)
+{
+	eat(do_print_data_member<Metaobjects, I>()...);
+}
+
+template <typename Metaobjects>
+void do_print_data_members(void)
+{
+	using namespace std;
+
+	do_print_data_members<Metaobjects>(
+		make_index_sequence<
+			meta::get_size_v<Metaobjects>
+		>()
+	);
+}
+
+template <typename MetaClass>
+void print_data_members(void)
+{
+	using namespace std;
+
+	cout<< "Public data members of " << meta::get_name_v<MetaClass> << endl;
+
+	do_print_data_members<meta::get_data_members_m<MetaClass>>();
+}
+
+template <typename MetaClass>
+void print_all_data_members(void)
+{
+	using namespace std;
+
+	cout << "All data members of " << meta::get_name_v<MetaClass> << endl;
+
+	do_print_data_members<meta::get_all_data_members_m<MetaClass>>();
+}
+
+int main(void)
+{
+	print_data_members<reflexpr(foo)>();
+	print_all_data_members<reflexpr(foo)>();
+
+	return 0;
+}
+\end{minted}
+
+This program produces the following output:
+
+\begin{verbatim}
+Public data members of foo
+0: public static bool b
+1: public  float x
+2: public  float y
+3: public  float z
+All data members of foo
+0: non-public  int _i
+1: non-public  int _j
+2: public static bool b
+3: public  float x
+4: public  float y
+5: public  float z
+6: non-public static double d
+\end{verbatim}
+

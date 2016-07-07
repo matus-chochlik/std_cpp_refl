@@ -1,0 +1,179 @@
+\subsection{Implementing the factory pattern}
+
+The purpose of the {\em Factory} pattern is to separate its caller,
+who requires a new instance of a {\em Product} type, from the details
+of this instance's construction. The caller only supplies the input data
+to the factory and collects the new instance. There are several aspects
+that need to be considered when designing and implementing a factory.
+
+The input data for the construction of an instance of the {\em Product}
+can be stored in an external representation (an XML fragment, a RDBS database dataset,
+a JSON document, etc.) or even entered by the user through a GUI oron the
+command-line and so on, and would need to be converted into a native C++ representation.
+The new instance also might be constructed as a copy of another already existing
+\emph{prototype} instance of the same type sitting in an object pool.
+
+The product may be polymorphic and the exact type may not even be
+known to the user. It may have one or several constructors, each of which
+may require a different set of arguments. It may or may not have
+constructors with a specific signature, for example a default constructor.
+
+A default constructor does not make sense for many types and requiring it
+just because the type will be used with a factory is problematic\footnote{
+or even impossible with third-party code}.
+Consider for example what a \say{default} instance of \verb@person@ or \verb@address@ would
+look like -- it would not have any meaning at all.
+Thus well-designed factories should not depend on the presence of constructors
+with specific signatures.
+
+Furthermore it might be desirable, that the constructor used to construct
+a particular instance is picked based on the available input data which is known
+only at run-time, but not when the factory is designed and implemented.
+
+Let's consider the implementation of a factory for a rather simple \verb@point@ class,
+representing a point in 3-dimensional space:
+
+\begin{minted}[tabsize=4]{cpp}
+struct point
+{
+    double _x, _y, _z;
+
+    point(double x, double y, double z): _x(x), _y(y), _z(z) { }
+
+    point(double w): _x(w), _y(w), _z(w) { }
+
+    point(void): _x(0.0), _y(0.0), _z(0.0) { }
+
+    point(const point&) = default;
+
+    // ... other declarations
+};
+\end{minted}
+
+A naive hand-coded implementation, of a factory constructing
+\verb@point@s from some \verb@Data@ type (for example an XML node) might look like this:
+
+\begin{minted}[tabsize=4]{cpp}
+class point_factory
+{
+private:
+    unsigned pick_constructor(Data data)
+    {
+        // somehow examine the data and pick
+        // the most suitable constructor of the point class
+    }
+
+    double extract(Data data, string param)
+    {
+        // somehow extract and convert the value
+        // of a named parameter from the data
+    }
+public:
+    point create(Data data)
+    {
+        switch(pick_constructor(data))
+        {
+            case 0: return point();
+
+            case 1: return point(extract(data, "w"));
+
+            case 2: return point(
+                        extract(data, "x"),
+                        extract(data, "y"),
+                        extract(data, "z")
+                    );
+
+            default: throw exception(...);
+        }
+    }
+};
+\end{minted}
+
+Now suppose that there is some pool of existing \verb@point@ objects
+and let's extend the factory to use this pool and return copies if applicable:
+
+\begin{minted}[tabsize=4]{cpp}
+
+extern pool_of<point>& point_pool;
+
+class point_factory
+{
+private:
+    unsigned pick_constructor(Data data)
+    {
+        // same as before but also allow the copy
+        // constructor to be picked if the data says so
+    }
+
+    double extract(Data data, string param);
+public:
+    point create(Data data)
+    {
+        switch(pick_constructor(data))
+        {
+            // same as before, but add a new case
+            // returning copies from the pool
+
+            case 3: return point_pool.get(data);
+
+            default: throw exception(...);
+        }
+    }
+};
+\end{minted}
+
+When looking at the hand-coded factories above, it is obvious that
+implementing and maintaining\footnote{as the constructed types evolve and change}
+factories for several dozens of classes in a larger
+application is a highly repetitive, tedious and possibly error-prone
+process and at least partial automation is desirable.
+
+Factory classes must generally handle several tasks
+which fit into two distinct and nearly orthogonal categories:
+
+\begin{itemize}
+\item{\emph{Product type-related}}
+        \begin{itemize}
+        \item{\emph{Constructor description}} -- providing the metadata describing
+        the individual constructors, their parameters, etc.
+        \item{\emph{Constructor dispatching}} -- calling the selected constructor.
+        with the supplied arguments which results in a new instance of the product type.
+        \end{itemize}
+
+\item{\emph{Input data representation-related}}
+        \begin{itemize}
+        \item{\emph{Input data validation}} -- checking if the input data match
+        the available constructors.
+        \item{\emph{Constructor selection}} -- examining the input data, comparing it
+        to the metadata describing product's constructors and determining
+        which constructor should be called.
+        \item{\emph{Getting the argument values}} -- determining where the argument
+        values should come from and getting them:
+                \begin{itemize}
+                \item{\emph{Conversion from the external representation}} -- this usually applies
+                to intrinsic C++ types, but complex types could be converted directly too.
+                \item{\emph{Recursive construction by using another factory}} -- this usually
+                requires some form of cooperation between the parent and its child factories
+                and it means that all the tasks discussed here must be repeated also for
+                the recursively constructed parameter(s).
+                \item{\emph{Copying an existing instance}} -- for example from an object pool.
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+Parts from each category can be combined with parts from the other to create new
+factories which promotes code re-usability. Factories constructing instances of a single
+product from various data representations share the product-related components
+and factories constructing instances of various product types from a single input data representation
+share the input-data-related parts. This approach has several advantages like better
+maintainability or the ability to develop the components separately and combine them later
+via metaprogramming.
+
+If the input data for a metaprogram generating the factory class, that is
+the metadata describing the Product type\footnote{specifically the constructors of Product}
+can be obtained by using compile-time reflection then new factory classes can be generated
+automatically for nearly arbitrary type provided that the input data type-related parts are
+implemented.
+
+The scope of this paper does not allow to fully explain the implementation
+of the factory generators. Please see \cite{Chochlik-CAI} for further details.

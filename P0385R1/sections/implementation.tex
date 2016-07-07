@@ -1,0 +1,36 @@
+\section{Experimental implementation}
+
+A fork of the clang compiler with a initial, partial, experimental implementation
+of this proposal can be found on github \cite{ReflexprImplementation}.
+The modified compiler can be built by following the instructions listed
+in \cite{ClangGettingStarted}, but instead of checking out the official clang
+repository, the sources on the \texttt{mirror-reflection} branch of the modified
+repository should be used.
+
+The implementation required changes (mostly additions) to roughly 3500 lines
+of code in the compiler plus circa 540 lines in the \texttt{<reflexpr>} header.
+
+All examples listed in section \ref{working-examples} are working with
+the modified compiler.
+
+This particular implementation works by generating and adding new \texttt{CXXRecordDecl}s,
+with member typedefs and member constants providing basic meta-data, to the AST.
+The templates implementing the metaobject operations are referencing and
+occasionally transforming the members of the metaobject types.
+
+The \texttt{is\_metaobject} trait is implemented by extending the existing
+clang's type-trait framework and adding the \texttt{\_\_is\_metaobject} builtin
+operator.
+
+The \meta{ObjectSequence} operations, namely \texttt{get\_size} and
+\texttt{get\_element} are implemented lazily by using the new
+\texttt{\_\_reflexpr\_size} and \texttt{\_\_reflexpr\_element} operators.
+
+Note that the limited time between the committee meetings and out limited experience
+at hacking clang internals at the time of starting with the fork,
+lead to the implementation not being lazy and thus neglecting some important
+opportunities to do optimizations. We expect that the compiler implementers
+or ourselves during our next attempts will do a better job.
+
+Also note that P0194R0 underwent some last-minute changes,
+which were not incorporated into the implementation yet.

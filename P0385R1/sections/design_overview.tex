@@ -1,0 +1,79 @@
+\subsection{Basic overview}
+
+As the introduction briefly mentions, the metadata reflecting base-level
+program declarations has its own structure. One way to maintain this structure
+and to organize the individual, but related pieces of metadata reflecting
+for example the structure of a class is to compose them into {\em metaobjects}.
+
+In P0194R0 we propose to add support for
+compile-time reflection to C++ by the means of lightweight, compiler-generated
+types -- {\em metaobjects}, providing \hyperref[term-metadata]{metadata}
+describing various \hyperref[term-base-meta-level]{base-level} program declarations.
+
+The metaobjects exist only at the type-level, they do not have any constructors
+or members and cannot be instantiated\footnote{It's not possible to create
+a run-time variable of metaobject type.}.
+
+Their sole purpose is to give a \hyperref[term-first-class]{first-class identity}
+to the reflected entity\footnote{Namespace, typedef, function, parameter, specifier, etc.},
+so that we can pass it as an argument or a return value in metaprograms and to
+separate the reflection of a declaration from the querying of metadata\footnote
+{Which will happen very often in the more complex use cases}.
+
+We introduce a new reflection operator -- \verb@reflexpr@ which returns a
+metaobject type reflecting its operand.
+
+For example:
+
+\begin{minted}{cpp}
+typedef reflexpr() meta_global_scope;
+typedef reflexpr(int) meta_int;
+typedef reflexpr(std) meta_std;
+typedef reflexpr(std::size_t) meta_std_size_t;
+typedef reflexpr(std::thread) meta_std_thread;
+typedef reflexpr(std::pair) meta_std_pair;
+\end{minted}
+
+Since there are many different kinds of
+base-level reflectable declarations, the metaobjects reflecting them are
+modeling various {\em metaobject concepts}. The metaobjects can be inspected
+by {\em metaobject traits}, which indicate whether a metaobjects has or has
+not a particular property;
+
+\begin{minted}{cpp}
+static_assert(meta::has_name_v<reflexpr(std)>, "");
+static_assert(meta::has_scope_v<reflexpr(int)>, "");
+static_assert(meta::is_scope_v<reflexpr(std::string)>, "");
+static_assert(meta::is_alias_v<reflexpr(std::string::size_type)>, "");
+\end{minted}
+
+or if is falls into a particular category:
+
+\begin{minted}{cpp}
+static_assert(meta::is_global_scope_v<reflexpr()>, "");
+static_assert(meta::is_namespace_v<reflexpr(std)>, "");
+static_assert(meta::is_type_v<reflexpr(int)>, "");
+static_assert(meta::is_class_v<reflexpr(std::string)>, "");
+static_assert(meta::is_typedef_v<reflexpr(std::string::size_type)>, "");
+\end{minted}
+
+The individual pieces of metadata can be obtained from a metaobject by using one
+of the class templates which comprise its interface.
+
+Some of this metadata like the class name or number of base classes is provided
+as compile-time constant values, some as base-level types, like the original
+type of the class and some in the form of other metaobjects, like the metaobject
+reflecting the scope, the sequence of metaobjects reflecting the members, etc.:
+
+\begin{minted}{cpp}
+using meta_str = reflexpr(std::string);
+
+get_name_v<meta_str>; // a compile-time constant string
+get_reflected_type_t<meta_str>; // a base-level type: std::string
+get_scope_m<meta_str>; // another metaobject reflecting the scope
+\end{minted}
+
+P0194R0 also defines the initial subset
+of metaobject concepts which we assume to be essential
+and which will provide a good starting point for future extensions.
+

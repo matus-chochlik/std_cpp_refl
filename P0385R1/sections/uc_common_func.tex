@@ -1,0 +1,140 @@
+\subsection{Generation of common functions}
+\label{use-case-common-func}
+
+This use case was part of the \say{targeted use cases} in the committee's
+call for compile-time reflection proposals~\cite{ISOCPP-N3814}: 
+
+{\em There are many functions that generally consist of boilerplate code,
+performing some action for each member of a class. Such functions include
+equality operators, comparison operators, serialization functions,
+hash functions and swap functions.
+}
+
+In other words for arbitrary structured type, for example:
+
+\begin{minted}[tabsize=4]{cpp}
+struct S
+{
+	int i;
+	long l;
+	float f;
+};
+\end{minted}
+
+we want to create equality or non-equality comparison function like:
+
+\begin{minted}[tabsize=4]{cpp}
+bool S_equal(const S& a, const S& b)
+{
+	bool result = true;
+	result &= a.i == b.i;
+	result &= a.l == b.l;
+	result &= a.f == b.f;
+	return result;
+}
+
+bool S_not_equal(const S& a, const S& b)
+{
+	bool result = false;
+	result |= a.i != b.i;
+	result |= a.l != b.l;
+	result |= a.f != b.f;
+	return result;
+}
+\end{minted}
+
+or a hash function:
+
+\begin{minted}[tabsize=4]{cpp}
+std::size_t S_hash(const S& a)
+{
+	std::size_t result = 0u;
+	result ^= std::hash<int>()(a.i);
+	result ^= std::hash<long>()(a.l);
+	result ^= std::hash<float>()(a.f);
+	return result;
+}
+\end{minted}
+
+This is one of the many use cases where the \verb@for_each@ function
+described in section \ref{fac-for-each} comes in handy. The above could be
+implemented along the lines of:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename T>
+struct compare_data_members
+{
+	const T& a;
+	const T& b;
+	bool& result;
+
+	template <typename MetaDataMember>
+	void operator()(identity<MetaDataMember>) const
+	{
+		auto mem_ptr = meta::get_pointer_v<MetaDataMember>;
+		result &= a.*mem_ptr == b.*mem_ptr;
+	}
+};
+
+template <typename T>
+bool generic_equal(const T& a, const T& b)
+{
+	using metaT = reflexpr(T);
+	bool result = true;
+
+	meta::for_each<meta::get_all_data_members_m<metaT>>(
+		compare_data_members<T>{a, b, result}
+	);
+
+	return result;
+}
+\end{minted}
+
+If the reversible reflection feature described in section \ref{fut-reverse-reflection}
+was implemented then the helper could take advantage of it:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename T>
+struct compare_data_members
+{
+	const T& a;
+	const T& b;
+	bool& result;
+
+	template <typename MetaDataMem>
+	void operator()(identity<MetaDataMem>) const
+	{
+		result &= a.reflexpr(MetaDataMem) == b.reflexpr(MetaDataMem);
+	}
+};
+\end{minted}
+
+The helper could also be implemented by using a lambda function:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+std::size_t generic_hash(const T& a)
+{
+	std::size_t result = 0u;
+
+	meta::for_each<meta::get_all_data_members_m<reflexpr(T)>>(
+		[&result,&a](auto meta_dm)
+		{
+			using MetaDataMem = decltype(meta_dm)::type;
+			using MetaT = meta::get_type_m<MetaDataMem>;
+
+			using T = meta::get_reflected_type_t<MetaT>;
+			// or T = reflexpr(metaT);
+
+			auto mem_ptr = meta::get_pointer_v<MetaDataMem>;
+
+			result ^= std::hash<T>(a.*mem_ptr);
+			// or  ^= std::hash<T>(a.reflexpr(MetaDataMem));
+		}
+	);
+
+	return result;
+}
+\end{minted}
+

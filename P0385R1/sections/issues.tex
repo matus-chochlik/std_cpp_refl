@@ -1,0 +1,197 @@
+\section{Issues}
+
+\subsection{Anonymous declarations}
+
+\textbf{Q:} {\em How should anonymous namespaces, nested structs, unions or
+the global scope for that matter be reflected?}
+
+In our opinion all such declarations should be reflected by
+the same metaobjects as their named counterparts, but without conforming
+to the \meta{Named} concept.
+
+So for example the \meta{GlobalScope} is a \meta{Namespace}, but
+the \verb@has_name@ trait should return \verb@false@ and the \verb@get_name@
+operation would be either undefined or return an empty string.
+
+On the other hand, even anonymous namespaces, classes or unions are scopes,
+so the metaobjects reflecting them should conform to the \meta{Scope} concept.
+
+Same reasoning applies to anonymous namespaces, nested structs or unions.
+
+\subsection{Reflection of \texttt{struct}s and \texttt{union}s}
+
+\textbf{Q:} {\em Do we need separate \meta{Struct} and \meta{Union}
+concepts or is \meta{Class} sufficient to cover all cases?}
+
+We don't have any strong opinion in this regard.
+
+\subsection{Alternatives for breaking access restrictions}
+\label{issue-breaking-access}
+
+\textbf{Q:} {\em Some people were objecting to reflection being able to break
+access restrictions. Would this capability be more acceptable if it had to be
+explicitly allowed or if it could be denied?}
+
+Breaking class member access restrictions is important for many use cases,
+like non-intrusive serialization of third-party classes, which may include
+the serialization of non-public data-members.
+But there may be situations where the programmer would like to prevent
+reflection from having access to non-public members.
+
+This may be achieved either by annotating such members with an attribute;
+
+\begin{minted}[tabsize=4]{cpp}
+class very_private
+{
+private:
+	[[nonreflectable]] int _really_secret;
+public:
+	/* ... */
+};
+\end{minted}
+
+or by explicitly allowing access to reflection, for example by extending
+the \verb@friend@ mechanism:
+
+\begin{minted}[tabsize=4]{cpp}
+class not_so_private
+{
+private:
+	friend reflexpr;
+	int _public_secret;
+public:
+	/* ... */
+};
+\end{minted}
+
+If this is deemed necessary, then we favor the first option.
+
+Another option is to explicitly ask permission when accessing class members,
+which are considered private or protected in a particular context.
+This can be done either by using a new variant of the access operation
+like \verb@get_private_pointer@ and \verb@get_protected_pointer@
+vs. \verb@get_pointer@:
+
+\begin{minted}[tabsize=4]{cpp}
+class mycls
+{
+private:
+	typedef int _my_t;
+	_my_t _secret;
+public:
+	typedef value_type;
+	value_type value ;
+	/* ... */
+};
+
+using meta_mycls = reflexpr(meta_mycls);
+using meta_mycls_dm = meta::get_all_data_members_m<meta_mycls>;
+using meta_mycls_mt = meta::get_all_member_types_m<meta_mycls>;
+
+using meta::get_element_m;
+using meta::get_pointer_t;
+using meta::get_private_pointer_t;
+
+get_private_pointer_v<get_element_m<meta_mycls_dm, 0>>; // OK, asking nicely
+get_pointer_v<get_element_m<meta_mycls_dm, 0>>; // error, member is private
+get_pointer_v<get_element_m<meta_mycls_dm, 1>>; // OK, member is public
+
+using meta::get_reflected_type_t;
+using meta::get_private_reflected_type_t;
+
+get_private_reflected_type_t<get_element_m<meta_mycls_mt, 0>>; // OK, asking nicely
+get_reflected_type_t<get_element_m<meta_mycls_mt, 0>>; // error, member is private
+get_reflected_type_t<get_element_m<meta_mycls_mt, 1>>; // OK, member is public
+\end{minted}
+
+However this approach would not scale very well because it requires three\footnote
+{or at least two} variants of all such operations.
+
+A better alternative to the above might be to use a special variant of the
+\hyperref[fut-reverse-reflection]{reverse reflection operator} like
+\verb@reflexpr(private, Metaobject)@ and \verb@reflexpr(protected, Metaobject)@\\
+vs. \verb@reflexpr(Metaobject)@:
+
+\begin{minted}[tabsize=4]{cpp}
+class mycls
+{
+private:
+	typedef int _my_t;
+	_my_t _secret;
+public:
+	typedef value_type;
+	value_type value ;
+	/* ... */
+};
+
+using meta_mycls = reflexpr(meta_mycls);
+using meta_mycls_dm = meta::get_all_data_members_m<meta_mycls>;
+using meta_mycls_mt = meta::get_all_member_types_m<meta_mycls>;
+
+// un-reflect the data members
+reflexpr(private, get_element_m<meta_mycls_dm, 0>); // OK, asking nicely
+reflexpr(get_element_m<meta_mycls_dm, 0>); // error, member is private
+reflexpr(get_element_m<meta_mycls_dm, 1>); // OK, member is public
+
+// un-reflect the member types
+reflexpr(private, get_element_m<meta_mycls_mt, 0>); // OK, asking nicely
+reflexpr(get_element_m<meta_mycls_mt, 0>); // error, member is private
+reflexpr(get_element_m<meta_mycls_mt, 1>); // OK, member is public
+\end{minted}
+
+\subsection{Interaction with attributes}
+
+\textbf{Q:} {\em Should we even reflect attributes? If so, how will the reflection
+of generalized attributes look like?}
+
+Currently generalized attributes are used {\em mostly} as hints to the compiler.
+They can help the compiler to do some optimizations\footnote{for example the
+\texttt{probably(true)} or \texttt{carries\_dependency} attributes} or to
+indicate that the user really means to do something what in other circumstances
+could be a bug\footnote{like the \texttt{fallthrough} or \texttt{maybe\_unused}
+attributes} that the compiler warns about, etc.
+
+Some people argue that generalized attributes are not supposed to have any
+semantic effects -- a compiler should be able to completely strip 
+a program of all attributes and it should not have any effects on the behavior
+of the program.
+
+Attributes could however be viewed more broadly as a generic mechanism for
+annotating declarations\footnote{Associating one or more constant values with
+the declarations.} in the code, without explicitly saying that the recipient
+can only be the compiler.
+There are valid use cases for user annotations and since the annotations
+usually provide additional conceptual (meta-)information about a declaration,
+reflection is a natural mechanism for accessing the annotations.
+
+We favor the view that on the base-level the compiler should be able to
+strip attributes\footnote{or to ignore attributes which it does not understand},
+but it should reflect them on the meta-level on demand.
+
+Having covered that, the reflection of the \say{simple} attributes like
+\verb@[[attr1]]@ or \verb@[[namespace::attr2]]@ could be pretty straightforward:
+
+We add a \meta{Attribute} concept and its trait, say \verb@meta::is_attribute@,
+make it conform to \meta{Named} and \meta{Scoped} concepts and then add an
+operation to the interface of \meta{Object} like \verb@get_attributes@, returning
+a sequence of metaobjects reflecting the attributes on a base-level declaration.
+
+The complication is that attributes can have nearly arbitrary parameters;
+\verb@[[probably(true)]]@, \verb@[[deprecated("reason")]]@,
+\verb@[[visibility(hidden)]]@, \verb@[[gnu::aligned(64)]]@. The reflection of
+such attributes and their arguments is currently unresolved.
+
+\subsection{Interaction with concepts}
+
+\textbf{Q:} {\em Are there any special interactions between compile-time
+reflection and concepts?}
+
+Unresolved.
+
+\subsection{Interaction with modules}
+
+\textbf{Q:} {\em Are there any special interactions between compile-time
+reflection and modules?}
+
+Unresolved.
+

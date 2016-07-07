@@ -1,0 +1,675 @@
+\section{Frequently asked questions}
+
+\subsection{Why metaobjects, why not reflect directly with type traits?}
+\label{faq-why-metaobjects}
+
+\textbf{Q:} {\em Why should we bother with defining a set of metaobject concepts,
+let the compiler generate models of these concepts and use those to obtain
+the metadata? Why not just extend the existing type traits?}
+
+\textbf{A:} The most important reasons are the \hyperref[design-completeness]{completeness} and the scope of reflection.
+Type traits\footnote{As they are defined now.} work just with types.
+A reflection facility should however provide much more metadata.
+It should be able to reflect namespaces, functions, constructors,
+class inheritance, templates, specifiers, variables, etc.
+
+Without drastically changing the rules specifying what can or cannot be a template
+parameter, we cannot properly reflect C++'s second-class declarations like
+namespaces.
+
+This is also connected with the usability of reflection in metaprograms.
+Using types to reflect various base-level declarations, allows to
+pass a representation of a namespace, a constructor, a specifier or a parameter,
+around various \say{subroutines} of a metaprogram as a parameter or a return value.
+
+In order to achieve this by other means it would be necessary to make namespaces,
+etc. first-class objects or at least to allow them to become template arguments.
+
+So with type-based metaobjects we can do for example the following:
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	// do something terribly useful
+}
+
+foo<reflexpr(int)>(); // works
+foo<reflexpr(std)>(); // works
+foo<reflexpr(std::string)>(); // works
+foo<reflexpr(std::string::size_type)>(); // works
+foo<reflexpr(std::size_t)>(); // works and is different from the above
+foo<reflexpr(std::pair)>(); // works
+foo<reflexpr(std::sqrt)>(); // works
+foo<reflexpr(static)>(); // works
+\end{minted}
+
+meanwhile without metaobjects:
+
+\begin{minted}{cpp}
+template <something Param>
+void foo(void)
+{
+	// do something terribly useful, if possible
+}
+
+foo<int>(); // works
+foo<std>(); // error?
+foo<std::string>(); // works
+foo<std::string::size_type>(); // works
+foo<std::size_t>(); // works but same as the above
+foo_tpl<std::pair>(); // works (if there are two versions of foo)
+foo<std::sqrt>(); // error?
+foo<static>(); // error?
+\end{minted}
+
+\subsection{OK, but why not reflect directly with several different operators?}
+
+\textbf{Q:} {\em Alright, we partially agree with the reasoning in the
+\hyperref[faq-why-metaobjects]{previous question}, but why don't we use several
+different operators to get the various pieces of metadata (like declaration names,
+types, scopes, etc.) directly, skipping the metaobjects?
+For example we already have \verb@decltype(expr)@ so why not add,
+\verb@declname(expr)@ or \verb@declscope(expr)@, etc.}
+
+\textbf{A:} The main reason is that there are many base-level declarations
+with various properties which we want to reflect and having a separate
+operator for every one of them\footnote{There may be even several dozen.},
+will require many new reserved keywords which can break existing code.
+
+And still, what would the operator reflecting for example a scope return?
+In case of class scopes it could return a type, but what if we are asking
+about the scope of a global-scope or namespace-level declaration? We would
+either end up with something like the proposed metaobjects,
+or we would have to make some other (not type-based) representation of any
+possible scope.
+In case of the latter we would loose the ability to pass the representation
+of the scope as parameters to metaprograms.
+
+The same applies to every other operation returning an expression which does
+not have first-class identity in base-level C++.
+
+It is possible that, the templates implementing the metaobject operations
+will internally use compiler built-ins\footnote{Just like some of the type traits
+are implemented.}, but these can use compiler-specific reserved keywords
+and they will all operate on the metaobjects.
+
+\subsection{Creating a separate type for each metaobject is so heavyweight.}
+
+\textbf{Q:} {\em Isn't the creation of a new type for each metaobject too
+heavyweight? Won't it lead to unacceptable increases in the memory footprint
+and compilation times?}
+
+\textbf{A:} This might have been a problem if the metaobjects were regular
+types and if the implementation was too coarse-grained or too eager.
+
+For example if upon the invocation of \verb@reflexpr(std::string)@, the representations
+of all the metadata related to the \verb@std::string@ type\footnote{Like
+the compile-time representation of its name and the metaobjects reflecting its scope
+or its members.} were generated immediately.
+
+This is however {\em not} the case.
+
+The metaobjects need to be types just enough so that they can be used
+as template arguments\footnote{Similar to the \texttt{void} type}.
+They don't need to have any name, scope, implicitly generated constructors,
+destructors, assignment operators, virtual method tables, run-time type information,
+etc. All they need to have is a unique identity and their internal representations
+need to point to the internal representations of the declarations\footnote
+{Which the compiler needs to maintain anyway, regardless of reflection.}
+which they reflect.
+
+Also our proposal allows very fine granularity. The result of \verb@reflexpr@
+can be a very lightweight type, as we just described and the individual
+\say{attributes} like the name, scope, members, specifiers, etc. related
+to the metaobject are materialized only when requested by one of the operations
+defined for that particular metaobject concept, like \verb@get_name@,
+\verb@get_scope@, \verb@get_data_members@, etc.
+
+\subsection{Creating a separate type for each string is so heavyweight.}
+
+\textbf{Q:} {\em Isn't the creation of a new type for each string returned
+for example from the \verb@get_name@ operation too heavyweight?
+Won't that lead to unacceptable increases in the memory footprint
+and compilation times?}
+
+\textbf{A:} The answer is that we {\em do not} insist on creating a separate
+type for each string returned by reflection. What we insist on is that we
+should have the ability to reason about and manipulate the strings at compile-time.
+A static, \verb@constexpr@-initialized, zero-terminated array of \verb@char@s
+gives us this ability.
+
+So for example the implementation of the \verb@get_name@ operation should
+{\em be equivalent} to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+template <Named T>
+struct get_name
+{
+	typedef const char value_type[N+1];
+	static constexpr const char value[N+1] = {...,'\0'};
+};
+\end{minted}
+
+Some members of the committee suggested that for example the
+\texttt{basic\_string\_constant} from N4121~\cite{ISOCPP-N4121} or
+N4236~\cite{ISOCPP-N4236} or whichever compile-time
+string representation eventually makes it to the standard could
+be used to implement the \verb@get_name@ operation,
+but this in just an option not a requirement for our part.
+We trust in the ability of the compiler vendors to pick and
+implement the best option and to use all the tricks at their disposal
+to make expressions like;
+
+\begin{minted}{cpp}
+std::string(std::meta::get_name_v<reflexpr(std::pair)>);
+\end{minted}
+
+as efficient as possible.
+
+\subsection{There's already a type trait for that!}
+
+\textbf{Q:} {\em Why do you introduce a metaobject trait like
+\verb@std::meta::is_class<Metaobject>@  when there already are equivalent
+type traits like \verb@std::is_class<T>@?}
+
+\textbf{A:} The reason is consistency.
+While it is true that there are a few metaobject traits, which indicate the
+same thing as already existing type traits, omitting the metaobject trait
+in favor of the type trait would break consistency and make the interface less generic.
+
+For example the following is much more consistent and nicer,
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	if(std::meta::is_class_v<Metaobject>) { ... }
+	else if(std::meta::is_typedef_v<Metaobject>) { ... }
+	else if(std::meta::is_type_v<Metaobject>) { ... }
+	else if(std::meta::is_namespace_v<Metaobject>) { ... }
+	else if(std::meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+than,
+
+\begin{minted}{cpp}
+template <typename T, typename Metaobject>
+void foo(void)
+{
+	if(std::is_class_v<T>) { ... }
+	else if(meta::is_typedef_v<Metaobject>) { ... }
+	else if(meta::is_type_v<Metaobject>) { ... }
+	else if(meta::is_namespace_v<Metaobject>) { ... }
+	else if(meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+or even,
+
+\begin{minted}{cpp}
+template <typename Metaobject>
+void foo(void)
+{
+	if(std::is_class_v<get_reflected_type_t<Metaobject>>) { ... }
+	else if(meta::is_typedef_v<Metaobject>) { ... }
+	else if(meta::is_type_v<Metaobject>) { ... }
+	else if(meta::is_namespace_v<Metaobject>) { ... }
+	else if(meta::is_function_v<Metaobject>) { ... }
+}
+\end{minted}
+
+Even more important is the problem with breaking genericity:
+
+\begin{minted}{cpp}
+template <typename Metaobject, template <class> class Trait>
+void bar(void)
+{
+	if(Trait<Metaobject>::value) { ... }
+	else { ... }
+}
+
+bar<reflexpr(std), std::meta::is_namespace>(); // works
+bar<reflexpr(static), std::meta::is_specifier>(); // works
+bar<reflexpr(std::string), std::meta::is_class>(); // works
+bar<reflexpr(std::string), std::is_class>(); // error!
+\end{minted}
+
+
+In C++ there are many examples of various expressions doing the same thing,
+this is just one of them.
+Having several options is not a bad thing, pick the one most appropriate for your
+particular use case.
+
+
+\subsection{There's already another expression for that!}
+
+\textbf{Q:} {\em There are situations where you can do something much more
+easily without reflection than with it, like \verb@&variable@ vs.
+\verb@meta::get_pointer_v<reflexpr(variable)>@ or\\\verb@decltype(var)@ vs.
+\verb@meta::get_reflected_type_t<meta::get_type_m<reflexpr(var)>>@, etc.}
+
+\textbf{A:} Of course there are! There are also situations where the decision
+that you want to get a pointer to or a to get the type of a (reflected) variable
+can be separated from the actual site where you access (reflect) the variable by
+several layers of metaprogram templates.
+
+Consider for example the following pseudo-code:
+
+\begin{minted}[tabsize=4]{cpp}
+
+template <typename T>
+void handle_var(const char* name, const T* ptr)
+{
+	/* ... */
+}
+
+template <MetaVariable MV>
+void handle_meta_var(void)
+{
+	// this may be true only in a fraction of cases
+	if(some_logic())
+	{
+		// we need the pointer just here
+		handle_var(
+			meta::get_name_v<MV>,
+			meta::get_pointer_v<MV>
+		);
+	}
+}
+
+template <MetaClass MC>
+void handle_meta_class(void);
+
+template <MetaType MT>
+void handle_meta_type(void);
+
+template <MetaVariable MV>
+void handle_meta_ns(void);
+
+template <Metaobject MO>
+void generic_func_1(void)
+{
+	// this may be true only in a fraction of cases
+	if(meta::is_variable_v<MO>)
+	{
+		handle_meta_var<MO>();
+	}
+	else if(meta:is_class_v<MO>)
+	{
+		handle_meta_class<MO>();
+	}
+	else if(meta:is_type_v<MO>)
+	{
+		handle_meta_type<MO>();
+	}
+	else if(meta:is_namespace_v<MO>)
+	{
+		handle_meta_ns<MO>();
+	}
+}
+
+template <Metaobject MO>
+void generic_func_2(void)
+{
+	if(some_trait_v<MO>)
+	{
+		generic_func_1<MO>();
+	}
+	else ...
+}
+
+// ... generic_func_3 - generic_func_19 ...
+// all eventually calling generic_func_1
+
+template <Metaobject MO>
+void generic_func_20(void)
+{
+	if(some_logic())
+	{
+		generic_func_19<MO>();
+	}
+	else
+	{
+		generic_func_15<MO>();
+	}
+}
+
+void main(int argc, const char** argv)
+{
+	std::string str;
+	generic_func_20<reflexpr(str)>();
+	generic_func_18<reflexpr(std)>();
+	generic_func_19<reflexpr(argc)>();
+	generic_func_20<reflexpr(std::pair)>();
+	// etc.
+
+	return 0;
+}
+\end{minted}
+
+In this case we actually need the pointer or a reference to a variable
+only in a fraction of cases, deep inside of the (meta-)program.
+
+If we didn't have the \verb@get_pointer@ operation, we would have to
+get the pointer very early and pass it through the whole algorithm.
+Furthermore in many cases there would not be any meaningful pointer to
+get so we would have pass \verb@nullptr@. Now imagine that there were more
+metaobjects, and potentially more pointers to pass around.
+
+Having said this, we of course do not force anybody to use \verb@get_pointer@
+when simply using the ampersand operator directly would be enough.
+
+Both cases are valid and again you should pick the most appropriate option
+for your situation.
+
+\subsection{All these additional options make it hard for the novices.}
+\label{faq-hard-on-novices}
+
+\textbf{Q:} {\em This reflection proposal is too complex to be learned by
+beginning C++ programmers and the novices might start to use unnecessarily
+complicated expressions to do simple things, like doing
+\verb@get_pointer_v<reflexpr(x)>@ instead of \verb@&x@.}
+
+\textbf{A:} 
+A novice could equally do:
+
+\begin{minted}{cpp}
+double a[2];
+*(a+int(-exp(complex<double>(0, M_PI)).real())) = 123.456;
+\end{minted}
+
+instead of
+
+\begin{minted}{cpp}
+double a[2];
+a[1] = 123.456;
+\end{minted}
+
+Doing mistakes is a part of being a beginner in something.
+
+C++ is a complex\footnote{No pun intended.} language which means that
+the reflection mechanism also must be expressive enough to capture
+the complexity of the base-level.
+However we do expect that once static reflection is available and the most
+common use cases are identified a more convenient and straightforward
+fa\c{c}ade will be added on top of it for simple and common things,
+while maintaining the usability of reflection in more elaborate use cases.
+
+\subsection{Why are the metaobjects anonymous?}
+
+\textbf{Q:} {\em Why should the metaobjects be anonymous types as opposed to
+types with well defined and standardized names or concrete template classes, (possibly with some
+special kind of parameter accepting different arguments than types and constants)?}
+
+\textbf{A:} We wanted to avoid defining a specific naming convention, because it would
+be difficult to do so and very probably not user friendly (see C++ name mangling). There
+already are precedents for anonymous types -- for example C++ {\em lambdas}.
+
+Another option would be to define a concrete set of template classes like:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace std {
+
+	template <typename T>
+	class meta_type /* Model of MetaType */
+	{ };
+
+} // namespace std
+\end{minted}
+
+which could work with types, classes, etc., but would not work with namespaces,
+constructors, etc. (see also the Q/A above):
+
+\begin{minted}[tabsize=4]{cpp}
+namespace std {
+
+	template <something X> // problem
+	class meta_constructor /* Model of Meta-Constructor */
+	{ };
+
+	template <something X> // problem
+	class meta_namespace /* Model of Meta-Namespace */
+	{ };
+
+} // namespace std
+
+typedef std::meta_namespace<std> meta_std; // problem
+\end{minted}
+
+Instead of this, the metaobjects are anonymous and their (internal) identification
+is left to the compiler. From the user's point of view, the metaobject can be distinguished
+by the means of the metaobject traits.
+
+\subsection{Reflection violating access restrictions to class members?}
+
+\textbf{Q:} {\em Why do you allow reflection to bypass the class member access
+restrictions? This is like giving people nuclear weapons. I don't want people
+to have nuclear weapons [sic].}
+
+\textbf{A:}
+This is a valid point, but there are several different ways to break access restrictions
+if the programmer wants to and we feel that restricting reflection only to public
+class members would severely limit its usefulness in implementing things like
+non-intrusive serialization, object-relational mapping, etc.
+
+Having said that we also try to design the interface to indicate to the users
+that they are breaking encapsulation. For example the \say{basic} operation
+for getting class members -- \verb@get_data_members@, returns only the
+reflections of {\em public} class data members. To get access to all data members
+including the private or protected ones, the \verb@get_all_data_members@\footnote
+{We are open to suggestions for a better, more expressive or dissuasive name.}
+operation has to be used.
+
+Furthermore the \verb@is_public@ trait can be used to test if a class member
+is publicly accessible or not.
+
+See also \hyperref[issue-breaking-access]{the issues section}.
+
+\subsection{We need to get around access restrictions, but not in reflection.}
+
+\textbf{Q:} {\em OK, we understand that there are use cases where we need
+to get around access restrictions, but why do this in reflection?
+Why don't we use some other, unrelated, \say{magic} operator for that?}
+
+\textbf{A:}
+In our opinion if want\footnote{and we do!} to add a way of sneaking past
+access restrictions, then reflection is the perfect place to do it.
+
+Reflection is like a way to look at a program from a higher dimension,
+not perceivable from the base-level itself. The access restrictions are in
+the base-level language for a reason and having to go through the meta-level
+to get around them seems appropriate.
+
+Another reason for not using an operator -- a reserved identifier, is to avoid
+causing conflicts with names in existing code.
+
+\subsection{Why do we need typedef reflection?}
+
+\textbf{Q:} {\em Why is it necessary to distinguish between types and typedefs
+or type aliases on the meta-level when they are not distinguishable on the
+base-level? Or why do we need to reflect on syntax rather than just on semantics?}
+
+\textbf{A:} Our preferred answer is that it's better to have more information
+then less. Being able to distinguish typedefs or aliases on the meta-level,
+brings additional information about what the programmer meant, not just how
+it is implemented;
+\begin{itemize}
+	\item \verb@size_type@ vs. \verb@unsigned@,
+	\item \verb@rank_type@ vs. \verb@short@,
+	\item \verb@const_iterator@ vs. \verb@const Element*@,
+	\item \verb@height_cm@ vs. \verb@float@,
+	\item \verb@pid_t@ vs. \verb@int@,
+	\item \verb@sighandler_t@ vs. \verb@void (*)(int)@,
+	\item etc.
+\end{itemize}
+
+If we reflect on typedefs or aliases we still know the underlying types,
+the opposite is not true.  
+
+Having this information is important\footnote{or at least very nice to have}
+in several use cases.
+
+\begin{itemize}
+	\item Debugging or trace messages (containing function signatures)
+		are much more readable and informative if they also contain 
+		the typedef names of parameter types, return values or variables,
+		not just their underlying types.
+	\item Cross-platform serialization or remote procedure calls may require
+		typedef names instead of native type names which vary between
+		platforms.
+\end{itemize}
+
+%TODO: mention some other use cases
+
+\subsection{Why \meta{ObjectSequence}s? Why not replace them with typelists?}
+
+\textbf{Q:} {\em Why do you define the \meta{ObjectSequence} concept and its
+operations? There are type-lists proposed for the inclusion into the standard,
+why not use those?}
+
+\textbf{A:} The reason why we use \meta{ObjectSequence}s is efficiency.
+Operations like \verb@get_data_members@ are currently designed to return
+metaobjects --  very lightweight types representing a whole set of
+other metaobjects, without actually instantiating the elements eagerly,
+unlike typelists which would require that all contained
+metaobjects are generated as a part of the definition of the typelist.
+There are use cases where returning a typelist directly would be much
+less efficient than returning the lightweight metaobject sequence.
+
+For example the user might want to test a big set of classes and find those,
+which have a precise number of members or find those which have multiple base
+classes or just get the metaobject reflecting only the first\footnote
+{zero-th} data member of a class having hundreds of members:
+
+\begin{minted}{cpp}
+get_element_m<get_data_members_m<reflexpr(my_class)>, 0>;
+\end{minted}
+
+This operation would involve the creation of two metaobjects:
+\begin{enumerate}
+	\item the \meta{ObjectSequence} and
+	\item the \meta{DataMember} reflecting the first data member.
+\end{enumerate}
+
+On the other hand if this operation returned a typelist of metaobjects,
+then all metaobjects would have to be generated, even if most of them
+were not used afterwards.
+
+What we can do is to add an operation converting a \meta{ObjectSequence}
+into a typelist on demand, which can be implemented trivially with the
+\verb@meta::unpack_sequence@ template:
+
+\begin{minted}{cpp}
+template &lt;typename ... T&gt;
+struct type_list { /* ... */ };
+
+
+template &lt;ObjectSequence MOS&gt;
+using convert_to_list = unpack_sequence&lt;MOS, type_list&gt;;
+\end{minted}
+
+\subsection{Why not reflect with constexpr instances of the same type?}
+
+\textbf{Q:} {\em Why are the metaobjects implemented as distinct types and
+their interface as specializations of templates? Why not provide the metadata
+as \verb@constexpr@ instances of the same type? Then we could replace the metaobject
+sequences with arrays of \verb@constexpr@ instances and the templates with
+\verb@constexpr@ functions. Wouldn't the latter be more nice and efficient?}
+
+\textbf{A:}
+In other words why don't we instead of:
+
+\begin{minted}{cpp}
+using mo = reflexpr(my_ns::my_class);
+
+std::cout << meta::get_name_v<mo> << std::endl;
+std::cout << meta::get_name_v<meta::get_scope_m<mo>> << std::endl;
+meta::for_each<meta::get_data_members_m<mo>>(my_func);
+\end{minted}
+
+do something like one of the following:
+
+\begin{enumerate}[label=\textbf{\Alph*)}]
+
+\item
+\begin{minted}{cpp}
+meta::object mo = reflexpr(my_ns::my_class);
+
+std::cout << meta::get_name(mo) << std::endl;
+std::cout << meta::get_name(meta::get_scope_t(mo)) << std::endl;
+meta::for_each(meta::get_data_members_t(mo), my_func);
+\end{minted}
+
+\item
+\begin{minted}{cpp}
+meta::object mo = reflexpr(my_ns::my_class);
+
+std::cout << mo.get_name() << std::endl;
+std::cout << mo.get_scope().get_name() << std::endl;
+mo.get_data_members().for_each(my_func)
+meta::for_each(meta::get_data_members(mo, my_func);
+\end{minted}
+
+\end{enumerate}
+
+One of the reasons for the chosen representation of metaobjects and their
+interface was consistency with the already existing type traits and the
+established practices in metaprogramming\footnote{Yes we are aware of the
+Boost.Hana library and the metaprogramming paradigm which it brings.}.
+
+Having said that, there is nothing preventing us to implement a fa\c{c}ade
+with similar syntax as either of the above\footnote{and even others}, on top
+of our chosen representation and we do plan to do that in the future.
+\say{Niceness} is generally a matter of taste and we want to accommodate
+various programming styles. See the various layers implemented by the Mirror
+reflection utilities \cite{Chochlik-Mirror-doc} for some examples.
+
+In regard to efficiency, the types representing the metaobjects are very
+lightweight up to the point of being comparable to compile-time constants.
+Also the representation which we have chosen allows for a very fine granularity
+and metadata which are not queried don't have to be generated by the compiler.
+This may not be true if the metadata is represented as instances of \verb@constexpr@
+structures, which must be initialized or would require some \say{magic}
+implementation.
+
+Also note that the metaobjects reflecting the various members of a scope\footnote{
+namespaces, native types, structured types, enumerations, functions, etc.}
+can and will be heterogeneous. This means that we will either have to implement
+them only as homogeneous compile-time identifiers and implement their interface
+with \say{magic} \verb@constexpr@ functions very similar to our templates, or
+we cannot store them in an array.
+
+Furthermore, representing metaobject sequences as arrays of such \verb@constexpr@
+objects also requires all of the metaobjects in the sequence to be instantiated
+even if only a few of them will actually be used. See also the previous
+question for more details on this.
+
+\subsection{Why not return fully qualified names?}
+
+\textbf{Q:} {\em Why doesn't the \texttt{get\_name} operation return fully
+qualified names instead of base names?}
+
+\textbf{A:} This is because it is much easier to generate full names from
+base names by using metaprogramming, than to do the reverse -- to parse the
+base name from a fully qualified and decorated name at compile-time.
+
+Also there are several possibilities how the full name can be formatted;
+should it contain any whitespaces, if so where and how many?, should the
+\verb@const@ and \verb@volatile@ qualifiers be put before or after the type
+name?, etc.
+
+These details shouldn't be handled by the basic reflection facility, but by
+a higher-level library.
+
+\subsection{What about the use cases from the committee's CFP?}
+
+\textbf{Q:} {\em How does this proposal handle the targeted use cases
+from the committee's Call for Compile-Time Reflection
+Proposals~\cite{ISOCPP-N3814}?}
+
+\textbf{A:} Some of these use cases are discussed in the sections
+\ref{use-case-common-func}, \ref{use-case-enum-to-string}
+and \ref{use-case-struct-transf} of this paper.
+
