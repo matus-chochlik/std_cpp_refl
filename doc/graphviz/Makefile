@@ -4,9 +4,10 @@ DOT ?= dot
 NEATO ?= neato
 INKSCAPE ?= inkscape
 
-REVISION_NODES ?= True
+REVISION_NODES ?= False
 MAX_REVISION ?= 2
-REVISIONS = $(shell seq 1 $(MAX_REVISION))
+MIN_REVISION ?= 2
+REVISIONS = $(shell seq $(MIN_REVISION) $(MAX_REVISION))
 
 ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))

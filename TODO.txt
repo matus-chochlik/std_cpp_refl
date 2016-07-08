@@ -1,3 +1,5 @@
+- What is the scope of const std::string*&?
+- Do we need a separate meta::Union?
 - Distinguish "declaration" scope and "lookup" scope (see enums).
 - enum vs enum class:
   - Different concepts

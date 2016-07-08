@@ -264,12 +264,13 @@ def print_metaobject_node(opts, concepts, metaobject):
 		"revision": opts.revision,
 		"typename_T": "typename T" if is_base else "Object T",
 		"head_color": metaobject_head_color,
-		"cell_color": opts.cell_color
+		"cell_color": opts.cell_color,
+                "padding": 6
 	}
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s-%(revision)d.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="%(padding)d" HREF="%(href)s-%(revision)d.svg">"""
 	% values)
 
 	opts.output.write("""
@@ -293,12 +294,12 @@ def print_metaobject_node(opts, concepts, metaobject):
 		for x in findall(opts, metaobject, "generalization")
 	]
 	requirements += [
-		"%s&lt;T&gt;" % x.attrib["name"]
-		for x in findall(opts, concepts, "trait[@indicates='%s']" % name)
+		"%s&lt;%s&lt;T&gt;&gt;" % (x.attrib["concept"], x.attrib["operation"])
+		for x in findall(opts, metaobject, "constraint")
 	]
 	requirements += [
-		"%s&lt;%s&lt;T&gt;&gt;" % (x.attrib["trait"], x.attrib["operation"])
-		for x in findall(opts, metaobject, "constraint")
+		"__%s(T)&nbsp;&nbsp;" % x.attrib["name"]
+		for x in findall(opts, concepts, "trait[@indicates='%s']" % name)
 	]
 
 	if is_base: requirements += ["is_metaobject"]
@@ -333,29 +334,23 @@ def print_trait_node(opts, concepts, trait):
 		"href" : href,
 		"revision": opts.revision,
 		"head_color": opts.trait_head_color,
-		"cell_color": opts.cell_color
+		"cell_color": opts.cell_color,
+                "padding" : 5
 	}
 
 	opts.output.write("""
 	%(name)s [label=<
-	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" HREF="%(href)s-%(revision)d.svg">"""
+	<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="0" CELLPADDING="%(padding)d" HREF="%(href)s-%(revision)d.svg">"""
 	% values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="%(head_color)s" COLSPAN="2" ALIGN="LEFT">template &lt;Object T&gt;</TD>
+		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT">constexpr bool</TD>
 	</TR>""" % values)
 
 	opts.output.write("""
 	<TR>
-		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT">struct <B>%(name)s</B></TD>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER">:</TD>
-	</TR>""" % values)
-
-	opts.output.write("""
-	<TR>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="RIGHT"><B>BooleanConstant</B></TD>
-		<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{ };</TD>
+		<TD BGCOLOR="%(head_color)s" ALIGN="LEFT"><B>__%(name)s(T)</B></TD>
 	</TR>""" % values)
 
 	opts.output.write("""
