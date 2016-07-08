@@ -1,3 +1,8 @@
+- Distinguish "declaration" scope and "lookup" scope (see enums).
+- enum vs enum class:
+  - Different concepts
+  - `is_scoped` operation
+  - `is_strongly_typed` operation
 - Only direct (type and namespace) alias reflection.
 - Add the `get_display_name` operation to Named.
 - meta::GlobalScope should be a meta::ScopeMember (and a meta::Named).
