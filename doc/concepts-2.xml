@@ -47,7 +47,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_sequence"
+	<trait name="is_meta_object_sequence"
 		since_revision="0"
 		indicates="ObjectSequence"
 	/>
@@ -105,7 +105,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="ObjectSequence"/>
 	</metaobject>
 
-	<trait name="is_reversible"
+	<trait name="is_meta_reversible"
 		since_revision="1"
 		indicates="Reversible"
 	/>
@@ -119,7 +119,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="ObjectSequence"/>
 	</metaobject>
 
-	<trait name="is_named"
+	<trait name="is_meta_named"
 		since_revision="0"
 		indicates="Named"
 	/>
@@ -159,7 +159,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Named"/>
 	</metaobject>
 
-	<trait name="is_specifier"
+	<trait name="is_meta_specifier"
 		since_revision="1"
 		indicates="Specifier"
 	/>
@@ -173,7 +173,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_typed"
+	<trait name="is_meta_typed"
 		since_revision="0"
 		indicates="Typed"
 	/>
@@ -197,7 +197,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Named"/>
 	</metaobject>
 
-	<trait name="is_scope_member"
+	<trait name="is_meta_scope_member"
 		since_revision="0"
 		indicates="ScopeMember"
 	/>
@@ -219,7 +219,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_scope"
+	<trait name="is_meta_scope"
 		since_revision="0"
 		indicates="Scope"
 	/>
@@ -232,7 +232,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Named"/>
 	</metaobject>
 
-	<trait name="is_alias"
+	<trait name="is_meta_alias"
 		since_revision="0"
 		indicates="Alias"
 	/>
@@ -256,7 +256,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Class"/>
 	</metaobject>
 
-	<trait name="is_class_member"
+	<trait name="is_meta_class_member"
 		since_revision="0"
 		indicates="ClassMember"
 	/>
@@ -297,6 +297,33 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="ClassMember"/>
 	</operation>
 
+	<operation name="is_public"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		has public access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<operation name="is_protected"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		has protected access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
+	<operation name="is_private"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		has private access."
+	>
+		<argument type="ClassMember"/>
+	</operation>
+
 	<metaobject name="EnumMember"
 		since_revision="2"
 		abstract="true"
@@ -307,7 +334,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Enum"/>
 	</metaobject>
 
-	<trait name="is_enum_member"
+	<trait name="is_meta_enum_member"
 		since_revision="2"
 		indicates="EnumMember"
 	/>
@@ -322,7 +349,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Typed"/>
 	</metaobject>
 
-	<trait name="is_linkable"
+	<trait name="is_meta_linkable"
 		since_revision="0"
 		indicates="Linkable"
 	/>
@@ -345,7 +372,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="ScopeMember"/>
 	</metaobject>
 
-	<trait name="is_namespace"
+	<trait name="is_meta_namespace"
 		since_revision="0"
 		indicates="Namespace"
 	/>
@@ -358,7 +385,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Namespace"/>
 	</metaobject>
 
-	<trait name="is_global_scope"
+	<trait name="is_meta_global_scope"
 		since_revision="0"
 		indicates="GlobalScope"
 	/>
@@ -382,7 +409,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="ScopeMember"/>
 	</metaobject>
 
-	<trait name="is_type"
+	<trait name="is_meta_type"
 		since_revision="0"
 		indicates="Type"
 	/>
@@ -414,7 +441,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Scope"/>
 	</metaobject>
 
-	<trait name="is_tag_type"
+	<trait name="is_meta_tag_type"
 		since_revision="2"
 		indicates="TagType"
 	/>
@@ -428,6 +455,42 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="TagType"/>
 	</operation>
 
+	<operation name="is_enum"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		is an enum."
+	>
+		<argument type="TagType"/>
+	</operation>
+
+	<operation name="is_class"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		is a class."
+	>
+		<argument type="TagType"/>
+	</operation>
+
+	<operation name="is_struct"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		is a struct."
+	>
+		<argument type="TagType"/>
+	</operation>
+
+	<operation name="is_union"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="Indicates if the $(reflected) reflected by a $(operand)
+		is a union."
+	>
+		<argument type="TagType"/>
+	</operation>
+
 	<metaobject name="Class"
 		since_revision="0"
 		reflects="a class"
@@ -435,7 +498,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="TagType"/>
 	</metaobject>
 
-	<trait name="is_class"
+	<trait name="is_meta_class"
 		since_revision="0"
 		indicates="Class"
 	/>
@@ -465,7 +528,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="TagType"/>
 	</metaobject>
 
-	<trait name="is_enum"
+	<trait name="is_meta_enum"
 		since_revision="0"
 		indicates="Enum"
 	/>
@@ -496,7 +559,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Typed"/>
 	</metaobject>
 
-	<trait name="is_constant"
+	<trait name="is_meta_constant"
 		since_revision="1"
 		indicates="Constant"
 	/>
@@ -518,7 +581,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Typed"/>
 	</metaobject>
 
-	<trait name="is_variable"
+	<trait name="is_meta_variable"
 		since_revision="0"
 		indicates="Variable"
 	/>
@@ -561,7 +624,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Enum"/>
 	</metaobject>
 
-	<trait name="is_enumerator"
+	<trait name="is_meta_enumerator"
 		since_revision="2"
 		indicates="Enumerator"
 	/>
