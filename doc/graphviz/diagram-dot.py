@@ -602,7 +602,7 @@ def print_concept_gen_spec_edge(opts, concepts, generalization, specialization):
 def do_print_note_node(opts, name, text):
 
 	opts.output.write("""
-	edge [constraint="false" style="dotted" arrowhead="none"];""")
+	edge [constraint="false" style="dotted" arrowhead="none" label=""];""")
 
 	opts.output.write("""
 	%(name)s [shape="note" style="filled" fillcolor="%(cell_color)s" label="%(text)s"];""" %
@@ -704,7 +704,9 @@ def print_metaobject(opts, concepts):
 
 	# Metaobject is-a edges
 	opts.output.write("""
-	edge [constraint="true" style="solid" fillcolor="WHITE", arrowhead="normal"];""")
+	edge [constraint="true" style="solid" fillcolor="WHITE" arrowhead="normal"];""")
+	opts.output.write("""\n\tedge [taillabel="is a"];""")
+
 
 	for gen in findall(opts, metaobject, "generalization"):
 		generalization = find_metaobject(opts, concepts, gen.attrib["concept"])
@@ -716,9 +718,11 @@ def print_metaobject(opts, concepts):
 			print_metaobject_node(opts, concepts, specialization)
 			print_concept_edge(opts, specialization, metaobject)
 
+	opts.output.write("""\n\tedge [taillabel=""];""")
+
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
-	edge [constraint="false" style="dotted" arrowhead="none"];""")
+	edge [constraint="false" style="dotted" arrowhead="none" label="indicates"];""")
 
 	for trait in findall(opts, concepts, "trait[@indicates='%s']" % opts.metaobject):
 		print_trait_node(opts, concepts, trait)
@@ -726,7 +730,7 @@ def print_metaobject(opts, concepts):
 
 	# Operation -> Result edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	edge [constraint="true" style="dashed" arrowhead="vee" label="result"];""")
 
 	for operation in findall(opts, concepts, "operation[@result='%s']" % opts.metaobject):
 		uname = get_node_uname(operation)
@@ -736,7 +740,7 @@ def print_metaobject(opts, concepts):
 
 	# Operation -> Element edges
 	opts.output.write("""
-	edge [constraint="false" style="dotted" arrowhead="diamond"];""")
+	edge [constraint="false" style="dotted" arrowhead="diamond" label="element"];""")
 
 	for operation in findall(opts, concepts, "operation[@element='%s']" % opts.metaobject):
 		uname = get_node_uname(operation)
@@ -746,7 +750,7 @@ def print_metaobject(opts, concepts):
 
 	# Argument -> Operation edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	edge [constraint="true" style="dashed" arrowhead="vee" label="argument"];""")
 
 	for operation in findall(opts, concepts, "operation"):
 		uname = get_node_uname(operation)
@@ -757,7 +761,7 @@ def print_metaobject(opts, concepts):
 
 	# Metaobject ordering edges
 	opts.output.write("""
-	edge [constraint="true" style="invis"];""")
+	edge [constraint="true" style="invis" label=""];""")
 
 	prev_mo = None
 	for gen in findall(opts, metaobject, "generalization"):
@@ -833,14 +837,14 @@ def print_operation(opts, concepts):
 
 		# Operation -> Result edges
 		opts.output.write("""
-		edge [constraint="true" style="dashed" arrowhead="vee"];""")
+		edge [constraint="true" style="dashed" arrowhead="vee" label="result"];""")
 		print_concept_edge(opts, operation, result)
 
 		# Result -> Element
 		if element is not None:
 			print_metaobject_node(opts, concepts, element)
 			opts.output.write("""
-			edge [constraint="false" arrowhead="none" arrowtail="diamond" dir="both"];""")
+			edge [constraint="false" arrowhead="none" arrowtail="diamond" dir="both" label="element"];""")
 			print_concept_edge(opts, result, element)
 			opts.output.write("""
 			edge [style="dotted" dir="forward"];""")
@@ -851,7 +855,7 @@ def print_operation(opts, concepts):
 
 	# Argument -> Operation edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	edge [constraint="true" style="dashed" arrowhead="vee" label="argument"];""")
 
 	reflected = None
 	for argument in findall(opts, operation, "argument"):
