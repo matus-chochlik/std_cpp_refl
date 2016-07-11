@@ -1008,13 +1008,13 @@ def print_overview(opts, concepts):
         edge [taillabel=""];""")
 
 	# Trait -> BooleanConstant (result) edges
-	#opts.output.write("""
-	#edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	opts.output.write("""
+	edge [constraint="true" style="dashed" arrowhead="vee"];""")
 
-	#if opts.gen_traits:
-		#for trait in findall(opts, concepts, "trait"):
-			#print_edge(opts, trait.attrib["name"], "BooleanConstant")
-		#opts.output.write("\n")
+	if opts.gen_traits:
+		for trait in findall(opts, concepts, "trait"):
+			print_edge(opts, trait.attrib["name"], "BooleanConstant")
+		opts.output.write("\n")
 
 	# Operation -> Result edges
 	opts.output.write("""
@@ -1046,6 +1046,7 @@ def print_overview(opts, concepts):
 	# Metaobject is-a edges
 	opts.output.write("""
 	edge [constraint="true" style="solid" arrowhead="normal"];
+        edge [label=""];
         edge [taillabel="is a"];""")
 
 	for derived in findall(opts, concepts, "metaobject"):

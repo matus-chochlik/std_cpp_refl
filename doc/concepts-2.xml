@@ -392,6 +392,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		label="Global\nScope"
 	>
 		<generalization concept="Namespace"/>
+		<constraint operation="get_scope" concept="GlobalScope"/>
 	</metaobject>
 
 	<trait name="is_meta_global_scope"
