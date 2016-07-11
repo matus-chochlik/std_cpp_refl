@@ -28,6 +28,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Object"/>
 	</operation>
 
+	<operation name="has_declaration"
+		since_revision="2"
+		brief="Indicates if $(reflected) reflected by a $(operand) was
+		declared in source code (as opposed to being built-in)."
+		result="BooleanConstant"
+	>
+		<argument type="Object"/>
+	</operation>
+
 	<operation name="get_source_location"
 		since_revision="0"
 		brief="returns the source location info of the declaration

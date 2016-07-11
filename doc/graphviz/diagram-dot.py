@@ -704,8 +704,8 @@ def print_metaobject(opts, concepts):
 
 	# Metaobject is-a edges
 	opts.output.write("""
-	edge [constraint="true" style="solid" fillcolor="WHITE" arrowhead="normal"];""")
-	opts.output.write("""\n\tedge [taillabel="is a"];""")
+	edge [constraint="true" style="solid" fillcolor="WHITE" arrowhead="normal"];
+        edge [taillabel="is a"];""")
 
 
 	for gen in findall(opts, metaobject, "generalization"):
@@ -718,7 +718,8 @@ def print_metaobject(opts, concepts):
 			print_metaobject_node(opts, concepts, specialization)
 			print_concept_edge(opts, specialization, metaobject)
 
-	opts.output.write("""\n\tedge [taillabel=""];""")
+	opts.output.write("""
+        edge [taillabel=""];""")
 
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
@@ -995,25 +996,30 @@ def print_overview(opts, concepts):
 
 	# Trait -> Metaobject (indicates) edges
 	opts.output.write("""
-	edge [constraint="true" style="dotted" arrowhead="none"];""")
+	edge [constraint="true" style="dotted" arrowhead="none"];
+        edge [taillabel="indicates"];""")
 
 	if opts.gen_traits:
 		for trait in findall(opts, concepts, "trait"):
 			print_edge(opts, trait.attrib["name"], trait.attrib["indicates"])
 		opts.output.write("\n")
 
-	# Trait -> BooleanConstant (result) edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+        edge [taillabel=""];""")
 
-	if opts.gen_traits:
-		for trait in findall(opts, concepts, "trait"):
-			print_edge(opts, trait.attrib["name"], "BooleanConstant")
-		opts.output.write("\n")
+	# Trait -> BooleanConstant (result) edges
+	#opts.output.write("""
+	#edge [constraint="true" style="dashed" arrowhead="vee"];""")
+
+	#if opts.gen_traits:
+		#for trait in findall(opts, concepts, "trait"):
+			#print_edge(opts, trait.attrib["name"], "BooleanConstant")
+		#opts.output.write("\n")
 
 	# Operation -> Result edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	edge [constraint="true" style="dashed" arrowhead="vee"];
+        edge [taillabel="result"];""")
 
 	if opts.gen_operations:
 		for operation in findall(opts, concepts, "operation"):
@@ -1021,9 +1027,14 @@ def print_overview(opts, concepts):
 			print_edge(opts, uname, operation.attrib["result"])
 		opts.output.write("\n")
 
+	opts.output.write("""
+        edge [headlabel=""];
+        edge [taillabel=""];""")
+
 	# Argument -> Operation edges
 	opts.output.write("""
-	edge [constraint="true" style="dashed" arrowhead="vee"];""")
+	edge [constraint="true" style="dashed" arrowhead="vee"];
+        edge [label="argument"];""")
 
 	if opts.gen_operations:
 		for operation in findall(opts, concepts, "operation"):
@@ -1034,12 +1045,17 @@ def print_overview(opts, concepts):
 
 	# Metaobject is-a edges
 	opts.output.write("""
-	edge [constraint="true" style="solid" arrowhead="normal"];""")
+	edge [constraint="true" style="solid" arrowhead="normal"];
+        edge [taillabel="is a"];""")
 
 	for derived in findall(opts, concepts, "metaobject"):
 		for base in findall(opts, derived, "generalization"):
 			print_concept_gen_spec_edge(opts, concepts, base, derived)
 	opts.output.write("\n")
+
+	opts.output.write("""
+        edge [headlabel=""];
+        edge [taillabel=""];""")
 
 	# Metaobject ordering edges
 	opts.output.write("""

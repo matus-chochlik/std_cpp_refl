@@ -13,7 +13,7 @@ ifneq ($(MAKECMDGOALS), clean)
 $(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))
 endif
 
-all: ./out/index.html svg-diagrams
+all: ./out/index.html ./out/overview.html svg-diagrams
 .PHONY: all
 
 ifneq ($(MAKECMDGOALS), clean)
@@ -32,7 +32,7 @@ svg-diagrams: $(foreach R,$(REVISIONS), svg-diagrams-$(R))
 ./out/%.svg: ./tmp/%.svg | out
 	$(XSLTPROC) --nonet --output $@ ./dot-svg-fixup.xsl $^
 
-./out/index.html: index.html | out
+./out/%.html: %.html | out
 	cp $< $@
 
 ./tmp/concept-%.svg: ./tmp/concept-%.dot | out
