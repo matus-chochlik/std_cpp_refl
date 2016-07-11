@@ -36,6 +36,8 @@
   greppability, helps to distinguish reflection from reverse reflection.
   Also simplifies the implementation, and can be used for identifier generation.
 
+- Will we need separate unrefltype and unreflexpr ?
+
 - Mention why we require the reflexpr header (can help implementations)
 
 - Examples for simple use cases and possible simplified interfaces
