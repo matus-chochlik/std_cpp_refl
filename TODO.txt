@@ -37,6 +37,8 @@
   Also simplifies the implementation, and can be used for identifier generation.
 
 - Will we need separate unrefltype and unreflexpr ?
+- Or something to disambiguate unreflexpr especially in dependent contexts
+  - Something like unreflexpr(typename, ...), unreflexpr(namespace, ...), ...?
 
 - Mention why we require the reflexpr header (can help implementations)
 
