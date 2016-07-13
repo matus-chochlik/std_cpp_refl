@@ -79,7 +79,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="size_t" name="Index"/>
 	</operation>
 
-	<operation name="unpack_elements"
+	<operation name="unpack_sequence"
 		since_revision="2"
 		result="Type"
 		brief="Unpacks the $(operand) into a template."
