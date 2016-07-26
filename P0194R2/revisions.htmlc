@@ -1,0 +1,83 @@
+<div id="revisions">
+<h2>Revision history</h2>
+
+<h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
+
+<p>Describes the method of static reflection
+by the means of compiler-generated anonymous types. Introduces the first version
+of the metaobject concepts and some possiblities of their implementation.
+Also includes discussion about the motivation and the design rationale for the proposal.
+</p>
+
+<h4>Revision 2 (<a href="#ref-N4111">N4111</a>)</h4>
+
+<p>Refines the metaobject concepts and introduces
+a concrete implementation of their interface by the means of templates similar
+to the standard type traits. Describes some additions to the standard library
+(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
+Answers some questions from the discussion about N3996 and expands the design
+rationale.
+</p>
+
+<h4>Revision 3 (<a href="#ref-N4451">N4451</a>)</h4>
+
+<p>Incorporates the feedback from the discussion
+about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
+definitions, removes some of the additions to the standard library added in the previous revisions.
+Adds context-dependent reflection.
+</p>
+
+<h4>Revision 4 (<a href="#ref-P0194R0">P0194R0</a>)</h4>
+
+<p>Further refines the concepts from N4111; prefixes
+the names of the metaobject operations with <code>get_</code>, adds new operations,
+replaces the metaobject category tags with new metaobject traits.
+Introduces a nested namespace <code>std::meta</code> which contains most
+of the reflection-related additions to the standard library.
+Rephrases definition of meta objects using Concepts Lite. Specifies the
+reflection operator name — <code>reflexpr</code>.
+Introduces an experimental implementation of the reflection operator in clang.
+Drops the context-dependent reflection from N4111 (will be re-introduced later).
+</p>
+
+<h4>Revision 5 (P0194R1)</h4>
+
+<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
+classification is now done by using the concepts. We assume that the following
+syntax of the Concepts specification is implemented:
+</p>
+
+<pre><code>
+template &lt;T&gt;
+constexpr bool Concept = <em>unspecified</em>;
+</code></pre>
+
+<p>and also assuming that the Concepts TS Issue 29 is resolved and that
+<code>Concept&lt;T&gt;</code> is a generally usable boolean expression,
+so that the following is valid code:</p>
+
+<pre><code>
+static_assert(Concept&lt;T&gt;, " ... ");
+
+using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
+
+if(Concept&lt;T&gt;) { /* ... */  }
+</code></pre>
+
+<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+The <code>meta::Constant</code> and <code>meta::Specifier</code> concepts,
+and several new operations have been added.
+</p>
+
+<p>The aliases for the operation templates returning metaobjects had previously
+the <code>_t</code> suffix; this has been changed to the <code>_m</code> suffix. For example:
+</p>
+<pre>
+<code>
+get_type_t -> get_type_m
+get_scope_t -> get_scope_m
+get_aliased_t -> get_aliased_m
+get_data_members_t -> get_data_members_m
+</code>
+</pre>
+</div>

@@ -1,0 +1,1554 @@
+<?xml version="1.0"?>
+<!--
+Autmatically generated file. Do not modify manually all changes will be lost.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8"/>
+	<style>
+body {
+	color: black;
+	background-color: white; 
+	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
+	padding: 2em;
+}
+
+table {
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+
+th {
+	border: 2px solid black;
+}
+
+td {
+	border: 1px solid black;
+}
+
+th, td {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+table.header {
+	border: none;
+}
+
+table.references {
+	border: none;
+}
+
+table.header th,
+table.header td {
+	border: none;
+}
+
+table.references th,
+table.references td {
+	border: none;
+}
+
+table.header th {
+	text-align: right;
+	padding-right: 1em;
+	vertical-align: top;
+}
+
+table.references th {
+	text-align: right;
+	padding-right: 1em;
+}
+
+table.references td {
+	font-style: oblique;
+}
+
+table.references td a {
+	color: black;
+	text-decoration: none;
+}
+
+table.references td a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+blockquote.std {
+	color: black;
+	background-color: #F1F1F1;
+	border: 1px solid #D1D1D1;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+span.section_name {
+	float: right;
+	font-weight: bold;
+}
+pre {
+	font-family: "Book Antiqua", "Times New Roman", "Times", serif;
+	line-height: 1.1em;
+}
+pre code {
+	font-family: "Hack", "OCR A Extended", "Consolas", "Lucida Console", monospace;
+	line-height: 1.1em;
+	font-size: small;
+	-moz-tab-size: 2;
+	-o-tab-size: 16;
+	tab-size: 2;
+}
+
+pre {
+	background-color: #F0F0F0;
+}
+
+span.note {
+	font-style: italic;
+}
+
+object.htmlc {
+	width: 100%;
+	height: auto;
+}
+
+</style>
+	<title>P0194R2 — Static reflection</title>
+</head>
+<body>
+
+<table class="header">
+	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
+  <tr><th>Date:</th><td>2016-07-26</td></tr>
+  <tr><th>Project:</th><td>Programming Language C++</td></tr>
+  <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
+  <tr>
+    <th rowspan="2">Authors:</th>
+    <td>Matúš Chochlík (<a href="mailto:chochlik@gmail.com">chochlik@gmail.com</a>)</td>
+  </tr>
+  <tr>
+    <td>Axel Naumann (axel.naumann@cern.ch)</td>
+  </tr>
+</table>
+
+<h1>Static reflection</h1>
+
+
+<h2>Table of Contents</h2>
+<div id="TOC">
+	<ul>
+		<li><a href="#introduction">Introduction</a>
+		</li>
+		<li><a href="#revisions">Revision history</a>
+		</li>
+		<li><a href="#wording">Proposed wording</a>
+		</li>
+		<li><a href="#acks">Acknowledgments</a>
+		</li>
+	</ul>
+</div>
+
+<div id="introduction">
+<h2>Introduction</h2>
+
+<p>This paper is the fifth revision of the proposal to add support for
+compile-time reflection to standard C++. We propose that the compiler shall
+generate <em>metaobjects</em> — representations of certain program declarations,
+which can be reasoned-about at compile time. These metaobjects can then be
+used, through a set of <em>operations</em> to obtain various pieces of metadata,
+like declaration names, lists of scope members, information about specifiers,
+and so on. The <em>metaobjects</em> are implemented as anonymous types
+conforming to defined concepts, and the operations are implemented as class
+templates.
+</p>
+
+<p>This paper is accompanied by another paper — P0385R0, which discusses the
+use cases, rationale, design decisions, future evolution of the proposed reflection
+facility and contains multiple examples of use and replies to frequently asked
+questions.
+</p>
+</div>
+
+<div id="revisions">
+<h2>Revision history</h2>
+
+<h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
+
+<p>Describes the method of static reflection
+by the means of compiler-generated anonymous types. Introduces the first version
+of the metaobject concepts and some possiblities of their implementation.
+Also includes discussion about the motivation and the design rationale for the proposal.
+</p>
+
+<h4>Revision 2 (<a href="#ref-N4111">N4111</a>)</h4>
+
+<p>Refines the metaobject concepts and introduces
+a concrete implementation of their interface by the means of templates similar
+to the standard type traits. Describes some additions to the standard library
+(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
+Answers some questions from the discussion about N3996 and expands the design
+rationale.
+</p>
+
+<h4>Revision 3 (<a href="#ref-N4451">N4451</a>)</h4>
+
+<p>Incorporates the feedback from the discussion
+about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
+definitions, removes some of the additions to the standard library added in the previous revisions.
+Adds context-dependent reflection.
+</p>
+
+<h4>Revision 4 (<a href="#ref-P0194R0">P0194R0</a>)</h4>
+
+<p>Further refines the concepts from N4111; prefixes
+the names of the metaobject operations with <code>get_</code>, adds new operations,
+replaces the metaobject category tags with new metaobject traits.
+Introduces a nested namespace <code>std::meta</code> which contains most
+of the reflection-related additions to the standard library.
+Rephrases definition of meta objects using Concepts Lite. Specifies the
+reflection operator name — <code>reflexpr</code>.
+Introduces an experimental implementation of the reflection operator in clang.
+Drops the context-dependent reflection from N4111 (will be re-introduced later).
+</p>
+
+<h4>Revision 5 (P0194R1)</h4>
+
+<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
+classification is now done by using the concepts. We assume that the following
+syntax of the Concepts specification is implemented:
+</p>
+
+<pre><code>
+template &lt;T&gt;
+constexpr bool Concept = <em>unspecified</em>;
+</code></pre>
+
+<p>and also assuming that the Concepts TS Issue 29 is resolved and that
+<code>Concept&lt;T&gt;</code> is a generally usable boolean expression,
+so that the following is valid code:</p>
+
+<pre><code>
+static_assert(Concept&lt;T&gt;, " ... ");
+
+using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
+
+if(Concept&lt;T&gt;) { /* ... */  }
+</code></pre>
+
+<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+The <code>meta::Constant</code> and <code>meta::Specifier</code> concepts,
+and several new operations have been added.
+</p>
+
+<p>The aliases for the operation templates returning metaobjects had previously
+the <code>_t</code> suffix; this has been changed to the <code>_m</code> suffix. For example:
+</p>
+<pre>
+<code>
+get_type_t -&gt; get_type_m
+get_scope_t -&gt; get_scope_m
+get_aliased_t -&gt; get_aliased_m
+get_data_members_t -&gt; get_data_members_m
+</code>
+</pre>
+</div>
+
+<h2 id="wording">Proposed wording</h2>
+
+<p>Insert a new element in Table 1, <em>C++ library headers</em> of
+[general.namespaces], named <code>&lt;experimental/reflexpr&gt;</code>.
+</p>
+
+<p>Insert a new section:
+</p>
+
+<blockquote class="std">
+	<h3>? Compile-time reflection <span class="section_name">[refl]</span></h3>
+
+	<h4>?.1 General description <span class="section_name">[refl.general]</span></h4>
+
+	<p>Compile-time constant metadata describing various aspects of a compiled program
+	are provided indirectly by the means of types generated by the compiler —
+	<em>Metaobjects</em>.
+
+	A <em>Metaobject</em> is an anonymous type <em>reflecting</em>
+	(representing) a particular declaration in a C++ program, the base-level program declaration. It can be
+	reasoned-about at compile-time and provides access to <em>metadata</em>
+	describing various properties of the reflected declaration through
+	a set of templates.
+
+	The <em>Metaobject</em> types themselves are opaque, without any visible
+	internal structure. Values of such a <em>Metaobject</em> type cannot be created.
+	</p>
+
+	<p>The <em>Metaobject</em>s are generated on demand by the compiler as
+	the result of the invocation of the <code>reflexpr</code> operator.
+	</p>
+	
+	<p>The actual metadata can be obtained by instantiating templates constituting
+	the <em>interface</em> of the <em>Metaobject</em>s. Each template serves a particular
+	purpose and provides a single piece of metadata. These templates are
+	collectively referred to as <em>Metaobject operations</em>.
+	</p>
+
+	<p><em>Metaobject</em>s reflecting different kinds of declarations conform to different
+	<em>Metaobject concepts</em> and have different interfaces — sets of templates
+	applicable to the <em>Metaobject</em>s. These concepts can also be used for
+	<em>Metaobject</em> classification.
+
+	</p><p><em>Metaobject</em> concepts form a generalization-specialization hierarchy, with
+	<code>meta::Object</code> being the common generalization for all <em>Metaobject</em>s.
+	</p>
+
+	<h4>?.2 <em>Metaobject</em> trait<span class="section_name">[refl.trait]</span></h4>
+
+	<p>A new <em>UnaryTypeTrait</em> — <code>is_metaobject</code> is added
+	to section [meta.unary.cat] to distinguish between <em>Metaobject</em> types generated
+	by the compiler and all other types.
+	</p>
+
+<pre><code>
+namespace std {
+namespace experimental {
+
+template &lt;typename T&gt; struct is_metaobject;
+template &lt;typename T&gt; constexpr bool is_metaobject_v
+  = is_metaobject&lt;T&gt;::value;
+
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+is_metaobject_v&lt;int&gt;;                   // false
+is_metaobject_v&lt;void&gt;;                  // false
+is_metaobject_v&lt;string&gt;;                // false
+is_metaobject_v&lt;reflexpr(int)&gt;;         // true
+is_metaobject_v&lt;reflexpr(std)&gt;;         // true
+is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h4>?.3 Header <code>&lt;experimental/reflexpr&gt;</code> synopsis<span class="section_name">[refl.synopsis]</span></h4>
+
+	<pre><code>
+namespace std {
+namespace experimental
+namespace meta {
+
+// <em>metaobject concepts</em>
+template &lt;typename T&gt; concept bool Object;
+template &lt;Object T&gt; concept bool ObjectSequence;
+template &lt;Object T&gt; concept bool Reversible;
+template &lt;Object T&gt; concept bool Named;
+template &lt;Object T&gt; concept bool Specifier;
+template &lt;Object T&gt; concept bool Typed;
+template &lt;Object T&gt; concept bool ScopeMember;
+template &lt;Object T&gt; concept bool Scope;
+template &lt;Object T&gt; concept bool Alias;
+template &lt;Object T&gt; concept bool ClassMember;
+template &lt;Object T&gt; concept bool EnumMember;
+template &lt;Object T&gt; concept bool Linkable;
+template &lt;Object T&gt; concept bool Namespace;
+template &lt;Object T&gt; concept bool GlobalScope;
+template &lt;Object T&gt; concept bool NamespaceAlias;
+template &lt;Object T&gt; concept bool Type;
+template &lt;Object T&gt; concept bool TypeAlias;
+template &lt;Object T&gt; concept bool TagType;
+template &lt;Object T&gt; concept bool RecordType;
+template &lt;Object T&gt; concept bool Union;
+template &lt;Object T&gt; concept bool Class;
+template &lt;Object T&gt; concept bool Inheritance;
+template &lt;Object T&gt; concept bool Enum;
+template &lt;Object T&gt; concept bool Constant;
+template &lt;Object T&gt; concept bool Variable;
+template &lt;Object T&gt; concept bool DataMember;
+template &lt;Object T&gt; concept bool MemberType;
+template &lt;Object T&gt; concept bool Enumerator;
+
+
+// <em>metaobject operations</em>
+template &lt;Object T1, Object T2&gt; struct reflects_same;
+template &lt;Object T&gt; struct has_declaration;
+template &lt;Object T&gt; struct get_source_location;
+template &lt;ObjectSequence T&gt; struct get_size;
+template &lt;ObjectSequence T1, size_t Index&gt; struct get_element;
+template &lt;ObjectSequence T&gt; struct unpack_sequence;
+template &lt;Named T&gt; struct is_anonymous;
+template &lt;Named T&gt; struct get_base_name;
+template &lt;Named T&gt; struct get_display_name;
+template &lt;Typed T&gt; struct get_type;
+template &lt;ScopeMember T&gt; struct get_scope;
+template &lt;Alias T&gt; struct get_aliased;
+template &lt;ClassMember T&gt; struct is_public;
+template &lt;ClassMember T&gt; struct is_protected;
+template &lt;ClassMember T&gt; struct is_private;
+template &lt;ClassMember T&gt; struct get_access_specifier;
+template &lt;Linkable T&gt; struct is_static;
+template &lt;Type T&gt; struct get_reflected_type;
+template &lt;TagType T&gt; struct get_elaborated_type_specifier;
+template &lt;TagType T&gt; struct is_enum;
+template &lt;TagType T&gt; struct is_class;
+template &lt;TagType T&gt; struct is_struct;
+template &lt;TagType T&gt; struct is_union;
+template &lt;RecordType T&gt; struct get_data_members;
+template &lt;RecordType T&gt; struct get_all_data_members;
+template &lt;RecordType T&gt; struct get_member_types;
+template &lt;RecordType T&gt; struct get_all_member_types;
+template &lt;Class T&gt; struct get_base_classes;
+template &lt;Inheritance T&gt; struct get_derived_class;
+template &lt;Inheritance T&gt; struct get_base_class;
+template &lt;Inheritance T&gt; struct is_virtual;
+template &lt;Inheritance T&gt; struct is_public;
+template &lt;Inheritance T&gt; struct is_protected;
+template &lt;Inheritance T&gt; struct is_private;
+template &lt;Inheritance T&gt; struct get_access_specifier;
+template &lt;Enum T&gt; struct is_scoped;
+template &lt;Enum T&gt; struct get_enumerators;
+template &lt;Constant T&gt; struct get_constant;
+template &lt;Variable T&gt; struct get_pointer;
+
+
+// 
+template &lt;Object T1, Object T2&gt;
+  constexpr auto reflects_same_v = reflects_same&lt;T1, T2&gt;::value;
+template &lt;Object T&gt;
+  constexpr auto has_declaration_v = has_declaration&lt;T&gt;::value;
+template &lt;ObjectSequence T&gt;
+  constexpr auto get_size_v = get_size&lt;T&gt;::value;
+template &lt;ObjectSequence T1, size_t Index&gt;
+  using get_element_m = typename get_element&lt;T1, Index&gt;::type;
+template &lt;ObjectSequence T&gt;
+  using unpack_sequence_m = typename unpack_sequence&lt;T&gt;::type;
+template &lt;Named T&gt;
+  constexpr auto is_anonymous_v = is_anonymous&lt;T&gt;::value;
+template &lt;Named T&gt;
+  constexpr auto get_base_name_v = get_base_name&lt;T&gt;::value;
+template &lt;Named T&gt;
+  constexpr auto get_display_name_v = get_display_name&lt;T&gt;::value;
+template &lt;Typed T&gt;
+  using get_type_m = typename get_type&lt;T&gt;::type;
+template &lt;ScopeMember T&gt;
+  using get_scope_m = typename get_scope&lt;T&gt;::type;
+template &lt;Alias T&gt;
+  using get_aliased_m = typename get_aliased&lt;T&gt;::type;
+template &lt;ClassMember T&gt;
+  constexpr auto is_public_v = is_public&lt;T&gt;::value;
+template &lt;ClassMember T&gt;
+  constexpr auto is_protected_v = is_protected&lt;T&gt;::value;
+template &lt;ClassMember T&gt;
+  constexpr auto is_private_v = is_private&lt;T&gt;::value;
+template &lt;ClassMember T&gt;
+  using get_access_specifier_m = typename get_access_specifier&lt;T&gt;::type;
+template &lt;Linkable T&gt;
+  constexpr auto is_static_v = is_static&lt;T&gt;::value;
+template &lt;Type T&gt;
+  using get_reflected_type_t = typename get_reflected_type&lt;T&gt;::type;
+template &lt;TagType T&gt;
+  using get_elaborated_type_specifier_m = typename get_elaborated_type_specifier&lt;T&gt;::type;
+template &lt;TagType T&gt;
+  constexpr auto is_enum_v = is_enum&lt;T&gt;::value;
+template &lt;TagType T&gt;
+  constexpr auto is_class_v = is_class&lt;T&gt;::value;
+template &lt;TagType T&gt;
+  constexpr auto is_struct_v = is_struct&lt;T&gt;::value;
+template &lt;TagType T&gt;
+  constexpr auto is_union_v = is_union&lt;T&gt;::value;
+template &lt;RecordType T&gt;
+  using get_data_members_m = typename get_data_members&lt;T&gt;::type;
+template &lt;RecordType T&gt;
+  using get_all_data_members_m = typename get_all_data_members&lt;T&gt;::type;
+template &lt;RecordType T&gt;
+  using get_member_types_m = typename get_member_types&lt;T&gt;::type;
+template &lt;RecordType T&gt;
+  using get_all_member_types_m = typename get_all_member_types&lt;T&gt;::type;
+template &lt;Class T&gt;
+  using get_base_classes_m = typename get_base_classes&lt;T&gt;::type;
+template &lt;Inheritance T&gt;
+  using get_derived_class_m = typename get_derived_class&lt;T&gt;::type;
+template &lt;Inheritance T&gt;
+  using get_base_class_m = typename get_base_class&lt;T&gt;::type;
+template &lt;Inheritance T&gt;
+  constexpr auto is_virtual_v = is_virtual&lt;T&gt;::value;
+template &lt;Inheritance T&gt;
+  constexpr auto is_public_v = is_public&lt;T&gt;::value;
+template &lt;Inheritance T&gt;
+  constexpr auto is_protected_v = is_protected&lt;T&gt;::value;
+template &lt;Inheritance T&gt;
+  constexpr auto is_private_v = is_private&lt;T&gt;::value;
+template &lt;Inheritance T&gt;
+  using get_access_specifier_m = typename get_access_specifier&lt;T&gt;::type;
+template &lt;Enum T&gt;
+  constexpr auto is_scoped_v = is_scoped&lt;T&gt;::value;
+template &lt;Enum T&gt;
+  using get_enumerators_m = typename get_enumerators&lt;T&gt;::type;
+template &lt;Constant T&gt;
+  constexpr auto get_constant_v = get_constant&lt;T&gt;::value;
+template &lt;Variable T&gt;
+  const auto get_pointer_v = get_pointer&lt;T&gt;::value;
+
+
+} // namespace meta
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+
+	<h4>?.4 <em>Metaobject</em> concepts<span class="section_name">[refl.concepts]</span></h4>
+
+	<div><table>
+<tr>
+<th>Concept</th>
+<th>Requirements</th>
+<th>Optional restrictions</th>
+<th>Description</th>
+</tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Object;
+</code></pre></td><td><code>is_metaobject_v&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Object</code> is a concept modelled by stateless anonymous types generated by the compiler which allow access to metadata reflecting specific program declarations.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool ObjectSequence;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::ObjectSequence</code> is an ordered sequence of metaobjects.</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Reversible;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Reversible</code> is a metaobject that can be reverted to the original   declaration.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Named;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Named</code> reflects a named declaration.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Specifier;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Specifier</code> reflects a specifier (const, virtual, static, noexcept, public,   protected, private, etc.).
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Typed;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Typed</code> reflects a base-level declaration with a type (for example   a variable).
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool ScopeMember;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::ScopeMember</code> reflects a declaration nested in a scope (like the global scope,   namespace, class, enum, etc.).
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Scope;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Scope</code> reflects a scope.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Alias;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Alias</code> reflects a type or namespace alias.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool ClassMember;
+</code></pre></td><td><code>ScopeMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::ClassMember</code> reflects a class member.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool EnumMember;
+</code></pre></td><td><code>ScopeMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::EnumMember</code> reflects a enum member.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Linkable;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Linkable</code> reflects a declaration with storage duration and/or linkage.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Namespace;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/><code>Scope&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Namespace</code> reflects a namespace.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool GlobalScope;
+</code></pre></td><td><code>Namespace&lt;T&gt;</code><br/></td><td/><td><p><code>meta::GlobalScope</code> reflects the global scope.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool NamespaceAlias;
+</code></pre></td><td><code>Namespace&lt;T&gt;</code><br/><code>Alias&lt;T&gt;</code><br/></td><td/><td><p><code>meta::NamespaceAlias</code> reflects a namespace alias.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Type;
+</code></pre></td><td><code>Reversible&lt;T&gt;</code><br/><code>Named&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Type</code> reflects a type.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool TypeAlias;
+</code></pre></td><td><code>Type&lt;T&gt;</code><br/><code>Alias&lt;T&gt;</code><br/></td><td/><td><p><code>meta::TypeAlias</code> reflects a type alias or typedef.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool TagType;
+</code></pre></td><td><code>Type&lt;T&gt;</code><br/><code>Scope&lt;T&gt;</code><br/></td><td/><td><p><code>meta::TagType</code> reflects a class or an enum.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool RecordType;
+</code></pre></td><td><code>TagType&lt;T&gt;</code><br/></td><td/><td><p><code>meta::RecordType</code> reflects a class, a scope or a union.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Union;
+</code></pre></td><td><code>RecordType&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Union</code> reflects a union.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Class;
+</code></pre></td><td><code>RecordType&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Class</code> reflects a class or a struct.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Inheritance;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Inheritance</code> reflects class inheritance.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Enum;
+</code></pre></td><td><code>TagType&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Enum</code> reflects an enumeration.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Constant;
+</code></pre></td><td><code>Typed&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Constant</code> reflects a compile-time constant value.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Variable;
+</code></pre></td><td><code>Linkable&lt;T&gt;</code><br/><code>Named&lt;T&gt;</code><br/><code>Typed&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Variable</code> reflects a variable.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool DataMember;
+</code></pre></td><td><code>ClassMember&lt;T&gt;</code><br/><code>Variable&lt;T&gt;</code><br/></td><td/><td><p><code>meta::DataMember</code> reflects a class data member.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool MemberType;
+</code></pre></td><td><code>ClassMember&lt;T&gt;</code><br/><code>Type&lt;T&gt;</code><br/></td><td/><td><p><code>meta::MemberType</code> reflects a class member type (typedef, class, union, enum).
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Enumerator;
+</code></pre></td><td><code>Constant&lt;T&gt;</code><br/><code>Named&lt;T&gt;</code><br/><code>EnumMember&lt;T&gt;</code><br/></td><td/><td><p><code>meta::Enumerator</code> reflects an enumerator.
+		</p></td></tr>
+</table></div>
+
+	<p>[<span class="note">Note:</span> <em>Metaobject</em>s reflecting anonymous types, anonymous
+	namespaces or the global scope do not satisfy the <code>meta::Named</code> concept.
+	This means that they do not implement the <code>meta::get_name</code> operation.
+	See below. <span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+static_assert(meta::Named&lt;reflexpr(int)&gt;, "");
+static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
+
+auto l = [](void) { };
+static_assert(!meta::Named&lt;reflexpr()&gt;, "");
+static_assert(!meta::Named&lt;reflexpr(::)&gt;, "");
+static_assert(!meta::Named&lt;reflexpr(decltype(l))&gt;, "");
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> <em>Metaobject</em>s reflecting the global scope do not satisfy
+	the <code>meta::ScopeMember</code> concept.
+	This means that they do not implement the <code>meta::get_scope</code> operation.
+	See below. <span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+static_assert(meta::ScopeMember&lt;reflexpr(int)&gt;, "");
+static_assert(meta::ScopeMember&lt;reflexpr(string)&gt;, "");
+
+static_assert(!meta::ScopeMember&lt;reflexpr(::)&gt;, "");
+static_assert(!meta::ScopeMember&lt;reflexpr(decltype(l))&gt;, "");
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting strongly-typed enumerations
+	conform to the <code>meta::Scope</code> concept, regular enumerations do not.
+	<span class="note">— end note</span>]
+	</p>
+
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+enum weak_enum { a, b, c };
+enum class scoped_enum { d, e, f };
+
+using meta_we = reflexpr(weak_enum);
+using meta_se = reflexpr(scoped_enum);
+
+static_assert(meta::Enum&lt;meta_we&gt;, "");
+static_assert(meta::Enum&lt;meta_se&gt;, "");
+
+static_assert(!meta::Scope&lt;meta_we&gt;, "");
+static_assert( meta::Scope&lt;meta_se&gt;, "");
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h4>?.5 <em>Metaobject</em> operations<span class="section_name">[refl.ops]</span></h4>
+
+	A <em>MetaobjectOperation</em> returns a single piece of metadata describing
+	a particular aspect of the declaration reflected by a <em>Metaobject</em>.
+	It is a class template taking one or more arguments, at least one
+	of which is a model of the <em>Metaobject</em> concept.
+	The result of a <em>MetaobjectOperation</em> can be either a compile-time
+	constant value a <code>const</code> pointer or a type.
+
+	<h5>?.5.1 Boolean constant result<span class="section_name">[refl.ops.bool]</span></h5>
+
+	<p>All <em>MetaobjectOperation</em> templates returning a boolean value
+	derive publicly and unambiguously from <code>true_type</code> or
+	<code>false_type</code>.
+	</p>
+	<p>For example:</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+ : integral_constant&lt;bool, <em>implementation-defined</em>&gt;
+{ };
+</code></pre>
+
+	<h5>?.5.2 Integral or <code>enum</code> constant result<span class="section_name">[refl.ops.int]</span></h5>
+
+	<p>All <em>MetaobjectOperation</em> templates returning an integer or
+	<code>enum</code> value derive publicly and unambiguously from
+	a specialization of <code>integral_constant</code> with apropriate
+	integer or <code>enum</code> type as the first argument.
+	</p>
+	<p>For example:</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+ : integral_constant&lt;<em>integral-or-enum-type</em>, <em>implementation-defined</em>&gt;
+{ };
+</code></pre>
+
+	<h5>?.5.3 String constant result<span class="section_name">[refl.ops.str]</span></h5>
+
+	<p>All <em>MetaobjectOperation</em> templates returning a character string
+	instantiate into a type <em>equivalent</em> to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+{
+	typedef const char value_type[N+1];
+	static constexpr value_type value;
+};
+</code></pre>
+
+	<p>where <code>N</code> is the length of the returned string and the
+	last element in the <code>value</code> character array is the
+	<code>'\0'</code> character.
+	The member names <code>value_type</code>, <code>value</code>,
+	<code>type</code> are publicly and unambiguously available
+	in such <em>MetaobjectOperation</em>.
+	</p>
+
+	<h5>?.5.4 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
+
+	<p>The <em>MetaobjectOperation</em> templates yielding another <em>Metaobject</em>
+	instantiate into a type <em>equivalent</em> to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+{
+	typedef meta::<em>Object</em> type;
+};
+</code></pre>
+
+	<p>The member name <code>type</code> is publicly and unambiguously
+	available in such <em>MetaobjectOperation</em>.
+	</p>
+
+	<h5>?.5.5 Type result<span class="section_name">[refl.ops.type]</span></h5>
+
+	<p>The <em>MetaobjectOperation</em> templates yielding a non-<em>Metaobject</em>
+	type instantiates into a type <em>equivalent</em> to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+{
+	typedef <em>unspecified</em> type;
+};
+</code></pre>
+
+	<p>The member name <code>type</code> is publicly and unambiguously
+	available in a <em>MetaobjectOperation</em>.
+	</p>
+
+	<h5>?.5.6 Pointer result<span class="section_name">[refl.ops.ptr]</span></h5>
+
+	<p>The <em>MetaobjectOperation</em> templates returning a pointer or
+	a class data member pointer instantiate into a type
+	<em>equivalent</em> to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+{
+	typedef conditional_t&lt;
+		bool(<em>is-non-static-class-data-member</em>),
+		<em>unspecified-type</em> <em>unspecified-class</em>::*,
+		<em>unspecified-type</em>*
+	&gt; value_type;
+
+	static const value_type value;
+};
+</code></pre>
+
+	<h5>?.5.7 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
+
+	<div><table><tr><th>Template</th>
+<th>Description</th>
+<th>Result</th></tr>
+<tr><td><pre><code>template &lt;Object T1, Object T2&gt;
+struct reflects_same;
+</code></pre></td><td>indicates if two metaobjects reflect the same base-level   declaration ('entity').</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Object T&gt;
+struct has_declaration;
+</code></pre></td><td>Indicates if a base-level program declaration reflected by a <code>meta::<em>Object</em></code> was   declared in source code (as opposed to being built-in).</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Object T&gt;
+struct get_source_location;
+</code></pre></td><td>returns the source location info of the declaration   of a base-level program declaration reflected by a <code>meta::<em>Object</em></code>.</td><td>
+		a <code>std::source_location</code> constant
+	</td></tr><tr><td><pre><code>template &lt;ObjectSequence T&gt;
+struct get_size;
+</code></pre></td><td>returns the number of elements in the sequence.</td><td>
+		a <code>size_t</code> integral constant
+	</td></tr><tr><td><pre><code>template &lt;ObjectSequence T1, size_t Index&gt;
+struct get_element;
+</code></pre></td><td>returns the i-th <code>meta::<em>Object</em></code> in a <code>meta::<em>ObjectSequence</em></code>.</td><td>
+		<code>meta::<em>Object</em></code>
+		</td></tr><tr><td><pre><code>template &lt;ObjectSequence T&gt;
+struct unpack_sequence;
+</code></pre></td><td>Unpacks the <code>meta::<em>ObjectSequence</em></code> into a template.</td><td>
+		<code>meta::<em>Type</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+struct is_anonymous;
+</code></pre></td><td>Indicates if the a named declaration reflected by a <code>meta::<em>Named</em></code>   is anonymous.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+struct get_base_name;
+</code></pre></td><td>returns the basic name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+struct get_display_name;
+</code></pre></td><td>returns the display name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Typed T&gt;
+struct get_type;
+</code></pre></td><td>returns the <code>meta::<em>Type</em></code> reflecting the type of a base-level declaration with a type (for example   a variable)   reflected by a <code>meta::<em>Typed</em></code>.</td><td>
+		<code>meta::<em>Type</em></code>
+		</td></tr><tr><td><pre><code>template &lt;ScopeMember T&gt;
+struct get_scope;
+</code></pre></td><td>returns the <code>meta::<em>Scope</em></code> reflecting the scope of a declaration nested in a scope (like the global scope,   namespace, class, enum, etc.)   reflected by a <code>meta::<em>ScopeMember</em></code>.</td><td>
+		<code>meta::<em>Scope</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Alias T&gt;
+struct get_aliased;
+</code></pre></td><td>returns the <code>meta::<em>Named</em></code> reflecting the original declaration   of a type or namespace alias reflected by a <code>meta::<em>Alias</em></code>.</td><td>
+		<code>meta::<em>Named</em></code>
+		</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
+struct is_public;
+</code></pre></td><td>indicates if the a class member reflected by a <code>meta::<em>ClassMember</em></code>   was declared with public access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
+struct is_protected;
+</code></pre></td><td>indicates if the a class member reflected by a <code>meta::<em>ClassMember</em></code>   was declared with protected access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
+struct is_private;
+</code></pre></td><td>indicates if the a class member reflected by a <code>meta::<em>ClassMember</em></code>   was declared with private access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;ClassMember T&gt;
+struct get_access_specifier;
+</code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of a class member reflected by a <code>meta::<em>ClassMember</em></code>.</td><td>
+		<code>meta::<em>Specifier</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Linkable T&gt;
+struct is_static;
+</code></pre></td><td>returns whether the a declaration with storage duration and/or linkage reflected by a <code>meta::<em>Linkable</em></code>   was declared with the static specifier.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Type T&gt;
+struct get_reflected_type;
+</code></pre></td><td>returns the the base-level type reflected by a <code>meta::<em>Type</em></code>.</td><td>the original type reflected by the argument</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+struct get_elaborated_type_specifier;
+</code></pre></td><td>returns a <code>meta::<em>Specifier</em></code> reflecting the elaborated type specifier   (class,struct,union,...) of a class or an enum reflected by a <code>meta::<em>TagType</em></code>.</td><td>
+		<code>meta::<em>Specifier</em></code>
+		</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+struct is_enum;
+</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is an enum.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+struct is_class;
+</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a class.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+struct is_struct;
+</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a struct.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+struct is_union;
+</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a union.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordType T&gt;
+struct get_data_members;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting   the public data members of a class, a scope or a union reflected by a <code>meta::<em>RecordType</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>DataMember</em></code>(s)</td></tr><tr><td><pre><code>template &lt;RecordType T&gt;
+struct get_all_data_members;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting all (including   private and protected) data members of a class, a scope or a union reflected by a <code>meta::<em>RecordType</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>DataMember</em></code>(s)</td></tr><tr><td><pre><code>template &lt;RecordType T&gt;
+struct get_member_types;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting   the public member types of a class, a scope or a union reflected by a <code>meta::<em>RecordType</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>MemberType</em></code>(s)</td></tr><tr><td><pre><code>template &lt;RecordType T&gt;
+struct get_all_member_types;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting all (including   private and protected) member types of a class, a scope or a union reflected by a <code>meta::<em>RecordType</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>MemberType</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct get_derived_class;
+</code></pre></td><td>returns the <code>meta::<em>Inheritance</em></code> reflecting the derived class inheritance   in a inheritance.</td><td>
+		<code>meta::<em>Class</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct get_base_class;
+</code></pre></td><td>returns the <code>meta::<em>Inheritance</em></code> reflecting the base class inheritance   in a inheritance.</td><td>
+		<code>meta::<em>Class</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_virtual;
+</code></pre></td><td>returns whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as virtual.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_public;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as public.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_protected;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as protected.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_private;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as private.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct get_access_specifier;
+</code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of class inheritance reflected by a <code>meta::<em>Inheritance</em></code>.</td><td>
+		<code>meta::<em>Specifier</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+struct get_base_classes;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Inheritance</em></code>(s) reflecting the inheritance   of base clases of a a class or a struct reflected by a <code>meta::<em>Class</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>Inheritance</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Enum T&gt;
+struct is_scoped;
+</code></pre></td><td>returns true if the an enumeration reflected by a <code>meta::<em>Enum</em></code>   is scoped (strongly-typed).</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Enum T&gt;
+struct get_enumerators;
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Enumerator</em></code>(s) reflecting all   enumerators of an enumeration reflected by a <code>meta::<em>Enum</em></code>.</td><td>
+		<code>meta::<em>ObjectSequence</em></code>
+		of <code>meta::<em>Enumerator</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Constant T&gt;
+struct get_constant;
+</code></pre></td><td>returns the value of a compile-time constant value reflected by a <code>meta::<em>Constant</em></code>.</td><td>
+		a constant value of an unspecified, integer or enum type
+	</td></tr><tr><td><pre><code>template &lt;Variable T&gt;
+struct get_pointer;
+</code></pre></td><td>returns a pointer to the a variable reflected by a <code>meta::<em>Variable</em></code>.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.</td><td>a regular or class data member pointer</td></tr></table></div>
+
+	<p>For <code>meta::Type</code>s reflecting native types with modifiers
+	like <code>unsigned</code>, <code>long</code>, etc. the <code>get_name</code>
+	operation returns the full type specifier name.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+meta::get_name_v&lt;reflexpr(unsigned)&gt;       // "unsigned int"
+meta::get_name_v&lt;reflexpr(short)&gt;          // "signed short int"
+meta::get_name_v&lt;reflexpr(long long)&gt;      // "signed long long int"
+meta::get_name_v&lt;reflexpr(signed char)&gt;    // "signed char"
+meta::get_name_v&lt;reflexpr(unsigned char)&gt;  // "unsigned char"
+meta::get_name_v&lt;reflexpr(char)&gt;           // "char"
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+
+	<p>The <code>get_name</code> invoked on a <code>meta::Alias</code>
+	returns the alias name not the name of the aliased declaration.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+using foo = int;
+using bar = foo;
+namespace std = baz;
+
+meta::get_name_v&lt;reflexpr(int)&gt;    // "int"
+meta::get_name_v&lt;reflexpr(std)&gt;    // "std"
+meta::get_name_v&lt;reflexpr(foo)&gt;    // "foo"
+meta::get_name_v&lt;reflexpr(bar)&gt;    // "bar"
+meta::get_name_v&lt;reflexpr(baz)&gt;    // "baz"
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>The <code>get_name</code> operation returns the type, namespace, etc.
+	name without any qualifiers, asterisks, ampersands, angle or square brackets, etc.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+using meta::get_name_v;
+
+get_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
+get_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "size_t"
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* (*pfoo)(std::set&lt;double&gt;&amp;))&gt; // "pfoo"
+get_name_v&lt;reflexpr(std::set&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;  // "foo"
+get_name_v&lt;reflexpr(std::chrono)&gt;                               // "chrono"
+get_name_v&lt;reflexpr(std::launch)&gt;                               // "launch"
+get_name_v&lt;reflexpr(static)&gt;                                    // "static"
+get_name_v&lt;reflexpr(public)&gt;                                    // "public"
+get_name_v&lt;reflexpr(class)&gt;                                     // "class"
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>Template type parameters are also considered to be type aliases:
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+template &lt;typename A, typename B&gt;
+void foo(A a, B b)
+{
+	using meta::get_name_v;
+	using meta::get_aliased_m;
+
+	using mA = reflexpr(A);
+	using mB = reflexpr(B);
+
+	cout &lt;&lt; "1:" &lt;&lt; get_name_v&lt;mA&gt; &lt;&lt; endl;
+	cout &lt;&lt; "2:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
+	cout &lt;&lt; "3:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;get_aliased_m&lt;mA&gt;&gt;&gt; &lt;&lt; endl;
+
+	cout &lt;&lt; "4:" &lt;&lt; get_name_v&lt;mB&gt; &lt;&lt; endl;
+	cout &lt;&lt; "5:" &lt;&lt; get_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
+}
+
+using rank_t = int;
+rank_t a = 123;
+float b = 45.67;
+
+foo(a, b);
+</code>
+produces the following output:
+<code>
+1:A
+2:rank_t
+3:int
+4:B
+5:float
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>The <code>meta::get_name</code> operation cannot be invoked on <em>Metaobject</em>s
+	which do not conform to the <code>meta::Named</code> concept.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+auto l = [](void) { };
+meta::get_name_v&lt;reflexpr(::)&gt;           // <em>ill-formed</em>
+meta::get_name_v&lt;reflexpr(decltype(l))&gt;  // <em>ill-formed</em>
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> The <em>Metaobject</em>s in a
+	<code>meta::ObjectSequence</code> are ordered according
+	to the order of their declarations in the translation unit.
+	<span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	typedef int t1;
+	typedef float t2;
+
+	t1 a, b, c;
+	t2 d;
+};
+
+using meta_foo = reflexpr(foo);
+
+using meta::get_element_m;
+using meta::get_data_members_m;
+using meta::get_member_types_m;
+
+get_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
+get_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
+
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
+get_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
+
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_data_members</code>, <code>meta::get_all_data_members</code>,
+	<code>meta::get_member_types</code> and <code>meta::get_all_member_types</code>
+	do not include <em>Metaobject</em>s reflecting inherited class members.
+	<span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	typedef int attr_t;
+	attr_t a, b, c, d;
+};
+
+struct bar : foo
+{
+	float e, f;
+};
+
+using meta_foo = reflexpr(foo);
+using meta_bar = reflexpr(bar);
+
+using meta::get_size_v;
+using meta::get_data_members_m;
+using meta::get_member_types_m;
+
+get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt; // 4
+get_size_v&lt;get_data_members_m&lt;meta_bar&gt;&gt; // 2
+
+get_size_v&lt;get_member_types_m&lt;meta_foo&gt;&gt; // 1
+get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span>
+	The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
+	contain only the <em>Metaobject</em>s reflecting publicly accessible class members.
+
+	The <code>meta::ObjectSequence</code> returned by
+	<code>meta::get_all_data_members</code> and <code>meta::get_all_member_types</code>
+	contain <em>Metaobject</em>s reflecting all class members including those
+	which are not publicly accessible otherwise.
+	<span class="note">— end note</span>]
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+private:
+	typedef int _attr_t;
+	_attr_t _a, _b, _c;
+public:
+	typedef float value_type;
+	typedef size_t size_type;
+	value_type d;
+};
+
+using meta_foo = reflexpr(foo);
+
+using meta::get_size_v;
+using meta::get_name_v;
+using meta::get_element_m;
+using meta::get_data_members_m;
+using meta::get_all_data_members_m;
+using meta::get_member_types_m;
+using meta::get_all_member_types_m;
+
+get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt;     // 1
+get_size_v&lt;get_all_data_members_m&lt;meta_foo&gt;&gt; // 4
+
+get_size_v&lt;get_member_types_m&lt;meta_foo&gt;&gt;     // 2
+get_size_v&lt;get_all_member_types_m&lt;meta_foo&gt;&gt; // 3
+
+get_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt;     // "d"
+get_name_v&lt;get_element_m&lt;get_all_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "_a"
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-related metadata.
+	One is using the <code>meta::Specifier</code> concept and its operations which is
+	more generic, and another using the boolean operations like <code>meta::is_static</code>,
+	<code>meta::is_public</code>, etc. which may be more convenient in simpler use-cases.
+	<span class="note">— end note</span>]</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct S
+{
+private:
+	int i;
+public:
+	float f;
+};
+
+using meta_S = reflexpr(S);
+using meta_S_i = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 0&gt;;
+using meta_S_f = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 1&gt;;
+
+using meta::reflects_same_v;
+using meta::get_access_specifer_m;
+
+reflects_same_v&lt;reflexpr(private),get_access_specifer_m&lt;meta_S_i&gt;&gt;  // true
+reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_i&gt;&gt;  // false
+reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_f&gt;&gt;  // true
+
+meta::is_private&lt;meta_S_i&gt; // true
+meta::is_public&lt;meta_S_i&gt;  // false
+meta::is_public&lt;meta_S_f&gt;  // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h5>?.5.8 Utility operations<span class="section_name">[refl.ops.util]</span></h5>
+
+	The <code>unpack_sequence</code> operation applicable to models of
+	<code>meta::ObjectSequence</code> is added to the <code>&lt;reflexpr&gt;</code>
+	header and is <em>equivalent</em> to:
+
+<pre><code>
+namespace std {
+namespace experimental {
+namespace meta {
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+struct unpack_sequence
+{
+	typedef Tpl&lt;
+		get_element_m&lt;Seq, 0&gt;,
+		get_element_m&lt;Seq, 1&gt;,
+		<em>...,</em>
+		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
+	&gt; type;
+};
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
+
+} // namespace meta
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	int a,
+	bool b;
+	char c;
+	double d;
+}
+
+template &lt;meta::DataMember ... MDM&gt;
+using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
+
+using X = meta::unpack_sequence_t&lt;
+	meta::get_data_members&lt;reflexpr(foo)&gt;,
+	helper
+&gt;;
+
+is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+
+	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
+
+	<p>The value of the <code>reflexpr</code> is a type satisfying <code>meta::Object</code>
+	and other <code>meta</code> concepts, depending on the operand.
+	The returned type is implementation defined.
+	Meta-operations on it describe the operand.
+	</p>
+    <p>
+      The <code>reflexpr</code> operator takes an <em>id-expression</em> (5.1), or
+      <em>access-specifier</em> (10) as operand, or nothing.
+      The <em>id-expression</em> must be uniquely resolved through regular lookup, as if used
+      outside of the <code>reflexpr</code> operator.
+      Otherwise, the expression is ill-formed.
+	</p>
+      <ul>
+        <li>If the operand is a <em>typedef-name</em>, the result will be satisfying
+          <code>TypeAlias</code>.</li>
+        <li>Otherwise, if the operand is a <em>class-name</em>, the result will be satisfying
+          <code>Class</code>.</li>
+        <li>Otherwise, if the operand is a <em>enum-name</em>, the result will be satisfying
+          <code>EnumClass</code> if the <em>enum-name</em> refers to a <em>scoped
+          enumerator</em> (7.2), or <code>Enum</code> if the <em>enum-name</em> refers to an
+          <em>unscoped enumerator</em>.</li>
+        <li>Otherwise, if the operand is a <em>type-name</em>, the result will be satisfying
+          <code>Type</code>.</li>
+        <li>Otherwise, if the operand is the name of a <em>namespace-alias-declaration</em>,
+          the result will be satisfying <code>NamespaceAlias</code>.</li>
+        <li>Otherwise, if the operand is a <em>namespace-name</em>, the result will be
+          satisfying <code>Namespace</code>.</li>
+      </ul>
+    <p>
+      If the <em>id-expression</em> is a <em>type-name</em>, and the scope of its declaration
+      is a class, then the result of <code>reflexpr</code> is also satisfying
+      <code>MemberType</code>.
+    </p>
+    <p>
+      The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>
+      is ill-formed.</p>
+<pre>
+[<span class="note">Example:</span>
+<code>
+reflexpr() // reflects the global namespace
+reflexpr(::) // reflects the global namespace
+reflexpr(std) // reflects the namespace
+reflexpr(std::size_t) // reflects the type
+reflexpr(std::launch) // reflects the enum type
+reflexpr(std::vector&lt;int&gt;) // reflects the class
+
+reflexpr(1) // <em>ill-formed</em>
+reflexpr(std::sin) // <em>ill-formed</em>
+reflexpr(std::vector) // <em>ill-formed</em>
+reflexpr(is_same_v&lt;void,void&gt;) // <em>ill-formed</em>
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+    <p>If the operand is an <em>access-specifier</em>, then the result of
+      <code>reflexpr</code> is satisfying <code>Specifier</code>.
+    </p>
+
+	<h5>?.6.1 Redeclarations<span class="section_name">[refl.reflexpr.redecl]</span></h5>
+
+	<p>The meta data queried by <code>reflexpr</code> depends on the point of invocation
+	of the operator; only declarations appearing in the translation unit before the invocation of the
+	<code>reflexpr</code> operator will be visible.
+	Subsequent invocations are independent of prior invocations, as if all compiler
+	generated types were unique to each <code>reflexpr</code> invocation.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+using meta::get_size_v;
+using meta::get_data_members_m;
+
+struct foo;
+using meta_foo_fwd1 = reflexpr(foo);
+constexpr size_t n1 = get_size_v&lt;get_data_members_m&lt;meta_foo_fwd1&gt;&gt;; // 0
+
+struct foo;
+using meta_foo_fwd2 = reflexpr(foo);
+constexpr size_t n2 = get_size_v&lt;get_data_members_m&lt;meta_foo_fwd2&gt;&gt;; // 0
+
+using meta::reflects_same_v;
+
+constexpr bool b1 = is_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;;       // <em>unspecified</em>
+constexpr bool b2 = reflects_same_v&lt;meta_foo_fwd1, meta_foo_fwd2&gt;; // true
+
+struct foo { int a,b,c,d; };
+using meta_foo = reflexpr(foo);
+constexpr size_t n3 = get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt;;      // 4
+
+constexpr bool b3 = is_same_v&lt;meta_foo_fwd1, meta_foo&gt;;       // false
+constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h5>?.6.2 Required header<span class="section_name">[refl.reflexpr.header]</span></h5>
+
+	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
+	of <code>reflexpr</code>, the program is ill-formed.
+	This header file makes available the definitions of the concepts and the templates implementing
+	the operations on <em>Metaobject</em>s as described above.
+	</p>
+
+	<h5>?.6.3 Reverse reflection<span class="section_name">[refl.reflexpr.rev]</span></h5>
+
+	<p>If a <em>Metaobject</em> conforming to the <code>meta::Reversible</code> concept
+	is passed as the argument to the <code>reflexpr</code> operator,
+	then this invocation has the same effect as if the name of the
+	original declaration reflected by the <em>Metaobject</em> was used.
+	</p>
+
+	<p>For instance if a <code>meta::Type</code> is passed as the argument,
+	then <code>reflexpr</code> yields the reflected type.
+	In this case the result of reverse reflection is the same as the result
+	of the <code>meta::get_reflected_type</code> operation.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+using meta_int = reflexpr(int);
+is_same_t&lt;int, reflexpr(meta_int)&gt;; // true
+is_same_t&lt;int, meta::get_reflected_type_t&lt;meta_int&gt;&gt;; // true
+
+reflexpr(meta_int) x = 123;   // valid (same as int x;)
+
+struct my_struct
+{
+	reflexpr(meta_int) i; // valid (same as int i;)
+};
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+<p>Passing a <em>Metaobject</em> to the <code>reflexpr</code> operator is ill-formed,
+unless the <em>Metaobject </em>conforms to the <code>meta::Reversible</code> concept.
+<span class="note">— end note</span>]
+</p>
+
+</blockquote>
+
+<div id="acks">
+<h2>Acknowledgments</h2>
+
+<p>Thanks to Ricardo Fabiano de Andrade, Roland Bock and Klaim - Joël Lamotte
+who provided very valuable feedback, criticism and suggestions.
+</p>
+</div>
+<div id="ref-P0194R0">
+<h2>References</h2>
+
+<table class="references">
+<tr>
+	<th>[P0194R0]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
+		Chochlík M., Naumann A. — P0194R0 - Static reflection (revision 4)
+	</a>
+  </td>
+</tr>
+
+<tr id="ref-N4451">
+	<th>[N4451]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4451.pdf">
+		Chochlík M. — N4451 - Static reflection (revision 3)
+  </a>
+  </td>
+</tr>
+
+<tr id="ref-N4111">
+	<th>[N4111]</th>
+	<td>
+	<a href="https://isocpp.org/files/papers/n4111.pdf">
+		Chochlík M. — N4111 - Static reflection (revision 2)
+	</a>
+  </td>
+</tr>
+
+<tr id="ref-N3996">
+	<th>[N3996]</th>
+	<td>
+	<a href="https://isocpp.org/files/papers/n3996.pdf">
+		Chochlík M. — N3996 - Static reflection
+	</a>
+  </td>
+</tr>
+</table>
+</div>
+
+</body>
+</html>
