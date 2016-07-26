@@ -87,6 +87,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="ObjectSequence"/>
 	</operation>
 
+	<!--
 	<operation name="expose_protected"
 		since_revision="2"
 		result="ObjectSequence"
@@ -102,6 +103,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="ObjectSequence"/>
 	</operation>
+	-->
 
 	<metaobject name="Reversible"
 		since_revision="1"
@@ -142,8 +144,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Named"/>
 	</operation>
 
-	<operation name="get_name"
-		since_revision="0"
+	<operation name="get_base_name"
+		since_revision="2"
 		result="StringConstant"
 		brief="returns the basic name of the $(reflected) reflected by
 		a $(operand)."
@@ -271,27 +273,30 @@ by the compiler which allow access to metadata reflecting specific program decla
 	/>
 
 	<operation name="is_public"
+		uname="is_public_class_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand)
+		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with public access."
 	>
 		<argument type="ClassMember"/>
 	</operation>
 
 	<operation name="is_protected"
+		uname="is_protected_class_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand)
+		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with protected access."
 	>
 		<argument type="ClassMember"/>
 	</operation>
 
 	<operation name="is_private"
+		uname="is_private_class_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand)
+		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with private access."
 	>
 		<argument type="ClassMember"/>
@@ -302,33 +307,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="Specifier"
 		brief="returns the $(result) reflecting the access specifier
 		of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="ClassMember"/>
-	</operation>
-
-	<operation name="is_public"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
-		has public access."
-	>
-		<argument type="ClassMember"/>
-	</operation>
-
-	<operation name="is_protected"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
-		has protected access."
-	>
-		<argument type="ClassMember"/>
-	</operation>
-
-	<operation name="is_private"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
-		has private access."
 	>
 		<argument type="ClassMember"/>
 	</operation>
@@ -501,16 +479,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="TagType"/>
 	</operation>
 
-	<metaobject name="Class"
-		since_revision="0"
-		reflects="a class"
+	<metaobject name="RecordType"
+		since_revision="2"
+		reflects="a class, a scope or a union"
 	>
 		<generalization concept="TagType"/>
 	</metaobject>
 
-	<trait name="is_meta_class"
-		since_revision="0"
-		indicates="Class"
+	<trait name="is_meta_record_type"
+		since_revision="2"
+		indicates="RecordType"
 	/>
 
 	<operation name="get_data_members"
@@ -519,7 +497,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="Class"/>
+		<argument type="RecordType"/>
+	</operation>
+
+	<operation name="get_all_data_members"
+		since_revision="2"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting all (including
+		private and protected) data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="RecordType"/>
 	</operation>
 
 	<operation name="get_member_types"
@@ -528,8 +515,132 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting
 		the public member types of $(reflected) reflected by a $(operand)."
 	>
+		<argument type="RecordType"/>
+	</operation>
+
+	<operation name="get_all_member_types"
+		since_revision="2"
+		result="ObjectSequence" element="MemberType"
+		brief="returns a $(result) of $(elements) reflecting all (including
+		private and protected) member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="RecordType"/>
+	</operation>
+
+	<metaobject name="Union"
+		since_revision="0"
+		reflects="a union"
+	>
+		<generalization concept="RecordType"/>
+	</metaobject>
+
+	<trait name="is_meta_union"
+		since_revision="0"
+		indicates="Union"
+	/>
+
+	<metaobject name="Class"
+		since_revision="0"
+		reflects="a class or a struct"
+	>
+		<generalization concept="RecordType"/>
+	</metaobject>
+
+	<trait name="is_meta_class"
+		since_revision="0"
+		indicates="Class"
+	/>
+
+	<metaobject name="Inheritance"
+		since_revision="2"
+		reflects="class inheritance"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<trait name="is_meta_inheritance"
+		since_revision="2"
+		indicates="Inheritance"
+	/>
+
+	<operation name="get_derived_class"
+		since_revision="2"
+		result="Class"
+		brief="returns the $(operand) reflecting the derived $(reflected)
+		in a inheritance."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="get_base_class"
+		since_revision="2"
+		result="Class"
+		brief="returns the $(operand) reflecting the base $(reflected)
+		in a inheritance."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_virtual"
+		uname="is_virtual_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as virtual."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_public"
+		uname="is_public_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as public."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_protected"
+		uname="is_protected_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as protected."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_private"
+		uname="is_private_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as private."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="get_access_specifier"
+		uname="get_inheritance_access_specifier"
+		since_revision="2"
+		result="Specifier"
+		brief="returns the $(result) reflecting the access specifier
+		of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+
+	<operation name="get_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Inheritance"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of base clases of a $(reflected) reflected by a $(operand)."
+	>
 		<argument type="Class"/>
 	</operation>
+
 
 	<metaobject name="Enum"
 		since_revision="0"
@@ -597,7 +708,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	/>
 
 	<operation name="get_pointer"
-		uname="get_data_pointer"
+		uname="get_data_member_pointer"
 		since_revision="0"
 		result="Pointer"
 		brief="returns a pointer to the $(reflected) reflected by a $(operand).
