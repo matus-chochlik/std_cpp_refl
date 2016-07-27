@@ -257,49 +257,49 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Alias"/>
 	</operation>
 
-	<metaobject name="ClassMember"
+	<metaobject name="RecordMember"
 		since_revision="0"
 		abstract="true"
-		reflects="a class member"
+		reflects="a class, struct or union member"
 	>
 		<generalization concept="ScopeMember"/>
-		<constraint operation="get_scope" concept="Class"/>
+		<constraint operation="get_scope" concept="Record"/>
 		<order_after concept="Class"/>
 	</metaobject>
 
-	<trait name="is_meta_class_member"
+	<trait name="is_meta_record_member"
 		since_revision="0"
-		indicates="ClassMember"
+		indicates="RecordMember"
 	/>
 
 	<operation name="is_public"
-		uname="is_public_class_member"
+		uname="is_public_record_member"
 		since_revision="0"
 		result="BooleanConstant"
 		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with public access."
 	>
-		<argument type="ClassMember"/>
+		<argument type="RecordMember"/>
 	</operation>
 
 	<operation name="is_protected"
-		uname="is_protected_class_member"
+		uname="is_protected_record_member"
 		since_revision="0"
 		result="BooleanConstant"
 		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with protected access."
 	>
-		<argument type="ClassMember"/>
+		<argument type="RecordMember"/>
 	</operation>
 
 	<operation name="is_private"
-		uname="is_private_class_member"
+		uname="is_private_record_member"
 		since_revision="0"
 		result="BooleanConstant"
 		brief="indicates if the $(reflected) reflected by a $(operand)
 		was declared with private access."
 	>
-		<argument type="ClassMember"/>
+		<argument type="RecordMember"/>
 	</operation>
 
 	<operation name="get_access_specifier"
@@ -308,7 +308,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns the $(result) reflecting the access specifier
 		of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="ClassMember"/>
+		<argument type="RecordMember"/>
 	</operation>
 
 	<metaobject name="EnumMember"
@@ -455,7 +455,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="TagType"/>
 	</operation>
 
-	<metaobject name="RecordType"
+	<metaobject name="Record"
 		since_revision="2"
 		abstract="true"
 		reflects="a class, a scope or a union"
@@ -465,7 +465,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<trait name="is_meta_record_type"
 		since_revision="2"
-		indicates="RecordType"
+		indicates="Record"
 	/>
 
 	<operation name="get_data_members"
@@ -474,7 +474,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<operation name="get_all_data_members"
@@ -483,7 +483,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) data members of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<operation name="get_accessible_data_members"
@@ -493,7 +493,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the operation."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<operation name="get_member_types"
@@ -502,7 +502,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting
 		the public member types of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<operation name="get_all_member_types"
@@ -511,7 +511,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) member types of $(reflected) reflected by a $(operand)."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<operation name="get_accessible_member_types"
@@ -521,14 +521,14 @@ by the compiler which allow access to metadata reflecting specific program decla
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the operation."
 	>
-		<argument type="RecordType"/>
+		<argument type="Record"/>
 	</operation>
 
 	<metaobject name="Union"
 		since_revision="0"
 		reflects="a union"
 	>
-		<generalization concept="RecordType"/>
+		<generalization concept="Record"/>
 	</metaobject>
 
 	<trait name="is_meta_union"
@@ -540,7 +540,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a class or a struct"
 	>
-		<generalization concept="RecordType"/>
+		<generalization concept="Record"/>
 	</metaobject>
 
 	<trait name="is_meta_class"
@@ -729,7 +729,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a class data member"
 	>
-		<generalization concept="ClassMember"/>
+		<generalization concept="RecordMember"/>
 		<generalization concept="Variable"/>
 	</metaobject>
 
@@ -737,7 +737,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="1"
 		reflects="a class member type (typedef, class, union, enum)"
 	>
-		<generalization concept="ClassMember"/>
+		<generalization concept="RecordMember"/>
 		<generalization concept="Type"/>
 	</metaobject>
 
