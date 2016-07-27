@@ -633,7 +633,27 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="2"
 		result="ObjectSequence" element="Inheritance"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
-		of base clases of a $(reflected) reflected by a $(operand)."
+		of public base clases of a $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_all_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Inheritance"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of all base clases (including the private and protected ones)
+		of a $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_accessible_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Inheritance"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of those base clases of a $(reflected) reflected by a $(operand)
+		which are accessible from the point of invocation of the operation."
 	>
 		<argument type="Class"/>
 	</operation>
