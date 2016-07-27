@@ -326,30 +326,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		indicates="EnumMember"
 	/>
 
-	<metaobject name="Linkable"
-		since_revision="0"
-		abstract="true"
-		reflects="a declaration with storage duration and/or linkage"
-	>
-		<generalization concept="Named"/>
-		<generalization concept="ScopeMember"/>
-		<order_after concept="Typed"/>
-	</metaobject>
-
-	<trait name="is_meta_linkable"
-		since_revision="0"
-		indicates="Linkable"
-	/>
-
-	<operation name="is_static"
-		since_revision="0"
-		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand)
-		was declared with the static specifier."
-	>
-		<argument type="Linkable"/>
-	</operation>
-
 	<metaobject name="Namespace"
 		since_revision="0"
 		reflects="a namespace"
@@ -481,6 +457,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<metaobject name="RecordType"
 		since_revision="2"
+		abstract="true"
 		reflects="a class, a scope or a union"
 	>
 		<generalization concept="TagType"/>
@@ -509,6 +486,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="RecordType"/>
 	</operation>
 
+	<operation name="get_accessible_data_members"
+		since_revision="2"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting data members
+		of $(reflected) reflected by a $(operand) accessible from the point
+		of invocation of the operation."
+	>
+		<argument type="RecordType"/>
+	</operation>
+
 	<operation name="get_member_types"
 		since_revision="1"
 		result="ObjectSequence" element="MemberType"
@@ -523,6 +510,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="ObjectSequence" element="MemberType"
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="RecordType"/>
+	</operation>
+
+	<operation name="get_accessible_member_types"
+		since_revision="2"
+		result="ObjectSequence" element="MemberType"
+		brief="returns a $(result) of $(elements) reflecting member types
+		of $(reflected) reflected by a $(operand) accessible from the point
+		of invocation of the operation."
 	>
 		<argument type="RecordType"/>
 	</operation>
@@ -697,15 +694,25 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a variable"
 	>
-		<generalization concept="Linkable"/>
 		<generalization concept="Named"/>
 		<generalization concept="Typed"/>
+		<generalization concept="ScopeMember"/>
 	</metaobject>
 
 	<trait name="is_meta_variable"
 		since_revision="0"
 		indicates="Variable"
 	/>
+
+	<operation name="is_static"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared with the static specifier."
+	>
+		<argument type="Variable"/>
+	</operation>
+
 
 	<operation name="get_pointer"
 		uname="get_data_member_pointer"
