@@ -28,15 +28,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Object"/>
 	</operation>
 
-	<operation name="has_declaration"
-		since_revision="2"
-		brief="Indicates if $(reflected) reflected by a $(operand) was
-		declared in source code (as opposed to being built-in)."
-		result="BooleanConstant"
-	>
-		<argument type="Object"/>
-	</operation>
-
 	<operation name="get_source_location"
 		since_revision="0"
 		brief="returns the source location info of the declaration
@@ -86,24 +77,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="ObjectSequence"/>
 	</operation>
-
-	<!--
-	<operation name="expose_protected"
-		since_revision="2"
-		result="ObjectSequence"
-		brief="Returns a $(result) including protected members."
-	>
-		<argument type="ObjectSequence"/>
-	</operation>
-
-	<operation name="expose_private"
-		since_revision="2"
-		result="ObjectSequence"
-		brief="Returns a $(result) including protected and private members."
-	>
-		<argument type="ObjectSequence"/>
-	</operation>
-	-->
 
 	<metaobject name="Reversible"
 		since_revision="1"
@@ -471,21 +444,22 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_data_members"
 		since_revision="0"
 		result="ObjectSequence" element="DataMember"
-		brief="returns a $(result) of $(elements) reflecting
-		the public data members of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Record"/>
-	</operation>
-
-	<operation name="get_all_data_members"
-		since_revision="2"
-		result="ObjectSequence" element="DataMember"
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Record"/>
 	</operation>
 
+	<operation name="get_public_data_members"
+		since_revision="2"
+		result="ObjectSequence" element="DataMember"
+		brief="returns a $(result) of $(elements) reflecting
+		the public data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+	</operation>
+
+	<!--
 	<operation name="get_accessible_data_members"
 		since_revision="2"
 		result="ObjectSequence" element="DataMember"
@@ -495,18 +469,10 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="Record"/>
 	</operation>
+	-->
 
 	<operation name="get_member_types"
 		since_revision="1"
-		result="ObjectSequence" element="MemberType"
-		brief="returns a $(result) of $(elements) reflecting
-		the public member types of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Record"/>
-	</operation>
-
-	<operation name="get_all_member_types"
-		since_revision="2"
 		result="ObjectSequence" element="MemberType"
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) member types of $(reflected) reflected by a $(operand)."
@@ -514,6 +480,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Record"/>
 	</operation>
 
+	<operation name="get_public_member_types"
+		since_revision="2"
+		result="ObjectSequence" element="MemberType"
+		brief="returns a $(result) of $(elements) reflecting
+		the public member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+	</operation>
+
+	<!--
 	<operation name="get_accessible_member_types"
 		since_revision="2"
 		result="ObjectSequence" element="MemberType"
@@ -523,18 +499,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="Record"/>
 	</operation>
-
-	<metaobject name="Union"
-		since_revision="0"
-		reflects="a union"
-	>
-		<generalization concept="Record"/>
-	</metaobject>
-
-	<trait name="is_meta_union"
-		since_revision="0"
-		indicates="Union"
-	/>
+	-->
 
 	<metaobject name="Class"
 		since_revision="0"
@@ -559,15 +524,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="2"
 		indicates="Inheritance"
 	/>
-
-	<operation name="get_derived_class"
-		since_revision="2"
-		result="Class"
-		brief="returns the $(operand) reflecting the derived $(reflected)
-		in a inheritance."
-	>
-		<argument type="Inheritance"/>
-	</operation>
 
 	<operation name="get_base_class"
 		since_revision="2"
@@ -633,21 +589,22 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="2"
 		result="ObjectSequence" element="Inheritance"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
-		of public base clases of a $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Class"/>
-	</operation>
-
-	<operation name="get_all_base_classes"
-		since_revision="2"
-		result="ObjectSequence" element="Inheritance"
-		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of all base clases (including the private and protected ones)
 		of a $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
 	</operation>
 
+	<operation name="get_public_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Inheritance"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of public base clases of a $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<!--
 	<operation name="get_accessible_base_classes"
 		since_revision="2"
 		result="ObjectSequence" element="Inheritance"
@@ -657,6 +614,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="Class"/>
 	</operation>
+	-->
 
 
 	<metaobject name="Enum"
@@ -671,11 +629,11 @@ by the compiler which allow access to metadata reflecting specific program decla
 		indicates="Enum"
 	/>
 
-	<operation name="is_scoped"
+	<operation name="is_scoped_enum"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="returns true if the $(reflected) reflected by a $(operand)
-		is scoped (strongly-typed)."
+		is scoped."
 	>
 		<argument type="Enum"/>
 	</operation>
@@ -744,36 +702,4 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="Variable"/>
 	</operation>
-
-	<metaobject name="DataMember"
-		since_revision="0"
-		reflects="a class data member"
-	>
-		<generalization concept="RecordMember"/>
-		<generalization concept="Variable"/>
-	</metaobject>
-
-	<metaobject name="MemberType"
-		since_revision="1"
-		reflects="a class member type (typedef, class, union, enum)"
-	>
-		<generalization concept="RecordMember"/>
-		<generalization concept="Type"/>
-	</metaobject>
-
-	<metaobject name="Enumerator"
-		since_revision="2"
-		reflects="an enumerator"
-	>
-		<generalization concept="Constant"/>
-		<generalization concept="Named"/>
-		<generalization concept="EnumMember"/>
-		<constraint operation="get_type" concept="Enum"/>
-		<order_after concept="Enum"/>
-	</metaobject>
-
-	<trait name="is_meta_enumerator"
-		since_revision="2"
-		indicates="Enumerator"
-	/>
 </concepts>

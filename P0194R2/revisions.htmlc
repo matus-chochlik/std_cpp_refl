@@ -80,4 +80,111 @@ get_aliased_t -> get_aliased_m
 get_data_members_t -> get_data_members_m
 </code>
 </pre>
+
+<h4>Revision 6 (P0194R2)</h4>
+
+<p>The following concepts from P0194R1 were dropped in order to simplify
+the proposal:
+<code>meta::Linkable</code>, <code>meta::Enumerator</code>,
+<code>meta::DataMember</code>, <code>meta::MemberType</code>.
+</p>
+
+<p>Unlike in the previous proposal, metaobjects reflecting anonymous entities -
+the global scope, anonymous namespaces and classes, etc. do conform to the
+<code>meta::Named</code> concept and implement the name-returning operations.
+</p>
+
+<p>Direct reflection of class data members, member types and type aliases
+and enumerators has been added. For example:
+</p>
+<pre>
+<code>
+enum E { a, b, c, d};
+
+using ME_a = reflexpr(E::a); // valid
+
+struct S { using T = int; T a; static bool b; };
+
+using MS_T = reflexpr(S::T); // valid
+using MS_a = reflexpr(S::a); // valid
+using MS_b = reflexpr(S::b); // valid
+
+</code>
+</pre>
+
+<p>The typedef (type-alias) reflection has been simplified according to the
+feedback from Oulu. Previously we required reflection to be aware about all
+aliases in a <em>"chain"</em> even in the context of templates. For example:
+</p>
+<pre>
+<code>
+using A = int;
+using B = A;
+using C = B;
+
+template &lt;typename T&gt;
+struct S
+{
+	using X = T;
+};
+
+using Mint = reflexpr(int);
+using MA = reflexpr(A);
+using MB = reflexpr(B);
+using MC = reflexpr(C);
+
+using MSintX = reflexpr(S&lt;int&gt;::X);
+using MSAX = reflexpr(S&lt;A&gt;::X);
+using MSBX = reflexpr(S&lt;B&gt;::X);
+using MSCX = reflexpr(S&lt;C&gt;::X);
+</code>
+</pre>
+
+<p>Previously we requied the following (i.e. that reflection should be aware
+of the whole <em>"chain"</em> of aliases: <code>S&lt;C&gt;::X -> C -> B -> A -> int</code>):
+</p>
+<pre>
+<code>
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, MC&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, MA&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;&gt;, MA&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, MA&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
+</code>
+</pre>
+
+<p>Now we require only that the alias knows the <em>"canonical"</em> type which
+it refers to - the type which has a unique identity at the base level (i.e.
+<code>S&lt;C&gt;::X -> int</code>, <code>C -> int</code>, <code>B -> int</code>,
+<code>A -> int</code>):
+</p>
+<pre>
+<code>
+static_assert(meta::Alias&lt;MSCX&gt;, "");
+static_assert(meta::Alias&lt;MSBX&gt;, "");
+static_assert(meta::Alias&lt;MSAX&gt;, "");
+
+static_assert(meta::Alias&lt;MC&gt;, "");
+static_assert(meta::Alias&lt;MB&gt;, "");
+static_assert(meta::Alias&lt;MA&gt;, "");
+
+static_assert(!meta::Alias&lt;Mint&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, Mint&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
+
+</code>
+</pre>
+
 </div>
+
