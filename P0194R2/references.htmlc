@@ -3,6 +3,15 @@
 
 <table class="references">
 <tr>
+	<th>[P0194R1]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r1.html">
+		Chochlík M., Naumann A. — P0194R1 - Static reflection (revision 5)
+	</a>
+  </td>
+</tr>
+
+<tr>
 	<th>[P0194R0]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
@@ -34,6 +43,15 @@
 	<td>
 	<a href="https://isocpp.org/files/papers/n3996.pdf">
 		Chochlík M. — N3996 - Static reflection
+	</a>
+  </td>
+</tr>
+
+<tr id="ref-P0385R0">
+	<th>[P0385R0]</th>
+	<td>
+	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0385r0.pdf">
+		Chochlík M., Naumann A. — P0385R0 - Static reflection - Rationale, design and evolution
 	</a>
   </td>
 </tr>

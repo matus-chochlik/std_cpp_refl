@@ -86,12 +86,41 @@ get_data_members_t -> get_data_members_m
 <p>The following concepts from P0194R1 were dropped in order to simplify
 the proposal:
 <code>meta::Linkable</code>, <code>meta::Enumerator</code>,
-<code>meta::DataMember</code>, <code>meta::MemberType</code>.
+<code>meta::DataMember</code>, <code>meta::MemberType</code> and
+<code>meta::EnumClass</code>.
 </p>
 
+<p>The following concepts were added to the proposal:
+<code>meta::TagType</code>, <code>meta::Record</code>,
+<code>meta::EnumMember</code>.
+</p>
+
+
 <p>Unlike in the previous proposal, metaobjects reflecting anonymous entities -
-the global scope, anonymous namespaces and classes, etc. do conform to the
+the global scope, anonymous namespaces and classes, etc. <em>do</em> conform to the
 <code>meta::Named</code> concept and implement the name-returning operations.
+</p>
+
+<p>Unlike in the previous proposal, metaobjects reflecting the global scope
+<em>do</em> conform to the <code>meta::ScopeMember</code> concept and the
+<code>meta::get_scope</code> operation, for arguments reflecting
+the global scope returns a metaobject reflecting the global scope
+(i.e. the global scope is its own scope).
+</p>
+
+<p>Metaobjects reflecting built-in types and types like pointers, references,
+arrays, etc. now don't have a scope (i.e. they do not conform to the
+<code>meta::ScopeMember</code> concept).
+</p>
+
+<p>We have added a different mechanism for distinguishing between
+non-scoped and scoped <code>enum</code>s - the <code>meta::is_scoped_enum</code>
+operation. Unlike in the previous proposal <code>meta::Enum</code> reflecting
+a non-scoped enum <em>is</em> a <code>meta::Scope</code>.
+</p>
+
+<p>We now allow the default construction and copy construction of
+values of metaobject types.
 </p>
 
 <p>Direct reflection of class data members, member types and type aliases
@@ -112,7 +141,7 @@ using MS_b = reflexpr(S::b); // valid
 </code>
 </pre>
 
-<p>The typedef (type-alias) reflection has been simplified according to the
+<p>The typedef (type-alias) reflection has been simplified based on the
 feedback from Oulu. Previously we required reflection to be aware about all
 aliases in a <em>"chain"</em> even in the context of templates. For example:
 </p>
