@@ -260,8 +260,9 @@ get_data_members_t -&gt; get_data_members_m
 <p>The following concepts from P0194R1 were dropped in order to simplify
 the proposal:
 <code>meta::Linkable</code>, <code>meta::Enumerator</code>,
-<code>meta::DataMember</code>, <code>meta::MemberType</code> and
-<code>meta::EnumClass</code>.
+<code>meta::DataMember</code>, <code>meta::MemberType</code>,
+<code>meta::EnumClass</code>, <code>meta::TypeAlias</code> and
+<code>meta::NamespaceAlias</code>.
 </p>
 
 <p>The following concepts were added to the proposal:
@@ -343,8 +344,9 @@ using MSCX = reflexpr(S&lt;C&gt;::X);
 </code>
 </pre>
 
-<p>Previously we requied the following (i.e. that reflection should be aware
-of the whole <em>"chain"</em> of aliases: <code>S&lt;C&gt;::X -&gt; C -&gt; B -&gt; A -&gt; int</code>):
+<p>In the previous proposals we required the following (i.e. that reflection
+should be aware of the whole <em>"chain"</em> of aliases -
+<code>S&lt;C&gt;::X -&gt; C -&gt; B -&gt; A -&gt; int</code>):
 </p>
 <pre>
 <code>
@@ -361,8 +363,8 @@ static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, 
 </code>
 </pre>
 
-<p>Now we require only that the alias knows the <em>"canonical"</em> type which
-it refers to - the type which has a unique identity at the base level (i.e.
+<p>Now we require only that the type alias knows the <em>"canonical"</em> type
+which it refers to - the type which has a unique identity at the base level (i.e.
 <code>S&lt;C&gt;::X -&gt; int</code>, <code>C -&gt; int</code>, <code>B -&gt; int</code>,
 <code>A -&gt; int</code>):
 </p>
@@ -390,7 +392,7 @@ static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, 
 </pre>
 
 <p>The mechanism for enumerating public-only vs. all (including non-public ones)
-class members has been changed. Now the <em>"basic"</em> operation like
+class members has been changed. Now the <em>"basic"</em> operations like
 <code>meta::get_data_members</code>, <code>meta::get_member_types</code>, etc.
 return all members, and the <code>meta::get_public_data_members</code>,
 <code>meta::get_public_member_types</code>, return only the public class members.
@@ -468,12 +470,12 @@ template &lt;typename T&gt; constexpr bool is_metaobject_v
 <pre>
 [<span class="note">Example:</span>
 <code>
-is_metaobject_v&lt;int&gt;;                   // false
-is_metaobject_v&lt;void&gt;;                  // false
-is_metaobject_v&lt;string&gt;;                // false
-is_metaobject_v&lt;reflexpr(int)&gt;;         // true
-is_metaobject_v&lt;reflexpr(std)&gt;;         // true
-is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
+is_metaobject_v&lt;int&gt;;                 // false
+is_metaobject_v&lt;void&gt;;                // false
+is_metaobject_v&lt;string&gt;;              // false
+is_metaobject_v&lt;reflexpr(int)&gt;;       // true
+is_metaobject_v&lt;reflexpr(std)&gt;;       // true
+is_metaobject_v&lt;reflexpr(string)&gt;;    // true
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -490,25 +492,23 @@ template &lt;typename T&gt; concept bool Object;
 template &lt;Object T&gt; concept bool ObjectSequence;
 template &lt;Object T&gt; concept bool Reversible;
 template &lt;Object T&gt; concept bool Named;
-template &lt;Object T&gt; concept bool Specifier;
-template &lt;Object T&gt; concept bool Typed;
-template &lt;Object T&gt; concept bool ScopeMember;
-template &lt;Object T&gt; concept bool Scope;
 template &lt;Object T&gt; concept bool Alias;
+template &lt;Object T&gt; concept bool Typed;
+template &lt;Object T&gt; concept bool Scope;
+template &lt;Object T&gt; concept bool ScopeMember;
 template &lt;Object T&gt; concept bool RecordMember;
 template &lt;Object T&gt; concept bool EnumMember;
 template &lt;Object T&gt; concept bool Namespace;
 template &lt;Object T&gt; concept bool GlobalScope;
-template &lt;Object T&gt; concept bool NamespaceAlias;
 template &lt;Object T&gt; concept bool Type;
-template &lt;Object T&gt; concept bool TypeAlias;
 template &lt;Object T&gt; concept bool TagType;
 template &lt;Object T&gt; concept bool Record;
 template &lt;Object T&gt; concept bool Class;
-template &lt;Object T&gt; concept bool Inheritance;
 template &lt;Object T&gt; concept bool Enum;
 template &lt;Object T&gt; concept bool Constant;
 template &lt;Object T&gt; concept bool Variable;
+template &lt;Object T&gt; concept bool Specifier;
+template &lt;Object T&gt; concept bool Inheritance;
 
 
 // <em>metaobject operations</em>
@@ -516,13 +516,13 @@ template &lt;Object T1, Object T2&gt; struct reflects_same;
 template &lt;Object T&gt; struct get_source_location;
 template &lt;ObjectSequence T&gt; struct get_size;
 template &lt;ObjectSequence T1, size_t Index&gt; struct get_element;
-template &lt;ObjectSequence T&gt; struct unpack_sequence;
+template &lt;ObjectSequence T1, template &lt;class...&gt; class Tpl&gt; struct unpack_sequence;
 template &lt;Named T&gt; struct is_anonymous;
 template &lt;Named T&gt; struct get_base_name;
 template &lt;Named T&gt; struct get_display_name;
+template &lt;Alias T&gt; struct get_aliased;
 template &lt;Typed T&gt; struct get_type;
 template &lt;ScopeMember T&gt; struct get_scope;
-template &lt;Alias T&gt; struct get_aliased;
 template &lt;RecordMember T&gt; struct is_public;
 template &lt;RecordMember T&gt; struct is_protected;
 template &lt;RecordMember T&gt; struct is_private;
@@ -539,17 +539,17 @@ template &lt;Record T&gt; struct get_member_types;
 template &lt;Record T&gt; struct get_public_member_types;
 template &lt;Class T&gt; struct get_base_classes;
 template &lt;Class T&gt; struct get_public_base_classes;
+template &lt;Enum T&gt; struct is_scoped_enum;
+template &lt;Enum T&gt; struct get_enumerators;
+template &lt;Constant T&gt; struct get_constant;
+template &lt;Variable T&gt; struct is_static;
+template &lt;Variable T&gt; struct get_pointer;
 template &lt;Inheritance T&gt; struct get_base_class;
 template &lt;Inheritance T&gt; struct is_virtual;
 template &lt;Inheritance T&gt; struct is_public;
 template &lt;Inheritance T&gt; struct is_protected;
 template &lt;Inheritance T&gt; struct is_private;
 template &lt;Inheritance T&gt; struct get_access_specifier;
-template &lt;Enum T&gt; struct is_scoped_enum;
-template &lt;Enum T&gt; struct get_enumerators;
-template &lt;Constant T&gt; struct get_constant;
-template &lt;Variable T&gt; struct is_static;
-template &lt;Variable T&gt; struct get_pointer;
 
 
 // 
@@ -559,20 +559,20 @@ template &lt;ObjectSequence T&gt;
   constexpr auto get_size_v = get_size&lt;T&gt;::value;
 template &lt;ObjectSequence T1, size_t Index&gt;
   using get_element_m = typename get_element&lt;T1, Index&gt;::type;
-template &lt;ObjectSequence T&gt;
-  using unpack_sequence_m = typename unpack_sequence&lt;T&gt;::type;
+template &lt;ObjectSequence T1, template &lt;class...&gt; class Tpl&gt;
+  using unpack_sequence_m = typename unpack_sequence&lt;T1, Tpl&gt;::type;
 template &lt;Named T&gt;
   constexpr auto is_anonymous_v = is_anonymous&lt;T&gt;::value;
 template &lt;Named T&gt;
   constexpr auto get_base_name_v = get_base_name&lt;T&gt;::value;
 template &lt;Named T&gt;
   constexpr auto get_display_name_v = get_display_name&lt;T&gt;::value;
+template &lt;Alias T&gt;
+  using get_aliased_m = typename get_aliased&lt;T&gt;::type;
 template &lt;Typed T&gt;
   using get_type_m = typename get_type&lt;T&gt;::type;
 template &lt;ScopeMember T&gt;
   using get_scope_m = typename get_scope&lt;T&gt;::type;
-template &lt;Alias T&gt;
-  using get_aliased_m = typename get_aliased&lt;T&gt;::type;
 template &lt;RecordMember T&gt;
   constexpr auto is_public_v = is_public&lt;T&gt;::value;
 template &lt;RecordMember T&gt;
@@ -605,6 +605,16 @@ template &lt;Class T&gt;
   using get_base_classes_m = typename get_base_classes&lt;T&gt;::type;
 template &lt;Class T&gt;
   using get_public_base_classes_m = typename get_public_base_classes&lt;T&gt;::type;
+template &lt;Enum T&gt;
+  constexpr auto is_scoped_enum_v = is_scoped_enum&lt;T&gt;::value;
+template &lt;Enum T&gt;
+  using get_enumerators_m = typename get_enumerators&lt;T&gt;::type;
+template &lt;Constant T&gt;
+  constexpr auto get_constant_v = get_constant&lt;T&gt;::value;
+template &lt;Variable T&gt;
+  constexpr auto is_static_v = is_static&lt;T&gt;::value;
+template &lt;Variable T&gt;
+  const auto get_pointer_v = get_pointer&lt;T&gt;::value;
 template &lt;Inheritance T&gt;
   using get_base_class_m = typename get_base_class&lt;T&gt;::type;
 template &lt;Inheritance T&gt;
@@ -617,16 +627,6 @@ template &lt;Inheritance T&gt;
   constexpr auto is_private_v = is_private&lt;T&gt;::value;
 template &lt;Inheritance T&gt;
   using get_access_specifier_m = typename get_access_specifier&lt;T&gt;::type;
-template &lt;Enum T&gt;
-  constexpr auto is_scoped_enum_v = is_scoped_enum&lt;T&gt;::value;
-template &lt;Enum T&gt;
-  using get_enumerators_m = typename get_enumerators&lt;T&gt;::type;
-template &lt;Constant T&gt;
-  constexpr auto get_constant_v = get_constant&lt;T&gt;::value;
-template &lt;Variable T&gt;
-  constexpr auto is_static_v = is_static&lt;T&gt;::value;
-template &lt;Variable T&gt;
-  const auto get_pointer_v = get_pointer&lt;T&gt;::value;
 
 
 } // namespace meta
@@ -679,8 +679,8 @@ concept bool Named;
 <tr><td>
 <pre><code>
 template &lt;typename T&gt;
-concept bool Specifier;
-</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td><p><code>meta::Specifier</code> reflects a specifier (const, virtual, static, noexcept, public,   protected, private, etc.).
+concept bool Alias;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td><p><code>meta::Alias</code> reflects a type or namespace alias.
 		</p></td></tr>
 
 
@@ -695,14 +695,6 @@ concept bool Typed;
 <tr><td>
 <pre><code>
 template &lt;typename T&gt;
-concept bool ScopeMember;
-</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td><p><code>meta::ScopeMember</code> reflects a declaration nested in a scope (like the global scope,   namespace, class, enum, etc.).
-		</p></td></tr>
-
-
-<tr><td>
-<pre><code>
-template &lt;typename T&gt;
 concept bool Scope;
 </code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td><p><code>meta::Scope</code> reflects a scope.
 		</p></td></tr>
@@ -711,8 +703,8 @@ concept bool Scope;
 <tr><td>
 <pre><code>
 template &lt;typename T&gt;
-concept bool Alias;
-</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td><p><code>meta::Alias</code> reflects a type or namespace alias.
+concept bool ScopeMember;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td><p><code>meta::ScopeMember</code> reflects a declaration nested in a scope (like the global scope,   namespace, class, enum, etc.).
 		</p></td></tr>
 
 
@@ -751,24 +743,8 @@ concept bool GlobalScope;
 <tr><td>
 <pre><code>
 template &lt;typename T&gt;
-concept bool NamespaceAlias;
-</code></pre></td><td><code>Namespace&lt;T&gt;</code><br/><code>Alias&lt;T&gt;</code><br/></td><td><p><code>meta::NamespaceAlias</code> reflects a namespace alias.
-		</p></td></tr>
-
-
-<tr><td>
-<pre><code>
-template &lt;typename T&gt;
 concept bool Type;
 </code></pre></td><td><code>Reversible&lt;T&gt;</code><br/><code>Named&lt;T&gt;</code><br/></td><td><p><code>meta::Type</code> reflects a type.
-		</p></td></tr>
-
-
-<tr><td>
-<pre><code>
-template &lt;typename T&gt;
-concept bool TypeAlias;
-</code></pre></td><td><code>Type&lt;T&gt;</code><br/><code>Alias&lt;T&gt;</code><br/></td><td><p><code>meta::TypeAlias</code> reflects a type alias or typedef.
 		</p></td></tr>
 
 
@@ -799,14 +775,6 @@ concept bool Class;
 <tr><td>
 <pre><code>
 template &lt;typename T&gt;
-concept bool Inheritance;
-</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td><p><code>meta::Inheritance</code> reflects class inheritance.
-		</p></td></tr>
-
-
-<tr><td>
-<pre><code>
-template &lt;typename T&gt;
 concept bool Enum;
 </code></pre></td><td><code>TagType&lt;T&gt;</code><br/></td><td><p><code>meta::Enum</code> reflects an enumeration.
 		</p></td></tr>
@@ -825,6 +793,22 @@ concept bool Constant;
 template &lt;typename T&gt;
 concept bool Variable;
 </code></pre></td><td><code>Named&lt;T&gt;</code><br/><code>Typed&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td><p><code>meta::Variable</code> reflects a variable.
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Specifier;
+</code></pre></td><td><code>Named&lt;T&gt;</code><br/></td><td><p><code>meta::Specifier</code> reflects a specifier (const, virtual, static, noexcept, public,   protected, private, etc.).
+		</p></td></tr>
+
+
+<tr><td>
+<pre><code>
+template &lt;typename T&gt;
+concept bool Inheritance;
+</code></pre></td><td><code>Object&lt;T&gt;</code><br/></td><td><p><code>meta::Inheritance</code> reflects class inheritance.
 		</p></td></tr>
 </table></div>
 
@@ -1066,7 +1050,7 @@ struct get_size;
 struct get_element;
 </code></pre></td><td>returns the i-th <code>meta::<em>Object</em></code> in a <code>meta::<em>ObjectSequence</em></code>.</td><td>
 		<code>meta::<em>Object</em></code>
-		</td></tr><tr><td><pre><code>template &lt;ObjectSequence T&gt;
+		</td></tr><tr><td><pre><code>template &lt;ObjectSequence T1, template &lt;class...&gt; class Tpl&gt;
 struct unpack_sequence;
 </code></pre></td><td>Unpacks the <code>meta::<em>ObjectSequence</em></code> into a template.</td><td>
 		<code>meta::<em>Type</em></code>
@@ -1076,7 +1060,11 @@ struct is_anonymous;
 struct get_base_name;
 </code></pre></td><td>returns the basic name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
 struct get_display_name;
-</code></pre></td><td>returns the display name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Typed T&gt;
+</code></pre></td><td>returns the display name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Alias T&gt;
+struct get_aliased;
+</code></pre></td><td>returns the <code>meta::<em>Named</em></code> reflecting the original declaration   of a type or namespace alias reflected by a <code>meta::<em>Alias</em></code>.</td><td>
+		<code>meta::<em>Named</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Typed T&gt;
 struct get_type;
 </code></pre></td><td>returns the <code>meta::<em>Type</em></code> reflecting the type of a base-level declaration with a type (for example   a variable)   reflected by a <code>meta::<em>Typed</em></code>.</td><td>
 		<code>meta::<em>Type</em></code>
@@ -1084,10 +1072,6 @@ struct get_type;
 struct get_scope;
 </code></pre></td><td>returns the <code>meta::<em>Scope</em></code> reflecting the scope of a declaration nested in a scope (like the global scope,   namespace, class, enum, etc.)   reflected by a <code>meta::<em>ScopeMember</em></code>.</td><td>
 		<code>meta::<em>Scope</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Alias T&gt;
-struct get_aliased;
-</code></pre></td><td>returns the <code>meta::<em>Named</em></code> reflecting the original declaration   of a type or namespace alias reflected by a <code>meta::<em>Alias</em></code>.</td><td>
-		<code>meta::<em>Named</em></code>
 		</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
 struct is_public;
 </code></pre></td><td>indicates if the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with public access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
@@ -1128,22 +1112,6 @@ struct get_member_types;
 struct get_public_member_types;
 </code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting   the public member types of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct get_base_class;
-</code></pre></td><td>returns the <code>meta::<em>Inheritance</em></code> reflecting the base class inheritance   in a inheritance.</td><td>
-		<code>meta::<em>Class</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct is_virtual;
-</code></pre></td><td>returns whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as virtual.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct is_public;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as public.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct is_protected;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as protected.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct is_private;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as private.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
-struct get_access_specifier;
-</code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of class inheritance reflected by a <code>meta::<em>Inheritance</em></code>.</td><td>
-		<code>meta::<em>Specifier</em></code>
 		</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_base_classes;
 </code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Inheritance</em></code>(s) reflecting the inheritance   of all base clases (including the private and protected ones)   of a a class or a struct reflected by a <code>meta::<em>Class</em></code>.</td><td>
@@ -1166,7 +1134,23 @@ struct get_constant;
 struct is_static;
 </code></pre></td><td>returns whether the a variable reflected by a <code>meta::<em>Variable</em></code>   was declared with the static specifier.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Variable T&gt;
 struct get_pointer;
-</code></pre></td><td>returns a pointer to the a variable reflected by a <code>meta::<em>Variable</em></code>.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.</td><td>a regular or class data member pointer</td></tr></table></div>
+</code></pre></td><td>returns a pointer to the a variable reflected by a <code>meta::<em>Variable</em></code>.   If the variable is a class member then the pointer is a class data member pointer,   otherwise it is a plain pointer.</td><td>a regular or class data member pointer</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct get_base_class;
+</code></pre></td><td>returns the <code>meta::<em>Inheritance</em></code> reflecting the base class inheritance   in a inheritance.</td><td>
+		<code>meta::<em>Class</em></code>
+		</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_virtual;
+</code></pre></td><td>returns whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as virtual.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_public;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as public.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_protected;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as protected.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct is_private;
+</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as private.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+struct get_access_specifier;
+</code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of class inheritance reflected by a <code>meta::<em>Inheritance</em></code>.</td><td>
+		<code>meta::<em>Specifier</em></code>
+		</td></tr></table></div>
 
 	<p>For <code>meta::Type</code>s reflecting native types with modifiers
 	like <code>unsigned</code>, <code>long</code>, etc. the <code>get_base_name</code>
