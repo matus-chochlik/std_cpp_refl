@@ -192,7 +192,7 @@ static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "")
 
 	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting strongly-typed
 	enumerations are distinguished from <em>Metaobjects</em>s reflecting non-scoped
-	enumerations are distinguished by the <code>meta::is_scoped_enum</code> operation.
+	enumerations by the <code>meta::is_scoped_enum</code> operation.
 	<span class="note">— end note</span>]
 	</p>
 
@@ -285,7 +285,7 @@ struct <em>MetaobjectOperation</em>
 { };
 </code></pre>
 
-	<h5>?.5.6 Pointer result<span class="section_name">[refl.ops.ptr]</span></h5>
+	<h5>?.5.3 Pointer result<span class="section_name">[refl.ops.ptr]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates returning a pointer or
 	a class data member pointer derive publicly and unambiguously from
@@ -301,7 +301,7 @@ struct <em>MetaobjectOperation</em>
 { };
 </code></pre>
 
-	<h5>?.5.3 String constant result<span class="section_name">[refl.ops.str]</span></h5>
+	<h5>?.5.4 String constant result<span class="section_name">[refl.ops.str]</span></h5>
 
 	<p>All <em>MetaobjectOperation</em> templates returning a character string
 	instantiate into a type <em>equivalent</em> to the following:
@@ -323,7 +323,7 @@ struct <em>MetaobjectOperation</em>
 	in such <em>MetaobjectOperation</em>.
 	</p>
 
-	<h5>?.5.4 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
+	<h5>?.5.5 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates yielding another <em>Metaobject</em>
 	instantiate into a type <em>equivalent</em> to the following:
@@ -340,7 +340,7 @@ struct <em>MetaobjectOperation</em>
 	available in such <em>MetaobjectOperation</em>.
 	</p>
 
-	<h5>?.5.5 Type result<span class="section_name">[refl.ops.type]</span></h5>
+	<h5>?.5.6 Type result<span class="section_name">[refl.ops.type]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates yielding a non-<em>Metaobject</em>
 	type instantiates into a type <em>equivalent</em> to the following:
@@ -468,8 +468,8 @@ produces the following output:
 <span class="note">— end example</span>]
 </pre>
 
-	<p>The <code>meta::get_base_name</code> operation cannot be invoked on <em>Metaobject</em>s
-	which do not conform to the <code>meta::Named</code> concept.
+	<p>The <code>meta::get_base_name</code> operation cannot be invoked on
+	<em>Metaobject</em>s which do not conform to the <code>meta::Named</code> concept.
 	</p>
 
 <pre>
@@ -478,6 +478,96 @@ produces the following output:
 auto l = [](void) { };
 meta::get_base_name_v&lt;reflexpr(::)&gt;           // <em>ill-formed</em>
 meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;  // <em>ill-formed</em>
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>The <code>meta::get_display_name</code> operation returns an
+	<em>implementation-dependent</em> name of the base-level entity reflected by
+	a <code>meta::Named</code> which is as close as possible to how the name
+	is spelled in the source code. For types in particular the display name
+	should be fully qualified and if possible it should preserve type or template
+	alias names.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+meta::get_display_name_v&lt;reflexpr(int)&gt; // "int"
+meta::get_display_name_v&lt;reflexpr(const std::string&amp;)&gt; // "const std::string&amp;"
+meta::get_display_name_v&lt;reflexpr(size_t * [10])&gt; // "std::size * [10]"
+meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt; // "char const [4]"
+
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<p>The <code>meta::get_aliased</code> operation invoked on a
+	<code>meta::Alias</code> always returns a (non <code>meta::Alias</code>)
+	<code>meta::Type</code> or <code>meta::Namespace</code> reflecting the
+	entity which has a unique identity at the base-level, which is directly
+	or indirectly referenced by the original alias.
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+
+using A = int;
+using B = const A;
+using C = B*;
+
+template &lt;typename T&gt;
+struct S
+{
+	using X = T&amp;;
+};
+
+static_assert( meta::Type&lt;reflexpr(A)&gt;, "");
+static_assert( meta::Alias&lt;reflexpr(A)&gt;, "");
+static_assert( meta::Type&lt;meta::get_aliased_m&lt;reflexpr(A)&gt;&gt;, "");
+static_assert(!meta::Alias&lt;meta::get_aliased_m&lt;reflexpr(A)&gt;&gt;, "");
+
+static_assert( meta::Type&lt;reflexpr(B)&gt;, "");
+static_assert( meta::Alias&lt;reflexpr(B)&gt;, "");
+static_assert( meta::Type&lt;meta::get_aliased_m&lt;reflexpr(B)&gt;&gt;, "");
+static_assert(!meta::Alias&lt;meta::get_aliased_m&lt;reflexpr(B)&gt;&gt;, "");
+
+static_assert( meta::Type&lt;reflexpr(C)&gt;, "");
+static_assert( meta::Alias&lt;reflexpr(C)&gt;, "");
+static_assert( meta::Type&lt;meta::get_aliased_m&lt;reflexpr(C)&gt;&gt;, "");
+static_assert(!meta::Alias&lt;meta::get_aliased_m&lt;reflexpr(C)&gt;&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(A)&gt;,
+	reflexpr(int)
+&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(B)&gt;,
+	reflexpr(const int)
+&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(C)&gt;,
+	reflexpr(const int *)
+&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(S&lt;A&gt;::X)&gt;,
+	reflexpr(int &amp;)
+&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(S&lt;B&gt;::X)&gt;,
+	reflexpr(const int &amp;)
+&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;
+	meta::get_aliased_m&lt;reflexpr(S&lt;C&gt;::X)&gt;,
+	reflexpr(const int * &amp;)
+&gt;, "");
+
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -739,9 +829,13 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
 reflexpr() // reflects the global namespace
 reflexpr(::) // reflects the global namespace
 reflexpr(std) // reflects the namespace
-reflexpr(std::size_t) // reflects the type
+reflexpr(int) // reflects the (native) type
+reflexpr(std::size_t) // reflects the type alias
 reflexpr(std::launch) // reflects the enum type
 reflexpr(std::vector&lt;int&gt;) // reflects the class
+reflexpr(std::launch::async) // reflects the enumerator
+reflexpr(std::pair&lt;int, int&gt;::first_type) // reflects the member typedef 
+reflexpr(std::pair&lt;int, int&gt;::first) // reflects the data member
 
 reflexpr(1) // <em>ill-formed</em>
 reflexpr(std::sin) // <em>ill-formed</em>

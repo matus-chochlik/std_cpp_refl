@@ -15,7 +15,6 @@
 <xsl:text>&lt;tr&gt;
 &lt;th&gt;Concept&lt;/th&gt;
 &lt;th&gt;Requirements&lt;/th&gt;
-&lt;th&gt;Optional restrictions&lt;/th&gt;
 &lt;th&gt;Description&lt;/th&gt;
 &lt;/tr&gt;
 </xsl:text>
@@ -48,12 +47,6 @@ concept bool <xsl:value-of select="@name"/>;
 		</xsl:if>
 	</xsl:for-each>
 	<xsl:if test="@name='Object'">&lt;code&gt;is_metaobject_v&amp;lt;T&amp;gt;&lt;/code&gt;&lt;br/&gt;</xsl:if>
-<xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
-	<xsl:for-each select="generalization[@optional='true']">
-		<xsl:text>&lt;code&gt;</xsl:text>
-		<xsl:value-of select="@concept"/><xsl:text>&amp;lt;T&amp;gt;</xsl:text>
-		<xsl:text>&lt;/code&gt;&lt;br/&gt;</xsl:text>
-	</xsl:for-each>
 <xsl:text>&lt;/td&gt;&lt;td&gt;</xsl:text>
 <xsl:choose>
 	<xsl:when test="@is_a">

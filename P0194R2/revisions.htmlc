@@ -103,7 +103,7 @@ the global scope, anonymous namespaces and classes, etc. <em>do</em> conform to 
 
 <p>Unlike in the previous proposal, metaobjects reflecting the global scope
 <em>do</em> conform to the <code>meta::ScopeMember</code> concept and the
-<code>meta::get_scope</code> operation, for arguments reflecting
+<code>meta::get_scope</code> operation. For arguments reflecting
 the global scope returns a metaobject reflecting the global scope
 (i.e. the global scope is its own scope).
 </p>
@@ -214,6 +214,13 @@ static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, 
 
 </code>
 </pre>
+
+<p>The mechanism for enumerating public-only vs. all (including non-public ones)
+class members has been changed. Now the <em>"basic"</em> operation like
+<code>meta::get_data_members</code>, <code>meta::get_member_types</code>, etc.
+return all members, and the <code>meta::get_public_data_members</code>,
+<code>meta::get_public_member_types</code>, return only the public class members.
+</p>
 
 </div>
 
