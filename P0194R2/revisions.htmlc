@@ -86,8 +86,9 @@ get_data_members_t -> get_data_members_m
 <p>The following concepts from P0194R1 were dropped in order to simplify
 the proposal:
 <code>meta::Linkable</code>, <code>meta::Enumerator</code>,
-<code>meta::DataMember</code>, <code>meta::MemberType</code> and
-<code>meta::EnumClass</code>.
+<code>meta::DataMember</code>, <code>meta::MemberType</code>,
+<code>meta::EnumClass</code>, <code>meta::TypeAlias</code> and
+<code>meta::NamespaceAlias</code>.
 </p>
 
 <p>The following concepts were added to the proposal:
@@ -169,8 +170,9 @@ using MSCX = reflexpr(S&lt;C&gt;::X);
 </code>
 </pre>
 
-<p>Previously we requied the following (i.e. that reflection should be aware
-of the whole <em>"chain"</em> of aliases: <code>S&lt;C&gt;::X -> C -> B -> A -> int</code>):
+<p>In the previous proposals we required the following (i.e. that reflection
+should be aware of the whole <em>"chain"</em> of aliases -
+<code>S&lt;C&gt;::X -> C -> B -> A -> int</code>):
 </p>
 <pre>
 <code>
@@ -187,8 +189,8 @@ static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, 
 </code>
 </pre>
 
-<p>Now we require only that the alias knows the <em>"canonical"</em> type which
-it refers to - the type which has a unique identity at the base level (i.e.
+<p>Now we require only that the type alias knows the <em>"canonical"</em> type
+which it refers to - the type which has a unique identity at the base level (i.e.
 <code>S&lt;C&gt;::X -> int</code>, <code>C -> int</code>, <code>B -> int</code>,
 <code>A -> int</code>):
 </p>
@@ -216,7 +218,7 @@ static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, 
 </pre>
 
 <p>The mechanism for enumerating public-only vs. all (including non-public ones)
-class members has been changed. Now the <em>"basic"</em> operation like
+class members has been changed. Now the <em>"basic"</em> operations like
 <code>meta::get_data_members</code>, <code>meta::get_member_types</code>, etc.
 return all members, and the <code>meta::get_public_data_members</code>,
 <code>meta::get_public_member_types</code>, return only the public class members.

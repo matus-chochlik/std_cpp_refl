@@ -58,7 +58,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		integer="size_t"
 		brief="returns the number of elements in the sequence."
 	>
-		<argument type="ObjectSequence"/>
+		<argument type="ObjectSequence" name="S"/>
 	</operation>
 
 	<operation name="get_element"
@@ -66,7 +66,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="Object"
 		brief="returns the i-th $(result) in a $(operand)."
 	>
-		<argument type="ObjectSequence"/>
+		<argument type="ObjectSequence" name="S"/>
 		<argument type="size_t" name="Index"/>
 	</operation>
 
@@ -75,7 +75,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="Type"
 		brief="Unpacks the $(operand) into a template."
 	>
-		<argument type="ObjectSequence"/>
+		<argument type="ObjectSequence" name="S"/>
+		<argument type="var_type_template" name="Tpl"/>
 	</operation>
 
 	<metaobject name="Reversible"
@@ -135,18 +136,27 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Named"/>
 	</operation>
 
-	<metaobject name="Specifier"
-		since_revision="1"
-		reflects="a specifier (const, virtual, static, noexcept, public,
-		protected, private, etc.)"
+	<metaobject name="Alias"
+		since_revision="0"
+		abstract="true"
+		reflects="a type or namespace alias"
 	>
 		<generalization concept="Named"/>
 	</metaobject>
 
-	<trait name="is_meta_specifier"
-		since_revision="1"
-		indicates="Specifier"
+	<trait name="is_meta_alias"
+		since_revision="0"
+		indicates="Alias"
 	/>
+
+	<operation name="get_aliased"
+		since_revision="0"
+		result="Named"
+		brief="returns the $(result) reflecting the original declaration
+		of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Alias"/>
+	</operation>
 
 	<metaobject name="Typed"
 		since_revision="0"
@@ -171,6 +181,19 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Typed"/>
 	</operation>
 
+	<metaobject name="Scope"
+		since_revision="0"
+		abstract="true"
+		reflects="a scope"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<trait name="is_meta_scope"
+		since_revision="0"
+		indicates="Scope"
+	/>
+
 	<metaobject name="ScopeMember"
 		since_revision="0"
 		abstract="true"
@@ -193,41 +216,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		reflected by a $(operand)."
 	>
 		<argument type="ScopeMember"/>
-	</operation>
-
-	<metaobject name="Scope"
-		since_revision="0"
-		abstract="true"
-		reflects="a scope"
-	>
-		<generalization concept="Object"/>
-	</metaobject>
-
-	<trait name="is_meta_scope"
-		since_revision="0"
-		indicates="Scope"
-	/>
-
-	<metaobject name="Alias"
-		since_revision="0"
-		abstract="true"
-		reflects="a type or namespace alias"
-	>
-		<generalization concept="Named"/>
-	</metaobject>
-
-	<trait name="is_meta_alias"
-		since_revision="0"
-		indicates="Alias"
-	/>
-
-	<operation name="get_aliased"
-		since_revision="0"
-		result="Named"
-		brief="returns the $(result) reflecting the original declaration
-		of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Alias"/>
 	</operation>
 
 	<metaobject name="RecordMember"
@@ -327,16 +315,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		indicates="GlobalScope"
 	/>
 
-	<metaobject name="NamespaceAlias"
-		since_revision="0"
-		reflects="a namespace alias"
-		label="Namespace\nAlias"
-	>
-		<generalization concept="Namespace"/>
-		<generalization concept="Alias"/>
-		<constraint operation="get_aliased" concept="Namespace"/>
-	</metaobject>
-
 	<metaobject name="Type"
 		since_revision="0"
 		reflects="a type"
@@ -357,16 +335,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="Type"/>
 	</operation>
-
-	<metaobject name="TypeAlias"
-		since_revision="0"
-		label="Type\nAlias"
-		reflects="a type alias or typedef"
-	>
-		<generalization concept="Type"/>
-		<generalization concept="Alias"/>
-		<constraint operation="get_aliased" concept="Type"/>
-	</metaobject>
 
 	<metaobject name="TagType"
 		since_revision="2"
@@ -512,78 +480,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		indicates="Class"
 	/>
 
-	<metaobject name="Inheritance"
-		since_revision="2"
-		reflects="class inheritance"
-	>
-		<generalization concept="Object"/>
-	</metaobject>
-
-	<trait name="is_meta_inheritance"
-		since_revision="2"
-		indicates="Inheritance"
-	/>
-
-	<operation name="get_base_class"
-		since_revision="2"
-		result="Class"
-		brief="returns the $(operand) reflecting the base $(reflected)
-		in a inheritance."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="is_virtual"
-		uname="is_virtual_inheritance"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="returns whether the $(reflected) reflected by a $(operand)
-		was declared as virtual."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="is_public"
-		uname="is_public_inheritance"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
-		was declared as public."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="is_protected"
-		uname="is_protected_inheritance"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
-		was declared as protected."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="is_private"
-		uname="is_private_inheritance"
-		since_revision="2"
-		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
-		was declared as private."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="get_access_specifier"
-		uname="get_inheritance_access_specifier"
-		since_revision="2"
-		result="Specifier"
-		brief="returns the $(result) reflecting the access specifier
-		of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Inheritance"/>
-	</operation>
-
-
 	<operation name="get_base_classes"
 		since_revision="2"
 		result="ObjectSequence" element="Inheritance"
@@ -700,5 +596,89 @@ by the compiler which allow access to metadata reflecting specific program decla
 		otherwise it is a plain pointer."
 	>
 		<argument type="Variable"/>
+	</operation>
+
+	<metaobject name="Specifier"
+		since_revision="1"
+		reflects="a specifier (const, virtual, static, noexcept, public,
+		protected, private, etc.)"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+	<trait name="is_meta_specifier"
+		since_revision="1"
+		indicates="Specifier"
+	/>
+
+	<metaobject name="Inheritance"
+		since_revision="2"
+		reflects="class inheritance"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<trait name="is_meta_inheritance"
+		since_revision="2"
+		indicates="Inheritance"
+	/>
+
+	<operation name="get_base_class"
+		since_revision="2"
+		result="Class"
+		brief="returns the $(operand) reflecting the base $(reflected)
+		in a inheritance."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_virtual"
+		uname="is_virtual_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as virtual."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_public"
+		uname="is_public_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as public."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_protected"
+		uname="is_protected_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as protected."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="is_private"
+		uname="is_private_inheritance"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates if the $(reflected) reflected by a $(operand)
+		was declared as private."
+	>
+		<argument type="Inheritance"/>
+	</operation>
+
+	<operation name="get_access_specifier"
+		uname="get_inheritance_access_specifier"
+		since_revision="2"
+		result="Specifier"
+		brief="returns the $(result) reflecting the access specifier
+		of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Inheritance"/>
 	</operation>
 </concepts>

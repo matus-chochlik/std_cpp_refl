@@ -119,12 +119,12 @@ template &lt;typename T&gt; constexpr bool is_metaobject_v
 <pre>
 [<span class="note">Example:</span>
 <code>
-is_metaobject_v&lt;int&gt;;                   // false
-is_metaobject_v&lt;void&gt;;                  // false
-is_metaobject_v&lt;string&gt;;                // false
-is_metaobject_v&lt;reflexpr(int)&gt;;         // true
-is_metaobject_v&lt;reflexpr(std)&gt;;         // true
-is_metaobject_v&lt;reflexpr(std::string)&gt;; // true
+is_metaobject_v&lt;int&gt;;                 // false
+is_metaobject_v&lt;void&gt;;                // false
+is_metaobject_v&lt;string&gt;;              // false
+is_metaobject_v&lt;reflexpr(int)&gt;;       // true
+is_metaobject_v&lt;reflexpr(std)&gt;;       // true
+is_metaobject_v&lt;reflexpr(string)&gt;;    // true
 </code>
 <span class="note">— end example</span>]
 </pre>

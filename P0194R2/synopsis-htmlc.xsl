@@ -17,8 +17,13 @@
 	<xsl:value-of select="$arg_type"/>
 	<xsl:text> T</xsl:text><xsl:if test="last()!=1"><xsl:value-of select="position()"/></xsl:if>
 	</xsl:when>
+	<xsl:when test="$arg_type='var_type_template'">
+	<xsl:text>template &amp;lt;class...&amp;gt; class </xsl:text>
+	<xsl:value-of select="@name"/>
+	</xsl:when>
 	<xsl:otherwise>
-	<xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="@name"/>
+	<xsl:value-of select="@type"/><xsl:text> </xsl:text>
+	<xsl:value-of select="@name"/>
 	</xsl:otherwise>
 	</xsl:choose>
 </xsl:for-each><xsl:text>&amp;gt;</xsl:text>
@@ -54,18 +59,6 @@ namespace meta {
 </xsl:choose>
 <xsl:text> T&amp;gt; concept bool </xsl:text><xsl:value-of select="@name"/>;
 </xsl:for-each>
-
-<!--
-// &lt;em&gt;metaobject traits&lt;/em&gt;
-<xsl:for-each select="trait[@since_revision &lt;= $revision]">
-<xsl:text>template &amp;lt;Object T&amp;gt; struct </xsl:text><xsl:value-of select="@name"/>;
-</xsl:for-each>
-// 
-<xsl:for-each select="trait[@since_revision &lt;= $revision]">
-<xsl:text>template &amp;lt;Object T&amp;gt;
-  constexpr bool </xsl:text><xsl:value-of select="@name"/>_v = <xsl:value-of select="@name"/>&amp;lt;T&amp;gt;::value;
-</xsl:for-each>
--->
 
 // &lt;em&gt;metaobject operations&lt;/em&gt;
 <xsl:for-each select="/concepts/metaobject[@since_revision &lt;= $revision]">
