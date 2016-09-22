@@ -468,35 +468,21 @@ produces the following output:
 <span class="note">— end example</span>]
 </pre>
 
-	<p>The <code>meta::get_base_name</code> operation cannot be invoked on
-	<em>Metaobject</em>s which do not conform to the <code>meta::Named</code> concept.
-	</p>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-auto l = [](void) { };
-meta::get_base_name_v&lt;reflexpr(::)&gt;           // <em>ill-formed</em>
-meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;  // <em>ill-formed</em>
-</code>
-<span class="note">— end example</span>]
-</pre>
-
 	<p>The <code>meta::get_display_name</code> operation returns an
-	<em>implementation-dependent</em> name of the base-level entity reflected by
-	a <code>meta::Named</code> which is as close as possible to how the name
-	is spelled in the source code. For types in particular the display name
-	should be fully qualified and if possible it should preserve type or template
-	alias names.
+	<em>implementation-dependent</em> string containing the name of the base-level
+	entity reflected by a <code>meta::Named</code> which is as close as possible
+	to how the name is spelled in the source code. For types in particular
+	the display name should be fully qualified and if possible it should preserve
+	type or template alias names.
 	</p>
 
 <pre>
 [<span class="note">Example:</span>
 <code>
-meta::get_display_name_v&lt;reflexpr(int)&gt; // "int"
+meta::get_display_name_v&lt;reflexpr(int)&gt;                // "int"
 meta::get_display_name_v&lt;reflexpr(const std::string&amp;)&gt; // "const std::string&amp;"
-meta::get_display_name_v&lt;reflexpr(size_t * [10])&gt; // "std::size * [10]"
-meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt; // "char const [4]"
+meta::get_display_name_v&lt;reflexpr(std::size_t * [10])&gt; // "std::size * [10]"
+meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt;    // "char const [4]"
 
 </code>
 <span class="note">— end example</span>]
@@ -795,30 +781,39 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
     <p>
       The <code>reflexpr</code> operator takes an <em>id-expression</em> (5.1), or
       <em>access-specifier</em> (10) as operand, or nothing.
-      The <em>id-expression</em> must be uniquely resolved through regular lookup, as if used
-      outside of the <code>reflexpr</code> operator.
+      The <em>id-expression</em> must be uniquely resolved through regular lookup,
+			as if used outside of the <code>reflexpr</code> operator.
       Otherwise, the expression is ill-formed.
 	</p>
       <ul>
-        <li>If the operand is a <em>typedef-name</em>, the result will be satisfying
-          <code>TypeAlias</code>.</li>
-        <li>Otherwise, if the operand is a <em>class-name</em>, the result will be satisfying
-          <code>Class</code>.</li>
-        <li>Otherwise, if the operand is a <em>enum-name</em>, the result will be satisfying
-          <code>EnumClass</code> if the <em>enum-name</em> refers to a <em>scoped
-          enumerator</em> (7.2), or <code>Enum</code> if the <em>enum-name</em> refers to an
-          <em>unscoped enumerator</em>.</li>
-        <li>Otherwise, if the operand is a <em>type-name</em>, the result will be satisfying
-          <code>Type</code>.</li>
-        <li>Otherwise, if the operand is the name of a <em>namespace-alias-declaration</em>,
-          the result will be satisfying <code>NamespaceAlias</code>.</li>
-        <li>Otherwise, if the operand is a <em>namespace-name</em>, the result will be
-          satisfying <code>Namespace</code>.</li>
+				<li>If no operand is passed to <code>reflexpr</code> or if the operand
+				is "<code>::</code>", then the result will be satisfying
+				<code>meta::GlobalScope</code>.</li>
+        <li>Otherwise, if the operand is a <em>union-name</em>, the result will
+				be satisfying <code>meta::Record</code>.</li>
+        <li>Otherwise, if the operand is a <em>class-name</em>, the result will
+				be satisfying <code>meta::Class</code>.</li>
+        <li>Otherwise, if the operand is a <em>enum-name</em>, the result will
+				be satisfying <code>meta::Enum</code>.</li>
+        <li>Otherwise, if the operand is a <em>type-name</em>, the result will
+				be satisfying <code>meta::Type</code>.</li>
+        <li>Otherwise, if the operand is a <em>typedef-name</em>, the result will be satisfying
+				<code>meta::Type</code> and <code>meta::Alias</code>.</li>
+        <li>Otherwise, if the operand is a <em>namespace-name</em>, the result
+				will be satisfying <code>meta::Namespace</code>.</li>
+        <li>Otherwise, if the operand is the name of a
+				<em>namespace-alias-declaration</em>, the result will be satisfying
+				<code>meta::Namespace</code> and <code>meta::Alias</code>.</li>
       </ul>
     <p>
-      If the <em>id-expression</em> is a <em>type-name</em>, and the scope of its declaration
-      is a class, then the result of <code>reflexpr</code> is also satisfying
-      <code>MemberType</code>.
+      If the scope of the declaration of the <em>id-expression</em> is a class
+			or a union then the result of <code>reflexpr</code> is also satisfying
+			<code>meta::RecordMember</code>.
+    </p>
+    <p>
+      If the scope of the declaration of the <em>id-expression</em> is an enum
+			then the result of <code>reflexpr</code> is also satisfying
+			<code>meta::EnumMember</code>.
     </p>
     <p>
       The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>

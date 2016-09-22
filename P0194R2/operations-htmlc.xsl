@@ -132,6 +132,7 @@ struct <xsl:value-of select="@name"/>;
 	</xsl:when>
 	<xsl:when test="@result='StringConstant'">a string constant</xsl:when>
 	<xsl:when test="@result='OriginalType'">the original type reflected by the argument</xsl:when>
+	<xsl:when test="@result='BaseLevelType'">a type</xsl:when>
 	<xsl:when test="@result='ConstantValue'">
 		a constant value of an unspecified, integer or <code>enum</code> type
 	</xsl:when>

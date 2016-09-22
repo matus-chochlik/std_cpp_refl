@@ -72,7 +72,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="unpack_sequence"
 		since_revision="2"
-		result="Type"
+		result="BaseLevelType"
 		brief="Unpacks the $(operand) into a template."
 	>
 		<argument type="ObjectSequence" name="S"/>
