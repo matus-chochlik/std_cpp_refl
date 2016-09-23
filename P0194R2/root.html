@@ -804,6 +804,12 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
         <li>Otherwise, if the operand is the name of a
 				<em>namespace-alias-declaration</em>, the result will be satisfying
 				<code>meta::Namespace</code> and <code>meta::Alias</code>.</li>
+        <li>Otherwise, if the operand is a <em>class-data-member-name</em>,
+				the result will be satisfying <code>meta::Variable</code>.</li>
+        <li>Otherwise, if the operand is a <em>variable-name</em>,
+				the result will be satisfying <code>meta::Variable</code>.</li>
+        <li>Otherwise, if the operand is a <em>enumerator-name</em>,
+				the result will be satisfying <code>meta::Constant</code>.</li>
       </ul>
     <p>
       If the scope of the declaration of the <em>id-expression</em> is a class
@@ -828,9 +834,9 @@ reflexpr(int) // reflects the (native) type
 reflexpr(std::size_t) // reflects the type alias
 reflexpr(std::launch) // reflects the enum type
 reflexpr(std::vector&lt;int&gt;) // reflects the class
-reflexpr(std::launch::async) // reflects the enumerator
 reflexpr(std::pair&lt;int, int&gt;::first_type) // reflects the member typedef 
 reflexpr(std::pair&lt;int, int&gt;::first) // reflects the data member
+reflexpr(std::launch::async) // reflects the enumerator
 
 reflexpr(1) // <em>ill-formed</em>
 reflexpr(std::sin) // <em>ill-formed</em>

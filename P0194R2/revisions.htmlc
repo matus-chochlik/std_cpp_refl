@@ -124,8 +124,9 @@ a non-scoped enum <em>is</em> a <code>meta::Scope</code>.
 values of metaobject types.
 </p>
 
-<p>Direct reflection of class data members, member types and type aliases
-and enumerators has been added. For example:
+<p>Direct reflection of class data members, member types and type aliases,
+enumerators and global scope/namespace-level variables has been added.
+For example:
 </p>
 <pre>
 <code>
@@ -138,6 +139,14 @@ struct S { using T = int; T a; static bool b; };
 using MS_T = reflexpr(S::T); // valid
 using MS_a = reflexpr(S::a); // valid
 using MS_b = reflexpr(S::b); // valid
+
+namespace foo {
+
+static float f = 12.34f;
+
+} // namespace foo
+
+using Mf = reflexpr(foo::f); // valid
 
 </code>
 </pre>
