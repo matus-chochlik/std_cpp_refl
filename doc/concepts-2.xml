@@ -76,7 +76,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="Unpacks the $(operand) into a template."
 	>
 		<argument type="ObjectSequence" name="S"/>
-		<argument type="var_type_template" name="Tpl"/>
+		<argument type="VarTypeTemplate" name="Tpl"/>
 	</operation>
 
 	<metaobject name="Reversible"

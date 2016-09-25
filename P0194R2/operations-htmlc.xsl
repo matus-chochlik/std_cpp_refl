@@ -64,7 +64,7 @@
 	<xsl:value-of select="$arg_type"/>
 	<xsl:text> T</xsl:text><xsl:if test="last()!=1"><xsl:value-of select="position()"/></xsl:if>
 	</xsl:when>
-	<xsl:when test="$arg_type='var_type_template'">
+	<xsl:when test="$arg_type='VarTypeTemplate'">
 	<xsl:text>template &amp;lt;class...&amp;gt; class </xsl:text>
 	<xsl:value-of select="@name"/>
 	</xsl:when>

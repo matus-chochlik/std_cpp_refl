@@ -382,16 +382,20 @@ def print_operation_node(opts, concepts, operation):
 		argt = arguments[0].attrib["type"]
 		if find_metaobject(opts, concepts, argt) is not None:
 			if operand is None:
-				operand = argt
+                                operand = argt
 		operands.append("%s T" % argt)
 
 	else:
 		for arg in arguments:
 			argt = arg.attrib["type"]
 			argn = arg.attrib.get("name", None)
+
+                        if argt == "VarTypeTemplate":
+                            argt = "template &lt;class...&gt; class"
+
 			if find_metaobject(opts, concepts, argt) is not None:
 				if operand is None:
-					operand = argt
+                                        operand = argt
 			operands.append("%s %s" % (argt, argn if argn else "T%d" % (len(operands)+1)))
 
 	values = {
@@ -976,6 +980,8 @@ def print_overview(opts, concepts):
 		print_plain_type_node(opts, concepts, "Pointer", "pointer")
 		print_plain_type_node(opts, concepts, "FunctionPointer", "function-pointer")
 		print_plain_type_node(opts, concepts, "OriginalType", "original-type")
+		print_plain_type_node(opts, concepts, "BaseLevelType", "base-level-type")
+		print_plain_type_node(opts, concepts, "VarTypeTemplate", "variadic-template-class")
 		print_plain_type_node(opts, concepts, "size_t", "size_t")
 
 	# Metaobject nodes 
