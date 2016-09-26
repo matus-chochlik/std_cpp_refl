@@ -119,7 +119,7 @@ object.htmlc {
 
 <table class="header">
 	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
-  <tr><th>Date:</th><td>2016-09-21</td></tr>
+  <tr><th>Date:</th><td>2016-09-26</td></tr>
   <tr><th>Project:</th><td>Programming Language C++</td></tr>
   <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
   <tr>
@@ -214,7 +214,7 @@ Introduces an experimental implementation of the reflection operator in clang.
 Drops the context-dependent reflection from N4111 (will be re-introduced later).
 </p>
 
-<h4>Revision 5 (P0194R1)</h4>
+<h4>Revision 5 (<a href="#ref-P0194R1">P0194R1</a>)</h4>
 
 <p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
 classification is now done by using the concepts. We assume that the following
@@ -761,7 +761,7 @@ concept bool Type;
 <pre><code>
 template &lt;typename T&gt;
 concept bool TagType;
-</code></pre></td><td><code>Type&lt;T&gt;</code><br/><code>Scope&lt;T&gt;</code><br/></td><td><p><code>meta::TagType</code> reflects a class or an enum.
+</code></pre></td><td><code>Type&lt;T&gt;</code><br/><code>Scope&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td><p><code>meta::TagType</code> reflects a class or an enum.
 		</p></td></tr>
 
 
@@ -793,7 +793,7 @@ concept bool Enum;
 <pre><code>
 template &lt;typename T&gt;
 concept bool Constant;
-</code></pre></td><td><code>Typed&lt;T&gt;</code><br/></td><td><p><code>meta::Constant</code> reflects a compile-time constant value.
+</code></pre></td><td><code>Reversible&lt;T&gt;</code><br/><code>Typed&lt;T&gt;</code><br/></td><td><p><code>meta::Constant</code> reflects a compile-time constant value.
 		</p></td></tr>
 
 
@@ -801,7 +801,7 @@ concept bool Constant;
 <pre><code>
 template &lt;typename T&gt;
 concept bool Variable;
-</code></pre></td><td><code>Named&lt;T&gt;</code><br/><code>Typed&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td><p><code>meta::Variable</code> reflects a variable.
+</code></pre></td><td><code>Reversible&lt;T&gt;</code><br/><code>Named&lt;T&gt;</code><br/><code>Typed&lt;T&gt;</code><br/><code>ScopeMember&lt;T&gt;</code><br/></td><td><p><code>meta::Variable</code> reflects a variable.
 		</p></td></tr>
 
 
@@ -1105,21 +1105,21 @@ struct is_struct;
 struct is_union;
 </code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a union.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Record T&gt;
 struct get_data_members;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting all (including   private and protected) data members of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Variable</em></code>(s) reflecting all (including   private and protected) data members of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Record T&gt;
+		of <code>meta::<em>Variable</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Record T&gt;
 struct get_public_data_members;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>DataMember</em></code>(s) reflecting   the public data members of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Variable</em></code>(s) reflecting   the public data members of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Record T&gt;
+		of <code>meta::<em>Variable</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Record T&gt;
 struct get_member_types;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting all (including   private and protected) member types of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Type</em></code>(s) reflecting all (including   private and protected) member types of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Record T&gt;
+		of <code>meta::<em>Type</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Record T&gt;
 struct get_public_member_types;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>MemberType</em></code>(s) reflecting   the public member types of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Type</em></code>(s) reflecting   the public member types of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Class T&gt;
+		of <code>meta::<em>Type</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Class T&gt;
 struct get_base_classes;
 </code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Inheritance</em></code>(s) reflecting the inheritance   of all base clases (including the private and protected ones)   of a a class or a struct reflected by a <code>meta::<em>Class</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
@@ -1131,9 +1131,9 @@ struct get_public_base_classes;
 struct is_scoped_enum;
 </code></pre></td><td>returns true if the an enumeration reflected by a <code>meta::<em>Enum</em></code>   is scoped.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Enum T&gt;
 struct get_enumerators;
-</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Enumerator</em></code>(s) reflecting all   enumerators of an enumeration reflected by a <code>meta::<em>Enum</em></code>.</td><td>
+</code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Constant</em></code>(s) reflecting all   enumerators of an enumeration reflected by a <code>meta::<em>Enum</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
-		</td></tr><tr><td><pre><code>template &lt;Constant T&gt;
+		of <code>meta::<em>Constant</em></code>(s)</td></tr><tr><td><pre><code>template &lt;Constant T&gt;
 struct get_constant;
 </code></pre></td><td>returns the value of a compile-time constant value reflected by a <code>meta::<em>Constant</em></code>.</td><td>
 		a constant value of an unspecified, integer or enum type
@@ -1707,7 +1707,7 @@ who provided valuable feedback, criticism and suggestions.
 <h2>References</h2>
 
 <table class="references">
-<tr>
+<tr id="ref-P0194R1">
 	<th>[P0194R1]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r1.html">
@@ -1716,7 +1716,7 @@ who provided valuable feedback, criticism and suggestions.
   </td>
 </tr>
 
-<tr>
+<tr id="ref-P0194R0">
 	<th>[P0194R0]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
