@@ -40,7 +40,7 @@ Introduces an experimental implementation of the reflection operator in clang.
 Drops the context-dependent reflection from N4111 (will be re-introduced later).
 </p>
 
-<h4>Revision 5 (P0194R1)</h4>
+<h4>Revision 5 (<a href="#ref-P0194R1">P0194R1</a>)</h4>
 
 <p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
 classification is now done by using the concepts. We assume that the following

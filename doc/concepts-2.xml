@@ -343,6 +343,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<generalization concept="Type"/>
 		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
 	</metaobject>
 
 	<trait name="is_meta_tag_type"
@@ -410,7 +411,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_data_members"
 		since_revision="0"
-		result="ObjectSequence" element="DataMember"
+		result="ObjectSequence" element="Variable"
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) data members of $(reflected) reflected by a $(operand)."
 	>
@@ -419,7 +420,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_public_data_members"
 		since_revision="2"
-		result="ObjectSequence" element="DataMember"
+		result="ObjectSequence" element="Variable"
 		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
 	>
@@ -429,7 +430,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<!--
 	<operation name="get_accessible_data_members"
 		since_revision="2"
-		result="ObjectSequence" element="DataMember"
+		result="ObjectSequence" element="Variable"
 		brief="returns a $(result) of $(elements) reflecting data members
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the operation."
@@ -440,7 +441,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_member_types"
 		since_revision="1"
-		result="ObjectSequence" element="MemberType"
+		result="ObjectSequence" element="Type"
 		brief="returns a $(result) of $(elements) reflecting all (including
 		private and protected) member types of $(reflected) reflected by a $(operand)."
 	>
@@ -449,7 +450,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_public_member_types"
 		since_revision="2"
-		result="ObjectSequence" element="MemberType"
+		result="ObjectSequence" element="Type"
 		brief="returns a $(result) of $(elements) reflecting
 		the public member types of $(reflected) reflected by a $(operand)."
 	>
@@ -459,7 +460,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<!--
 	<operation name="get_accessible_member_types"
 		since_revision="2"
-		result="ObjectSequence" element="MemberType"
+		result="ObjectSequence" element="Type"
 		brief="returns a $(result) of $(elements) reflecting member types
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the operation."
@@ -535,7 +536,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_enumerators"
 		since_revision="1"
-		result="ObjectSequence" element="Enumerator"
+		result="ObjectSequence" element="Constant"
 		brief="returns a $(result) of $(elements) reflecting all
 		enumerators of $(reflected) reflected by a $(operand)."
 	>
@@ -547,6 +548,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		abstract="true"
 		reflects="a compile-time constant value"
 	>
+		<generalization concept="Reversible"/>
 		<generalization concept="Typed"/>
 	</metaobject>
 
@@ -567,6 +569,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a variable"
 	>
+		<generalization concept="Reversible"/>
 		<generalization concept="Named"/>
 		<generalization concept="Typed"/>
 		<generalization concept="ScopeMember"/>

@@ -2,7 +2,7 @@
 <h2>References</h2>
 
 <table class="references">
-<tr>
+<tr id="ref-P0194R1">
 	<th>[P0194R1]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r1.html">
@@ -11,7 +11,7 @@
   </td>
 </tr>
 
-<tr>
+<tr id="ref-P0194R0">
 	<th>[P0194R0]</th>
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
