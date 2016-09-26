@@ -23,7 +23,7 @@ int field_to_json(std::ostream& out, const T& v)
 
 	if(I > 0) out << ", ";
 
-	out << '"' << std::meta::get_name_v<meta_F> << "\": ";
+	out << '"' << std::meta::get_base_name_v<meta_F> << "\": ";
 
 	value_to_json(out, (v.*std::meta::get_pointer_v<meta_F>));
 

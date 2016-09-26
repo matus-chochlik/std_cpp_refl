@@ -11,13 +11,14 @@ into a standard or custom, text-based or binary format like XML, JSON, XDR, ASN1
 etc.,
 
 \item (re-)construction of instances of both atomic and structured types
-from external data representations (like those listed above), or
+from external data representations, like those listed above, or
 from the data stored in a relational database, or from data entered by
 a user through a user interface, or queried through a web service API,
 
-\item automated implementation of hash functions for structured types,
+\item automated implementation of comparison operations or hash functions
+for structured types,
 
-\item automated generation of user interface elements,
+\item automated generation of user interface elements or input data parsers,
 
 \item automatic generation of a relational schema from the application
 object model and object-relational mapping (ORM),
@@ -32,7 +33,7 @@ or a web service,
 \item visualization of objects or structured data and their relationships,
 
 \item automatic or semi-automatic implementation of certain software design
-patterns, for example the Object factory pattern,
+patterns, for example the factory pattern,
 
 \item implementation of cross-cutting aspects like debugging, logging, profiling,
 access control, etc.,
@@ -81,13 +82,13 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "function: min<"
-	        << get_name_v<get_aliased_m<reflexpr(T)>>
+	        << get_base_name_v<get_aliased_m<reflexpr(T)>>
 	        << ">("
-	        << get_name_v<reflexpr(a)> << ": "
-	        << get_name_v<get_aliased_m<get_type_m<reflexpr(a)>>>
+	        << get_base_name_v<reflexpr(a)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(a)>>>
 	        << " = " << a
-	        << get_name_v<reflexpr(b)> << ": "
-	        << get_name_v<get_aliased_m<get_type_m<reflexpr(b)>>>
+	        << get_base_name_v<reflexpr(b)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(b)>>>
 	        << " = " << b
 	        << ")" << std::endl
 

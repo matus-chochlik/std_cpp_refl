@@ -27,7 +27,7 @@ int main(void)
 	>, "");
 
 	static_assert(meta::has_name_v<meta_foo_baz>, "");
-	cout << meta::get_name_v<meta_foo_baz> << endl;
+	cout << meta::get_base_name_v<meta_foo_baz> << endl;
 
 	typedef meta::get_aliased_m<meta_foo_baz> meta_foo_bar;
 
@@ -41,7 +41,7 @@ int main(void)
 	>, "");
 
 	static_assert(meta::has_name_v<meta_foo_bar>, "");
-	cout << meta::get_name_v<meta_foo_bar> << endl;
+	cout << meta::get_base_name_v<meta_foo_bar> << endl;
 
 	typedef meta::get_aliased_m<meta_foo_bar> meta_int;
 
@@ -55,7 +55,7 @@ int main(void)
 	>, "");
 
 	static_assert(meta::has_name_v<meta_int>, "");
-	cout << meta::get_name_v<meta_int> << endl;
+	cout << meta::get_base_name_v<meta_int> << endl;
 
 	return 0;
 }

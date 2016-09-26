@@ -51,7 +51,7 @@ about the base-level structure of a program.
 {\em Static} metadata is metadata which can be manipulated or reasoned
 about at compile-time by the compiler.
 
-The metadata itself can have its own structure.
+The metadata itself has its own structure.
 For example metadata describing the base-level declaration of a class 
 from a C++ program includes;
 \begin{itemize}
@@ -59,8 +59,8 @@ from a C++ program includes;
 \item its scope,
 \item list of its base classes,
 \item list of data members,
-\item list of nested types like typedefs, classes and enums,
-\item the elaborted type specifier,
+\item list of nested types like type aliases, classes and enumerations,
+\item the elaborated type specifier, the access specifier,
 \item source location information~\cite{ISOCPP-N4519},
 \item etc.
 \end{itemize}
@@ -78,8 +78,8 @@ C++ code generator written in Python or Bash.}, in a C++ compiler plug-in,
 or in C++ itself. 
 
 When done directly in C++, metaprogramming usually takes the form of a
-{\em source code generator}\footnote{Like Qt's MOC.}, or the form of {\em preprocessor}
-or {\em template} metaprogramming.
+{\em source code generator}\footnote{Like Qt's MOC.}, or the form
+of {\em preprocessor}, {\em template} or {\em constexpr} metaprogramming.
 
 In template metaprogramming we use C++'s type system
 as a standalone functional programming language \say{interpreted} by a C++
@@ -104,7 +104,8 @@ a program code is interpreted\footnote{Mostly in interpreted languages.}.
 
 For the purpose of this paper, reflection is the process of obtaining metadata.
 In the future the meaning can be expanded to include modification of the program
-in ways exceeding the capabilities of current template metaprogramming.
+in ways exceeding the capabilities of current template
+metaprogramming\footnote{For example generating new class data members.}.
 
 \subsubsection{First-class object, second-class object}
 \label{term-first-class}
@@ -122,13 +123,14 @@ the following:
 \end{itemize}
 
 Since this paper deals with compile-time static reflection and its use
-in template metaprogramming, we will be talking about first- or second- class
+in compile-time metaprogramming, we will be talking about first- or second-class
 citizens in this regard. 
 For the purpose of this paper a first-class object is something that
 we can distinguish and reason about at compile-time and what can be passed around
 as \say{data} in metaprograms -- something that can be a template parameter.
 
-This means that a type or a template instance is for our purposes a first-class object:
+This means that a type, a template instance or a compile-time integral constant
+is for our purposes a first-class object:
 
 \begin{minted}{cpp}
 // compile-time "values"
@@ -139,7 +141,7 @@ struct value_b { };
 template <typename Param>
 struct identity
 {
-	typedef Param result;
+	using result = Param;
 };
 
 // "values" are equality comparable and they are distinguishable
@@ -169,7 +171,7 @@ assert(!std::is_same_v<y, z>, "");
 \end{minted}
 
 
-On the other hand a namespace, a typedef or a template parameter do not have
+On the other hand a namespace, a type alias or a template parameter do not have
 some or any of these properties.
 
 \begin{minted}{cpp}
@@ -182,7 +184,7 @@ using baz = unsigned;
 template <typename Param>
 struct identity
 {
-	typedef Param result;
+	using result = Param;
 };
 
 // they are not distinguishable
@@ -212,7 +214,8 @@ is not a first-class object.
 \subsubsection{Reification}
 \label{term-reification}
 
-Generally speaking {\em reification} or \say{thingification}\footnote{From latin \say{rei}, the dative form of \say{res} -- a thing.}, is making something
+Generally speaking {\em reification} or \say{thingification}\footnote{From latin
+\say{rei}, the dative form of \say{res} -- a thing.}, is making something
 real, bringing it into being as an entity with its own identity,
 or making something concrete.
 

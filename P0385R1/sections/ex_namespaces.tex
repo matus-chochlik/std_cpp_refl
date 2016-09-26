@@ -23,7 +23,7 @@ int main(void)
 
 	static_assert(meta::has_name_v<meta_foo>, "");
 	static_assert(meta::has_scope_v<meta_foo>, "");
-	cout << meta::get_name_v<meta_foo> << endl;
+	cout << meta::get_base_name_v<meta_foo> << endl;
 
 	typedef reflexpr(foo::bar) meta_foo_bar;
 
@@ -36,7 +36,7 @@ int main(void)
 
 	static_assert(meta::has_name_v<meta_foo_bar>, "");
 	static_assert(meta::has_scope_v<meta_foo_bar>, "");
-	cout << meta::get_name_v<meta_foo_bar> << endl;
+	cout << meta::get_base_name_v<meta_foo_bar> << endl;
 
 	typedef reflexpr(foobar) meta_foobar;
 
@@ -49,8 +49,8 @@ int main(void)
 
 	static_assert(meta::has_name_v<meta_foobar>, "");
 	static_assert(meta::has_scope_v<meta_foobar>, "");
-	cout << meta::get_name_v<meta_foobar> << " a.k.a ";
-	cout << meta::get_name_v<meta::get_aliased_m<meta_foobar>> << endl;
+	cout << meta::get_base_name_v<meta_foobar> << " a.k.a ";
+	cout << meta::get_base_name_v<meta::get_aliased_m<meta_foobar>> << endl;
 
 	return 0;
 }

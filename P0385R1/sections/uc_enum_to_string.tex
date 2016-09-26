@@ -60,7 +60,7 @@ struct enum_to_string_helper
 	{
 		if(value == meta::get_constant_v<MetaEnumValue>)
 		{
-			result = meta::get_name_v<MetaEnumValue>;
+			result = meta::get_base_name_v<MetaEnumValue>;
 			return true; // found
 		}
 		return false; // not found yet
@@ -95,7 +95,7 @@ struct string_to_enum_helper
 	template <MetaEnumValue>
 	bool operator()(identity<MetaEnumValue>) const
 	{
-		if(name == meta::get_name_v<MetaEnumValue>)
+		if(name == meta::get_base_name_v<MetaEnumValue>)
 		{
 			result = meta::get_constant_v<MetaEnumValue>;
 			return true; // found
@@ -133,7 +133,7 @@ Enum string_to_enum(const string& enum_name)
 		[&enum_name, &result](auto meta_ev)
 		{
 			using MetaEnumValue = decltype(meta_ev)::type;
-			if(enum_name == meta::get_name_v<MetaEnumValue>)
+			if(enum_name == meta::get_base_name_v<MetaEnumValue>)
 			{
 				result = reflexpr(MetaEnumValue);
 				return true;

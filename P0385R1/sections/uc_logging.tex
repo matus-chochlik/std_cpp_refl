@@ -46,7 +46,7 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "min<"
-	        << get_name_v<reflexpr(T)>
+	        << get_base_name_v<reflexpr(T)>
 	        << ">(" << a << ", " << b << ") = ";
 
 	T result = a<b?a:b;
@@ -69,20 +69,20 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "function: min<"
-	        << get_name_v<get_aliased_m<reflexpr(T)>>
+	        << get_base_name_v<get_aliased_m<reflexpr(T)>>
 	        << ">("
-	        << get_name_v<reflexpr(a)> << ": "
-	        << get_name_v<get_aliased_m<get_type_m<reflexpr(a)>>>
+	        << get_base_name_v<reflexpr(a)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(a)>>>
 	        << " = " << a
-	        << get_name_v<reflexpr(b)> << ": "
-	        << get_name_v<get_aliased_m<get_type_m<reflexpr(b)>>>
+	        << get_base_name_v<reflexpr(b)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(b)>>>
 	        << " = " << b
 	        << ")" << std::endl
 
 	T result = a<b?a:b;
 
-	log()   << get_name_v<reflexpr(result)> << ": "
-	        << get_name_v<get_aliased_m<get_type_m<reflexpr(result)>>>
+	log()   << get_base_name_v<reflexpr(result)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(result)>>>
 	        << " = " << result << std::endl;
 
 	return result;
@@ -107,8 +107,8 @@ result: double = 12.34
 
 It is true that the lines:
 \begin{minted}[tabsize=4]{cpp}
-	<< get_name_v<reflexpr(a)> << " = "
-	<< get_name_v<reflexpr(b)> << " = "
+	<< get_base_name_v<reflexpr(a)> << " = "
+	<< get_base_name_v<reflexpr(b)> << " = "
 \end{minted}
 
 could be replaced by preprocessor stringization
@@ -140,7 +140,7 @@ template <typename MetaFunction, typename ... P>
 void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 {
 	log()   << "function: "
-	        << get_name_v<MetaFunction>
+	        << get_base_name_v<MetaFunction>
 	        << std::endl;
 
 	// obtain the MetaParameter(s) from the MetaFunction
@@ -149,7 +149,7 @@ void log_function_exec(MetaFunction, const std::tuple<P&...>& params)
 		[&params](auto meta_param)
 		{
 			using MP = decltype(meta_param)::type;
-			log()  << get_name_v<MP> << ": "
+			log()  << get_base_name_v<MP> << ": "
 			       << std::get<get_position_v<MP>>(params)
 			       << std::endl;
 		}

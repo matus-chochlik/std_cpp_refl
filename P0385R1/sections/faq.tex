@@ -123,13 +123,13 @@ Also our proposal allows very fine granularity. The result of \verb@reflexpr@
 can be a very lightweight type, as we just described and the individual
 \say{attributes} like the name, scope, members, specifiers, etc. related
 to the metaobject are materialized only when requested by one of the operations
-defined for that particular metaobject concept, like \verb@get_name@,
+defined for that particular metaobject concept, like \verb@get_base_name@,
 \verb@get_scope@, \verb@get_data_members@, etc.
 
 \subsection{Creating a separate type for each string is so heavyweight.}
 
 \textbf{Q:} {\em Isn't the creation of a new type for each string returned
-for example from the \verb@get_name@ operation too heavyweight?
+for example from the \verb@get_base_name@ operation too heavyweight?
 Won't that lead to unacceptable increases in the memory footprint
 and compilation times?}
 
@@ -139,12 +139,12 @@ should have the ability to reason about and manipulate the strings at compile-ti
 A static, \verb@constexpr@-initialized, zero-terminated array of \verb@char@s
 gives us this ability.
 
-So for example the implementation of the \verb@get_name@ operation should
+So for example the implementation of the \verb@get_base_name@ operation should
 {\em be equivalent} to the following:
 
 \begin{minted}[tabsize=4]{cpp}
 template <Named T>
-struct get_name
+struct get_base_name
 {
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1] = {...,'\0'};
@@ -155,14 +155,14 @@ Some members of the committee suggested that for example the
 \texttt{basic\_string\_constant} from N4121~\cite{ISOCPP-N4121} or
 N4236~\cite{ISOCPP-N4236} or whichever compile-time
 string representation eventually makes it to the standard could
-be used to implement the \verb@get_name@ operation,
+be used to implement the \verb@get_base_name@ operation,
 but this in just an option not a requirement for our part.
 We trust in the ability of the compiler vendors to pick and
 implement the best option and to use all the tricks at their disposal
 to make expressions like;
 
 \begin{minted}{cpp}
-std::string(std::meta::get_name_v<reflexpr(std::pair)>);
+std::string(std::meta::get_base_name_v<reflexpr(std::pair)>);
 \end{minted}
 
 as efficient as possible.
@@ -273,7 +273,7 @@ void handle_meta_var(void)
 	{
 		// we need the pointer just here
 		handle_var(
-			meta::get_name_v<MV>,
+			meta::get_base_name_v<MV>,
 			meta::get_pointer_v<MV>
 		);
 	}
@@ -584,8 +584,8 @@ In other words why don't we instead of:
 \begin{minted}{cpp}
 using mo = reflexpr(my_ns::my_class);
 
-std::cout << meta::get_name_v<mo> << std::endl;
-std::cout << meta::get_name_v<meta::get_scope_m<mo>> << std::endl;
+std::cout << meta::get_base_name_v<mo> << std::endl;
+std::cout << meta::get_base_name_v<meta::get_scope_m<mo>> << std::endl;
 meta::for_each<meta::get_data_members_m<mo>>(my_func);
 \end{minted}
 
@@ -597,8 +597,8 @@ do something like one of the following:
 \begin{minted}{cpp}
 meta::object mo = reflexpr(my_ns::my_class);
 
-std::cout << meta::get_name(mo) << std::endl;
-std::cout << meta::get_name(meta::get_scope_t(mo)) << std::endl;
+std::cout << meta::get_base_name(mo) << std::endl;
+std::cout << meta::get_base_name(meta::get_scope_t(mo)) << std::endl;
 meta::for_each(meta::get_data_members_t(mo), my_func);
 \end{minted}
 
@@ -606,8 +606,8 @@ meta::for_each(meta::get_data_members_t(mo), my_func);
 \begin{minted}{cpp}
 meta::object mo = reflexpr(my_ns::my_class);
 
-std::cout << mo.get_name() << std::endl;
-std::cout << mo.get_scope().get_name() << std::endl;
+std::cout << mo.get_base_name() << std::endl;
+std::cout << mo.get_scope().get_base_name() << std::endl;
 mo.get_data_members().for_each(my_func)
 meta::for_each(meta::get_data_members(mo, my_func);
 \end{minted}

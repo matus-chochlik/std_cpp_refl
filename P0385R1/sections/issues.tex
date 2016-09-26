@@ -1,30 +1,5 @@
 \section{Issues}
 
-\subsection{Anonymous declarations}
-
-\textbf{Q:} {\em How should anonymous namespaces, nested structs, unions or
-the global scope for that matter be reflected?}
-
-In our opinion all such declarations should be reflected by
-the same metaobjects as their named counterparts, but without conforming
-to the \meta{Named} concept.
-
-So for example the \meta{GlobalScope} is a \meta{Namespace}, but
-the \verb@has_name@ trait should return \verb@false@ and the \verb@get_name@
-operation would be either undefined or return an empty string.
-
-On the other hand, even anonymous namespaces, classes or unions are scopes,
-so the metaobjects reflecting them should conform to the \meta{Scope} concept.
-
-Same reasoning applies to anonymous namespaces, nested structs or unions.
-
-\subsection{Reflection of \texttt{struct}s and \texttt{union}s}
-
-\textbf{Q:} {\em Do we need separate \meta{Struct} and \meta{Union}
-concepts or is \meta{Class} sufficient to cover all cases?}
-
-We don't have any strong opinion in this regard.
-
 \subsection{Alternatives for breaking access restrictions}
 \label{issue-breaking-access}
 

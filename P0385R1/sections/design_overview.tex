@@ -68,7 +68,7 @@ reflecting the scope, the sequence of metaobjects reflecting the members, etc.:
 \begin{minted}{cpp}
 using meta_str = reflexpr(std::string);
 
-get_name_v<meta_str>; // a compile-time constant string
+get_base_name_v<meta_str>; // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string
 get_scope_m<meta_str>; // another metaobject reflecting the scope
 \end{minted}

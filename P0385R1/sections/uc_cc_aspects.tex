@@ -164,7 +164,7 @@ public:
 	logging_aspect_impl(void)
 	{
 		clog
-			<< get_name_v<MetaFunction>
+			<< get_base_name_v<MetaFunction>
 			<< "("
 			/* ... */
 			<< ")"
@@ -221,7 +221,7 @@ struct autorization_enabled
 		reflexpr(foo::bar),
 		get_scope_m<MetaFunction>
 	> && constexpr_starts_with(
-		get_name_v<MetaFunction>,
+		get_base_name_v<MetaFunction>,
 		"secure_"
 	) &&
 	/* ... etc. ... */

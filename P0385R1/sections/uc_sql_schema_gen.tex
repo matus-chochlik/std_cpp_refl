@@ -22,13 +22,13 @@ struct create_table_column_from
 	{
 		if(!meta::is_variable_v<MetaMemVar>) return;
 
-		std::cout << meta::get_name_v<MetaMemVar> << " ";
+		std::cout << meta::get_base_name_v<MetaMemVar> << " ";
 
 		std::cout << translate_to_sql(
-			meta::get_name_v<meta::get_type_m<MetaMemVar>>
+			meta::get_base_name_v<meta::get_type_m<MetaMemVar>>
 		);
 
-		if(starts_with(get_name_v<MetaMemVar>, "id_"))
+		if(starts_with(get_base_name_v<MetaMemVar>, "id_"))
 		{
 			std::cout << " PRIMARY KEY";
 		}
@@ -46,13 +46,13 @@ struct create_table_from
 		if(!meta::is_class_v<MetaClass>) return;
 
 		if(!starts_with(
-			get_name_v<MetaClass>,
+			get_base_name_v<MetaClass>,
 			"persistent_"
 		)) return;
 
 		std::cout << "CREATE TABLE "
 		          << schema_name << "."
-			  << strip_prefix("persistent_", get_name_v<MetaClass>)
+			  << strip_prefix("persistent_", get_base_name_v<MetaClass>)
 			  << "(" << std::endl;
 
 		meta::for_each<meta::get_data_members_m<MetaClass>>(
@@ -69,11 +69,11 @@ struct create_schema_from
 	void operator()(identity<MetaNamespace>)
 	{
 		std::cout << "CREATE SCHEMA "
-			  << get_name_v<MetaNamespace>
+			  << get_base_name_v<MetaNamespace>
 			  << ";" << std::endl;
 
 		meta::for_each<meta::get_member_types<MetaNamespace>>(
-			create_table_from{meta::get_name_v<MetaNamespace>}
+			create_table_from{meta::get_base_name_v<MetaNamespace>}
 		);
 	}
 };

@@ -21,7 +21,7 @@ int main(void)
 	static_assert(is_same_v<meta::get_reflected_type_t<meta_bar>, bar>, "");
 
 	static_assert(meta::has_name_v<meta_bar>, "");
-	cout << meta::get_name_v<meta_bar> << endl;
+	cout << meta::get_base_name_v<meta_bar> << endl;
 
 	typedef meta::get_aliased_m<meta_bar> meta_foo;
 
@@ -33,7 +33,7 @@ int main(void)
 	static_assert(is_same_v<meta::get_reflected_type_t<meta_foo>, foo>, "");
 
 	static_assert(meta::has_name_v<meta_foo>, "");
-	cout << meta::get_name_v<meta_foo> << endl;
+	cout << meta::get_base_name_v<meta_foo> << endl;
 
 	return 0;
 }
