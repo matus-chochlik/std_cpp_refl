@@ -5,44 +5,11 @@ In this section we describe several useful metaprogramming utilities which
 could be added later to the standard library to simplify the use of the basic
 reflection primitives in certain cases.
  
-\subsubsection{\texttt{identity}}
-\label{fac-identity}
-
-The \verb@identity@ template should be defined as follows:
-
-\begin{minted}[tabsize=4]{cpp}
-template <typename X>
-struct identity
-{
-	typedef X type;
-};
-\end{minted}
-
-The primary purpose of \verb@identity@ is to wrap types which {\em cannot} be
-instantiated\footnote{like the metaobjects returned by \texttt{reflexpr}}
-into a template which still carries information about these types, but
-{\em can} be used to create run-time variables.
-
-For example:
-
-\begin{minted}[tabsize=4]{cpp}
-using MO = reflexpr(int);
-
-void v; // error
-MO mo; // error
-
-identity<void> idv; // OK
-identity<MO> idmo; // OK
-\end{minted}
- 
-This can be used for example to pass metaobjects into lambda functions,
-templated constructors or operators. 
-
 \subsubsection{\texttt{for\_each}}
 \label{fac-for-each}
 
 The \verb@for_each@ function should sequentially call a specified
-\verb@UnaryFunction@ on instances of \verb@identity@-wrapped metaobjects from
+\verb@UnaryFunction@ on instances of metaobjects from
 a \meta{ObjectSequence}. It should {\em be equivalent} to the following:
 
 \begin{minted}[tabsize=4]{cpp}
@@ -52,10 +19,10 @@ namespace meta {
 template <typename MetaObjectSequence, typename UnaryFunction>
 void for_each(UnaryFunction func)
 {
-	func(identity<Metaobject1>());
-	func(identity<Metaobject2>());
+	func(Metaobject1{});
+	func(Metaobject2{});
 	/* ... */
-	func(identity<MetaobjectN>());
+	func(MetaobjectN{});
 }
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
@@ -68,33 +35,17 @@ For example:
 meta::for_each<meta::get_data_members_m<reflexpr(my_class)>>(
 	[](auto idmo)
 	{
-		using MO = decltype(idmo)::type;
+		using MO = decltype(idmo);
 		...
 	}
 );
 \end{minted}
 
-There are some cases where we would like to have the ability to interrupt
-the traversal if some condition is met, for example if the user-defined
-function returns \verb@true@.
-
-\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
-template <typename MetaObjectSequence, typename UnaryFunction>
-void for_each_until(UnaryFunction func)
-{
-	if(func(identity<Metaobject1>())) return;
-	if(func(identity<Metaobject2>())) return;
-	/* ... */
-	if(func(identity<MetaobjectN>())) return;
-}
-\end{minted}
-
-\subsubsection{\texttt{unpack\_sequence}}
+\subsubsection{\texttt{unpack\_sequence\_if}}
 \label{fac-unpack-sequence}
 
-The \verb@unpack_sequence@ template should instantiate the provided variadic
-template with metaobjects from a specified \meta{ObjectSequence} as template
-arguments. It should be equivalent to the following:
+We already have the \verb@unpack_sequence@ template which instantiates
+the provided variadic template with metaobjects from a \meta{ObjectSequence}.
 
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {
@@ -114,8 +65,8 @@ using unpack_sequence_t =
 } // namespace meta
 \end{minted}
 
-If we wanted only members satisfying an unary predicate, the following
-variant of \verb@unpack_sequence@ could be used:
+We could also add the following variant of \verb@unpack_sequence@ to be
+able to unpack only metaobjects satisfying a given predicate:
 
 \begin{minted}[tabsize=4]{cpp}
 namespace meta {

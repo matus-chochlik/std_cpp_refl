@@ -1,4 +1,4 @@
-\subsection{Enum value to string and vice versa}
+\subsection{Enumerator to string and vice versa}
 \label{use-case-enum-to-string}
 
 This is another use case from the \say{targeted use cases} in the committee's
@@ -45,104 +45,88 @@ E string_to_E(const string& name)
 }
 \end{minted}
 
-As in the previous use case, the \verb@for_each@ function comes in handy
-for both the \verb@enum_to_string@:
+The Mirror reflection library shows a possible implementation of the
+\verb@enum_to_string@,
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename Enum>
-struct enum_to_string_helper
+class enum_to_string
 {
-	Enum value;
-	string& result;
-
-	template <MetaEnumValue>
-	bool operator()(identity<MetaEnumValue>) const
+private:
+	template <typename ... MEC>
+	struct _hlpr
 	{
-		if(value == meta::get_constant_v<MetaEnumValue>)
+		static void _eat(bool ...) { }
+
+		static std::map<Enum, std::string> _make_map(void)
 		{
-			result = meta::get_base_name_v<MetaEnumValue>;
-			return true; // found
+			using namespace std;
+
+			map<Enum, string> res;
+			_eat(res.emplace(
+				meta::get_constant_v<MEC>,
+				string(meta::get_base_name<MEC>())
+			).second...);
+			return res;
 		}
-		return false; // not found yet
+	};
+public:
+	const std::string& operator()(Enum e) const
+	{
+		using namespace std;
+
+		using ME = reflexpr(Enum);
+		using hlpr = meta::unpack_sequence_t<
+			meta::get_enumerators_m<ME>,
+			_hlpr
+		>;
+		static auto m = hlpr::_make_map();
+		return m[e];
 	}
 };
-
-template <typename Enum>
-string enum_to_string(Enum enum_value)
-{
-	string result;
-
-	using MetaEnum = reflexpr(Enum);
-
-	// traverse the members until the function returns true
-	meta::for_each_until<meta::get_enum_members_m<MetaEnum>>(
-		enum_to_string_helper<Enum>{enum_value, result}
-	);
-
-	return result;
-}
 \end{minted}
 
-and the \verb@string_to_enum@ function:
+and the \verb@string_to_enum@ utility:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename Enum>
-struct string_to_enum_helper
+class string_to_enum
 {
-	const string& name;
-	Enum& result;
-
-	template <MetaEnumValue>
-	bool operator()(identity<MetaEnumValue>) const
+private:
+	template <typename ... MEC>
+	struct _hlpr
 	{
-		if(name == meta::get_base_name_v<MetaEnumValue>)
+		static void _eat(bool ...) { }
+
+		static std::map<std::string, Enum> _make_map(void)
 		{
-			result = meta::get_constant_v<MetaEnumValue>;
-			return true; // found
+			using namespace std;
+
+			map<string, Enum> res;
+			_eat(res.emplace(
+				string(meta::get_base_name<MEC>()),
+				meta::get_constant_v<MEC>
+			).second...);
+			return res;
 		}
-		return false; // not found yet
+	};
+public:
+	Enum operator()(const std::string& s) const
+	{
+		using namespace std;
+
+		using ME = reflexpr(Enum);
+		using hlpr = meta::unpack_sequence_t<
+			meta::get_enumerators_m<ME>,
+			_hlpr
+		>;
+		static auto m = hlpr::_make_map();
+		auto p = m.find(s);
+		if(p == m.end()) {
+			throw runtime_error("Invalid enumerator name");
+		}
+		return p->second;
 	}
 };
-
-template <typename Enum>
-Enum string_to_enum(const string& enum_name)
-{
-	Enum result;
-
-	using MetaEnum = reflexpr(Enum);
-
-	meta::for_each_until<meta::get_enum_members_m<MetaEnum>>(
-		string_to_enum_helper<Enum>{enum_name, result}
-	);
-
-	return result;
-}
-\end{minted}
-
-Again a lambda could be used as the helper and having the \say{reversible reflection}
-feature would come in handy:
-
-\begin{minted}[tabsize=4]{cpp}
-
-template <typename Enum>
-Enum string_to_enum(const string& enum_name)
-{
-	Enum result;
-
-	meta::for_each_until<meta::get_enum_members_m<reflexpr(Enum)>>(
-		[&enum_name, &result](auto meta_ev)
-		{
-			using MetaEnumValue = decltype(meta_ev)::type;
-			if(enum_name == meta::get_base_name_v<MetaEnumValue>)
-			{
-				result = reflexpr(MetaEnumValue);
-				return true;
-			}
-			return false;
-		}
-	);
-
-	return result;
-}
 \end{minted}
 

@@ -16,39 +16,39 @@ int main(void)
 
 	static_assert(is_metaobject_v<meta_foo>, "");
 
-	static_assert(!meta::is_global_scope_v<meta_foo>, "");
-	static_assert(meta::is_namespace_v<meta_foo>, "");
-	static_assert(!meta::is_type_v<meta_foo>, "");
-	static_assert(!meta::is_alias_v<meta_foo>, "");
+	static_assert(!meta::GlobalScope<meta_foo>, "");
+	static_assert(meta::Namespace<meta_foo>, "");
+	static_assert(!meta::Type<meta_foo>, "");
+	static_assert(!meta::Alias<meta_foo>, "");
 
-	static_assert(meta::has_name_v<meta_foo>, "");
-	static_assert(meta::has_scope_v<meta_foo>, "");
+	static_assert(meta::Named<meta_foo>, "");
+	static_assert(meta::ScopeMember<meta_foo>, "");
 	cout << meta::get_base_name_v<meta_foo> << endl;
 
 	typedef reflexpr(foo::bar) meta_foo_bar;
 
 	static_assert(is_metaobject_v<meta_foo_bar>, "");
 
-	static_assert(!meta::is_global_scope_v<meta_foo_bar>, "");
-	static_assert(meta::is_namespace_v<meta_foo_bar>, "");
-	static_assert(!meta::is_type_v<meta_foo_bar>, "");
-	static_assert(!meta::is_alias_v<meta_foo_bar>, "");
+	static_assert(!meta::GlobalScope<meta_foo_bar>, "");
+	static_assert(meta::Namespace<meta_foo_bar>, "");
+	static_assert(!meta::Type<meta_foo_bar>, "");
+	static_assert(!meta::Alias<meta_foo_bar>, "");
 
-	static_assert(meta::has_name_v<meta_foo_bar>, "");
-	static_assert(meta::has_scope_v<meta_foo_bar>, "");
+	static_assert(meta::Named<meta_foo_bar>, "");
+	static_assert(meta::ScopeMember<meta_foo_bar>, "");
 	cout << meta::get_base_name_v<meta_foo_bar> << endl;
 
 	typedef reflexpr(foobar) meta_foobar;
 
 	static_assert(is_metaobject_v<meta_foobar>, "");
 
-	static_assert(!meta::is_global_scope_v<meta_foobar>, "");
-	static_assert(meta::is_namespace_v<meta_foobar>, "");
-	static_assert(!meta::is_type_v<meta_foobar>, "");
-	static_assert(meta::is_alias_v<meta_foobar>, "");
+	static_assert(!meta::GlobalScope<meta_foobar>, "");
+	static_assert(meta::Namespace<meta_foobar>, "");
+	static_assert(!meta::Type<meta_foobar>, "");
+	static_assert(meta::Alias<meta_foobar>, "");
 
-	static_assert(meta::has_name_v<meta_foobar>, "");
-	static_assert(meta::has_scope_v<meta_foobar>, "");
+	static_assert(meta::Named<meta_foobar>, "");
+	static_assert(meta::ScopeMember<meta_foobar>, "");
 	cout << meta::get_base_name_v<meta_foobar> << " a.k.a ";
 	cout << meta::get_base_name_v<meta::get_aliased_m<meta_foobar>> << endl;
 

@@ -68,8 +68,8 @@ struct compare_data_members
 	const T& b;
 	bool& result;
 
-	template <typename MetaDataMember>
-	void operator()(identity<MetaDataMember>) const
+	template <meta::Object MetaDataMember>
+	void operator()(MetaDataMember) const
 	{
 		auto mem_ptr = meta::get_pointer_v<MetaDataMember>;
 		result &= a.*mem_ptr == b.*mem_ptr;
@@ -82,7 +82,7 @@ bool generic_equal(const T& a, const T& b)
 	using metaT = reflexpr(T);
 	bool result = true;
 
-	meta::for_each<meta::get_all_data_members_m<metaT>>(
+	meta::for_each<meta::get_data_members_m<metaT>>(
 		compare_data_members<T>{a, b, result}
 	);
 
@@ -101,10 +101,10 @@ struct compare_data_members
 	const T& b;
 	bool& result;
 
-	template <typename MetaDataMem>
-	void operator()(identity<MetaDataMem>) const
+	template <meta::Object MetaDataMem>
+	void operator()(MetaDataMem) const
 	{
-		result &= a.reflexpr(MetaDataMem) == b.reflexpr(MetaDataMem);
+		result &= a.unreflexpr(MetaDataMem) == b.unreflexpr(MetaDataMem);
 	}
 };
 \end{minted}
@@ -118,19 +118,19 @@ std::size_t generic_hash(const T& a)
 {
 	std::size_t result = 0u;
 
-	meta::for_each<meta::get_all_data_members_m<reflexpr(T)>>(
+	meta::for_each<meta::get_data_members_m<reflexpr(T)>>(
 		[&result,&a](auto meta_dm)
 		{
 			using MetaDataMem = decltype(meta_dm)::type;
 			using MetaT = meta::get_type_m<MetaDataMem>;
 
 			using T = meta::get_reflected_type_t<MetaT>;
-			// or T = reflexpr(metaT);
+			// or T = unreflexpr(metaT);
 
 			auto mem_ptr = meta::get_pointer_v<MetaDataMem>;
 
 			result ^= std::hash<T>(a.*mem_ptr);
-			// or  ^= std::hash<T>(a.reflexpr(MetaDataMem));
+			// or  ^= std::hash<T>(a.unreflexpr(MetaDataMem));
 		}
 	);
 

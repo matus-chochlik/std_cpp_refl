@@ -4,33 +4,172 @@ A fork of the clang compiler with a initial, partial, experimental implementatio
 of this proposal can be found on github \cite{ReflexprImplementation}.
 The modified compiler can be built by following the instructions listed
 in \cite{ClangGettingStarted}, but instead of checking out the official clang
-repository, the sources on the \texttt{mirror-reflection} branch of the modified
+repository, the sources on the \texttt{reflexpr} branch of the modified
 repository should be used.
 
-The implementation required changes (mostly additions) to roughly 3500 lines
-of code in the compiler plus circa 540 lines in the \texttt{<reflexpr>} header.
+The reflection implementation represents the metaobjects with compile-time
+constants wrapped in a class template and implements the metaobject operations
+with the help of compiler built-in operators taking the metaobject ID values
+as arguments. 
 
-All examples listed in section \ref{working-examples} are working with
-the modified compiler.
+It adds a new native integral \verb@__metaobject_id@ type which has the same
+bit-width as the \verb@std::uintptr_t@ type on the platform for which
+the compiler is built (this allows values of \verb@__metaobject_id@ to represent
+pointers in the compiler). Unlike other integral types, \verb@__metaobject_id@
+does not have any arithmetic operators and no conversions to other integral types. 
 
-This particular implementation works by generating and adding new \texttt{CXXRecordDecl}s,
-with member typedefs and member constants providing basic meta-data, to the AST.
-The templates implementing the metaobject operations are referencing and
-occasionally transforming the members of the metaobject types.
+The metaobjects are represented as specializations of the \verb@std::__metaobject@
+template: 
 
-The \texttt{is\_metaobject} trait is implemented by extending the existing
-clang's type-trait framework and adding the \texttt{\_\_is\_metaobject} builtin
-operator.
+\begin{minted}{cpp}
+namespace std {
 
-The \meta{ObjectSequence} operations, namely \texttt{get\_size} and
-\texttt{get\_element} are implemented lazily by using the new
-\texttt{\_\_reflexpr\_size} and \texttt{\_\_reflexpr\_element} operators.
+template <__metaobject_id MoId>
+struct __metaobject
+{
+	__metaobject() = default;
+	__metaobject(const metaobject&) = default;
+};
 
-Note that the limited time between the committee meetings and out limited experience
-at hacking clang internals at the time of starting with the fork,
-lead to the implementation not being lazy and thus neglecting some important
-opportunities to do optimizations. We expect that the compiler implementers
-or ourselves during our next attempts will do a better job.
+} // namespace std
+\end{minted}
 
-Also note that P0194R0 underwent some last-minute changes,
-which were not incorporated into the implementation yet.
+The metaobject ID can be obtained from a metaobject (type) by using the internal
+helper template \verb@__unwrap_id@: 
+
+\begin{minted}{cpp}
+namespace std {
+
+template <typename T>
+struct __unwrap_id;
+
+template <__metaobject_id MoId>
+struct __unwrap_id<__metaobject<MoId>>
+{
+	static constexpr __metaobject_id value = MoId;
+};
+
+template <typename T>
+constexpr __metaobject_id __unwrap_id_v = __unwrap_id<T>::value;
+
+} // namespace std
+\end{minted}
+
+The proposed \verb@std::is_metaobject@ trait can then be implemented as follows: 
+
+\begin{minted}{cpp}
+namespace std {
+
+template <typename T>
+struct is_metaobject : false_type { };
+
+template <__metaobject_id MoId>
+struct is_metaobject<__metaobject<MoId>> : true_type { }
+
+} // namespace std
+\end{minted}
+
+The invocation of the \verb@reflexpr@ operator yields specializations of
+the \verb@std::__metaobject@ template, where the value of the \verb@MoId@
+argument is a handle to a representation of the metaobject inside of
+the compiler, as described below. 
+
+
+The metaobject operations and concepts are implemented with the help of compiler
+built-ins which take one or several arguments where at least one which is
+a metaobject ID (i.e. a compile-time constant of the \verb@__metaobject_id@ type).
+
+These built-ins are then used in the definition of the class templates,
+template aliases and concepts which implement the public interface of
+the metaobject.
+
+The built-ins can yield compile-time constant values of the following types: 
+
+
+\begin{itemize}
+\item{{\em boolean constants} -- used mostly by the metaobject concept definitions
+like \verb@std::meta::Named@, \verb@std::meta::ScopeMember@, etc. and operations
+like \verb@std::meta::is_anonymous@.}
+
+\item{{\em integral constants} -- for operations like \verb@std::meta::get_source_line@
+or \verb@std::meta::get_size@ and \verb@std::meta::get_constant@.}
+
+\item{{\em pointer constants} -- for operations like \verb@std::meta::get_pointer@.}
+
+\item{{\em c-string literals} -- for operations like \verb@std::meta::get_source_file@
+or \verb@std::meta::get_base_name@.}
+
+\item{{\em metaobject IDs} -- for operations like \verb@std::meta::get_scope@,
+\verb@std::meta::get_base_classes@ or \verb@std::meta::get_element@.}
+\end{itemize}
+
+
+So for example the Named concept is implemented with the help of
+the \verb@__metaobject_is_meta_named@ compiler built-in which returns a boolean
+compile time constant (equivalent to the following pseudocode):
+
+\begin{minted}{cpp}
+constexpr bool __metaobject_is_meta_named(__metaobject_id moid);
+\end{minted}
+
+The concept as defined in the specification can be then implemented in the
+following manner: 
+
+\begin{minted}{cpp}
+namespace std {
+namespace meta {
+
+template <typename T>
+concept bool Object = is_metaobject<T>;
+
+template <Object T>
+concept bool Named = __metaobject_is_meta_named(__unwrap_id<T>);
+
+} // namespace meta
+} // namespace std
+\end{minted}
+
+The \verb@get_base_name@ operation is implemented with the help of the
+\verb@__metaobject_get_base_name@ built-in resulting in a \verb@constexpr@
+\verb@char@ array: 
+
+\begin{minted}{cpp}
+constexpr const char [] __metaobject_get_base_name(__metaobject_id moid);
+
+namespace std {
+namespace meta {
+
+template <Named T>
+struct get_base_name
+{
+	constexpr const char value[] =
+		__metaobject_get_base_name(__unwrap_id_v<T>);
+};
+
+} // namespace meta
+} // namespace std
+\end{minted}
+
+There is also the \verb@std::meta::get_reflected_type@ operation which instead
+of a compile-time constant value, yields a type. This operation is implemented
+by the \verb@__unrefltype@ built-in operator:
+
+\begin{minted}{cpp}
+unspecified-type __unrefltype(__metaobject_id);
+\end{minted}
+
+The template \verb@get_reflected_type@ is then implemented as follows:
+
+\begin{minted}{cpp}
+namespace std {
+namespace meta {
+
+template <Type T>
+struct get_reflected_type
+{
+	using type = __unrefltype(__unwrap_id_v<T>);
+};
+
+} // namespace meta
+} // namespace std
+\end{minted}

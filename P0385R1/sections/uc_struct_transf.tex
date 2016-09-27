@@ -53,12 +53,12 @@ the preprocessor.
 We either have to add the ability to create identifiers from compile-time strings
 which may be fairly complicated, or look for some simpler workarounds.
 
-First, let's say that we have a magic operator, like \verb@identifier@ as
+First, let's say that we have a magic operator, like \verb@idreflexpr@ as
 described in \ref{fut-op-identifier1} , which \say{creates} an identifier from
 a compile-time string, so that for example:
 
 \begin{minted}[tabsize=4]{cpp}
-identifier("long") identifier("foo")(int i, int j);
+idreflexpr("long") idreflexpr("foo")(int i, int j);
 \end{minted}
 
 would be equivalent to 
@@ -79,7 +79,7 @@ struct bar
 
 using meta_bar_foo = reflexpr(bar::foo);
 
-long identifier(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
+long idreflexpr(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 In order to do anything more complex than just
@@ -88,7 +88,7 @@ string manipulation library implementing for example functions for
 compile-time string concatenation, like \verb@ct_concat@:
 
 \begin{minted}[tabsize=4]{cpp}
-int identifier(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
+int idreflexpr(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -109,7 +109,7 @@ struct soa_single_member
 {
 	// vector<T> Xs;
 	vector<meta::get_reflected_type_t<meta::get_type_m<MetaDataMember>>>
-		identifier(ct_concat(meta::get_base_name_v<MetaDataMember>, "s"));
+		idreflexpr(ct_concat(meta::get_base_name_v<MetaDataMember>, "s"));
 
 	/* constructors, forwarding parameters to the vector, ... */
 };
@@ -129,7 +129,7 @@ struct soa
 using soa_foo = soa<foo>;
 \end{minted}
 
-If we don't want to implement the magic operator \verb@identifier@,
+If we don't want to implement the magic operator \verb@idreflexpr@,
 we could instead add a new template \verb@named_data_member@
 for \meta{Named} metaobjects, described in greater detail in section
 \ref{fut-named-member-X}:

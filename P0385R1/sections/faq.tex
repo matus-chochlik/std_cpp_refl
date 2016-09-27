@@ -112,14 +112,14 @@ This is however {\em not} the case.
 
 The metaobjects need to be types just enough so that they can be used
 as template arguments\footnote{Similar to the \texttt{void} type}.
-They don't need to have any name, scope, implicitly generated constructors,
-destructors, assignment operators, virtual method tables, run-time type information,
+They don't need to have any name, scope, 
+virtual method tables, run-time type information,
 etc. All they need to have is a unique identity and their internal representations
 need to point to the internal representations of the declarations\footnote
 {Which the compiler needs to maintain anyway, regardless of reflection.}
 which they reflect.
 
-Also our proposal allows very fine granularity. The result of \verb@reflexpr@
+Our proposal allows very fine granularity. The result of \verb@reflexpr@
 can be a very lightweight type, as we just described and the individual
 \say{attributes} like the name, scope, members, specifiers, etc. related
 to the metaobject are materialized only when requested by one of the operations
@@ -166,82 +166,6 @@ std::string(std::meta::get_base_name_v<reflexpr(std::pair)>);
 \end{minted}
 
 as efficient as possible.
-
-\subsection{There's already a type trait for that!}
-
-\textbf{Q:} {\em Why do you introduce a metaobject trait like
-\verb@std::meta::is_class<Metaobject>@  when there already are equivalent
-type traits like \verb@std::is_class<T>@?}
-
-\textbf{A:} The reason is consistency.
-While it is true that there are a few metaobject traits, which indicate the
-same thing as already existing type traits, omitting the metaobject trait
-in favor of the type trait would break consistency and make the interface less generic.
-
-For example the following is much more consistent and nicer,
-
-\begin{minted}{cpp}
-template <typename Metaobject>
-void foo(void)
-{
-	if(std::meta::is_class_v<Metaobject>) { ... }
-	else if(std::meta::is_typedef_v<Metaobject>) { ... }
-	else if(std::meta::is_type_v<Metaobject>) { ... }
-	else if(std::meta::is_namespace_v<Metaobject>) { ... }
-	else if(std::meta::is_function_v<Metaobject>) { ... }
-}
-\end{minted}
-
-than,
-
-\begin{minted}{cpp}
-template <typename T, typename Metaobject>
-void foo(void)
-{
-	if(std::is_class_v<T>) { ... }
-	else if(meta::is_typedef_v<Metaobject>) { ... }
-	else if(meta::is_type_v<Metaobject>) { ... }
-	else if(meta::is_namespace_v<Metaobject>) { ... }
-	else if(meta::is_function_v<Metaobject>) { ... }
-}
-\end{minted}
-
-or even,
-
-\begin{minted}{cpp}
-template <typename Metaobject>
-void foo(void)
-{
-	if(std::is_class_v<get_reflected_type_t<Metaobject>>) { ... }
-	else if(meta::is_typedef_v<Metaobject>) { ... }
-	else if(meta::is_type_v<Metaobject>) { ... }
-	else if(meta::is_namespace_v<Metaobject>) { ... }
-	else if(meta::is_function_v<Metaobject>) { ... }
-}
-\end{minted}
-
-Even more important is the problem with breaking genericity:
-
-\begin{minted}{cpp}
-template <typename Metaobject, template <class> class Trait>
-void bar(void)
-{
-	if(Trait<Metaobject>::value) { ... }
-	else { ... }
-}
-
-bar<reflexpr(std), std::meta::is_namespace>(); // works
-bar<reflexpr(static), std::meta::is_specifier>(); // works
-bar<reflexpr(std::string), std::meta::is_class>(); // works
-bar<reflexpr(std::string), std::is_class>(); // error!
-\end{minted}
-
-
-In C++ there are many examples of various expressions doing the same thing,
-this is just one of them.
-Having several options is not a bad thing, pick the one most appropriate for your
-particular use case.
-
 
 \subsection{There's already another expression for that!}
 
@@ -292,19 +216,19 @@ template <Metaobject MO>
 void generic_func_1(void)
 {
 	// this may be true only in a fraction of cases
-	if(meta::is_variable_v<MO>)
+	if(meta::Variable<MO>)
 	{
 		handle_meta_var<MO>();
 	}
-	else if(meta:is_class_v<MO>)
+	else if(meta:Class<MO>)
 	{
 		handle_meta_class<MO>();
 	}
-	else if(meta:is_type_v<MO>)
+	else if(meta:Type<MO>)
 	{
 		handle_meta_type<MO>();
 	}
-	else if(meta:is_namespace_v<MO>)
+	else if(meta:Namespace<MO>)
 	{
 		handle_meta_ns<MO>();
 	}
@@ -456,10 +380,9 @@ non-intrusive serialization, object-relational mapping, etc.
 
 Having said that we also try to design the interface to indicate to the users
 that they are breaking encapsulation. For example the \say{basic} operation
-for getting class members -- \verb@get_data_members@, returns only the
+for getting class members -- \verb@get_public_data_members@, returns only the
 reflections of {\em public} class data members. To get access to all data members
-including the private or protected ones, the \verb@get_all_data_members@\footnote
-{We are open to suggestions for a better, more expressive or dissuasive name.}
+including the private or protected ones, the \verb@get_data_members@
 operation has to be used.
 
 Furthermore the \verb@is_public@ trait can be used to test if a class member
@@ -562,12 +485,12 @@ into a typelist on demand, which can be implemented trivially with the
 \verb@meta::unpack_sequence@ template:
 
 \begin{minted}{cpp}
-template &lt;typename ... T&gt;
+template <typename ... T>
 struct type_list { /* ... */ };
 
 
-template &lt;ObjectSequence MOS&gt;
-using convert_to_list = unpack_sequence&lt;MOS, type_list&gt;;
+template <ObjectSequence MOS>
+using convert_to_list = unpack_sequence<MOS, type_list>;
 \end{minted}
 
 \subsection{Why not reflect with constexpr instances of the same type?}
@@ -624,7 +547,8 @@ with similar syntax as either of the above\footnote{and even others}, on top
 of our chosen representation and we do plan to do that in the future.
 \say{Niceness} is generally a matter of taste and we want to accommodate
 various programming styles. See the various layers implemented by the Mirror
-reflection utilities \cite{Chochlik-Mirror-doc} for some examples.
+reflection utilities \cite{Chochlik-Mirror-new-doc},
+\cite{Chochlik-Mirror-old-doc} for some examples.
 
 In regard to efficiency, the types representing the metaobjects are very
 lightweight up to the point of being comparable to compile-time constants.
@@ -648,7 +572,7 @@ question for more details on this.
 
 \subsection{Why not return fully qualified names?}
 
-\textbf{Q:} {\em Why doesn't the \texttt{get\_name} operation return fully
+\textbf{Q:} {\em Why doesn't the \texttt{get\_base\_name} operation return fully
 qualified names instead of base names?}
 
 \textbf{A:} This is because it is much easier to generate full names from
@@ -658,7 +582,7 @@ base name from a fully qualified and decorated name at compile-time.
 Also there are several possibilities how the full name can be formatted;
 should it contain any whitespaces, if so where and how many?, should the
 \verb@const@ and \verb@volatile@ qualifiers be put before or after the type
-name?, etc.
+name?, should a complicated type name be split into several lines and indented, etc.
 
 These details shouldn't be handled by the basic reflection facility, but by
 a higher-level library.

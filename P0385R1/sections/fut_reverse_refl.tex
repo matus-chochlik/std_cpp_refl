@@ -6,15 +6,12 @@ of a base-level declaration. But what if we wanted to do the opposite: to
 get back the original declaration from a metaobject?
 
 This of course would make sense only for a subset of metaobjects, so let's
-define a new concept like \meta{Revertible}.
+define a new concept like \meta{Reversible}.
 
-One way to achieve this would be to extend the \verb@reflexpr@
-operator. In case that the operand of \verb@reflexpr@ is a \meta{Revertible}
-it should \say{return} the original declaration, for other metaobjects the behavior
-would be undefined.
+One way to achieve this would be to add new operator -- \verb@unreflexpr@.
 
 Let's look at some possible use cases for this feature.
-The most trivial one is to replace the \texttt{get\_original\_type}
+The most trivial one is to replace the \texttt{get\_reflected\_type}
 template from the interface of \meta{Type}:
 
 \begin{minted}{cpp}
@@ -29,8 +26,8 @@ using MT = reflexpr(int);
 using T = get_reflected_type_t<MT>;
 
 // we could do:
-static_assert(meta::is_revertible_v<MT> && meta::is_type_v<MT>, "");
-using T = reflexpr(MT);
+static_assert(meta::Reversible<MT> && meta::Type<MT>, "");
+using T = unreflexpr(MT);
 static_assert(is_same_v<T, int>, "");
 
 \end{minted}
@@ -49,14 +46,14 @@ using MV = reflexpr(foo::str); // Meta-Variable
 
 // ... lots of code here ...
 // using namespace foo;
-using namespace reflexpr(get_scope_m<MV>);
+using namespace unreflexpr(get_scope_m<MV>);
 
 // [foo::]bar(foo::str);
-bar(reflexpr(MV));
+bar(unreflexpr(MV));
 
 \end{minted}
 
-or even selecting whole namespaces programmatically;
+or even selecting whole namespaces (meta-)programmatically;
 
 \begin{minted}[tabsize=4]{cpp}
 
@@ -77,10 +74,10 @@ template <typename MN>
 void algorithm(const string& str, int i, int j)
 {
 	// [foo|bar]::func1
-	reflexpr(MN)::func1(str);
+	unreflexpr(MN)::func1(str);
 
 	// [foo|bar]::func2([foo|bar]::func3(i*j, 64, i == j), i, j);
-	reflexpr(MN)::func2(reflexpr(MN)::func3(i*j, 64, i == j), i, j);
+	unreflexpr(MN)::func2(unreflexpr(MN)::func3(i*j, 64, i == j), i, j);
 }
 
 void func(const string& str, int i, int j, bool want_foo)
@@ -108,8 +105,8 @@ namespace foo {
 using MF = reflexpr(foo::bar); // Meta-Function
 
 // ... lots of code here ...
-// foo::bar("hello");
-reflexpr(MF)("hello");
+//   foo::bar("hello");
+unreflexpr(MF)("hello");
 
 \end{minted}
 
@@ -124,13 +121,13 @@ struct my_struct
 };
 
 // Meta-DataMember
-using MDM = get_element_m<get_data_members_m<reflexpr(foo::bar)>, 0>;
+using MDM = reflexpr(foo::bar::i);
 
 my_struct x {123, 45.67f};
 
 assert(x.i == 123);
 // x.i = 234;
-x.reflexpr(MDM) = 234;
+x.unreflexpr(MDM) = 234;
 assert(x.i == 234);
 
 \end{minted}
@@ -143,7 +140,7 @@ or go back to the original template;
 using MTpl = reflexpr(std::pair);
 
 // std::pair<int, std::string> p;
-reflexpr(MTpl)<int, std::string> p{10, "Hi!"};
+unreflexpr(MTpl)<int, std::string> p{10, "Hi!"};
 
 \end{minted}
 
@@ -151,17 +148,7 @@ and so on.
 
 Combined with the fact that all metaobjects are first-class
 entities this would make a very powerful feature, which would essentially
-allow to sort of reify all reflectable declarations, even those which are
+allow to reify all reflectable declarations at the meta-level, even those which are
 second-class without actually reifying them at the base-level\footnote
 {At the cost of the round-trip through the meta-level.}
 
-The the name of the \verb@reflexpr@ operator works nicely in both directions:
-\begin{itemize}
-\item Base$\rightarrow$Meta -level: {\em reflect} an expression.
-\item Meta$\rightarrow$Base -level: get {\em reflected} expression.
-\end{itemize}
-
-We are however also considering to use another name for the reverse operator.
-So far \verb@decltype(Metaobject)@\footnote{which works nicely for metaobjects
-reflecting types, but not otherwise} and
-\verb@unreflexpr(Metaobject)@\footnote{see the Acknowledgements} were suggested.

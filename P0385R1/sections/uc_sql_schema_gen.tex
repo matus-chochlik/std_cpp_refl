@@ -18,9 +18,9 @@ const char* translate_to_sql(const std::string& type_name)
 struct create_table_column_from
 {
 	template <typename MetaMemVar>
-	void operator()(identity<MetaMemVar>)
+	void operator()(MetaMemVar)
 	{
-		if(!meta::is_variable_v<MetaMemVar>) return;
+		if(!meta::Variable<MetaMemVar>) return;
 
 		std::cout << meta::get_base_name_v<MetaMemVar> << " ";
 
@@ -41,9 +41,9 @@ struct create_table_from
 	const char* schema_name;
 
 	template <typename MetaClass>
-	void operator()(identity<MetaClass>)
+	void operator()(MetaClass)
 	{
-		if(!meta::is_class_v<MetaClass>) return;
+		if(!meta::Class<MetaClass>) return;
 
 		if(!starts_with(
 			get_base_name_v<MetaClass>,
@@ -66,7 +66,7 @@ struct create_table_from
 struct create_schema_from
 {
 	template <typename MetaNamespace>
-	void operator()(identity<MetaNamespace>)
+	void operator()(MetaNamespace)
 	{
 		std::cout << "CREATE SCHEMA "
 			  << get_base_name_v<MetaNamespace>
@@ -81,7 +81,7 @@ struct create_schema_from
 int main(void)
 {
 	create_schema_from create;
-	create(identity<reflexpr(foo)>());
+	create(reflexpr(foo){});
 	return 0;
 }
 

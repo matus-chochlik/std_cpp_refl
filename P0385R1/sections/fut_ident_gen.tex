@@ -9,13 +9,13 @@ identifiers programmatically.
 \label{fut-op-identifier1}
 
 We will start by the most powerful, but also the most difficult to implement
-option -- an operator, say \verb@identifier(const char (&)[N])@\footnote{We
+option -- an operator, say \verb@idreflexpr(const char (&)[N])@\footnote{We
 do not insist on this particular name in case it should be implemented.},
 which \say{creates} an identifier from an arbitrary compile-time string, so that:
 
 \begin{minted}[tabsize=4]{cpp}
-identifier("std")::identifier("size_t")
-identifier("foo")(int identifier("i"), int j);
+idreflexpr("std")::idreflexpr("size_t")
+idreflexpr("foo")(int idreflexpr("i"), int j);
 \end{minted}
 
 would be equivalent to 
@@ -37,7 +37,7 @@ struct bar
 
 using meta_bar_foo = reflexpr(bar::foo);
 
-std::size_t identifier(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
+std::size_t idreflexpr(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 which is again equivalent to:
@@ -56,7 +56,7 @@ need to have a function for compile-time string concatenation, like
 \begin{minted}[tabsize=4]{cpp}
 using meta_bar_foo = reflexpr(bar::foo);
 
-int identifier(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
+int idreflexpr(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -66,13 +66,13 @@ int get_foo(const bar&);
 \end{minted}
 
 While being very appealing and powerful, implementing this feature may
-also prove to be very challenging, especially taking the different phases
+also prove to be challenging, especially taking the different phases
 of compilation into account.
 
 \subsubsection{Identifier formatting}
 \label{fut-ident-formatting}
 
-Another option is a simplified version of the operator \verb@identifier@,
+Another option is a simplified version of the operator \verb@idreflexpr@,
 which would take a format string {\em literal} and optionally a pack of
 \meta{Named} metaobjects:
 
@@ -85,8 +85,8 @@ struct bar
 using meta_bar = reflexpr(bar);
 using meta_foo = reflexpr(bar::foo);
 
-identifier("int")
-identifier("get_%1_%2", meta_bar, meta_foo)(const identifier("%1", meta_bar)&);
+idreflexpr("int")
+idreflexpr("get_%1_%2", meta_bar, meta_foo)(const idreflexpr("%1", meta_bar)&);
 \end{minted}
 
 which would result in:
@@ -101,7 +101,7 @@ would be handled inside of the compiler.
 
 Also note that we could combine this with the reversible reflection described
 in section \ref{fut-reverse-reflection} and reuse the \verb@reflexpr@ operator
-instead of adding a new operator like \verb@identifier@:
+instead of adding a new operator like \verb@idreflexpr@:
 
 \begin{minted}[tabsize=4]{cpp}
 reflexpr("int")
@@ -111,7 +111,7 @@ reflexpr("get_%1_%2", meta_bar, meta_foo)(const reflexpr("%1", meta_bar)&);
 \subsubsection{\texttt{named\_data\_member} and \texttt{named\_member\_typedef}}
 \label{fut-named-member-X}
 
-If we don't want to implement the operator \verb@identifier@ or expose it
+If we don't want to implement the operator \verb@idreflexpr@ or expose it
 to the users directly, the third option is to add new operations like
 \verb@named_member_typedef@  and \verb@named_data_member@ for \meta{Named}
 metaobjects {\em equivalent} to the following:
@@ -123,8 +123,8 @@ struct named_member_typedef
 	struct type
 	{
 		// same as
-		// typedef X identifier(meta::get_base_name_v<MO>);
-		typedef X __builtin_identifier_of(MO);
+		// typedef X idreflexpr(meta::get_base_name_v<MO>);
+		typedef X __builtin_idreflexpr_of(MO);
 	};
 };
 
@@ -134,12 +134,12 @@ struct named_data_member
 	struct type
 	{
 		// same as
-		// X identifier(meta::get_base_name_v<MO>);
-		X __builtin_identifier_of(MO);
+		// X idreflexpr(meta::get_base_name_v<MO>);
+		X __builtin_idreflexpr_of(MO);
 
 		template <typename ... P>
 		type(P&& ... p)
-		 : __builtin_identifier_of(MO)(forward<P>(p)...) 
+		 : __builtin_idreflexpr_of(MO)(forward<P>(p)...) 
 		{ }
 	};
 };

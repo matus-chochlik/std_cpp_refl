@@ -24,7 +24,7 @@ template <DataMember ... MDM>
 struct soa_helper
 {
 	std::vector<meta::get_reflected_type_t<meta::get_type_m<MDM>>>
-	identifier("vec_%1", MDM)...;
+	idreflexpr("vec_%1", MDM)...;
 };
 
 template <typename T>
@@ -41,7 +41,7 @@ With the \say{reversible reflection} feature described in section
 template <DataMember ... MDM>
 struct soa_helper
 {
-	std::vector<reflexpr(meta::get_type_m<MDM>)>
-	identifier("vec_%1", MDM)...;
+	std::vector<unreflexpr(meta::get_type_m<MDM>)>
+	idreflexpr("vec_%1", MDM)...;
 };
 \end{minted}
