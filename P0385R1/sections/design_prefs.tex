@@ -71,9 +71,10 @@ struct my_meta_algorithm
 	using result = /* ... */;
 };
 
-using x = my_meta_algorithm<std>::result; // Error
+using x = my_meta_algorithm<reflexpr(std)>::result; // OK
 
-using y = my_meta_algorithm<reflexpr(std)>::result; // OK
+using y = my_meta_algorithm<std>::result; // Error
+
 \end{minted}
 
 \subsubsection{Ontological correspondence}
@@ -121,8 +122,8 @@ This can be achieved by having a solid and powerful compiler-assisted reflection
 as the foundation and by implementing a simplifying facade on top of it once
 the common use-cases are identified.
 
-Utilities such as {\em enum-to-string}, {\em string-to-enum} or {\em get-type-name}
-can be implemented on top of reflection instead of each of them using their own
+Utilities such as {\em enum-to-string}, {\em string-to-enum} or {\em get-type-name},
+etc., can be implemented on top of reflection instead of each of them using their own
 \say{dedicated compiler magic}.
 
 \subsubsection{Integration}

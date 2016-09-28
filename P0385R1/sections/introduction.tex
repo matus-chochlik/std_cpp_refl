@@ -77,11 +77,11 @@ C++ metaprogramming can be done both in an external language\footnote{For exampl
 C++ code generator written in Python or Bash.}, in a C++ compiler plug-in,
 or in C++ itself. 
 
-When done directly in C++, metaprogramming usually takes the form of a
+In C++, metaprogramming usually takes the form of a
 {\em source code generator}\footnote{Like Qt's MOC.}, or the form
 of {\em preprocessor}, {\em template} or {\em constexpr} metaprogramming.
 
-In template metaprogramming we use C++'s type system
+With template metaprogramming we use C++'s type system
 as a standalone functional programming language \say{interpreted} by a C++
 compiler, with \say{variables} being
 represented by types (or compile-time constants),
@@ -220,6 +220,6 @@ real, bringing it into being as an entity with its own identity,
 or making something concrete.
 
 In regard to programming languages, reification is often defined as making
-a concept in the language a first-class object. So in the context of C++ template
+an entity in the language a first-class object. So in the context of C++ template
 metaprogramming a type is reified, but a namespace or a specifier is not.
 
