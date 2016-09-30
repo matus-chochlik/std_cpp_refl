@@ -130,24 +130,14 @@ For example:
 </p>
 <pre>
 <code>
-enum E { a, b, c, d};
+enum class E { a, b, c, d};
 
 using ME_a = reflexpr(E::a); // valid
 
-struct S { using T = int; T a; static bool b; };
+struct S { using T = int; T a; };
 
 using MS_T = reflexpr(S::T); // valid
 using MS_a = reflexpr(S::a); // valid
-using MS_b = reflexpr(S::b); // valid
-
-namespace foo {
-
-static float f = 12.34f;
-
-} // namespace foo
-
-using Mf = reflexpr(foo::f); // valid
-
 </code>
 </pre>
 
@@ -161,65 +151,15 @@ using A = int;
 using B = A;
 using C = B;
 
-template &lt;typename T&gt;
-struct S
-{
-	using X = T;
-};
-
 using Mint = reflexpr(int);
 using MA = reflexpr(A);
 using MB = reflexpr(B);
-using MC = reflexpr(C);
 
-using MSintX = reflexpr(S&lt;int&gt;::X);
-using MSAX = reflexpr(S&lt;A&gt;::X);
-using MSBX = reflexpr(S&lt;B&gt;::X);
-using MSCX = reflexpr(S&lt;C&gt;::X);
-</code>
-</pre>
-
-<p>In the previous proposals we required the following (i.e. that reflection
-should be aware of the whole <em>"chain"</em> of aliases -
-<code>S&lt;C&gt;::X -> C -> B -> A -> int</code>):
-</p>
-<pre>
-<code>
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, MC&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, MA&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;&gt;, MA&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, MA&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
-</code>
-</pre>
-
-<p>Now we require only that the type alias knows the <em>"canonical"</em> type
-which it refers to - the type which has a unique identity at the base level (i.e.
-<code>S&lt;C&gt;::X -> int</code>, <code>C -> int</code>, <code>B -> int</code>,
-<code>A -> int</code>):
-</p>
-<pre>
-<code>
-static_assert(meta::Alias&lt;MSCX&gt;, "");
-static_assert(meta::Alias&lt;MSBX&gt;, "");
-static_assert(meta::Alias&lt;MSAX&gt;, "");
-
-static_assert(meta::Alias&lt;MC&gt;, "");
 static_assert(meta::Alias&lt;MB&gt;, "");
 static_assert(meta::Alias&lt;MA&gt;, "");
 
 static_assert(!meta::Alias&lt;Mint&gt;, "");
 
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, Mint&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, Mint&gt;, "");
 static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, Mint&gt;, "");
 static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
 
