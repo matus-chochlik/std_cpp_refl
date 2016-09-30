@@ -134,20 +134,10 @@ enum class E { a, b, c, d};
 
 using ME_a = reflexpr(E::a); // valid
 
-struct S { using T = int; T a; static bool b; };
+struct S { using T = int; T a; };
 
 using MS_T = reflexpr(S::T); // valid
 using MS_a = reflexpr(S::a); // valid
-using MS_b = reflexpr(S::b); // valid
-
-namespace foo {
-
-static float f = 12.34f;
-
-} // namespace foo
-
-using Mf = reflexpr(foo::f); // valid
-
 </code>
 </pre>
 
