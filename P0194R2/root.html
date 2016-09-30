@@ -539,11 +539,10 @@ get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by
+	<p>The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code>, <code>meta::get_public_data_members</code>,
 	<code>meta::get_member_types</code> and <code>meta::get_public_member_types</code>
 	<em>do not</em> include <em>Metaobject</em>s reflecting inherited class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -576,7 +575,7 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span>
+	<p>
 	The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
 	contain <em>Metaobject</em>s reflecting all class members including those
@@ -586,7 +585,6 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 	<code>meta::get_public_data_members</code> and
 	<code>meta::get_public_member_types</code>
 	contain only the <em>Metaobject</em>s reflecting publicly accessible class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
