@@ -168,12 +168,11 @@ static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "")
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting fundamental
+	<p><em>Metaobject</em>s reflecting fundamental
         types (except for <code>std::nullptr_t</code>),
 	pointers (including pointers-to-members), references, arrays and function types
 	do not conform to the <em>meta::ScopeMember</em> concept, all other
 	types do.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
