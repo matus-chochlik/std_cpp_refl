@@ -151,30 +151,14 @@ using A = int;
 using B = A;
 using C = B;
 
-template &lt;typename T&gt;
-struct S
-{
-	using X = T;
-};
-
 using Mint = reflexpr(int);
 using MA = reflexpr(A);
 using MB = reflexpr(B);
-
-using MSintX = reflexpr(S&lt;int&gt;::X);
-using MSAX = reflexpr(S&lt;A&gt;::X);
-using MSBX = reflexpr(S&lt;B&gt;::X);
-
-static_assert(meta::Alias&lt;MSBX&gt;, "");
-static_assert(meta::Alias&lt;MSAX&gt;, "");
 
 static_assert(meta::Alias&lt;MB&gt;, "");
 static_assert(meta::Alias&lt;MA&gt;, "");
 
 static_assert(!meta::Alias&lt;Mint&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, Mint&gt;, "");
 
 static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, Mint&gt;, "");
 static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
