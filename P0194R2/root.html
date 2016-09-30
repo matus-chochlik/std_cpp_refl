@@ -150,12 +150,10 @@ is_metaobject_v&lt;Mstring&gt;;             // true
 <pre>
 [<span class="note">Example:</span>
 <code>
-static_assert(meta::Named&lt;reflexpr(int)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
 
 auto l = [](void) { };
 static_assert(meta::Named&lt;reflexpr()&gt;, "");
-static_assert(meta::Named&lt;reflexpr(::)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
 </code>
 <span class="note">— end example</span>]
@@ -165,10 +163,8 @@ static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
 [<span class="note">Example:</span>
 <code>
 static_assert(!meta::is_anonymous_v&lt;reflexpr(int)&gt;, "");
-static_assert(!meta::is_anonymous_v&lt;reflexpr(string)&gt;, "");
 
 auto l = [](void) { };
-static_assert(meta::is_anonymous_v&lt;reflexpr()&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(::)&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(decltype(l))&gt;, "");
 </code>
@@ -179,10 +175,8 @@ static_assert(meta::is_anonymous_v&lt;reflexpr(decltype(l))&gt;, "");
 [<span class="note">Example:</span>
 <code>
 static_assert(meta::get_base_name_v&lt;reflexpr(int)&gt;[0] != '\0', "");
-static_assert(meta::get_base_name_v&lt;reflexpr(string)&gt;[0] != '\0', "");
 
 auto l = [](void) { };
-static_assert(meta::get_base_name_v&lt;reflexpr()&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(::)&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "");
 </code>
