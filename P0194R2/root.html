@@ -168,33 +168,6 @@ static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "")
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting strongly-typed
-	enumerations are distinguished from <em>Metaobjects</em>s reflecting non-scoped
-	enumerations by the <code>meta::is_scoped_enum</code> operation.
-	<span class="note">— end note</span>]
-	</p>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-enum weak_enum { a, b, c };
-enum class scoped_enum { d, e, f };
-
-using meta_we = reflexpr(weak_enum);
-using meta_se = reflexpr(scoped_enum);
-
-static_assert(meta::Enum&lt;meta_we&gt;, "");
-static_assert(meta::Enum&lt;meta_se&gt;, "");
-
-static_assert(meta::Scope&lt;meta_we&gt;, "");
-static_assert(meta::Scope&lt;meta_se&gt;, "");
-
-static_assert(!meta::is_scoped_enum_v&lt;meta_we&gt;, "");
-static_assert( meta::is_scoped_enum_v&lt;meta_se&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
-
 	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting native
 	types, pointers, references, arrays, function types and other <em>derived</em> types
 	do not conform to the <em>meta::ScopeMember</em> concept, all other
