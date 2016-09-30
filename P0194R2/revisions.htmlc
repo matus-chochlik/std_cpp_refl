@@ -130,7 +130,7 @@ For example:
 </p>
 <pre>
 <code>
-enum E { a, b, c, d};
+enum class E { a, b, c, d};
 
 using ME_a = reflexpr(E::a); // valid
 
