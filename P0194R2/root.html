@@ -339,9 +339,9 @@ struct <em>MetaobjectOperation</em>
 
 	<object class="htmlc" name="concepts" type="text/html" data="operations.htmlc"></object>
 
-	<p>For <code>meta::Type</code>s reflecting native types with modifiers
-	like <code>unsigned</code>, <code>long</code>, etc. the <code>get_base_name</code>
-	operation returns the full type specifier name.
+	<p>For <code>meta::Type</code>s reflecting integer types, etc. the <code>get_base_name</code>
+	operation returns the longest type specifier name, i.e. including <code>long</code>,
+        <code>signed</code> or <code>unsigned</code>, if they describe the identical type.
 	</p>
 
 <pre>
