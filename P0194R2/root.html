@@ -184,15 +184,11 @@ struct S { };
 namespace foo { class C { }; }
 
 static_assert(!meta::ScopeMember(reflexpr(void)), "");
-static_assert(!meta::ScopeMember(reflexpr(int)), "");
-static_assert(!meta::ScopeMember(reflexpr(int*)), "");
-static_assert(!meta::ScopeMember(reflexpr(S[10])), "");
-static_assert(!meta::ScopeMember(reflexpr(foo::C&amp;)), "");
-static_assert(!meta::ScopeMember(reflexpr(int(char, bool))), "");
 static_assert(!meta::ScopeMember(reflexpr(int(*)(char, bool))), "");
 
 static_assert( meta::ScopeMember(reflexpr(S)), "");
 static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
+static_assert( meta::ScopeMember(reflexpr(size_t)), "");
 
 </code>
 <span class="note">— end example</span>]
