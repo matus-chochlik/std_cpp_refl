@@ -195,11 +195,11 @@ static_assert( meta::is_scoped_enum_v&lt;meta_se&gt;, "");
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting native
-	types, pointers, references, arrays, function types and other <em>derived</em> types
+  <p><em>Metaobject</em>s reflecting fundamental
+  types (except for <code>std::nullptr_t</code>),
+  pointers (including pointers-to-members), references, arrays and function types
 	do not conform to the <em>meta::ScopeMember</em> concept, all other
 	types do.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
