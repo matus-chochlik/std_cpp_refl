@@ -5,6 +5,10 @@ body {
 	padding: 2em;
 }
 
+h3,h4,h5,h6 {
+	font-size: 100%;
+}
+
 table {
 	border: 2px solid black;
 	border-collapse: collapse;
