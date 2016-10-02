@@ -348,11 +348,14 @@ meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 <code>
 using foo = int;
 using bar = foo;
-namespace std = baz;
+namespace baz = std;
+
+typedef foo(*pfoo)(double, float);
 
 meta::get_base_name_v&lt;reflexpr(foo)&gt;    // "foo"
 meta::get_base_name_v&lt;reflexpr(bar)&gt;    // "bar"
 meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
+meta::get_base_name_v&lt;reflexpr(pfoo)&gt;   // "pfoo"
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -367,10 +370,8 @@ meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
 using meta::get_base_name_v;
 
 get_base_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
-get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "size_t"
+get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "unsigned long int"
 get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*pfoo)(std::set&lt;double&gt;&amp;))&gt; // "pfoo"
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;  // "foo"
 get_base_name_v&lt;reflexpr(std::chrono)&gt;                               // "chrono"
 get_base_name_v&lt;reflexpr(std::launch)&gt;                               // "launch"
 get_base_name_v&lt;reflexpr(static)&gt;                                    // "static"
