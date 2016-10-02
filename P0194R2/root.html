@@ -13,7 +13,7 @@
 
 <table class="header">
 	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
-  <tr><th>Date:</th><td>2016-09-26</td></tr>
+  <tr><th>Date:</th><td>2016-10-02</td></tr>
   <tr><th>Project:</th><td>Programming Language C++</td></tr>
   <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
   <tr>
@@ -318,7 +318,7 @@ struct <em>MetaobjectOperation</em>
 
 	<object class="htmlc" name="concepts" type="text/html" data="operations.htmlc"></object>
 
-	<h6>?.5.7.1 Operation <code>get_base_name</code><span class="section_name">[refl.ops.desc.base_name]</span></h6>
+	<h6>?.5.7.1 Operation <code>get_base_name</code><span class="section_name">[refl.ops.base_name]</span></h6>
 
 	<p>For <code>meta::Type</code>s reflecting integer types, etc. the <code>get_base_name</code>
 	operation returns the longest type specifier name, i.e. including <code>long</code>,
@@ -380,7 +380,7 @@ get_base_name_v&lt;reflexpr(class)&gt;                                     // "c
 </pre>
 
 
-	<h6>?.5.7.2 Operation <code>get_display_name</code><span class="section_name">[refl.ops.desc.disp_name]</span></h6>
+	<h6>?.5.7.2 Operation <code>get_display_name</code><span class="section_name">[refl.ops.disp_name]</span></h6>
 
 	<p>The <code>meta::get_display_name</code> operation returns an
 	implementation-defined string containing the name of the base-level
@@ -402,7 +402,7 @@ meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt;    // "char const [4]"
 <span class="note">— end example</span>]
 </pre>
 
-	<h6>?.5.7.3 Operation <code>get_aliased</code><span class="section_name">[refl.ops.desc.aliased]</span></h6>
+	<h6>?.5.7.3 Operation <code>get_aliased</code><span class="section_name">[refl.ops.aliased]</span></h6>
 
 	<p>The <code>meta::get_aliased</code> operation invoked on a
 	<code>meta::Alias</code> always returns a (non <code>meta::Alias</code>)
@@ -519,7 +519,7 @@ produces the following output:
 <span class="note">— end example</span>]
 </pre>
 
-	<h6>?.5.7.4 Sequence operations<span class="section_name">[refl.ops.desc.seq]</span></h6>
+	<h6>?.5.7.4 Sequence operations<span class="section_name">[refl.ops.seq]</span></h6>
 
 	<p><em>Metaobject</em>s in a
 	<code>meta::ObjectSequence</code> are ordered according
@@ -692,7 +692,7 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
 </pre>
 
 
-	<h6>?.5.7.5 Specifier operations<span class="section_name">[refl.ops.desc.spec]</span></h6>
+	<h6>?.5.7.5 Specifier operations<span class="section_name">[refl.ops.spec]</span></h6>
 
 	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-related metadata.
 	One is using the <code>meta::Specifier</code> concept and its operations which is
