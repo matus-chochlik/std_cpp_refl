@@ -20,7 +20,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="reflects_same"
 		since_revision="0"
-		brief="indicates if two metaobjects reflect the same base-level
+		brief="indicates whether two metaobjects reflect the same base-level
 		declaration ('entity')."
 		result="BooleanConstant"
 	>
@@ -73,7 +73,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="unpack_sequence"
 		since_revision="2"
 		result="BaseLevelType"
-		brief="Unpacks the $(operand) into a template."
+		brief="unpacks the $(operand) into a template."
 	>
 		<argument type="ObjectSequence" name="S"/>
 		<argument type="VarTypeTemplate" name="Tpl"/>
@@ -112,7 +112,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_anonymous"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is anonymous."
 	>
 		<argument type="Named"/>
@@ -237,7 +237,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_public_record_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared with public access."
 	>
 		<argument type="RecordMember"/>
@@ -247,7 +247,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_protected_record_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared with protected access."
 	>
 		<argument type="RecordMember"/>
@@ -257,7 +257,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_private_record_member"
 		since_revision="0"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whetherthe $(reflected) reflected by a $(operand)
 		was declared with private access."
 	>
 		<argument type="RecordMember"/>
@@ -363,7 +363,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_enum"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is an enum."
 	>
 		<argument type="TagType"/>
@@ -372,7 +372,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_class"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a class."
 	>
 		<argument type="TagType"/>
@@ -381,7 +381,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_struct"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a struct."
 	>
 		<argument type="TagType"/>
@@ -390,7 +390,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="is_union"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="Indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a union."
 	>
 		<argument type="TagType"/>
@@ -649,7 +649,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_public_inheritance"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as public."
 	>
 		<argument type="Inheritance"/>
@@ -659,7 +659,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_protected_inheritance"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as protected."
 	>
 		<argument type="Inheritance"/>
@@ -669,7 +669,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		uname="is_private_inheritance"
 		since_revision="2"
 		result="BooleanConstant"
-		brief="indicates if the $(reflected) reflected by a $(operand)
+		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as private."
 	>
 		<argument type="Inheritance"/>

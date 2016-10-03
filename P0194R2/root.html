@@ -13,7 +13,7 @@
 
 <table class="header">
 	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
-  <tr><th>Date:</th><td>2016-09-26</td></tr>
+  <tr><th>Date:</th><td>2016-10-02</td></tr>
   <tr><th>Project:</th><td>Programming Language C++</td></tr>
   <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
   <tr>
@@ -21,10 +21,10 @@
     <td>Matúš Chochlík (<a href="mailto:chochlik@gmail.com">chochlik@gmail.com</a>)</td>
   </tr>
   <tr>
-    <td>Axel Naumann (axel.naumann@cern.ch)</td>
+    <td>Axel Naumann (axel@cern.ch)</td>
   </tr>
   <tr>
-    <td>David Sankel (TODO)</td>
+    <td>David Sankel (camior@gmail.com)</td>
   </tr>
 </table>
 
@@ -36,9 +36,9 @@
 	<ul>
 		<li><a href="#introduction">Introduction</a>
 		</li>
-		<li><a href="#revisions">Revision history</a>
-		</li>
 		<li><a href="#wording">Proposed wording</a>
+		</li>
+		<li><a href="#revisions">Revision history</a>
 		</li>
 		<li><a href="#acks">Acknowledgments</a>
 		</li>
@@ -46,8 +46,6 @@
 </div>
 
 <object class="htmlc" type="text/html" data="introduction.htmlc"></object>
-
-<object class="htmlc" type="text/html" data="revisions.htmlc"></object>
 
 <h2 id="wording">Proposed wording</h2>
 
@@ -120,11 +118,10 @@ template &lt;typename T&gt; constexpr bool is_metaobject_v
 [<span class="note">Example:</span>
 <code>
 is_metaobject_v&lt;int&gt;;                 // false
-is_metaobject_v&lt;void&gt;;                // false
-is_metaobject_v&lt;string&gt;;              // false
 is_metaobject_v&lt;reflexpr(int)&gt;;       // true
 is_metaobject_v&lt;reflexpr(std)&gt;;       // true
-is_metaobject_v&lt;reflexpr(string)&gt;;    // true
+using Mstring = reflexpr(string);
+is_metaobject_v&lt;Mstring&gt;;             // true
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -151,77 +148,29 @@ is_metaobject_v&lt;reflexpr(string)&gt;;    // true
 <pre>
 [<span class="note">Example:</span>
 <code>
-static_assert(meta::Named&lt;reflexpr(int)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
-
 auto l = [](void) { };
 static_assert(meta::Named&lt;reflexpr()&gt;, "");
-static_assert(meta::Named&lt;reflexpr(::)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
 static_assert(!meta::is_anonymous_v&lt;reflexpr(int)&gt;, "");
-static_assert(!meta::is_anonymous_v&lt;reflexpr(string)&gt;, "");
-
 auto l = [](void) { };
-static_assert(meta::is_anonymous_v&lt;reflexpr()&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(::)&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(decltype(l))&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
 static_assert(meta::get_base_name_v&lt;reflexpr(int)&gt;[0] != '\0', "");
-static_assert(meta::get_base_name_v&lt;reflexpr(string)&gt;[0] != '\0', "");
-
 auto l = [](void) { };
-static_assert(meta::get_base_name_v&lt;reflexpr()&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(::)&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "");
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting strongly-typed
-	enumerations are distinguished from <em>Metaobjects</em>s reflecting non-scoped
-	enumerations by the <code>meta::is_scoped_enum</code> operation.
-	<span class="note">— end note</span>]
-	</p>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-enum weak_enum { a, b, c };
-enum class scoped_enum { d, e, f };
-
-using meta_we = reflexpr(weak_enum);
-using meta_se = reflexpr(scoped_enum);
-
-static_assert(meta::Enum&lt;meta_we&gt;, "");
-static_assert(meta::Enum&lt;meta_se&gt;, "");
-
-static_assert(meta::Scope&lt;meta_we&gt;, "");
-static_assert(meta::Scope&lt;meta_se&gt;, "");
-
-static_assert(!meta::is_scoped_enum_v&lt;meta_we&gt;, "");
-static_assert( meta::is_scoped_enum_v&lt;meta_se&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
-
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting native
-	types, pointers, references, arrays, function types and other <em>derived</em> types
+  <p><em>Metaobject</em>s reflecting fundamental
+  types (except for <code>std::nullptr_t</code>),
+  pointers (including pointers-to-members), references, arrays and function types
 	do not conform to the <em>meta::ScopeMember</em> concept, all other
 	types do.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -232,16 +181,15 @@ struct S { };
 
 namespace foo { class C { }; }
 
-static_assert(!meta::ScopeMember(reflexpr(void)), "");
 static_assert(!meta::ScopeMember(reflexpr(int)), "");
 static_assert(!meta::ScopeMember(reflexpr(int*)), "");
 static_assert(!meta::ScopeMember(reflexpr(S[10])), "");
 static_assert(!meta::ScopeMember(reflexpr(foo::C&amp;)), "");
-static_assert(!meta::ScopeMember(reflexpr(int(char, bool))), "");
 static_assert(!meta::ScopeMember(reflexpr(int(*)(char, bool))), "");
 
 static_assert( meta::ScopeMember(reflexpr(S)), "");
 static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
+static_assert( meta::ScopeMember(reflexpr(std::size_t)), "");
 
 </code>
 <span class="note">— end example</span>]
@@ -249,7 +197,7 @@ static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
 
 	<h4>?.5 <em>Metaobject</em> operations<span class="section_name">[refl.ops]</span></h4>
 
-	A <em>MetaobjectOperation</em> returns a single piece of metadata describing
+	A <em>MetaobjectOperation</em> describes
 	a particular aspect of the declaration reflected by a <em>Metaobject</em>.
 	It is a class template taking one or more arguments, at least one
 	of which is a model of the <em>Metaobject</em> concept.
@@ -262,44 +210,54 @@ static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
 	derive publicly and unambiguously from <code>true_type</code> or
 	<code>false_type</code>.
 	</p>
-	<p>For example:</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;bool, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.2 Integral or <code>enum</code> constant result<span class="section_name">[refl.ops.int]</span></h5>
 
 	<p>All <em>MetaobjectOperation</em> templates returning an integer or
 	<code>enum</code> value derive publicly and unambiguously from
-	a specialization of <code>integral_constant</code> with apropriate
-	integer or <code>enum</code> type as the first argument.
+	a specialization of <code>integral_constant</code>. The first argument's
+	integer or <code>enum</code> type is part of the specification of the operation.
 	</p>
-	<p>For example:</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;<em>integral-or-enum-type</em>, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.3 Pointer result<span class="section_name">[refl.ops.ptr]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates returning a pointer or
 	a class data member pointer derive publicly and unambiguously from
-	a specialization of <code>integral_constant</code> with appropriate
-	pointer or class data member pointer type as the first template argument
-	and with the appropriate constant pointer value as if taken by the 
-	<code>&amp;</code> operator:
+	a specialization of <code>integral_constant</code> with value as if taken by the 
+  <code>&amp;</code> operator.
+	The first argument's pointer or class data member pointer type
+	is part of the specification of the operation. 
 	</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;<em>pointer-or-data-member-pointer-type</em>, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.4 String constant result<span class="section_name">[refl.ops.str]</span></h5>
 
@@ -318,8 +276,7 @@ struct <em>MetaobjectOperation</em>
 	<p>where <code>N</code> is the length of the returned string and the
 	last element in the <code>value</code> character array is the
 	<code>'\0'</code> character.
-	The member names <code>value_type</code>, <code>value</code>,
-	<code>type</code> are publicly and unambiguously available
+	The member names <code>value_type</code> and <code>value</code> are publicly and unambiguously available
 	in such <em>MetaobjectOperation</em>.
 	</p>
 
@@ -361,9 +318,11 @@ struct <em>MetaobjectOperation</em>
 
 	<object class="htmlc" name="concepts" type="text/html" data="operations.htmlc"></object>
 
-	<p>For <code>meta::Type</code>s reflecting native types with modifiers
-	like <code>unsigned</code>, <code>long</code>, etc. the <code>get_base_name</code>
-	operation returns the full type specifier name.
+	<h6>?.5.7.1 Operation <code>get_base_name</code><span class="section_name">[refl.ops.base_name]</span></h6>
+
+	<p>For <code>meta::Type</code>s reflecting integer types, etc. the <code>get_base_name</code>
+	operation returns the longest type specifier name, i.e. including <code>long</code>,
+        <code>signed</code> or <code>unsigned</code>, if they describe the identical type.
 	</p>
 
 <pre>
@@ -389,13 +348,14 @@ meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 <code>
 using foo = int;
 using bar = foo;
-namespace std = baz;
+namespace baz = std;
 
-meta::get_base_name_v&lt;reflexpr(int)&gt;    // "int"
-meta::get_base_name_v&lt;reflexpr(std)&gt;    // "std"
+typedef foo(*pfoo)(double, float);
+
 meta::get_base_name_v&lt;reflexpr(foo)&gt;    // "foo"
 meta::get_base_name_v&lt;reflexpr(bar)&gt;    // "bar"
 meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
+meta::get_base_name_v&lt;reflexpr(pfoo)&gt;   // "pfoo"
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -410,66 +370,21 @@ meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
 using meta::get_base_name_v;
 
 get_base_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
-get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "size_t"
+get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "unsigned long int"
 get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*pfoo)(std::set&lt;double&gt;&amp;))&gt; // "pfoo"
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;  // "foo"
 get_base_name_v&lt;reflexpr(std::chrono)&gt;                               // "chrono"
 get_base_name_v&lt;reflexpr(std::launch)&gt;                               // "launch"
 get_base_name_v&lt;reflexpr(static)&gt;                                    // "static"
-get_base_name_v&lt;reflexpr(public)&gt;                                    // "public"
 get_base_name_v&lt;reflexpr(class)&gt;                                     // "class"
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>Template type parameters are also considered to be type aliases:
-	</p>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
-template &lt;typename A, typename B&gt;
-void foo(A a, B b)
-{
-	using meta::get_base_name_v;
-	using meta::get_aliased_m;
-
-	using mA = reflexpr(A);
-	using mB = reflexpr(B);
-
-	cout &lt;&lt; "1:" &lt;&lt; get_base_name_v&lt;mA&gt; &lt;&lt; endl;
-	cout &lt;&lt; "2:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
-
-	cout &lt;&lt; "3:" &lt;&lt; get_base_name_v&lt;mB&gt; &lt;&lt; endl;
-	cout &lt;&lt; "4:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
-}
-
-using rank_t = int;
-rank_t a = 123;
-float b = 45.67;
-
-foo(a, b);
-
-using mR = reflexpr(rank_t);
-cout &lt;&lt; "5:" &lt;&lt; get_base_name_v&lt;mR&gt; &lt;&lt; endl;
-cout &lt;&lt; "6:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mR&gt;&gt; &lt;&lt; endl;
-
-</code>
-produces the following output:
-<code>
-1:A
-2:int
-3:B
-4:float
-5:rank_t;
-6:int;
-</code>
-<span class="note">— end example</span>]
-</pre>
+	<h6>?.5.7.2 Operation <code>get_display_name</code><span class="section_name">[refl.ops.disp_name]</span></h6>
 
 	<p>The <code>meta::get_display_name</code> operation returns an
-	<em>implementation-dependent</em> string containing the name of the base-level
+	implementation-defined string containing the name of the base-level
 	entity reflected by a <code>meta::Named</code> which is as close as possible
 	to how the name is spelled in the source code. For types in particular
 	the display name should be fully qualified and if possible it should preserve
@@ -487,6 +402,8 @@ meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt;    // "char const [4]"
 </code>
 <span class="note">— end example</span>]
 </pre>
+
+	<h6>?.5.7.3 Operation <code>get_aliased</code><span class="section_name">[refl.ops.aliased]</span></h6>
 
 	<p>The <code>meta::get_aliased</code> operation invoked on a
 	<code>meta::Alias</code> always returns a (non <code>meta::Alias</code>)
@@ -558,10 +475,56 @@ static_assert(meta::reflects_same_v&lt;
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span> The <em>Metaobject</em>s in a
+	<p>Template type parameters are also considered to be a special kind of type aliases:
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+template &lt;typename A, typename B&gt;
+void foo(A a, B b)
+{
+	using meta::get_base_name_v;
+	using meta::get_aliased_m;
+
+	using mA = reflexpr(A);
+	using mB = reflexpr(B);
+
+	cout &lt;&lt; "1:" &lt;&lt; get_base_name_v&lt;mA&gt; &lt;&lt; endl;
+	cout &lt;&lt; "2:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
+
+	cout &lt;&lt; "3:" &lt;&lt; get_base_name_v&lt;mB&gt; &lt;&lt; endl;
+	cout &lt;&lt; "4:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
+}
+
+using rank_t = int;
+rank_t a = 123;
+float b = 45.67;
+
+foo(a, b);
+
+using mR = reflexpr(rank_t);
+cout &lt;&lt; "5:" &lt;&lt; get_base_name_v&lt;mR&gt; &lt;&lt; endl;
+cout &lt;&lt; "6:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mR&gt;&gt; &lt;&lt; endl;
+
+</code>
+produces the following output:
+<code>
+1:A
+2:int
+3:B
+4:float
+5:rank_t;
+6:int;
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h6>?.5.7.4 Sequence operations<span class="section_name">[refl.ops.seq]</span></h6>
+
+	<p><em>Metaobject</em>s in a
 	<code>meta::ObjectSequence</code> are ordered according
-	to the order of their declarations in the translation unit.
-	<span class="note">— end note</span>]
+	to the order of each <em>Metaobject</em>'s first declaration in the translation unit.
 	</p>
 
 <pre>
@@ -578,27 +541,27 @@ struct foo
 
 using meta_foo = reflexpr(foo);
 
+using meta::get_base_name_v;
 using meta::get_element_m;
 using meta::get_data_members_m;
 using meta::get_member_types_m;
 
-get_base_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
-get_base_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
+get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
+get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
 
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
 
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by
+	<p>The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code>, <code>meta::get_public_data_members</code>,
 	<code>meta::get_member_types</code> and <code>meta::get_public_member_types</code>
 	<em>do not</em> include <em>Metaobject</em>s reflecting inherited class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -631,7 +594,7 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span>
+	<p>
 	The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
 	contain <em>Metaobject</em>s reflecting all class members including those
@@ -641,7 +604,6 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 	<code>meta::get_public_data_members</code> and
 	<code>meta::get_public_member_types</code>
 	contain only the <em>Metaobject</em>s reflecting publicly accessible class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -680,6 +642,60 @@ get_base_name_v&lt;get_element_m&lt;get_public_data_members_m&lt;meta_foo&gt;, 0
 <span class="note">— end example</span>]
 </pre>
 
+	The <code>unpack_sequence</code> operation is applied to models of
+	<code>meta::ObjectSequence</code>. It is <em>equivalent</em> to:
+
+<pre><code>
+namespace std {
+namespace experimental {
+namespace meta {
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+struct unpack_sequence
+{
+	typedef Tpl&lt;
+		get_element_m&lt;Seq, 0&gt;,
+		get_element_m&lt;Seq, 1&gt;,
+		<em>...,</em>
+		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
+	&gt; type;
+};
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
+
+} // namespace meta
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	int a;
+	bool b;
+	char c;
+	double d;
+};
+
+template &lt;meta::DataMember ... MDM&gt;
+using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
+
+using X = meta::unpack_sequence_t&lt;
+	meta::get_data_members_m&lt;reflexpr(foo)&gt;,
+	helper
+&gt;;
+
+is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+
+	<h6>?.5.7.5 Specifier operations<span class="section_name">[refl.ops.spec]</span></h6>
+
 	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-related metadata.
 	One is using the <code>meta::Specifier</code> concept and its operations which is
 	more generic, and another using the boolean operations like <code>meta::is_static</code>,
@@ -714,61 +730,6 @@ meta::is_public&lt;meta_S_f&gt;  // true
 </code>
 <span class="note">— end example</span>]
 </pre>
-
-	<h5>?.5.8 Utility operations<span class="section_name">[refl.ops.util]</span></h5>
-
-	The <code>unpack_sequence</code> operation applicable to models of
-	<code>meta::ObjectSequence</code> is added to the <code>&lt;reflexpr&gt;</code>
-	header and is <em>equivalent</em> to:
-
-<pre><code>
-namespace std {
-namespace experimental {
-namespace meta {
-
-template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
-struct unpack_sequence
-{
-	typedef Tpl&lt;
-		get_element_m&lt;Seq, 0&gt;,
-		get_element_m&lt;Seq, 1&gt;,
-		<em>...,</em>
-		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
-	&gt; type;
-};
-
-template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
-using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
-
-} // namespace meta
-} // namespace experimental
-} // namespace std
-</code></pre>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-struct foo
-{
-	int a,
-	bool b;
-	char c;
-	double d;
-}
-
-template &lt;meta::DataMember ... MDM&gt;
-using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
-
-using X = meta::unpack_sequence_t&lt;
-	meta::get_data_members&lt;reflexpr(foo)&gt;,
-	helper
-&gt;;
-
-is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
-</code>
-<span class="note">— end example</span>]
-</pre>
-
 
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
@@ -830,7 +791,7 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
 reflexpr() // reflects the global namespace
 reflexpr(::) // reflects the global namespace
 reflexpr(std) // reflects the namespace
-reflexpr(int) // reflects the (native) type
+reflexpr(int) // reflects the fundamental type
 reflexpr(std::size_t) // reflects the type alias
 reflexpr(std::launch) // reflects the enum type
 reflexpr(std::vector&lt;int&gt;) // reflects the class
@@ -898,6 +859,7 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 
 </blockquote>
 
+<object class="htmlc" type="text/html" data="revisions.htmlc"></object>
 <object class="htmlc" type="text/html" data="acks.htmlc"></object>
 <object class="htmlc" type="text/html" data="references.htmlc"></object>
 

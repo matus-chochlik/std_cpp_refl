@@ -13,6 +13,10 @@ body {
 	padding: 2em;
 }
 
+h3,h4,h5,h6 {
+	font-size: 100%;
+}
+
 table {
 	border: 2px solid black;
 	border-collapse: collapse;
@@ -119,7 +123,7 @@ object.htmlc {
 
 <table class="header">
 	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
-  <tr><th>Date:</th><td>2016-09-26</td></tr>
+  <tr><th>Date:</th><td>2016-10-02</td></tr>
   <tr><th>Project:</th><td>Programming Language C++</td></tr>
   <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
   <tr>
@@ -127,10 +131,10 @@ object.htmlc {
     <td>Matúš Chochlík (<a href="mailto:chochlik@gmail.com">chochlik@gmail.com</a>)</td>
   </tr>
   <tr>
-    <td>Axel Naumann (axel.naumann@cern.ch)</td>
+    <td>Axel Naumann (axel@cern.ch)</td>
   </tr>
   <tr>
-    <td>David Sankel (TODO)</td>
+    <td>David Sankel (camior@gmail.com)</td>
   </tr>
 </table>
 
@@ -142,9 +146,9 @@ object.htmlc {
 	<ul>
 		<li><a href="#introduction">Introduction</a>
 		</li>
-		<li><a href="#revisions">Revision history</a>
-		</li>
 		<li><a href="#wording">Proposed wording</a>
+		</li>
+		<li><a href="#revisions">Revision history</a>
 		</li>
 		<li><a href="#acks">Acknowledgments</a>
 		</li>
@@ -170,243 +174,6 @@ use cases, rationale, design decisions, future evolution of the proposed reflect
 facility and contains multiple examples of use and replies to frequently asked
 questions.
 </p>
-</div>
-
-<div id="revisions">
-<h2>Revision history</h2>
-
-<h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
-
-<p>Describes the method of static reflection
-by the means of compiler-generated anonymous types. Introduces the first version
-of the metaobject concepts and some possiblities of their implementation.
-Also includes discussion about the motivation and the design rationale for the proposal.
-</p>
-
-<h4>Revision 2 (<a href="#ref-N4111">N4111</a>)</h4>
-
-<p>Refines the metaobject concepts and introduces
-a concrete implementation of their interface by the means of templates similar
-to the standard type traits. Describes some additions to the standard library
-(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
-Answers some questions from the discussion about N3996 and expands the design
-rationale.
-</p>
-
-<h4>Revision 3 (<a href="#ref-N4451">N4451</a>)</h4>
-
-<p>Incorporates the feedback from the discussion
-about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
-definitions, removes some of the additions to the standard library added in the previous revisions.
-Adds context-dependent reflection.
-</p>
-
-<h4>Revision 4 (<a href="#ref-P0194R0">P0194R0</a>)</h4>
-
-<p>Further refines the concepts from N4111; prefixes
-the names of the metaobject operations with <code>get_</code>, adds new operations,
-replaces the metaobject category tags with new metaobject traits.
-Introduces a nested namespace <code>std::meta</code> which contains most
-of the reflection-related additions to the standard library.
-Rephrases definition of meta objects using Concepts Lite. Specifies the
-reflection operator name — <code>reflexpr</code>.
-Introduces an experimental implementation of the reflection operator in clang.
-Drops the context-dependent reflection from N4111 (will be re-introduced later).
-</p>
-
-<h4>Revision 5 (<a href="#ref-P0194R1">P0194R1</a>)</h4>
-
-<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
-classification is now done by using the concepts. We assume that the following
-syntax of the Concepts specification is implemented:
-</p>
-
-<pre><code>
-template &lt;T&gt;
-constexpr bool Concept = <em>unspecified</em>;
-</code></pre>
-
-<p>and also assuming that the Concepts TS Issue 29 is resolved and that
-<code>Concept&lt;T&gt;</code> is a generally usable boolean expression,
-so that the following is valid code:</p>
-
-<pre><code>
-static_assert(Concept&lt;T&gt;, " ... ");
-
-using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
-
-if(Concept&lt;T&gt;) { /* ... */  }
-</code></pre>
-
-<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
-The <code>meta::Constant</code> and <code>meta::Specifier</code> concepts,
-and several new operations have been added.
-</p>
-
-<p>The aliases for the operation templates returning metaobjects had previously
-the <code>_t</code> suffix; this has been changed to the <code>_m</code> suffix. For example:
-</p>
-<pre>
-<code>
-get_type_t -&gt; get_type_m
-get_scope_t -&gt; get_scope_m
-get_aliased_t -&gt; get_aliased_m
-get_data_members_t -&gt; get_data_members_m
-</code>
-</pre>
-
-<h4>Revision 6 (P0194R2)</h4>
-
-<p>The following concepts from P0194R1 were dropped in order to simplify
-the proposal:
-<code>meta::Linkable</code>, <code>meta::Enumerator</code>,
-<code>meta::DataMember</code>, <code>meta::MemberType</code>,
-<code>meta::EnumClass</code>, <code>meta::TypeAlias</code> and
-<code>meta::NamespaceAlias</code>.
-</p>
-
-<p>The following concepts were added to the proposal:
-<code>meta::TagType</code>, <code>meta::Record</code>,
-<code>meta::EnumMember</code>.
-</p>
-
-
-<p>Unlike in the previous proposal, metaobjects reflecting anonymous entities -
-the global scope, anonymous namespaces and classes, etc. <em>do</em> conform to the
-<code>meta::Named</code> concept and implement the name-returning operations.
-</p>
-
-<p>Unlike in the previous proposal, metaobjects reflecting the global scope
-<em>do</em> conform to the <code>meta::ScopeMember</code> concept and the
-<code>meta::get_scope</code> operation. For arguments reflecting
-the global scope returns a metaobject reflecting the global scope
-(i.e. the global scope is its own scope).
-</p>
-
-<p>Metaobjects reflecting built-in types and types like pointers, references,
-arrays, etc. now don't have a scope (i.e. they do not conform to the
-<code>meta::ScopeMember</code> concept).
-</p>
-
-<p>We have added a different mechanism for distinguishing between
-non-scoped and scoped <code>enum</code>s - the <code>meta::is_scoped_enum</code>
-operation. Unlike in the previous proposal <code>meta::Enum</code> reflecting
-a non-scoped enum <em>is</em> a <code>meta::Scope</code>.
-</p>
-
-<p>We now allow the default construction and copy construction of
-values of metaobject types.
-</p>
-
-<p>Direct reflection of class data members, member types and type aliases,
-enumerators and global scope/namespace-level variables has been added.
-For example:
-</p>
-<pre>
-<code>
-enum E { a, b, c, d};
-
-using ME_a = reflexpr(E::a); // valid
-
-struct S { using T = int; T a; static bool b; };
-
-using MS_T = reflexpr(S::T); // valid
-using MS_a = reflexpr(S::a); // valid
-using MS_b = reflexpr(S::b); // valid
-
-namespace foo {
-
-static float f = 12.34f;
-
-} // namespace foo
-
-using Mf = reflexpr(foo::f); // valid
-
-</code>
-</pre>
-
-<p>The typedef (type-alias) reflection has been simplified based on the
-feedback from Oulu. Previously we required reflection to be aware about all
-aliases in a <em>"chain"</em> even in the context of templates. For example:
-</p>
-<pre>
-<code>
-using A = int;
-using B = A;
-using C = B;
-
-template &lt;typename T&gt;
-struct S
-{
-	using X = T;
-};
-
-using Mint = reflexpr(int);
-using MA = reflexpr(A);
-using MB = reflexpr(B);
-using MC = reflexpr(C);
-
-using MSintX = reflexpr(S&lt;int&gt;::X);
-using MSAX = reflexpr(S&lt;A&gt;::X);
-using MSBX = reflexpr(S&lt;B&gt;::X);
-using MSCX = reflexpr(S&lt;C&gt;::X);
-</code>
-</pre>
-
-<p>In the previous proposals we required the following (i.e. that reflection
-should be aware of the whole <em>"chain"</em> of aliases -
-<code>S&lt;C&gt;::X -&gt; C -&gt; B -&gt; A -&gt; int</code>):
-</p>
-<pre>
-<code>
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, MC&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, MA&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;&gt;, MA&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, MB&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, MA&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
-</code>
-</pre>
-
-<p>Now we require only that the type alias knows the <em>"canonical"</em> type
-which it refers to - the type which has a unique identity at the base level (i.e.
-<code>S&lt;C&gt;::X -&gt; int</code>, <code>C -&gt; int</code>, <code>B -&gt; int</code>,
-<code>A -&gt; int</code>):
-</p>
-<pre>
-<code>
-static_assert(meta::Alias&lt;MSCX&gt;, "");
-static_assert(meta::Alias&lt;MSBX&gt;, "");
-static_assert(meta::Alias&lt;MSAX&gt;, "");
-
-static_assert(meta::Alias&lt;MC&gt;, "");
-static_assert(meta::Alias&lt;MB&gt;, "");
-static_assert(meta::Alias&lt;MA&gt;, "");
-
-static_assert(!meta::Alias&lt;Mint&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, Mint&gt;, "");
-
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, Mint&gt;, "");
-static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
-
-</code>
-</pre>
-
-<p>The mechanism for enumerating public-only vs. all (including non-public ones)
-class members has been changed. Now the <em>"basic"</em> operations like
-<code>meta::get_data_members</code>, <code>meta::get_member_types</code>, etc.
-return all members, and the <code>meta::get_public_data_members</code>,
-<code>meta::get_public_member_types</code>, return only the public class members.
-</p>
-
 </div>
 
 <h2 id="wording">Proposed wording</h2>
@@ -480,11 +247,10 @@ template &lt;typename T&gt; constexpr bool is_metaobject_v
 [<span class="note">Example:</span>
 <code>
 is_metaobject_v&lt;int&gt;;                 // false
-is_metaobject_v&lt;void&gt;;                // false
-is_metaobject_v&lt;string&gt;;              // false
 is_metaobject_v&lt;reflexpr(int)&gt;;       // true
 is_metaobject_v&lt;reflexpr(std)&gt;;       // true
-is_metaobject_v&lt;reflexpr(string)&gt;;    // true
+using Mstring = reflexpr(string);
+is_metaobject_v&lt;Mstring&gt;;             // true
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -834,77 +600,29 @@ concept bool Inheritance;
 <pre>
 [<span class="note">Example:</span>
 <code>
-static_assert(meta::Named&lt;reflexpr(int)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
-
 auto l = [](void) { };
 static_assert(meta::Named&lt;reflexpr()&gt;, "");
-static_assert(meta::Named&lt;reflexpr(::)&gt;, "");
 static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
 static_assert(!meta::is_anonymous_v&lt;reflexpr(int)&gt;, "");
-static_assert(!meta::is_anonymous_v&lt;reflexpr(string)&gt;, "");
-
 auto l = [](void) { };
-static_assert(meta::is_anonymous_v&lt;reflexpr()&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(::)&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(decltype(l))&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
 static_assert(meta::get_base_name_v&lt;reflexpr(int)&gt;[0] != '\0', "");
-static_assert(meta::get_base_name_v&lt;reflexpr(string)&gt;[0] != '\0', "");
-
 auto l = [](void) { };
-static_assert(meta::get_base_name_v&lt;reflexpr()&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(::)&gt;[0] == '\0', "");
 static_assert(meta::get_base_name_v&lt;reflexpr(decltype(l))&gt;[0] == '\0', "");
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting strongly-typed
-	enumerations are distinguished from <em>Metaobjects</em>s reflecting non-scoped
-	enumerations by the <code>meta::is_scoped_enum</code> operation.
-	<span class="note">— end note</span>]
-	</p>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-enum weak_enum { a, b, c };
-enum class scoped_enum { d, e, f };
-
-using meta_we = reflexpr(weak_enum);
-using meta_se = reflexpr(scoped_enum);
-
-static_assert(meta::Enum&lt;meta_we&gt;, "");
-static_assert(meta::Enum&lt;meta_se&gt;, "");
-
-static_assert(meta::Scope&lt;meta_we&gt;, "");
-static_assert(meta::Scope&lt;meta_se&gt;, "");
-
-static_assert(!meta::is_scoped_enum_v&lt;meta_we&gt;, "");
-static_assert( meta::is_scoped_enum_v&lt;meta_se&gt;, "");
-</code>
-<span class="note">— end example</span>]
-</pre>
-
-	<p>[<span class="note">Note: </span> <em>Metaobject</em>s reflecting native
-	types, pointers, references, arrays, function types and other <em>derived</em> types
+  <p><em>Metaobject</em>s reflecting fundamental
+  types (except for <code>std::nullptr_t</code>),
+  pointers (including pointers-to-members), references, arrays and function types
 	do not conform to the <em>meta::ScopeMember</em> concept, all other
 	types do.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -915,16 +633,15 @@ struct S { };
 
 namespace foo { class C { }; }
 
-static_assert(!meta::ScopeMember(reflexpr(void)), "");
 static_assert(!meta::ScopeMember(reflexpr(int)), "");
 static_assert(!meta::ScopeMember(reflexpr(int*)), "");
 static_assert(!meta::ScopeMember(reflexpr(S[10])), "");
 static_assert(!meta::ScopeMember(reflexpr(foo::C&amp;)), "");
-static_assert(!meta::ScopeMember(reflexpr(int(char, bool))), "");
 static_assert(!meta::ScopeMember(reflexpr(int(*)(char, bool))), "");
 
 static_assert( meta::ScopeMember(reflexpr(S)), "");
 static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
+static_assert( meta::ScopeMember(reflexpr(std::size_t)), "");
 
 </code>
 <span class="note">— end example</span>]
@@ -932,7 +649,7 @@ static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
 
 	<h4>?.5 <em>Metaobject</em> operations<span class="section_name">[refl.ops]</span></h4>
 
-	A <em>MetaobjectOperation</em> returns a single piece of metadata describing
+	A <em>MetaobjectOperation</em> describes
 	a particular aspect of the declaration reflected by a <em>Metaobject</em>.
 	It is a class template taking one or more arguments, at least one
 	of which is a model of the <em>Metaobject</em> concept.
@@ -945,44 +662,54 @@ static_assert( meta::ScopeMember(reflexpr(foo::C)), "");
 	derive publicly and unambiguously from <code>true_type</code> or
 	<code>false_type</code>.
 	</p>
-	<p>For example:</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;bool, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.2 Integral or <code>enum</code> constant result<span class="section_name">[refl.ops.int]</span></h5>
 
 	<p>All <em>MetaobjectOperation</em> templates returning an integer or
 	<code>enum</code> value derive publicly and unambiguously from
-	a specialization of <code>integral_constant</code> with apropriate
-	integer or <code>enum</code> type as the first argument.
+	a specialization of <code>integral_constant</code>. The first argument's
+	integer or <code>enum</code> type is part of the specification of the operation.
 	</p>
-	<p>For example:</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;<em>integral-or-enum-type</em>, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.3 Pointer result<span class="section_name">[refl.ops.ptr]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates returning a pointer or
 	a class data member pointer derive publicly and unambiguously from
-	a specialization of <code>integral_constant</code> with appropriate
-	pointer or class data member pointer type as the first template argument
-	and with the appropriate constant pointer value as if taken by the 
-	<code>&amp;</code> operator:
+	a specialization of <code>integral_constant</code> with value as if taken by the 
+  <code>&amp;</code> operator.
+	The first argument's pointer or class data member pointer type
+	is part of the specification of the operation. 
 	</p>
 
-<pre><code>
+<pre>
+[<span class="note">Example:</span>
+<code>
 struct <em>MetaobjectOperation</em>
  : integral_constant&lt;<em>pointer-or-data-member-pointer-type</em>, <em>implementation-defined</em>&gt;
 { };
-</code></pre>
+</code>
+<span class="note">— end example</span>]
+</pre>
 
 	<h5>?.5.4 String constant result<span class="section_name">[refl.ops.str]</span></h5>
 
@@ -1001,8 +728,7 @@ struct <em>MetaobjectOperation</em>
 	<p>where <code>N</code> is the length of the returned string and the
 	last element in the <code>value</code> character array is the
 	<code>'\0'</code> character.
-	The member names <code>value_type</code>, <code>value</code>,
-	<code>type</code> are publicly and unambiguously available
+	The member names <code>value_type</code> and <code>value</code> are publicly and unambiguously available
 	in such <em>MetaobjectOperation</em>.
 	</p>
 
@@ -1047,7 +773,7 @@ struct <em>MetaobjectOperation</em>
 <th>Result</th></tr>
 <tr><td><pre><code>template &lt;Object T1, Object T2&gt;
 struct reflects_same;
-</code></pre></td><td>indicates if two metaobjects reflect the same base-level   declaration ('entity').</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Object T&gt;
+</code></pre></td><td>indicates whether two metaobjects reflect the same base-level   declaration ('entity').</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Object T&gt;
 struct get_source_location;
 </code></pre></td><td>returns the source location info of the declaration   of a base-level program declaration reflected by a <code>meta::<em>Object</em></code>.</td><td>
 		a <code>std::source_location</code> constant
@@ -1061,9 +787,9 @@ struct get_element;
 		<code>meta::<em>Object</em></code>
 		</td></tr><tr><td><pre><code>template &lt;ObjectSequence T1, template &lt;class...&gt; class Tpl&gt;
 struct unpack_sequence;
-</code></pre></td><td>Unpacks the <code>meta::<em>ObjectSequence</em></code> into a template.</td><td>a type</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+</code></pre></td><td>unpacks the <code>meta::<em>ObjectSequence</em></code> into a template.</td><td>a type</td></tr><tr><td><pre><code>template &lt;Named T&gt;
 struct is_anonymous;
-</code></pre></td><td>Indicates if the a named declaration reflected by a <code>meta::<em>Named</em></code>   is anonymous.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
+</code></pre></td><td>indicates whether the a named declaration reflected by a <code>meta::<em>Named</em></code>   is anonymous.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
 struct get_base_name;
 </code></pre></td><td>returns the basic name of the a named declaration reflected by   a <code>meta::<em>Named</em></code>.</td><td>a string constant</td></tr><tr><td><pre><code>template &lt;Named T&gt;
 struct get_display_name;
@@ -1081,11 +807,11 @@ struct get_scope;
 		<code>meta::<em>Scope</em></code>
 		</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
 struct is_public;
-</code></pre></td><td>indicates if the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with public access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
+</code></pre></td><td>indicates whether the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with public access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
 struct is_protected;
-</code></pre></td><td>indicates if the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with protected access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
+</code></pre></td><td>indicates whether the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with protected access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
 struct is_private;
-</code></pre></td><td>indicates if the a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with private access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
+</code></pre></td><td>indicates whetherthe a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>   was declared with private access.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;RecordMember T&gt;
 struct get_access_specifier;
 </code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of a class, struct or union member reflected by a <code>meta::<em>RecordMember</em></code>.</td><td>
 		<code>meta::<em>Specifier</em></code>
@@ -1097,13 +823,13 @@ struct get_elaborated_type_specifier;
 		<code>meta::<em>Specifier</em></code>
 		</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
 struct is_enum;
-</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is an enum.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+</code></pre></td><td>indicates whether the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is an enum.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
 struct is_class;
-</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a class.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+</code></pre></td><td>indicates whether the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a class.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
 struct is_struct;
-</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a struct.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
+</code></pre></td><td>indicates whether the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a struct.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;TagType T&gt;
 struct is_union;
-</code></pre></td><td>Indicates if the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a union.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Record T&gt;
+</code></pre></td><td>indicates whether the a class or an enum reflected by a <code>meta::<em>TagType</em></code>   is a union.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Record T&gt;
 struct get_data_members;
 </code></pre></td><td>returns a <code>meta::<em>ObjectSequence</em></code> of <code>meta::<em>Variable</em></code>(s) reflecting all (including   private and protected) data members of a class, a scope or a union reflected by a <code>meta::<em>Record</em></code>.</td><td>
 		<code>meta::<em>ObjectSequence</em></code>
@@ -1149,19 +875,21 @@ struct get_base_class;
 struct is_virtual;
 </code></pre></td><td>returns whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as virtual.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
 struct is_public;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as public.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+</code></pre></td><td>indicates whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as public.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
 struct is_protected;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as protected.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+</code></pre></td><td>indicates whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as protected.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
 struct is_private;
-</code></pre></td><td>indicates if the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as private.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
+</code></pre></td><td>indicates whether the class inheritance reflected by a <code>meta::<em>Inheritance</em></code>   was declared as private.</td><td>a boolean constant</td></tr><tr><td><pre><code>template &lt;Inheritance T&gt;
 struct get_access_specifier;
 </code></pre></td><td>returns the <code>meta::<em>Specifier</em></code> reflecting the access specifier   of class inheritance reflected by a <code>meta::<em>Inheritance</em></code>.</td><td>
 		<code>meta::<em>Specifier</em></code>
 		</td></tr></table></div>
 
-	<p>For <code>meta::Type</code>s reflecting native types with modifiers
-	like <code>unsigned</code>, <code>long</code>, etc. the <code>get_base_name</code>
-	operation returns the full type specifier name.
+	<h6>?.5.7.1 Operation <code>get_base_name</code><span class="section_name">[refl.ops.base_name]</span></h6>
+
+	<p>For <code>meta::Type</code>s reflecting integer types, etc. the <code>get_base_name</code>
+	operation returns the longest type specifier name, i.e. including <code>long</code>,
+        <code>signed</code> or <code>unsigned</code>, if they describe the identical type.
 	</p>
 
 <pre>
@@ -1187,13 +915,14 @@ meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 <code>
 using foo = int;
 using bar = foo;
-namespace std = baz;
+namespace baz = std;
 
-meta::get_base_name_v&lt;reflexpr(int)&gt;    // "int"
-meta::get_base_name_v&lt;reflexpr(std)&gt;    // "std"
+typedef foo(*pfoo)(double, float);
+
 meta::get_base_name_v&lt;reflexpr(foo)&gt;    // "foo"
 meta::get_base_name_v&lt;reflexpr(bar)&gt;    // "bar"
 meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
+meta::get_base_name_v&lt;reflexpr(pfoo)&gt;   // "pfoo"
 </code>
 <span class="note">— end example</span>]
 </pre>
@@ -1208,66 +937,21 @@ meta::get_base_name_v&lt;reflexpr(baz)&gt;    // "baz"
 using meta::get_base_name_v;
 
 get_base_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
-get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "size_t"
+get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "unsigned long int"
 get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*pfoo)(std::set&lt;double&gt;&amp;))&gt; // "pfoo"
-get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* foo(std::vector&lt;double&gt;&amp;))&gt;  // "foo"
 get_base_name_v&lt;reflexpr(std::chrono)&gt;                               // "chrono"
 get_base_name_v&lt;reflexpr(std::launch)&gt;                               // "launch"
 get_base_name_v&lt;reflexpr(static)&gt;                                    // "static"
-get_base_name_v&lt;reflexpr(public)&gt;                                    // "public"
 get_base_name_v&lt;reflexpr(class)&gt;                                     // "class"
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>Template type parameters are also considered to be type aliases:
-	</p>
 
-<pre>
-[<span class="note">Example:</span>
-<code>
-template &lt;typename A, typename B&gt;
-void foo(A a, B b)
-{
-	using meta::get_base_name_v;
-	using meta::get_aliased_m;
-
-	using mA = reflexpr(A);
-	using mB = reflexpr(B);
-
-	cout &lt;&lt; "1:" &lt;&lt; get_base_name_v&lt;mA&gt; &lt;&lt; endl;
-	cout &lt;&lt; "2:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
-
-	cout &lt;&lt; "3:" &lt;&lt; get_base_name_v&lt;mB&gt; &lt;&lt; endl;
-	cout &lt;&lt; "4:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
-}
-
-using rank_t = int;
-rank_t a = 123;
-float b = 45.67;
-
-foo(a, b);
-
-using mR = reflexpr(rank_t);
-cout &lt;&lt; "5:" &lt;&lt; get_base_name_v&lt;mR&gt; &lt;&lt; endl;
-cout &lt;&lt; "6:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mR&gt;&gt; &lt;&lt; endl;
-
-</code>
-produces the following output:
-<code>
-1:A
-2:int
-3:B
-4:float
-5:rank_t;
-6:int;
-</code>
-<span class="note">— end example</span>]
-</pre>
+	<h6>?.5.7.2 Operation <code>get_display_name</code><span class="section_name">[refl.ops.disp_name]</span></h6>
 
 	<p>The <code>meta::get_display_name</code> operation returns an
-	<em>implementation-dependent</em> string containing the name of the base-level
+	implementation-defined string containing the name of the base-level
 	entity reflected by a <code>meta::Named</code> which is as close as possible
 	to how the name is spelled in the source code. For types in particular
 	the display name should be fully qualified and if possible it should preserve
@@ -1285,6 +969,8 @@ meta::get_display_name_v&lt;reflexpr(decltype("foo"))&gt;    // "char const [4]"
 </code>
 <span class="note">— end example</span>]
 </pre>
+
+	<h6>?.5.7.3 Operation <code>get_aliased</code><span class="section_name">[refl.ops.aliased]</span></h6>
 
 	<p>The <code>meta::get_aliased</code> operation invoked on a
 	<code>meta::Alias</code> always returns a (non <code>meta::Alias</code>)
@@ -1356,10 +1042,56 @@ static_assert(meta::reflects_same_v&lt;
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span> The <em>Metaobject</em>s in a
+	<p>Template type parameters are also considered to be a special kind of type aliases:
+	</p>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+template &lt;typename A, typename B&gt;
+void foo(A a, B b)
+{
+	using meta::get_base_name_v;
+	using meta::get_aliased_m;
+
+	using mA = reflexpr(A);
+	using mB = reflexpr(B);
+
+	cout &lt;&lt; "1:" &lt;&lt; get_base_name_v&lt;mA&gt; &lt;&lt; endl;
+	cout &lt;&lt; "2:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mA&gt;&gt; &lt;&lt; endl;
+
+	cout &lt;&lt; "3:" &lt;&lt; get_base_name_v&lt;mB&gt; &lt;&lt; endl;
+	cout &lt;&lt; "4:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mB&gt;&gt; &lt;&lt; endl;
+}
+
+using rank_t = int;
+rank_t a = 123;
+float b = 45.67;
+
+foo(a, b);
+
+using mR = reflexpr(rank_t);
+cout &lt;&lt; "5:" &lt;&lt; get_base_name_v&lt;mR&gt; &lt;&lt; endl;
+cout &lt;&lt; "6:" &lt;&lt; get_base_name_v&lt;get_aliased_m&lt;mR&gt;&gt; &lt;&lt; endl;
+
+</code>
+produces the following output:
+<code>
+1:A
+2:int
+3:B
+4:float
+5:rank_t;
+6:int;
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+	<h6>?.5.7.4 Sequence operations<span class="section_name">[refl.ops.seq]</span></h6>
+
+	<p><em>Metaobject</em>s in a
 	<code>meta::ObjectSequence</code> are ordered according
-	to the order of their declarations in the translation unit.
-	<span class="note">— end note</span>]
+	to the order of each <em>Metaobject</em>'s first declaration in the translation unit.
 	</p>
 
 <pre>
@@ -1376,27 +1108,27 @@ struct foo
 
 using meta_foo = reflexpr(foo);
 
+using meta::get_base_name_v;
 using meta::get_element_m;
 using meta::get_data_members_m;
 using meta::get_member_types_m;
 
-get_base_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
-get_base_name_v&lt;get_element_v&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
+get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
+get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
 
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
-get_base_name_v&lt;get_element_v&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 0&gt;&gt; // "a"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 1&gt;&gt; // "b"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 2&gt;&gt; // "c"
+get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt; // "d"
 
 </code>
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span> The <code>meta::ObjectSequence</code> returned by
+	<p>The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code>, <code>meta::get_public_data_members</code>,
 	<code>meta::get_member_types</code> and <code>meta::get_public_member_types</code>
 	<em>do not</em> include <em>Metaobject</em>s reflecting inherited class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -1429,7 +1161,7 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 <span class="note">— end example</span>]
 </pre>
 
-	<p>[<span class="note">Note:</span>
+	<p>
 	The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
 	contain <em>Metaobject</em>s reflecting all class members including those
@@ -1439,7 +1171,6 @@ get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 	<code>meta::get_public_data_members</code> and
 	<code>meta::get_public_member_types</code>
 	contain only the <em>Metaobject</em>s reflecting publicly accessible class members.
-	<span class="note">— end note</span>]
 	</p>
 
 <pre>
@@ -1478,6 +1209,60 @@ get_base_name_v&lt;get_element_m&lt;get_public_data_members_m&lt;meta_foo&gt;, 0
 <span class="note">— end example</span>]
 </pre>
 
+	The <code>unpack_sequence</code> operation is applied to models of
+	<code>meta::ObjectSequence</code>. It is <em>equivalent</em> to:
+
+<pre><code>
+namespace std {
+namespace experimental {
+namespace meta {
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+struct unpack_sequence
+{
+	typedef Tpl&lt;
+		get_element_m&lt;Seq, 0&gt;,
+		get_element_m&lt;Seq, 1&gt;,
+		<em>...,</em>
+		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
+	&gt; type;
+};
+
+template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
+using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
+
+} // namespace meta
+} // namespace experimental
+} // namespace std
+</code></pre>
+
+<pre>
+[<span class="note">Example:</span>
+<code>
+struct foo
+{
+	int a;
+	bool b;
+	char c;
+	double d;
+};
+
+template &lt;meta::DataMember ... MDM&gt;
+using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
+
+using X = meta::unpack_sequence_t&lt;
+	meta::get_data_members_m&lt;reflexpr(foo)&gt;,
+	helper
+&gt;;
+
+is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
+</code>
+<span class="note">— end example</span>]
+</pre>
+
+
+	<h6>?.5.7.5 Specifier operations<span class="section_name">[refl.ops.spec]</span></h6>
+
 	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-related metadata.
 	One is using the <code>meta::Specifier</code> concept and its operations which is
 	more generic, and another using the boolean operations like <code>meta::is_static</code>,
@@ -1512,61 +1297,6 @@ meta::is_public&lt;meta_S_f&gt;  // true
 </code>
 <span class="note">— end example</span>]
 </pre>
-
-	<h5>?.5.8 Utility operations<span class="section_name">[refl.ops.util]</span></h5>
-
-	The <code>unpack_sequence</code> operation applicable to models of
-	<code>meta::ObjectSequence</code> is added to the <code>&lt;reflexpr&gt;</code>
-	header and is <em>equivalent</em> to:
-
-<pre><code>
-namespace std {
-namespace experimental {
-namespace meta {
-
-template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
-struct unpack_sequence
-{
-	typedef Tpl&lt;
-		get_element_m&lt;Seq, 0&gt;,
-		get_element_m&lt;Seq, 1&gt;,
-		<em>...,</em>
-		get_element_m&lt;Seq, get_size_v&lt;Seq&gt;-1&gt;,
-	&gt; type;
-};
-
-template &lt;ObjectSequence Seq, template &lt;typename ...&gt; class Tpl&gt;
-using unpack_sequence_t = typename unpack_sequence&lt;Seq, Tpl&gt;::type;
-
-} // namespace meta
-} // namespace experimental
-} // namespace std
-</code></pre>
-
-<pre>
-[<span class="note">Example:</span>
-<code>
-struct foo
-{
-	int a,
-	bool b;
-	char c;
-	double d;
-}
-
-template &lt;meta::DataMember ... MDM&gt;
-using helper = tuple&lt;meta::get_reflected_type_t&lt;MDM&gt;...&gt;;
-
-using X = meta::unpack_sequence_t&lt;
-	meta::get_data_members&lt;reflexpr(foo)&gt;,
-	helper
-&gt;;
-
-is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
-</code>
-<span class="note">— end example</span>]
-</pre>
-
 
 	<h4>?.6 The reflection operator<span class="section_name">[refl.reflexpr]</span></h4>
 
@@ -1628,7 +1358,7 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
 reflexpr() // reflects the global namespace
 reflexpr(::) // reflects the global namespace
 reflexpr(std) // reflects the namespace
-reflexpr(int) // reflects the (native) type
+reflexpr(int) // reflects the fundamental type
 reflexpr(std::size_t) // reflects the type alias
 reflexpr(std::launch) // reflects the enum type
 reflexpr(std::vector&lt;int&gt;) // reflects the class
@@ -1696,6 +1426,232 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 
 </blockquote>
 
+<div id="revisions">
+<h2>Revision history</h2>
+
+<h4>Revision 1 (<a href="#ref-N3996">N3996</a>)</h4>
+
+<p>Describes the method of static reflection
+by the means of compiler-generated anonymous types. Introduces the first version
+of the metaobject concepts and some possiblities of their implementation.
+Also includes discussion about the motivation and the design rationale for the proposal.
+</p>
+
+<h4>Revision 2 (<a href="#ref-N4111">N4111</a>)</h4>
+
+<p>Refines the metaobject concepts and introduces
+a concrete implementation of their interface by the means of templates similar
+to the standard type traits. Describes some additions to the standard library
+(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
+Answers some questions from the discussion about N3996 and expands the design
+rationale.
+</p>
+
+<h4>Revision 3 (<a href="#ref-N4451">N4451</a>)</h4>
+
+<p>Incorporates the feedback from the discussion
+about N4111 at the Urbana meeting, most notably reduces the set of metaobject concepts and refines their
+definitions, removes some of the additions to the standard library added in the previous revisions.
+Adds context-dependent reflection.
+</p>
+
+<h4>Revision 4 (<a href="#ref-P0194R0">P0194R0</a>)</h4>
+
+<p>Further refines the concepts from N4111; prefixes
+the names of the metaobject operations with <code>get_</code>, adds new operations,
+replaces the metaobject category tags with new metaobject traits.
+Introduces a nested namespace <code>std::meta</code> which contains most
+of the reflection-related additions to the standard library.
+Rephrases definition of meta objects using Concepts Lite. Specifies the
+reflection operator name — <code>reflexpr</code>.
+Introduces an experimental implementation of the reflection operator in clang.
+Drops the context-dependent reflection from N4111 (will be re-introduced later).
+</p>
+
+<h4>Revision 5 (<a href="#ref-P0194R1">P0194R1</a>)</h4>
+
+<p>Dropped all metaobject traits except <code>is_metaobject</code>. All metaobject
+classification is now done by using the concepts. We assume that the following
+syntax of the Concepts specification is implemented:
+</p>
+
+<pre><code>
+template &lt;T&gt;
+constexpr bool Concept = <em>unspecified</em>;
+</code></pre>
+
+<p>and also assuming that the Concepts TS Issue 29 is resolved and that
+<code>Concept&lt;T&gt;</code> is a generally usable boolean expression,
+so that the following is valid code:</p>
+
+<pre><code>
+static_assert(Concept&lt;T&gt;, " ... ");
+
+using U = std::conditional_t&lt;Concept&lt;T&gt;, T1, T2&gt;;
+
+if(Concept&lt;T&gt;) { /* ... */  }
+</code></pre>
+
+<p>The <code>meta::Scoped</code> concept has been renamed to <code>meta::ScopeMember</code>.
+The <code>meta::Constant</code> and <code>meta::Specifier</code> concepts,
+and several new operations have been added.
+</p>
+
+<p>The aliases for the operation templates returning metaobjects had previously
+the <code>_t</code> suffix; this has been changed to the <code>_m</code> suffix. For example:
+</p>
+<pre>
+<code>
+get_type_t -&gt; get_type_m
+get_scope_t -&gt; get_scope_m
+get_aliased_t -&gt; get_aliased_m
+get_data_members_t -&gt; get_data_members_m
+</code>
+</pre>
+
+<h4>Revision 6 (P0194R2)</h4>
+
+<p>The following concepts from P0194R1 were dropped in order to simplify
+the proposal:
+<code>meta::Linkable</code>, <code>meta::Enumerator</code>,
+<code>meta::DataMember</code>, <code>meta::MemberType</code>,
+<code>meta::EnumClass</code>, <code>meta::TypeAlias</code> and
+<code>meta::NamespaceAlias</code>.
+</p>
+
+<p>The following concepts were added to the proposal:
+<code>meta::TagType</code>, <code>meta::Record</code>,
+<code>meta::EnumMember</code>.
+</p>
+
+
+<p>Unlike in the previous proposal, metaobjects reflecting anonymous entities -
+the global scope, anonymous namespaces and classes, etc. <em>do</em> conform to the
+<code>meta::Named</code> concept and implement the name-returning operations.
+</p>
+
+<p>Unlike in the previous proposal, metaobjects reflecting the global scope
+<em>do</em> conform to the <code>meta::ScopeMember</code> concept and the
+<code>meta::get_scope</code> operation. For arguments reflecting
+the global scope returns a metaobject reflecting the global scope
+(i.e. the global scope is its own scope).
+</p>
+
+<p>Metaobjects reflecting built-in types and types like pointers, references,
+arrays, etc. now don't have a scope (i.e. they do not conform to the
+<code>meta::ScopeMember</code> concept).
+</p>
+
+<p>We have added a different mechanism for distinguishing between
+non-scoped and scoped <code>enum</code>s - the <code>meta::is_scoped_enum</code>
+operation. Unlike in the previous proposal <code>meta::Enum</code> reflecting
+a non-scoped enum <em>is</em> a <code>meta::Scope</code>.
+</p>
+
+<p>We now allow the default construction and copy construction of
+values of metaobject types.
+</p>
+
+<p>Direct reflection of class data members, member types and type aliases,
+enumerators and global scope/namespace-level variables has been added.
+For example:
+</p>
+<pre>
+<code>
+enum class E { a, b, c, d};
+
+using ME_a = reflexpr(E::a); // valid
+
+struct S { using T = int; T a; };
+
+using MS_T = reflexpr(S::T); // valid
+using MS_a = reflexpr(S::a); // valid
+</code>
+</pre>
+
+<p>The typedef (type-alias) reflection has been simplified based on the
+feedback from Oulu. Previously we required reflection to be aware about all
+aliases in a <em>"chain"</em> even in the context of templates. For example:
+</p>
+<pre>
+<code>
+using A = int;
+using B = A;
+using C = B;
+
+template &lt;typename T&gt;
+struct S
+{
+	using X = T;
+};
+
+using Mint = reflexpr(int);
+using MA = reflexpr(A);
+using MB = reflexpr(B);
+using MC = reflexpr(C);
+
+using MSintX = reflexpr(S&lt;int&gt;::X);
+using MSAX = reflexpr(S&lt;A&gt;::X);
+using MSBX = reflexpr(S&lt;B&gt;::X);
+using MSCX = reflexpr(S&lt;C&gt;::X);
+</code>
+</pre>
+
+<p>In the previous proposals we required the following (i.e. that reflection
+should be aware of the whole <em>"chain"</em> of aliases -
+<code>S&lt;C&gt;::X -&gt; C -&gt; B -&gt; A -&gt; int</code>):
+</p>
+<pre>
+<code>
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, MC&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, MA&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;meta::get_aliased_m&lt;MSCX&gt;&gt;&gt;, MA&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, MB&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, MA&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
+</code>
+</pre>
+
+<p>Now we require only that the type alias knows the <em>"canonical"</em> type
+which it refers to - the type which has a unique identity at the base level (i.e.
+<code>S&lt;C&gt;::X -&gt; int</code>, <code>C -&gt; int</code>, <code>B -&gt; int</code>,
+<code>A -&gt; int</code>):
+</p>
+<pre>
+<code>
+static_assert(meta::Alias&lt;MSCX&gt;, "");
+static_assert(meta::Alias&lt;MSBX&gt;, "");
+static_assert(meta::Alias&lt;MSAX&gt;, "");
+
+static_assert(meta::Alias&lt;MC&gt;, "");
+static_assert(meta::Alias&lt;MB&gt;, "");
+static_assert(meta::Alias&lt;MA&gt;, "");
+
+static_assert(!meta::Alias&lt;Mint&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSCX&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSBX&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MSAX&gt;, Mint&gt;, "");
+
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MC&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MB&gt;, Mint&gt;, "");
+static_assert(meta::reflects_same_v&lt;meta::get_aliased_m&lt;MA&gt;, Mint&gt;, "");
+
+</code>
+</pre>
+
+<p>The mechanism for enumerating public-only vs. all (including non-public ones)
+class members has been changed. Now the <em>"basic"</em> operations like
+<code>meta::get_data_members</code>, <code>meta::get_member_types</code>, etc.
+return all members, and the <code>meta::get_public_data_members</code>,
+<code>meta::get_public_member_types</code>, return only the public class members.
+</p>
+
+</div>
 <div id="acks">
 <h2>Acknowledgments</h2>
 
