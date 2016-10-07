@@ -732,6 +732,13 @@ struct <em>MetaobjectOperation</em>
 	in such <em>MetaobjectOperation</em>.
 	</p>
 
+<p>[<span class="note">Note:</span>
+This specification of string-returning operations is only a placeholder.
+We expect C++ to have a compile-time string type eventually and the specification
+for string-returning operations will be updated to use that type.
+<span class="note">— end note</span>]</p>
+
+
 	<h5>?.5.5 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates yielding another <em>Metaobject</em>
@@ -766,7 +773,24 @@ struct <em>MetaobjectOperation</em>
 	available in a <em>MetaobjectOperation</em>.
 	</p>
 
-	<h5>?.5.7 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
+	<h5>?.5.7 Source location result<span class="section_name">[refl.ops.srcloc]</span></h5>
+
+	<p>The <em>MetaobjectOperation</em> templates yielding <code>source_location</code>
+	compile-time values will be equivalent to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+ : source_location /* <em>initialized in an implementation-defined way</em> */
+{ };
+</code></pre>
+
+<p>[<span class="note">Note:</span>
+This specification of source-location-returning operations is potentially subject
+to change in future revisions.
+<span class="note">— end note</span>]</p>
+
+	<h5>?.5.8 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
 
 	<div><table><tr><th>Template</th>
 <th>Description</th>
