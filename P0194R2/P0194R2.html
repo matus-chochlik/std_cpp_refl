@@ -1309,15 +1309,15 @@ using meta_S_i = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 
 using meta_S_f = meta::get_element_m&lt;meta::get_data_members_m&lt;meta_S&gt;, 1&gt;;
 
 using meta::reflects_same_v;
-using meta::get_access_specifer_m;
+using meta::get_access_specifier_m;
 
-reflects_same_v&lt;reflexpr(private),get_access_specifer_m&lt;meta_S_i&gt;&gt;  // true
-reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_i&gt;&gt;  // false
-reflects_same_v&lt;reflexpr(public), get_access_specifer_m&lt;meta_S_f&gt;&gt;  // true
+reflects_same_v&lt;reflexpr(private),get_access_specifier_m&lt;meta_S_i&gt;&gt;  // true
+reflects_same_v&lt;reflexpr(public), get_access_specifier_m&lt;meta_S_i&gt;&gt;  // false
+reflects_same_v&lt;reflexpr(public), get_access_specifier_m&lt;meta_S_f&gt;&gt;  // true
 
-meta::is_private&lt;meta_S_i&gt; // true
-meta::is_public&lt;meta_S_i&gt;  // false
-meta::is_public&lt;meta_S_f&gt;  // true
+meta::is_private_v&lt;meta_S_i&gt; // true
+meta::is_public_v&lt;meta_S_i&gt;  // false
+meta::is_public_v&lt;meta_S_f&gt;  // true
 </code>
 <span class="note">— end example</span>]
 </pre>
