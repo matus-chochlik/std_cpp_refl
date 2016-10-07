@@ -14,7 +14,7 @@ Also includes discussion about the motivation and the design rationale for the p
 <p>Refines the metaobject concepts and introduces
 a concrete implementation of their interface by the means of templates similar
 to the standard type traits. Describes some additions to the standard library
-(mostly meta-programming utilities), which simpilfy the use of the metaobjects.
+(mostly meta-programming utilities), which simplify the use of the metaobjects.
 Answers some questions from the discussion about N3996 and expands the design
 rationale.
 </p>

@@ -8,7 +8,7 @@
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r1.html">
 		Chochlík M., Naumann A. — P0194R1 - Static reflection (revision 5)
 	</a>
-  </td>
+	</td>
 </tr>
 
 <tr id="ref-P0194R0">
@@ -17,7 +17,7 @@
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0194r0.pdf">
 		Chochlík M., Naumann A. — P0194R0 - Static reflection (revision 4)
 	</a>
-  </td>
+	</td>
 </tr>
 
 <tr id="ref-N4451">
@@ -25,8 +25,8 @@
 	<td>
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4451.pdf">
 		Chochlík M. — N4451 - Static reflection (revision 3)
-  </a>
-  </td>
+	</a>
+	</td>
 </tr>
 
 <tr id="ref-N4111">
@@ -35,7 +35,7 @@
 	<a href="https://isocpp.org/files/papers/n4111.pdf">
 		Chochlík M. — N4111 - Static reflection (revision 2)
 	</a>
-  </td>
+	</td>
 </tr>
 
 <tr id="ref-N3996">
@@ -44,7 +44,7 @@
 	<a href="https://isocpp.org/files/papers/n3996.pdf">
 		Chochlík M. — N3996 - Static reflection
 	</a>
-  </td>
+	</td>
 </tr>
 
 <tr id="ref-P0385R0">
@@ -53,7 +53,15 @@
 	<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0385r0.pdf">
 		Chochlík M., Naumann A. — P0385R0 - Static reflection - Rationale, design and evolution
 	</a>
-  </td>
+	</td>
 </tr>
+
+<tr id="ref-P0385R1">
+	<th>[P0385R1]</th>
+	<td>
+		Chochlík M., Naumann A. — P0385R1 - Static reflection - Rationale, design and evolution
+	</td>
+</tr>
+
 </table>
 </div>

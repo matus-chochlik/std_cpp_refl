@@ -111,8 +111,7 @@ namespace std {
 namespace experimental {
 
 template &lt;typename T&gt; struct is_metaobject;
-template &lt;typename T&gt; constexpr bool is_metaobject_v
-  = is_metaobject&lt;T&gt;::value;
+template &lt;typename T&gt; constexpr bool is_metaobject_v = is_metaobject&lt;T&gt;::value;
 
 } // namespace experimental
 } // namespace std
@@ -330,20 +329,16 @@ struct <em>MetaobjectOperation</em>
 { };
 </code></pre>
 
-<p>[<span class="note">Note:</span>
-This specification of source-location-returning operations is potentially subject
-to change in future revisions.
-<span class="note">— end note</span>]</p>
-
 	<h5>?.5.8 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
 
 	<object class="htmlc" name="concepts" type="text/html" data="operations.htmlc"></object>
 
 	<h6>?.5.7.1 Operation <code>get_base_name</code><span class="section_name">[refl.ops.base_name]</span></h6>
 
-	<p>For <code>meta::Type</code>s reflecting integer types, etc. the <code>get_base_name</code>
-	operation returns the longest type specifier name, i.e. including <code>long</code>,
-        <code>signed</code> or <code>unsigned</code>, if they describe the identical type.
+	<p>For <code>meta::Type</code>s reflecting fundamental types,
+	the <code>get_base_name</code> operation returns the longest type specifier name,
+	i.e. including <code>long</code>, <code>signed</code> or <code>unsigned</code>,
+	if they describe the identical type.
 	</p>
 
 <pre>
@@ -352,6 +347,7 @@ to change in future revisions.
 meta::get_base_name_v&lt;reflexpr(unsigned)&gt;       // "unsigned int"
 meta::get_base_name_v&lt;reflexpr(short)&gt;          // "signed short int"
 meta::get_base_name_v&lt;reflexpr(long long)&gt;      // "signed long long int"
+meta::get_base_name_v&lt;reflexpr(long double)&gt;    // "long double"
 meta::get_base_name_v&lt;reflexpr(signed char)&gt;    // "signed char"
 meta::get_base_name_v&lt;reflexpr(unsigned char)&gt;  // "unsigned char"
 meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
@@ -794,9 +790,9 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
 				the result will be satisfying <code>meta::Constant</code>.</li>
       </ul>
     <p>
-      If the scope of the declaration of the <em>id-expression</em> is a class
-			or a union then the result of <code>reflexpr</code> is also satisfying
-			<code>meta::RecordMember</code>.
+      If the scope of the declaration of the <em>id-expression</em> is a class,
+			a struct or a union then the result of <code>reflexpr</code> is also
+			satisfying <code>meta::RecordMember</code>.
     </p>
     <p>
       If the scope of the declaration of the <em>id-expression</em> is an enum
@@ -874,7 +870,7 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 
 	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
 	of <code>reflexpr</code>, the program is ill-formed.
-	This header file makes available the definitions of the concepts and
+	This header file provides the definitions of the concepts and
 	the templates implementing the operations on <em>Metaobject</em>s as described above.
 	</p>
 
