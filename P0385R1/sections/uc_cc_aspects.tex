@@ -106,7 +106,7 @@ make_func_aspects(
 
 void func1(int a, int b)
 {
-	auto _fa = make_func_aspects<void>(
+	const auto _fa = make_func_aspects<void>(
 		__func__,
 		__FILE__,
 		__LINE__,
@@ -117,7 +117,7 @@ void func1(int a, int b)
 
 double func2(double a, float b, long c)
 {
-	auto _fa = make_func_aspects<double>(
+	const auto _fa = make_func_aspects<double>(
 		__func__,
 		__FILE__,
 		__LINE__,
@@ -130,7 +130,7 @@ namespace foo {
 
 long func3(int x)
 {
-	auto _fa = make_func_aspects<long>(
+	const auto _fa = make_func_aspects<long>(
 		__func__,
 		__FILE__,
 		__LINE__,
@@ -246,13 +246,13 @@ public:
 
 void func1(int a, int b)
 {
-	func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<reflexpr(this::function)> _fa;
 	/* function body */
 }
 
 double func2(double a, float b, long c)
 {
-	func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<reflexpr(this::function)> _fa;
 	/* function body */
 }
 
@@ -260,7 +260,7 @@ namespace foo {
 
 long func3(int x)
 {
-	func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<reflexpr(this::function)> _fa;
 	/* function body */
 }
 

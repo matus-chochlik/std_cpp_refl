@@ -17,5 +17,7 @@ The \meta{Named} concept reflects named language constructs
 and provides the \verb@get_base_name@ operation
 returning their basic name without any qualifiers or decorations.
 This can be with the help of metaprogramming turned into a fully-qualified
-name.
+name. The \verb@get_display_name@ operation returns a user-friendly
+implementation-dependent string containing the full name of a declaration,
+possibly retaining type alias names.
 

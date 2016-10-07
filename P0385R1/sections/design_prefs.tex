@@ -34,7 +34,7 @@ etc.} depending on the application needs.
 
 The reflection facility as a whole is consistent, instead of being
 composed of several ad-hoc, individually-designed parts. This makes
-its interface more tidy, coherent and easier to learn.
+its interface more tidy, coherent and easier to learn and teach.
 
 \subsubsection{Encapsulation}
 \label{design-encapsulation}
@@ -49,11 +49,36 @@ the C++ standard template library.
 \label{design-stratification}
 
 Reflection is non-intrusive and the metaobjects are separated
-from the base-level language declarations which they reflect.
+from the base-level language declarations which they reflect:
+
+\begin{minted}[tabsize=4]{cpp}
+float foo = 42.f;
+
+using m_std = reflexpr(std);
+using m_int = reflexpr(int);
+using m_foo = reflexpr(foo);
+\end{minted}
+
+instead of for example
+
+\begin{minted}[tabsize=4]{cpp}
+using m_std = std::reflect();
+using m_int = int::reflect();
+using m_foo = foo::reflect();
+\end{minted}
 
 This is achieved by using the reflection operator which hides most of the
 \say{magic}, isolates reflection from the rest of the language,
 for example by allowing to pass expressions not valid elsewhere as operands.
+
+It is also consistent with the syntax of other existing operators in C++:
+
+\begin{minted}[tabsize=4]{cpp}
+float foo = 42.f;
+
+using foo_type = decltype(foo);
+using meta_foo = reflexpr(foo);
+\end{minted}
 
 \subsubsection{Meta-level reification}
 \label{design-reification}
@@ -62,7 +87,7 @@ The metaobjects giving a first-class identity to declarations
 which are only second-class in base-level C++,
 allow to partially \say{reify} namespaces, specifiers, etc., without actually
 making them first-class citizens. This in turn allows to pass their reflections around
-metaprograms even if it were not possible with the base-level declarations.
+metaprograms even if it was not possible with the base-level declarations.
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>

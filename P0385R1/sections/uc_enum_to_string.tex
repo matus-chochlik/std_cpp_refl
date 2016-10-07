@@ -45,8 +45,8 @@ E string_to_E(const string& name)
 }
 \end{minted}
 
-The Mirror reflection library shows a possible implementation of the
-\verb@enum_to_string@,
+The Mirror reflection library~\cite{Chochlik-Mirror-new-doc} shows a possible
+implementation of the \verb@enum_to_string@ utility,
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename Enum>
@@ -58,7 +58,7 @@ private:
 	{
 		static void _eat(bool ...) { }
 
-		static std::map<Enum, std::string> _make_map(void)
+		static auto _make_map(void)
 		{
 			using namespace std;
 
@@ -98,7 +98,7 @@ private:
 	{
 		static void _eat(bool ...) { }
 
-		static std::map<std::string, Enum> _make_map(void)
+		static auto _make_map(void)
 		{
 			using namespace std;
 
