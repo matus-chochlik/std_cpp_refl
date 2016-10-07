@@ -1,0 +1,10 @@
+<div id="interplay">
+<h2>Interplay with other proposals</h2>
+
+<p>This proposal relies on the Concepts TS, including a resolution to its
+<a href="http://cplusplus.github.io/concepts-ts/ts-active.html#29">Issue 29</a>.
+It assumes that WG21 will find a solution for compile-time
+strings; until then, this proposal provides a placeholder one (see
+[refl.ops.str]) to be able to reason about the interfaces.
+</p>
+</div>
