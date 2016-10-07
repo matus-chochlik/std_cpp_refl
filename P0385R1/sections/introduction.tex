@@ -23,6 +23,11 @@ which we included in the proposal.
 The text of this paper includes several revised, updated and extended parts
 from the previous papers: N3996, N4111, N4451 and N4452.
 
+There is also an experimental implementation of the P0194 proposal
+described in greater detail in section~\ref{implementation}
+and the {\em Mirror} reflection library built on top of the proposed
+static reflection facility described in section~\ref{mirror-lib}.
+
 \subsection{Terminology}
 
 In order to avoid confusion about terminology, this section provides definitions
@@ -61,7 +66,7 @@ from a C++ program includes;
 \item list of data members,
 \item list of nested types like type aliases, classes and enumerations,
 \item the elaborated type specifier, the access specifier,
-\item source location information~\cite{ISOCPP-N4519},
+\item source location information,
 \item etc.
 \end{itemize}
 
@@ -77,7 +82,7 @@ C++ metaprogramming can be done both in an external language\footnote{For exampl
 C++ code generator written in Python or Bash.}, in a C++ compiler plug-in,
 or in C++ itself. 
 
-In C++, metaprogramming usually takes the form of a
+In C++ metaprogramming usually takes the form of an external
 {\em source code generator}\footnote{Like Qt's MOC.}, or the form
 of {\em preprocessor}, {\em template} or {\em constexpr} metaprogramming.
 
@@ -192,10 +197,10 @@ std::is_same_v<bar, baz>;
 // and cannot be used for overloading
 std::is_same_v<identity<bar>, identity<baz>>;
 
-// or not even comparable
+// they are not even comparable
 std::is_same_v<std, foo>;
 
-// or they cannot be passed as arguments to subroutines
+// they cannot be passed as arguments to subroutines
 identity<std>;
 identity<foo>;
 
@@ -209,7 +214,7 @@ std::is_same_v<z, baz>;
 \end{minted}
 
 From the above follows, that a {\em second-class object} is everything else that
-is not a first-class object.
+is not a first-class object, for example a namespace or a typedef.
 
 \subsubsection{Reification}
 \label{term-reification}

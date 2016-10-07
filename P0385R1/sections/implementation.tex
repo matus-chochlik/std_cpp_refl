@@ -1,4 +1,5 @@
 \section{Experimental implementation}
+\label{implementation}
 
 A fork of the clang compiler with a initial, partial, experimental implementation
 of this proposal can be found on github \cite{ReflexprImplementation}.
@@ -7,7 +8,7 @@ in \cite{ClangGettingStarted}, but instead of checking out the official clang
 repository, the sources on the \texttt{reflexpr} branch of the modified
 repository should be used.
 
-The reflection implementation represents the metaobjects with compile-time
+The reflection implementation represents the metaobjects as compile-time
 constants wrapped in a class template and implements the metaobject operations
 with the help of compiler built-in operators taking the metaobject ID values
 as arguments. 

@@ -64,9 +64,10 @@ The individual pieces of metadata can be obtained from a metaobject by using one
 of the class templates which comprise its interface.
 
 Some of this metadata like the class name or number of base classes is provided
-as compile-time constant values, some as base-level types, like the original
-type of the class and some in the form of other metaobjects, like the metaobject
-reflecting the scope, the sequence of metaobjects reflecting the members, etc.:
+as compile-time constant values, some as base-level types
+and some in the form of other metaobjects, like metaobjects
+reflecting declaration scope or a sequence of metaobjects reflecting class members,
+etc.:
 
 \begin{minted}{cpp}
 using meta_str = reflexpr(std::string);
@@ -74,6 +75,7 @@ using meta_str = reflexpr(std::string);
 get_base_name_v<meta_str>; // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string
 get_scope_m<meta_str>; // another metaobject reflecting the scope
+get_data_members_m<meta_str>; // a metaobject-sequence containing other metaobjects
 \end{minted}
 
 P0194R2 also defines the initial subset
