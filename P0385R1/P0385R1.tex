@@ -33,7 +33,6 @@
 
 \usepackage[pdftex]{graphicx}
 \DeclareGraphicsExtensions{.pdf}
-\graphicspath{{images/}}
 \usepackage{rotating}
 
 \setcounter{tocdepth}{3} 
@@ -89,11 +88,18 @@ frequently asked in regard to the proposal.
 
 \input{sections/references.tex}
 
-%\begin{appendices}
-%\newpage
-%\appendix
-%\part*{Appendix}
-%\addcontentsline{toc}{part}{Appendix}
-%\end{appendices}
+\begin{appendices}
+\newpage
+\appendix
+\part*{Appendix}
+\addcontentsline{toc}{part}{Appendix}
+
+\begin{figure}[h!t]
+\centering
+\includegraphics[width=0.81\linewidth]{images/hierarchy.pdf}
+\caption{Metaobject concept hierarchy}
+\end{figure}
+
+\end{appendices}
 
 \end{document}
