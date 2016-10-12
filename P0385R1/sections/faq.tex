@@ -111,7 +111,7 @@ or its members.} were generated immediately.
 This is however {\em not} the case.
 
 The metaobjects need to be types just enough so that they can be used
-as template arguments\footnote{Similar to the \texttt{void} type}.
+as template arguments and types of default- and copy-constructible variables.
 They don't need to have any name, scope, 
 virtual method tables, run-time type information,
 etc. All they need to have is a unique identity and their internal representations
@@ -378,17 +378,13 @@ if the programmer wants to and we feel that restricting reflection only to publi
 class members would severely limit its usefulness in implementing things like
 non-intrusive serialization, object-relational mapping, etc.
 
-Having said that we also try to design the interface to indicate to the users
-that they are breaking encapsulation. For example the \say{basic} operation
-for getting class members -- \verb@get_public_data_members@, returns only the
-reflections of {\em public} class data members. To get access to all data members
-including the private or protected ones, the \verb@get_data_members@
-operation has to be used.
+Having said that we also try to design the interface to allow the users
+to indicate that they only want the public data members, by providing
+two sets of operations where applicable (for example \verb@get_data_members@
+vs. \verb@get_public_data_members@).
 
 Furthermore the \verb@is_public@ trait can be used to test if a class member
 is publicly accessible or not.
-
-See also \hyperref[issue-breaking-access]{the issues section}.
 
 \subsection{We need to get around access restrictions, but not in reflection.}
 
@@ -443,6 +439,10 @@ in several use cases.
 		typedef names instead of native type names which vary between
 		platforms.
 \end{itemize}
+
+Having said this, we are aware of the compiler limitations in this area
+and we require the compilers to reflect on type aliases only in the reasonable
+cases.
 
 %TODO: mention some other use cases
 
@@ -580,12 +580,13 @@ base names by using metaprogramming, than to do the reverse -- to parse the
 base name from a fully qualified and decorated name at compile-time.
 
 Also there are several possibilities how the full name can be formatted;
-should it contain any whitespaces, if so where and how many?, should the
+should it contain any white-spaces, if so where and how many?, should the
 \verb@const@ and \verb@volatile@ qualifiers be put before or after the type
 name?, should a complicated type name be split into several lines and indented, etc.
 
 These details shouldn't be handled by the basic reflection facility, but by
-a higher-level library.
+a higher-level library. See for example the
+{\em Mirror reflection utilities}~\cite{Chochlik-Mirror-new-doc}.
 
 \subsection{What about the use cases from the committee's CFP?}
 

@@ -99,15 +99,6 @@ In this case we would only allow string {\em literals}, not arbitrary
 \verb@constexpr@ string-returning expressions and the identifier formatting
 would be handled inside of the compiler.
 
-Also note that we could combine this with the reversible reflection described
-in section \ref{fut-reverse-reflection} and reuse the \verb@reflexpr@ operator
-instead of adding a new operator like \verb@idreflexpr@:
-
-\begin{minted}[tabsize=4]{cpp}
-reflexpr("int")
-reflexpr("get_%1_%2", meta_bar, meta_foo)(const reflexpr("%1", meta_bar)&);
-\end{minted}
-
 \subsubsection{\texttt{named\_data\_member} and \texttt{named\_member\_typedef}}
 \label{fut-named-member-X}
 
