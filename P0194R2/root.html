@@ -80,11 +80,11 @@
 	default-constructed, copy-constructed and copy-assigned.
 	</p>
 
-	<p>The <em>Metaobject</em>s are generated on demand by the compiler as
+	<p><em>Metaobject</em>s are generated on demand by the compiler as
 	the result of the invocation of the <code>reflexpr</code> operator.
 	</p>
 	
-	<p>The actual metadata can be obtained by instantiating templates constituting
+	<p>The actual metadata is obtained by instantiating templates constituting
 	the <em>interface</em> of the <em>Metaobject</em>s. Each template serves a particular
 	purpose and provides a single piece of metadata. These templates are
 	collectively referred to as <em>Metaobject operations</em>.
@@ -139,7 +139,7 @@ is_metaobject_v&lt;Mstring&gt;;             // true
 	<object class="htmlc" name="concepts" type="text/html" data="concepts.htmlc"></object>
 
 	<p>[<span class="note">Note:</span> <em>Metaobject</em>s reflecting anonymous
-	types, anonymous namespaces or the global scope also do satisfy the
+	types, anonymous namespaces and the global scope also satisfy the
 	<code>meta::Named</code> concept.
 	The fact that they reflect an anonymous declaration is indicated by the
 	<code>meta::is_anonymous</code> operation. In such case the
@@ -153,6 +153,7 @@ is_metaobject_v&lt;Mstring&gt;;             // true
 <code>
 static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
 auto l = [](void) { };
+DJS: What's the motivation for reflexpr() being "named"?
 static_assert(meta::Named&lt;reflexpr()&gt;, "");
 static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
 
@@ -160,6 +161,8 @@ static_assert(!meta::is_anonymous_v&lt;reflexpr(int)&gt;, "");
 auto l = [](void) { };
 static_assert(meta::is_anonymous_v&lt;reflexpr(::)&gt;, "");
 static_assert(meta::is_anonymous_v&lt;reflexpr(decltype(l))&gt;, "");
+
+DJS: This stye of concept design tends toward the creation of one concept per operation which looks a lot like plain overloading. Inheritance hiearchies that look like this (everything inherits from named) are also frowned upon. Would it be better to instead model this as an algebraic data type? Just because two classes have a function with the same name and with a similar semantics doesn't mean that they should both inherit from the same ABC.
 
 static_assert(meta::get_base_name_v&lt;reflexpr(int)&gt;[0] != '\0', "");
 auto l = [](void) { };
@@ -200,12 +203,14 @@ static_assert( meta::ScopeMember(reflexpr(std::size_t)), "");
 
 	<h4>?.5 <em>Metaobject</em> operations<span class="section_name">[refl.ops]</span></h4>
 
-	A <em>MetaobjectOperation</em> describes
-	a particular aspect of the declaration reflected by a <em>Metaobject</em>.
+DJS: Can't MetaobjectOpertions also return metaobjects?
+
+	A <em>MetaobjectOperation</em> extracts
+	information from <em>Metaobject</em>s.
 	It is a class template taking one or more arguments, at least one
-	of which is a model of the <em>Metaobject</em> concept.
+	of which models the <em>Metaobject</em> concept.
 	The result of a <em>MetaobjectOperation</em> can be either a compile-time
-	constant value a <code>const</code> pointer or a type.
+	constant value, a <code>const</code> pointer, or a type.
 
 	<h5>?.5.1 Boolean constant result<span class="section_name">[refl.ops.bool]</span></h5>
 
@@ -285,6 +290,8 @@ struct <em>MetaobjectOperation</em>
 
 	<h5>?.5.5 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
 
+DJS: Should this generally be type return values? I'm not sure what calling out "metaobjects" buys us. The fact that the derived type is in the 'meta' namespace doesn't seem interesting.
+
 	<p>The <em>MetaobjectOperation</em> templates yielding another <em>Metaobject</em>
 	instantiate into a type <em>equivalent</em> to the following:
 	</p>
@@ -292,6 +299,7 @@ struct <em>MetaobjectOperation</em>
 <pre><code>
 struct <em>MetaobjectOperation</em>
 {
+DJS: would this be more clear as 'using type = <em>MetaObject</em>;'?
 	using type = meta::<em>Object</em>;
 };
 </code></pre>
@@ -337,7 +345,7 @@ struct <em>MetaobjectOperation</em>
 
 	<p>For <code>meta::Type</code>s reflecting fundamental types,
 	the <code>get_base_name</code> operation returns the longest type specifier name,
-	i.e. including <code>long</code>, <code>signed</code> or <code>unsigned</code>,
+	i.e. including <code>long</code>, <code>signed</code> or <code>unsigned</code> modifiers,
 	if they describe the identical type.
 	</p>
 
@@ -350,6 +358,7 @@ meta::get_base_name_v&lt;reflexpr(long long)&gt;      // "signed long long int"
 meta::get_base_name_v&lt;reflexpr(long double)&gt;    // "long double"
 meta::get_base_name_v&lt;reflexpr(signed char)&gt;    // "signed char"
 meta::get_base_name_v&lt;reflexpr(unsigned char)&gt;  // "unsigned char"
+DJS: shouldn't this resolve to "signed char"?
 meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 </code>
 <span class="note">— end example</span>]
@@ -357,7 +366,7 @@ meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 
 
 	<p>The <code>get_base_name</code> invoked on a <code>meta::Alias</code>
-	returns the alias name not the name of the aliased declaration.
+	returns the alias name, not the name of the aliased declaration.
 	</p>
 
 <pre>
@@ -386,6 +395,7 @@ meta::get_base_name_v&lt;reflexpr(pfoo)&gt;   // "pfoo"
 <code>
 using meta::get_base_name_v;
 
+DJS: This one needs some rationale because I think it would be unexpected. Folks, I think, will expect "vector<signed int>" to be the result whereas reflexpr(vector)'s base name would be vector. Do we actually need this function? It may make sense to only allow it on undecorated primitive types, classes, enums, and namespaces. For concrete template types we could rename the operation to something else. A video call may be needed here. I'm going with the principal of adding the minimal functionality required and then allow libraries to be built on top for a preferred interface. Has the multiple name function design been considered.
 get_base_name_v&lt;reflexpr(std::vector&lt;int&gt;)&gt;                          // "vector"
 get_base_name_v&lt;reflexpr(volatile std::size_t* [10])&gt;                // "unsigned long int"
 get_base_name_v&lt;reflexpr(std::set&lt;int&gt;* (*)(std::vector&lt;double&gt;&amp;))&gt;  // ""
@@ -563,6 +573,8 @@ using meta::get_element_m;
 using meta::get_data_members_m;
 using meta::get_member_types_m;
 
+DJS: It is going to come up that we have a non-general purpose indexed list being put into use here. We should have some kind of discussion about why we're doing it this way. A good answer would be that we're anticipating a general purpose type list "concept" and hope to use something like that eventually.
+
 get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 0&gt;&gt; // "t1"
 get_base_name_v&lt;get_element_m&lt;get_member_types_m&lt;meta_foo&gt;, 1&gt;&gt; // "t2"
 
@@ -605,12 +617,14 @@ using meta::get_member_types_m;
 get_size_v&lt;get_data_members_m&lt;meta_foo&gt;&gt; // 4
 get_size_v&lt;get_data_members_m&lt;meta_bar&gt;&gt; // 2
 
+DJS: Should this be called 'get_nested_types'? I'm not sure if member types is the parlance that most folks use. Maybe for consistency we can call 'get_all_member_types' 'get_all_type_members'? 
 get_size_v&lt;get_member_types_m&lt;meta_foo&gt;&gt; // 1
 get_size_v&lt;get_member_types_m&lt;meta_bar&gt;&gt; // 0
 </code>
 <span class="note">— end example</span>]
 </pre>
 
+DJS: Did we discuss calling 'get_data_members' 'get_public_data_members'? Maybe 'get_member_variables'?
 	<p>
 	The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code> and <code>meta::get_member_types</code>
@@ -713,6 +727,8 @@ is_same_v&lt;X, tuple&lt;int, bool, char, double&gt;&gt; // true
 
 	<h6>?.5.7.5 Specifier operations<span class="section_name">[refl.ops.spec]</span></h6>
 
+DJS: Maybe we should omit the 'meta::is_static', etc. functions as those would properly belong to a library on top of the primitives we provide. We could make a footnote or something as a future library design note.
+
 	<p>[<span class="note">Note:</span> There is a dual interface for retrieving specifier-related metadata.
 	One is using the <code>meta::Specifier</code> concept and its operations which is
 	more generic, and another using the boolean operations like <code>meta::is_static</code>,
@@ -788,6 +804,8 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
 				the result will be satisfying <code>meta::Variable</code>.</li>
         <li>Otherwise, if the operand is a <em>enumerator-name</em>,
 				the result will be satisfying <code>meta::Constant</code>.</li>
+
+DJS: Has it been considered that all primary operands that work exclusively on types that satisfy a concept embed the concept name within their name? That may make the structure more apparent in the code.
       </ul>
     <p>
       If the scope of the declaration of the <em>id-expression</em> is a class,
@@ -799,12 +817,14 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
 			then the result of <code>reflexpr</code> is also satisfying
 			<code>meta::EnumMember</code>.
     </p>
+DJS: you may want to note here that other expressions are ill-formed, not because it is impossible, but because we're bringing this proposal out in stages. Maybe the discussion of that should go closer to the introduction.
     <p>
       The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>
       is ill-formed.</p>
 <pre>
 [<span class="note">Example:</span>
 <code>
+DJS: I'm not sure how much I like this having any meaning. Lets discuss what the use case is for this particular expression.
 reflexpr() // reflects the global namespace
 reflexpr(::) // reflects the global namespace
 reflexpr(std) // reflects the namespace
@@ -845,6 +865,7 @@ using meta::get_data_members_m;
 
 struct foo;
 using meta_foo_fwd1 = reflexpr(foo);
+DJS: Hrm, I'm not sure about this. My expectation is that reflexpr will return something satisfying an incomplete type in this case. Querying the number of data members should result in a compilation error.
 constexpr size_t n1 = get_size_v&lt;get_data_members_m&lt;meta_foo_fwd1&gt;&gt;; // 0
 
 struct foo;
@@ -867,6 +888,8 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 </pre>
 
 	<h5>?.6.2 Required header<span class="section_name">[refl.reflexpr.header]</span></h5>
+
+DJS: IIRC, we discussed in the previous meeting that including the header should not prevent use of the reflexpr operation.
 
 	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
 	of <code>reflexpr</code>, the program is ill-formed.
