@@ -745,10 +745,21 @@ struct <em>MetaobjectOperation</em>
 	in such <em>MetaobjectOperation</em>.
 	</p>
 
-	<h5>?.5.5 <em>Metaobject</em> result<span class="section_name">[refl.ops.metaobj]</span></h5>
+	<h5>?.5.5 Type result<span class="section_name">[refl.ops.type]</span></h5>
+
+	<p>The <em>MetaobjectOperation</em> templates yielding a non-<em>Metaobject</em>
+	type instantiates into a type <em>equivalent</em> to the following:
+	</p>
+
+<pre><code>
+struct <em>MetaobjectOperation</em>
+{
+	using type = <em>unspecified</em>;
+};
+</code></pre>
 
 	<p>The <em>MetaobjectOperation</em> templates yielding another <em>Metaobject</em>
-	instantiate into a type <em>equivalent</em> to the following:
+	type instantiate into a type <em>equivalent</em> to the following:
 	</p>
 
 <pre><code>
@@ -762,24 +773,8 @@ struct <em>MetaobjectOperation</em>
 	available in such <em>MetaobjectOperation</em>.
 	</p>
 
-	<h5>?.5.6 Type result<span class="section_name">[refl.ops.type]</span></h5>
 
-	<p>The <em>MetaobjectOperation</em> templates yielding a non-<em>Metaobject</em>
-	type instantiates into a type <em>equivalent</em> to the following:
-	</p>
-
-<pre><code>
-struct <em>MetaobjectOperation</em>
-{
-	using type = <em>unspecified</em>;
-};
-</code></pre>
-
-	<p>The member name <code>type</code> is publicly and unambiguously
-	available in a <em>MetaobjectOperation</em>.
-	</p>
-
-	<h5>?.5.7 Source location result<span class="section_name">[refl.ops.srcloc]</span></h5>
+	<h5>?.5.6 Source location result<span class="section_name">[refl.ops.srcloc]</span></h5>
 
 	<p>The <em>MetaobjectOperation</em> templates yielding <code>source_location</code>
 	compile-time values will be equivalent to the following:
@@ -791,7 +786,7 @@ struct <em>MetaobjectOperation</em>
 { };
 </code></pre>
 
-	<h5>?.5.8 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
+	<h5>?.5.7 Operation description<span class="section_name">[refl.ops.desc]</span></h5>
 
 	<div><table><tr><th>Template</th>
 <th>Description</th>
@@ -1365,6 +1360,11 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
 				the result will be satisfying <code>meta::Variable</code>.</li>
         <li>Otherwise, if the operand is a <em>enumerator-name</em>,
 				the result will be satisfying <code>meta::Constant</code>.</li>
+				<li>Otherwise, if the operand is any of <code>static</code>,
+				<code>virtual</code>, <code>enum</code>, <code>class</code>,
+				<code>struct</code>, <code>union</code>,
+				<code>public</code>, <code>protected</code>, <code>private</code>,
+				the result will be satisfying <code>meta::Specifier</code>.</li>
 
       </ul>
     <p>
@@ -1404,9 +1404,12 @@ reflexpr(is_same_v&lt;void,void&gt;) // <em>ill-formed</em>
 <span class="note">— end example</span>]
 </pre>
 
-    <p>If the operand is a <em>specifier</em>, then the result of
-      <code>reflexpr</code> is satisfying <code>meta::Specifier</code>.
-    </p>
+	<p>[<span class="note">Note:</span>The expressions <code>reflexpr()</code>
+	and <code>reflexpr(::)</code> both reflect the global scope.
+	It is possible that in the future only one of them will be chosen for this
+	purpose.
+	<span class="note">— end note</span>]
+	</p>
 
 	<h5>?.6.1 Redeclarations<span class="section_name">[refl.reflexpr.redecl]</span></h5>
 
@@ -1446,12 +1449,12 @@ constexpr bool b4 = reflects_same_v&lt;meta_foo_fwd1, meta_foo&gt;; // true
 <span class="note">— end example</span>]
 </pre>
 
-	<h5>?.6.2 Required header<span class="section_name">[refl.reflexpr.header]</span></h5>
-
-	<p>If the header <code>&lt;reflexpr&gt;</code> is not included prior to a use
-	of <code>reflexpr</code>, the program is ill-formed.
-	This header file provides the definitions of the concepts and
-	the templates implementing the operations on <em>Metaobject</em>s as described above.
+	<p>[<span class="note">Note:</span> In order to distinguish the reflections
+	of incomplete forward declarations of types a new concept like
+	<code>meta::IncompleteType</code> or <code>meta::ForwardDeclarated</code>
+	or a new operation like <code>meta::is_forward_declared</code> will be
+	added in a future revision.
+	<span class="note">— end note</span>]
 	</p>
 
 </blockquote>
