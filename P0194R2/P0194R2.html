@@ -183,9 +183,9 @@ questions.
 
 <p>This proposal relies on the Concepts TS, including a resolution to its
 <a href="http://cplusplus.github.io/concepts-ts/ts-active.html#29">Issue 29</a>.
-It assumes that WG21 will find a solution for compile-time
-strings; until then, this proposal provides a placeholder one (see
-[refl.ops.str]) to be able to reason about the interfaces.
+It also assumes that WG21 will incoporate proper compile-time
+strings; until then, this proposal provides a placeholder implementation (see
+[refl.ops.str]) to facilitate reasoning about the interfaces.
 </p>
 </div>
 
@@ -218,11 +218,11 @@ strings; until then, this proposal provides a placeholder one (see
 	default-constructed, copy-constructed and copy-assigned.
 	</p>
 
-	<p>The <em>Metaobject</em>s are generated on demand by the compiler as
+	<p><em>Metaobject</em>s are generated on demand by the compiler as
 	the result of the invocation of the <code>reflexpr</code> operator.
 	</p>
 	
-	<p>The actual metadata can be obtained by instantiating templates constituting
+	<p>The actual metadata is obtained by instantiating templates constituting
 	the <em>interface</em> of the <em>Metaobject</em>s. Each template serves a particular
 	purpose and provides a single piece of metadata. These templates are
 	collectively referred to as <em>Metaobject operations</em>.
@@ -600,7 +600,7 @@ concept bool Inheritance;
 </table></div>
 
 	<p>[<span class="note">Note:</span> <em>Metaobject</em>s reflecting anonymous
-	types, anonymous namespaces or the global scope also do satisfy the
+	types, anonymous namespaces and the global scope also satisfy the
 	<code>meta::Named</code> concept.
 	The fact that they reflect an anonymous declaration is indicated by the
 	<code>meta::is_anonymous</code> operation. In such case the
@@ -614,6 +614,7 @@ concept bool Inheritance;
 <code>
 static_assert(meta::Named&lt;reflexpr(string)&gt;, "");
 auto l = [](void) { };
+
 static_assert(meta::Named&lt;reflexpr()&gt;, "");
 static_assert(meta::Named&lt;reflexpr(decltype(l))&gt;, "");
 
@@ -661,12 +662,12 @@ static_assert( meta::ScopeMember(reflexpr(std::size_t)), "");
 
 	<h4>?.5 <em>Metaobject</em> operations<span class="section_name">[refl.ops]</span></h4>
 
-	A <em>MetaobjectOperation</em> describes
-	a particular aspect of the declaration reflected by a <em>Metaobject</em>.
+	A <em>MetaobjectOperation</em> extracts
+	information from <em>Metaobject</em>s.
 	It is a class template taking one or more arguments, at least one
-	of which is a model of the <em>Metaobject</em> concept.
+	of which models the <em>Metaobject</em> concept.
 	The result of a <em>MetaobjectOperation</em> can be either a compile-time
-	constant value a <code>const</code> pointer or a type.
+	constant value, a <code>const</code> pointer, or a type.
 
 	<h5>?.5.1 Boolean constant result<span class="section_name">[refl.ops.bool]</span></h5>
 
@@ -753,7 +754,7 @@ struct <em>MetaobjectOperation</em>
 <pre><code>
 struct <em>MetaobjectOperation</em>
 {
-	using type = meta::<em>Object</em>;
+	using type = <em>Object</em>;
 };
 </code></pre>
 
@@ -913,7 +914,7 @@ struct get_access_specifier;
 
 	<p>For <code>meta::Type</code>s reflecting fundamental types,
 	the <code>get_base_name</code> operation returns the longest type specifier name,
-	i.e. including <code>long</code>, <code>signed</code> or <code>unsigned</code>,
+	i.e. including <code>long</code>, <code>signed</code> or <code>unsigned</code> modifiers,
 	if they describe the identical type.
 	</p>
 
@@ -933,7 +934,7 @@ meta::get_base_name_v&lt;reflexpr(char)&gt;           // "char"
 
 
 	<p>The <code>get_base_name</code> invoked on a <code>meta::Alias</code>
-	returns the alias name not the name of the aliased declaration.
+	returns the alias name, not the name of the aliased declaration.
 	</p>
 
 <pre>
@@ -1364,6 +1365,7 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
 				the result will be satisfying <code>meta::Variable</code>.</li>
         <li>Otherwise, if the operand is a <em>enumerator-name</em>,
 				the result will be satisfying <code>meta::Constant</code>.</li>
+
       </ul>
     <p>
       If the scope of the declaration of the <em>id-expression</em> is a class,
@@ -1377,7 +1379,9 @@ meta::is_public_v&lt;meta_S_f&gt;  // true
     </p>
     <p>
       The invocation of <code>reflexpr</code> on all other kinds of <em>id-expressions</em>
-      is ill-formed.</p>
+      is ill-formed. The proposal will be extended in the future revisions
+			to allow additional operands.
+		</p>
 <pre>
 [<span class="note">Example:</span>
 <code>
