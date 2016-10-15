@@ -13,7 +13,7 @@
 
 <table class="header">
 	<tr><th>Document Number:</th><td><b>P0194R2</b>, ISO/IEC JTC1 SC22 WG21</td></tr>
-  <tr><th>Date:</th><td>2016-10-13</td></tr>
+  <tr><th>Date:</th><td>2016-10-15</td></tr>
   <tr><th>Project:</th><td>Programming Language C++</td></tr>
   <tr><th>Audience:</th><td>Reflection(SG7) / EWG</td></tr>
   <tr>
@@ -570,6 +570,11 @@ get_base_name_v&lt;get_element_m&lt;get_data_members_m&lt;meta_foo&gt;, 3&gt;&gt
 </code>
 <span class="note">— end example</span>]
 </pre>
+
+  <p>[<span class="note">Note:</span> The name of <code>get_element</code>
+	may be shortened to <code>get</code> or unified with an equivalent operation
+	on type-lists if they become part of the standard in the future.
+	<span class="note">— end note</span>]</p>
 
 	<p>The <code>meta::ObjectSequence</code> returned by
 	<code>meta::get_data_members</code>, <code>meta::get_public_data_members</code>,
