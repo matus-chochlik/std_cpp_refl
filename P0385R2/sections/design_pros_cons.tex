@@ -1,0 +1,68 @@
+\subsection{Design evaluation}
+
+\subsubsection{The good}
+
+The proposed reflection facility\footnote{assuming it is fully completed}:
+
+\begin{itemize}
+\item covers many different use cases,
+\item is fairly powerful and expressive,
+\item is non-intrusive,
+\item is fine-grained,
+\item allows for efficient implementations,
+\item allows to manipulate and reason about all provided metadata at compile-time,
+\item gives the metadata a structure by arranging it into metaobjects,
+\item makes the metaobjects first-class entities allowing to pass
+	representations of second-class base-level language entities
+	around metaprograms as arguments and return values and store them
+	in named \say{variables}\footnote{We cannot stress the importance of this
+	feature enough.},
+\item can serve as the foundation for other, compile-time or run-time reflection
+	utilities implementing other interfaces or fa\c{c}ades aimed at various
+	paradigms or use cases,
+\item contains and isolates all the required changes within the reflection operator,
+\item limits the impact on existing code by adding only a single reserved keyword,
+\item does not require any other changes to the core language, especially no new rules
+	for template parameters.
+\end{itemize}
+
+\subsubsection{The bad}
+
+This proposal requires the addition of a new operator -- \texttt{reflexpr}
+which {\em may} cause conflicts with identifiers in existing code.
+
+For what it's worth, we have performed a quick analysis on \num{994} third-party,
+open-source repositories of C++ projects, hosted on
+\url{http://github.com/}\footnote{The main branches of original repositories,
+not forks.}, where we counted identifiers in the C++ source files.
+
+We have found \num{646313149} instances of \num{7903042} {\em distinct} words
+matching the C++ identifier rules.  We did not find {\em any} occurrence of
+\say{reflexpr}.
+
+\subsubsection{The ugly}
+
+The complexity of the proposal\footnote{stemming from the complexity of the
+base-level language} makes it too verbose for certain simple use cases
+or it may be difficult to learn for beginners.
+
+On the other hand we do not want to trade its usefulness for \say{simplicity}
+and as already said simplifying wrappers aimed at trivial use cases can 
+and {\em will} be devised and added to the standard library.
+See also the discussion \hyperref[faq-hard-on-novices]{in the FAQ section}.
+
+Representing the metaobjects as types may be suboptimal in some simple
+use cases. For example:
+
+\begin{minted}[tabsize=4]{cpp}
+std::string(std::meta::get_base_name_v<reflexpr(T)>);
+\end{minted}
+
+However, the compilers already are doing many other AST transformations,
+optimizations and elisions, and their developers have many tricks at their
+disposal to make the above as efficient as say:
+
+\begin{minted}[tabsize=4]{cpp}
+std::string(operator_get_base_name_of(T));
+\end{minted}
+

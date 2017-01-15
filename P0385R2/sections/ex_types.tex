@@ -1,0 +1,39 @@
+\subsubsection{Type reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflexpr>
+#include <iostream>
+
+int main(void)
+{
+	using namespace std;
+
+	typedef reflexpr(unsigned) meta_unsigned;
+
+	static_assert(is_metaobject_v<meta_unsigned>, "");
+	static_assert(meta::Type<meta_unsigned>, "");
+	static_assert(!meta::Alias<meta_unsigned>, "");
+
+	static_assert(is_same_v<
+		meta::get_reflected_type_t<meta_unsigned>,
+		unsigned
+	>, "");
+
+	static_assert(meta::Named<meta_unsigned>, "");
+	cout << meta::get_base_name_v<meta_unsigned> << endl;
+
+	typedef reflexpr(unsigned*) meta_ptr_unsigned;
+	static_assert(meta::Named<meta_ptr_unsigned>, "");
+	cout << meta::get_base_name_v<meta_ptr_unsigned> << endl;
+
+	return 0;
+}
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+unsigned int
+unsigned int
+\end{verbatim}
+

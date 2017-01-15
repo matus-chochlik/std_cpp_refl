@@ -1,0 +1,100 @@
+\subsection{Additional utilities}
+\label{fut-facade}
+
+In this section we describe several useful metaprogramming utilities which
+could be added later to the standard library to simplify the use of the basic
+reflection primitives in certain cases.
+ 
+\subsubsection{\texttt{for\_each}}
+\label{fac-for-each}
+
+The \verb@for_each@ function should sequentially call a specified
+\verb@UnaryFunction@ on instances of metaobjects from
+a \meta{ObjectSequence}. It should {\em be equivalent} to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <typename MetaObjectSequence, typename UnaryFunction>
+void for_each(UnaryFunction func)
+{
+	func(Metaobject1{});
+	func(Metaobject2{});
+	/* ... */
+	func(MetaobjectN{});
+}
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+
+For example:
+
+\begin{minted}[tabsize=4]{cpp}
+meta::for_each<meta::get_data_members_m<reflexpr(my_class)>>(
+	[](auto idmo)
+	{
+		using MO = decltype(idmo);
+		...
+	}
+);
+\end{minted}
+
+\subsubsection{\texttt{unpack\_sequence\_if}}
+\label{fac-unpack-sequence}
+
+We already have the \verb@unpack_sequence@ template which instantiates
+the provided variadic template with metaobjects from a \meta{ObjectSequence}.
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <typename MetaObjectSequence, template <typename ...> class Template>
+struct unpack_sequence
+{
+	typedef Template<Metaobject1, Metaobject2, ... MetaobjectN> type;
+};
+
+template <typename MetaObjectSequence, template <typename ...> class Template>
+using unpack_sequence_t =
+	typename unpack_sequence<MetaobjectSequence, Template>::type;
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+
+We could also add the following variant of \verb@unpack_sequence@ to be
+able to unpack only metaobjects satisfying a given predicate:
+
+\begin{minted}[tabsize=4]{cpp}
+namespace meta {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <
+	typename MetaObjectSequence,
+	template <typename ...> class Template,
+	template <typename> class Predicate
+>
+struct unpack_sequence_if
+{
+	typedef Template<...> type;
+};
+
+template <
+	typename MetaObjectSequence,
+	template <typename ...> class Template,
+	template <typename> class Predicate
+>
+using unpack_sequence_if_t =
+	typename unpack_sequence_if<
+		MetaobjectSequence,
+		Template,
+		Predicate
+	>::type;
+\end{minted}
+\begin{minted}[tabsize=4]{cpp}
+} // namespace meta
+\end{minted}
+

@@ -1,0 +1,110 @@
+\section{Motivation}
+
+Generic programming and metaprogramming supported by reflection can be valuable
+tools in the implementation of an extensive range of various use cases or
+programming patterns, including but not limited to:
+
+\begin{itemize}
+
+\item serialization or conversion of data from the native C++ representation
+into a standard or custom, text-based or binary format like XML, JSON, XDR, ASN1,
+etc.,
+
+\item (re-)construction of instances of both \say{atomic} and structured types
+from external data representations, like those listed above, or
+from the data stored in a relational database, or from data entered by
+a user through a user interface, or queried through a web service API,
+
+\item automated implementation of comparison operations or hash functions
+for structured types,
+
+\item automated generation of user interface elements,
+
+\item automatic generation of a relational schema from the application
+object model and object-relational mapping (ORM),
+
+\item support for scripting or implementation of input data parsers,
+
+\item support for remote procedure calls (RPC) / remote method invocation (RMI),
+
+\item inspection and manipulation of existing objects via a user interface
+or a web service,
+
+\item visualization of objects or structured data and their relationships,
+
+\item automatic or semi-automatic implementation of certain software design
+patterns, for example the factory pattern,
+
+\item implementation of cross-cutting aspects like debugging, logging, profiling,
+access control, etc.,
+
+\item implementation of source code generators.
+
+\end{itemize}
+
+Some of the use cases listed above are described in more detail in section
+\ref{use-cases-examples}.
+
+There are several approaches to the implementation of the mentioned functionality.
+The most basic, straightforward and also usually the most
+error-prone is manual implementation. Many of the tasks listed above
+are inherently repetitive and basically require to process and organize
+programming language elements\footnote{types, structures, containers, functions,
+constructors, class member variables, enumerated values, etc.}
+in a very uniform way which could be transcribed into a metaprogram\footnote{with
+varying level of complexity}.
+
+This leads to the second, heavily used approach: preprocessing
+and parsing of the program source text by a usually very specific external
+program like, a documentation generation tool, an interface definition language
+compiler for a RPC/RMI framework, a web service interface generator,
+a rapid application development environment with a form designer, etc.,
+resulting in additional program source code, which is then integrated into
+the project and compiled into the final application binary.
+
+This approach has several problems. First, it requires the external
+tools which may not fit well into the build system or may not be portable
+between platforms or be free; second, such tools are task-specific
+and many of them allow only a limited, if any, customization of the output
+and third, there is a lot of repeated code related to the parsing, the
+representation and the manipulation of the input program source.
+
+Another way to automate these tasks is to use reflection and metaprogramming.
+Metaprogramming is the tool for transforming one program into another based
+on some meta-algorithm and reflection provides the input data for that algorithm
+directly from the compiler without the need for an external source code parser.
+
+For example if we want to log the execution of a function, reflection may
+be used as a source of metadata:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename T>
+T min(const T& a, const T& b)
+{
+	log()   << "function: min<"
+	        << get_base_name_v<get_aliased_m<reflexpr(T)>>
+	        << ">("
+	        << get_base_name_v<reflexpr(a)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(a)>>>
+	        << " = " << a
+	        << get_base_name_v<reflexpr(b)> << ": "
+	        << get_base_name_v<get_aliased_m<get_type_m<reflexpr(b)>>>
+	        << " = " << b
+	        << ")" << std::endl
+
+	return a<b?a:b;
+}
+\end{minted}
+
+Calling the \verb@min@ function:
+
+\begin{minted}[tabsize=4]{cpp}
+double m = min(12.34, 23.45);
+\end{minted}
+
+would produce the following log entry:
+
+\begin{verbatim}
+function: min<double>(a: double = 12.34, b: double = 23.45)
+\end{verbatim}
+

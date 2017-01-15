@@ -1,0 +1,58 @@
+\section{Issues}
+
+\subsection{Interaction with attributes}
+
+\textbf{Q:} {\em Should we even reflect attributes? If so, how will the reflection
+of generalized attributes look like?}
+
+Currently generalized attributes are used {\em mostly} as hints to the compiler.
+They can help the compiler to do some optimizations\footnote{for example the
+\texttt{probably(true)} or \texttt{carries\_dependency} attributes} or to
+indicate that the user really means to do something what in other circumstances
+could be a bug\footnote{like the \texttt{fallthrough} or \texttt{maybe\_unused}
+attributes} that the compiler warns about, etc.
+
+Some people argue that generalized attributes are not supposed to have any
+semantic effects -- a compiler should be able to completely strip 
+a program of all attributes and it should not have any effects on the behavior
+of the program.
+
+Attributes could however be viewed more broadly as a generic mechanism for
+annotating declarations\footnote{Associating one or more constant values with
+the declarations.} in the code, without explicitly saying that the recipient
+can only be the compiler.
+There are valid use cases for user annotations and since the annotations
+usually provide additional conceptual (meta-)information about a declaration,
+reflection is a natural mechanism for accessing the annotations.
+
+We favor the view that on the base-level the compiler should be able to
+strip attributes\footnote{or to ignore attributes which it does not understand},
+but it should reflect them on the meta-level on demand.
+
+Having covered that, the reflection of the \say{simple} attributes like
+\verb@[[attr1]]@ or \verb@[[namespace::attr2]]@ could be pretty straightforward:
+
+We add a \meta{Attribute} concept,
+make it conform to \meta{Named} and \meta{Scoped} concepts and then add an
+operation to the interface of \meta{Object} like \verb@get_attributes@, returning
+a sequence of metaobjects reflecting the attributes on a base-level declaration.
+
+The complication is that attributes can have nearly arbitrary parameters;
+\verb@[[probably(true)]]@, \verb@[[deprecated("reason")]]@,
+\verb@[[visibility(hidden)]]@, \verb@[[gnu::aligned(64)]]@. The reflection of
+such attributes and their arguments is currently unresolved.
+
+\subsection{Interaction with concepts}
+
+\textbf{Q:} {\em Are there any special interactions between compile-time
+reflection and concepts?}
+
+Unresolved.
+
+\subsection{Interaction with modules}
+
+\textbf{Q:} {\em Are there any special interactions between compile-time
+reflection and modules?}
+
+Unresolved.
+

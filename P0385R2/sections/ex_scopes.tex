@@ -1,0 +1,68 @@
+\subsubsection{Scope reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflexpr>
+#include <iostream>
+
+namespace foo {
+
+struct bar
+{
+	typedef int baz;
+};
+
+} // namespace foo
+
+typedef long foobar;
+
+int main(void)
+{
+	using namespace std;
+
+	typedef reflexpr(int) meta_int;
+	typedef reflexpr(foo::bar) meta_foo_bar;
+	typedef reflexpr(foo::bar::baz) meta_foo_bar_baz;
+	typedef reflexpr(foobar) meta_foobar;
+
+	static_assert(meta::ScopeMember<meta_int>, "");
+	static_assert(meta::ScopeMember<meta_foo_bar>, "");
+	static_assert(meta::ScopeMember<meta_foo_bar_baz>, "");
+	static_assert(meta::ScopeMember<meta_foobar>, "");
+
+	typedef meta::get_scope_m<meta_int> meta_int_s;
+	typedef meta::get_scope_m<meta_foo_bar> meta_foo_bar_s;
+	typedef meta::get_scope_m<meta_foo_bar_baz> meta_foo_bar_baz_s;
+	typedef meta::get_scope_m<meta_foobar> meta_foobar_s;
+
+	static_assert(meta::Scope<meta_int_s>, "");
+	static_assert(meta::Scope<meta_foo_bar_s>, "");
+	static_assert(meta::Scope<meta_foo_bar_baz_s>, "");
+	static_assert(meta::Scope<meta_foobar_s>, "");
+
+	static_assert(meta::Namespace<meta_int_s>, "");
+	static_assert(meta::GlobalScope<meta_int_s>, "");
+	static_assert(meta::Namespace<meta_foo_bar_s>, "");
+	static_assert(!meta::GlobalScope<meta_foo_bar_s>, "");
+	static_assert(meta::Type<meta_foo_bar_baz_s>, "");
+	static_assert(meta::Class<meta_foo_bar_baz_s>, "");
+	static_assert(!meta::Namespace<meta_foo_bar_baz_s>, "");
+	static_assert(meta::Namespace<meta_foobar_s>, "");
+	static_assert(meta::GlobalScope<meta_foobar_s>, "");
+	static_assert(!meta::Class<meta_foobar_s>, "");
+
+	cout << meta::get_base_name_v<meta_foo_bar_baz> << endl;
+	cout << meta::get_base_name_v<meta_foo_bar_baz_s> << endl;
+	cout << meta::get_base_name_v<meta_foo_bar_s> << endl;
+
+	return 0;
+}
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+baz
+bar
+foo
+\end{verbatim}
+

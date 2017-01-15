@@ -1,0 +1,154 @@
+\subsection{Reversing reflection}
+\label{fut-reverse-reflection}
+
+The \verb@reflexpr@ operator allows to obtain the meta-level representation
+of a base-level declaration. But what if we wanted to do the opposite: to
+get back the original declaration from a metaobject?
+
+This of course would make sense only for a subset of metaobjects, so let's
+define a new concept like \meta{Reversible}.
+
+One way to achieve this would be to add new operator -- \verb@unreflexpr@.
+
+Let's look at some possible use cases for this feature.
+The most trivial one is to replace the \texttt{get\_reflected\_type}
+template from the interface of \meta{Type}:
+
+\begin{minted}{cpp}
+using MT = reflexpr(int);
+
+// ... lots of other code here ...
+
+// Now we arrived to a point where we need
+// to get the base-level type reflected by `MT`.
+
+// Instead of using get_reflected_type ...
+using T = get_reflected_type_t<MT>;
+
+// we could do:
+static_assert(meta::Reversible<MT> && meta::Type<MT>, "");
+using T = unreflexpr(MT);
+static_assert(is_same_v<T, int>, "");
+
+\end{minted}
+
+But that's far from being the only use case. If we could get back to
+the original namespace or variable;
+
+\begin{minted}[tabsize=4]{cpp}
+namespace foo {
+	std::string str;
+
+	void bar(const std::string&);
+} // namespace foo
+
+using MV = reflexpr(foo::str); // Meta-Variable
+
+// ... lots of code here ...
+// using namespace foo;
+using namespace unreflexpr(get_scope_m<MV>);
+
+// [foo::]bar(foo::str);
+bar(unreflexpr(MV));
+
+\end{minted}
+
+or even selecting whole namespaces (meta-)programmatically;
+
+\begin{minted}[tabsize=4]{cpp}
+
+namespace foo {
+	void func1(const std::string&);
+	void func2(int, int, int);
+	int func3(long, short, bool);
+} // namespace foo
+
+
+namespace bar {
+	void func1(const std::string&);
+	void func2(int, int, int);
+	int func3(long, short, bool);
+} // namespace bar
+
+template <typename MN>
+void algorithm(const string& str, int i, int j)
+{
+	// [foo|bar]::func1
+	unreflexpr(MN)::func1(str);
+
+	// [foo|bar]::func2([foo|bar]::func3(i*j, 64, i == j), i, j);
+	unreflexpr(MN)::func2(unreflexpr(MN)::func3(i*j, 64, i == j), i, j);
+}
+
+void func(const string& str, int i, int j, bool want_foo)
+{
+	if(want_foo)
+	{
+		algorithm<reflexpr(foo)>(str, i, j);
+	}
+	else 
+	{
+		algorithm<reflexpr(bar)>(str, i, j);
+	}
+}
+
+\end{minted}
+
+or get back to the original function;
+
+\begin{minted}[tabsize=4]{cpp}
+
+namespace foo {
+	void bar(const std::string&);
+} // namespace foo
+
+using MF = reflexpr(foo::bar); // Meta-Function
+
+// ... lots of code here ...
+//   foo::bar("hello");
+unreflexpr(MF)("hello");
+
+\end{minted}
+
+or back to the original class data member;
+
+\begin{minted}[tabsize=4]{cpp}
+
+struct my_struct
+{
+	int i;
+	float f;
+};
+
+// Meta-DataMember
+using MDM = reflexpr(foo::bar::i);
+
+my_struct x {123, 45.67f};
+
+assert(x.i == 123);
+// x.i = 234;
+x.unreflexpr(MDM) = 234;
+assert(x.i == 234);
+
+\end{minted}
+
+or go back to the original template;
+
+\begin{minted}{cpp}
+
+// Meta-Template
+using MTpl = reflexpr(std::pair);
+
+// std::pair<int, std::string> p;
+unreflexpr(MTpl)<int, std::string> p{10, "Hi!"};
+
+\end{minted}
+
+and so on.
+
+Combined with the fact that all metaobjects are first-class
+entities this would make a very powerful feature, which would essentially
+allow to reify all reflectable declarations at the meta-level, even those which are
+second-class without actually reifying them at the base-level\footnote
+{At the cost of the round-trip through the meta-level.}
+

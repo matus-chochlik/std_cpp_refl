@@ -1,0 +1,36 @@
+\section{Revision history}
+
+\subsection{P0385R0}
+
+This is the initial revision of the design paper accompanying the P0194 papers.
+
+\subsection{P0385R1 -- current revision}
+
+This revision brings the following updates reflecting\footnote{Pun not intended}
+the changes made in the P0194R2 paper.
+
+\begin{itemize}
+\item Based on the feedback from Oulu, the specification of typedef and
+type alias reflection has been simplified. We no longer require reflection
+to be aware of the whole chain of type aliases especially not in the context
+of templates, each type alias only references the underlying type with unique
+identity at the base level.
+\item Unlike in the previous revision it is now possible to create variables
+with {\em metaobject} types.
+\item Section~\ref{fac-for-each} describing the \verb@for_each@ function
+planned to be included in future revisions has been revised.
+\item The {\em reverse reflection operator} has been renamed to \verb@unreflexpr@.
+\item The {\em identifier-generating operator} has been renamed to \verb@idreflexpr@.
+\item The mechanism for enumerating public-only vs. all (including non-public ones)
+class members has been changed. Now the \say{basic} operations like
+\verb@get_data_members@, \verb@get_member_types@, etc.
+return all members, and the \verb@get_public_data_members@,
+\verb@get_public_member_types@, return only the public class members.
+\item All examples have been revised and extended according to the changes listed above.
+\item New examples have been added to section~\ref{design-prefs} describing
+the design considerations.
+\item A description of the implementation has been added (section~\ref{implementation}).
+\item A brief introduction to the {\em Mirror reflection utilities} has been added
+(section~\ref{mirror-lib}).
+\end{itemize}
+

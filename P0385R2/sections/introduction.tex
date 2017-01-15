@@ -1,0 +1,230 @@
+\section{Introduction}
+
+This paper accompanies the P0194Rx papers which we want to keep brief, technical
+and to the point and which will eventually result in the final wording to be
+included into the standard if this proposal is accepted.
+
+We are writing this paper with several goals in mind:
+
+\begin{itemize}
+\item To define and explain the reflection-related terminology.
+\item To keep a written record of the rationale behind the design of the
+proposed static reflection facility.
+\item To keep the answers to the frequently asked questions about
+the decisions we've made in this proposal in one place so that we can avoid
+having to write them over and over from scratch in various discussions\footnote
+{Also to help us remember what the answers were.}.
+\item To enumerate and describe the use cases for the various features
+which we included in the proposal.
+\item To provide concrete examples of usage.
+\item To discuss the possibilities of the evolution of reflection in the future.
+\end{itemize}
+
+The text of this paper includes several revised, updated and extended parts
+from the previous papers: N3996, N4111, N4451 and N4452.
+
+There is also an experimental implementation of the P0194 proposal
+described in greater detail in section~\ref{implementation}
+and the {\em Mirror} reflection library built on top of the proposed
+static reflection facility described in section~\ref{mirror-lib}.
+
+\subsection{Terminology}
+
+In order to avoid confusion about terminology, this section provides definitions
+for several important terms used throughout the text of the paper and
+explains what we mean when using them in the context of this paper.
+
+\subsubsection{Base-level, meta-level}
+\label{term-base-meta-level}
+
+When speaking generally, the {\em meta-level} is some higher level of abstraction
+conceptually describing a lower, {\em base-level} which is the primary subject
+of our endeavors.
+
+In the context of this paper the base-level is the structure of a C++ program.
+The meta-level is an abstraction partially describing that structure,
+mainly the declarations of the program.
+
+\subsubsection{Metadata}
+\label{term-metadata}
+
+{\em Metadata} is generally a piece of data conceptually describing some other,
+{\em primary} data.
+
+In the context of this paper, metadata is data providing information
+about the base-level structure of a program.
+{\em Static} metadata is metadata which can be manipulated or reasoned
+about at compile-time by the compiler.
+
+The metadata itself has its own structure.
+For example metadata describing the base-level declaration of a class 
+from a C++ program includes;
+\begin{itemize}
+\item the name of the class,
+\item its scope,
+\item list of its base classes,
+\item list of data members,
+\item list of nested types like type aliases, classes and enumerations,
+\item the elaborated type specifier, the access specifier,
+\item source location information,
+\item etc.
+\end{itemize}
+
+\subsubsection{Metaprogramming}
+
+{\em Metaprogramming} is a kind of programming with the ability to treat and
+manipulate other programs as data, so both the input and the output of
+a metaprogram is usually a program. The language in which metaprograms
+are written is called the {\em metalanguage} and it can be a different or the
+same language as the one used to write the primary program.
+
+C++ metaprogramming can be done both in an external language\footnote{For example a
+C++ code generator written in Python or Bash.}, in a C++ compiler plug-in,
+or in C++ itself. 
+
+In C++ metaprogramming usually takes the form of an external
+{\em source code generator}\footnote{Like Qt's MOC.}, or the form
+of {\em preprocessor}, {\em template} or {\em constexpr} metaprogramming.
+
+With template metaprogramming we use C++'s type system
+as a standalone functional programming language \say{interpreted} by a C++
+compiler, with \say{variables} being
+represented by types (or compile-time constants),
+\say{data structures} by instantiations of templates,
+\say{subroutines} by class templates or template aliases, and
+algorithms or \say{programs} by compositions of the above.
+
+Unless stated otherwise when we say \say{metaprogramming} in the following text,
+we mean template metaprogramming.
+
+\subsubsection{Reflection}
+
+In the context of computer science,
+the term {\em reflection} refers to the ability of a program to examine
+and possibly modify its own structure and/or behavior.
+
+When combined with metaprogramming, this can include modification of the existing
+or the definition of new data structures, doing changes to algorithms or changing the way
+a program code is interpreted\footnote{Mostly in interpreted languages.}.
+
+For the purpose of this paper, reflection is the process of obtaining metadata.
+In the future the meaning can be expanded to include modification of the program
+in ways exceeding the capabilities of current template
+metaprogramming\footnote{For example generating new class data members.}.
+
+\subsubsection{First-class object, second-class object}
+\label{term-first-class}
+
+First-class objects are also known as first-class {\em citizens}, {\em types},
+{\em entities} or {\em values}.
+In the context of programming language design they describe an entity that satisfies
+the following:
+
+\begin{itemize}
+	\item{Can be stored in a named variable or a data structure.}
+	\item{Can be passed as an argument to a subroutine.}
+	\item{Can be returned as a result of a subroutine.}
+	\item{Has an intrinsic identity making the entity unique and distinguishable.}
+\end{itemize}
+
+Since this paper deals with compile-time static reflection and its use
+in compile-time metaprogramming, we will be talking about first- or second-class
+citizens in this regard. 
+For the purpose of this paper a first-class object is something that
+we can distinguish and reason about at compile-time and what can be passed around
+as \say{data} in metaprograms -- something that can be a template parameter.
+
+This means that a type, a template instance or a compile-time integral constant
+is for our purposes a first-class object:
+
+\begin{minted}{cpp}
+// compile-time "values"
+struct value_a { };
+struct value_b { };
+
+// a compile-time "subroutine"
+template <typename Param>
+struct identity
+{
+	using result = Param;
+};
+
+// "values" are equality comparable and they are distinguishable
+assert(!std::is_same_v<value_a, value_b>, "");
+// and can be used for overloading
+assert(!std::is_same_v<identity<value_a>, identity<value_b>>, "");
+
+// they can be stored in named "variables" ...
+using x = value_a;
+
+// ... while maintaining their identity
+assert(std::is_same_v<value_a, x>, "");
+
+// they can be passed as parameters to subroutines
+identity<value_a>;
+identity<value_b>;
+
+// they can be returned from subroutines
+using y = identity<value_a>::result;
+using z = identity<value_b>::result;
+
+// ... while still maintaining their identity
+assert(std::is_same_v<value_a, y>, "");
+assert(std::is_same_v<value_b, z>, "");
+// and still being distinguishable
+assert(!std::is_same_v<y, z>, "");
+\end{minted}
+
+
+On the other hand a namespace, a type alias or a template parameter do not have
+some or any of these properties.
+
+\begin{minted}{cpp}
+// other entities
+namespace std { }
+namespace foo = std;
+using bar = unsigned;
+using baz = unsigned;
+
+template <typename Param>
+struct identity
+{
+	using result = Param;
+};
+
+// they are not distinguishable
+std::is_same_v<bar, baz>;
+// and cannot be used for overloading
+std::is_same_v<identity<bar>, identity<baz>>;
+
+// they are not even comparable
+std::is_same_v<std, foo>;
+
+// they cannot be passed as arguments to subroutines
+identity<std>;
+identity<foo>;
+
+// nor returned as a result
+namespace y = identity<foo>::result;
+
+// those which can be returned ...
+using z = identity<bar>::result;
+// ... do not maintain their unique identity
+std::is_same_v<z, baz>;
+\end{minted}
+
+From the above follows, that a {\em second-class object} is everything else that
+is not a first-class object, for example a namespace or a typedef.
+
+\subsubsection{Reification}
+\label{term-reification}
+
+Generally speaking {\em reification} or \say{thingification}\footnote{From latin
+\say{rei}, the dative form of \say{res} -- a thing.}, is making something
+real, bringing it into being as an entity with its own identity,
+or making something concrete.
+
+In regard to programming languages, reification is often defined as making
+an entity in the language a first-class object. So in the context of C++ template
+metaprogramming a type is reified, but a namespace or a specifier is not.
+

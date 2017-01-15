@@ -1,0 +1,20 @@
+\subsection{Compile-time vs. run-time reflection}
+
+Run-time, dynamic reflection facilities may seem more readily
+usable, but with the increasing popularity of compile-time metaprogramming,
+the need for compile-time introspection\footnote{already taken care of
+by \texttt{type\_traits}} and reflection also increases.
+
+Also, if compile-time reflection is well supported it is relatively
+easy to implement run-time or even dynamically loadable reflection
+on top of it. The opposite is not true: One cannot use run-time metaobjects
+or the value returned by their member functions as template parameters
+or compile-time constants.
+
+From the performance point of view, algorithms based on static
+meta-data offer much more possibilities for the compiler to do
+optimizations.
+
+Thus, taking shortcuts directly to run-time reflection, without
+compile-time support has obvious drawbacks.
+
