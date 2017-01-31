@@ -2,14 +2,14 @@
 \label{context-dependent-reflection}
 
 One of the interesting potential future extensions of reflection
-is {\em context-dependent reflection}. Currently the operands of \verb@reflexpr@
+is {\em context-dependent reflection}. Currently the operands of \verb@$reflect@
 are names of the base-level entities which we want to reflect.
 
 Context-dependent reflection would allow to obtain metadata based on the context
 in which the reflection operator is invoked, instead of on the declaration name.
 
 Several new expressions would have to be added as valid operands for
-\verb@reflexpr@, allowing to reflect the \say{current} namespace, class
+\verb@$reflect@, allowing to reflect the \say{current} namespace, class
 or even function.
 
 \subsubsection{Namespaces}
@@ -21,13 +21,13 @@ inside of which the reflection operator was invoked.
 For example:
 
 \begin{minted}{cpp}
-typedef reflexpr(this::namespace) _meta_gs;
+typedef $reflect(this::namespace) _meta_gs;
 \end{minted}
 
 reflects the global scope namespace and is equivalent to
 
 \begin{minted}{cpp}
-typedef reflexpr(::) _meta_gs;
+typedef $reflect(::) _meta_gs;
 \end{minted}
 
 For named namespaces:
@@ -36,12 +36,12 @@ For named namespaces:
 namespace foo {
 \end{minted}
 \begin{minted}[xleftmargin=1em]{cpp}
-typedef reflexpr(this::namespace) _meta_foo;
+typedef $reflect(this::namespace) _meta_foo;
 
 namespace bar {
 \end{minted}
 \begin{minted}[xleftmargin=2em]{cpp}
-typedef reflexpr(this::namespace) _meta_foo_bar;
+typedef $reflect(this::namespace) _meta_foo_bar;
 
 } // namespace bar
 \end{minted}
@@ -63,16 +63,16 @@ struct foo
 	const char* _name;
 
 	// reflects foo
-	typedef reflexpr(this::class) _meta_foo1;
+	typedef $reflect(this::class) _meta_foo1;
 
 	foo(void)
-	 : _name(get_base_name_v<reflexpr(this::class)>())
+	 : _name(get_base_name_v<$reflect(this::class)>())
 	{ }
 
 	void f(void)
 	{
 		// reflects foo
-		typedef reflexpr(this::class) _meta_foo2;
+		typedef $reflect(this::class) _meta_foo2;
 	}
 
 	double g(double, double);
@@ -80,24 +80,24 @@ struct foo
 	struct bar
 	{
 		// reflects foo::bar
-		typedef reflexpr(this::class) _meta_foo_bar;
+		typedef $reflect(this::class) _meta_foo_bar;
 	};
 };
 
 double foo::g(double a, double b)
 {
 	// reflects foo
-	typedef reflexpr(this::class) _meta_foo3;
+	typedef $reflect(this::class) _meta_foo3;
 	return a+b;
 }
 
 class baz
 {
 private:
-	typedef reflexpr(this::class) _meta_baz;
+	typedef $reflect(this::class) _meta_baz;
 };
 
-typedef reflexpr(this::class); // error: not used inside of a class.
+typedef $reflect(this::class); // error: not used inside of a class.
 
 \end{minted}
 
@@ -113,13 +113,13 @@ For example:
 void foobar(void)
 {
 	// reflects this particular overload of the foobar function
-	typedef reflexpr(this::function) _meta_foobar;
+	typedef $reflect(this::function) _meta_foobar;
 }
 
 int foobar(int i)
 {
 	// reflects this particular overload of the foobar function
-	typedef reflexpr(this::function) _meta_foobar;
+	typedef $reflect(this::function) _meta_foobar;
 	return i+1;
 }
 
@@ -129,32 +129,32 @@ private:
 	void f(void)
 	{
 		// reflects this particular overload of foo::f
-		typedef reflexpr(this::function) _meta_foo_f;
+		typedef $reflect(this::function) _meta_foo_f;
 	}
 
 	double f(void)
 	{
 		// reflects this particular overload of foo::f
-		typedef reflexpr(this::function) _meta_foo_f;
+		typedef $reflect(this::function) _meta_foo_f;
 		return 12345.6789;
 	}
 public:
 	foo(void)
 	{
 		// reflects this constructor of foo
-		typedef reflexpr(this::function) _meta_foo_foo;
+		typedef $reflect(this::function) _meta_foo_foo;
 	}
 
 	friend bool operator == (foo, foo)
 	{
 		// reflects this operator
-		typedef reflexpr(this::function) _meta_foo_eq;
+		typedef $reflect(this::function) _meta_foo_eq;
 	}
 
-	typedef reflexpr(this::function) _meta_fn; // error
+	typedef $reflect(this::function) _meta_fn; // error
 };
 
-typedef reflexpr(this::function) _meta_fn; // error
+typedef $reflect(this::function) _meta_fn; // error
 \end{minted}
 
 \subsubsection{Templates}
@@ -171,9 +171,9 @@ template <typename First, typename Second, typename Third>
 struct triplet
 {
 	// reflects the template not the instantiation
-	using _meta_tpl = reflexpr(this::template);
+	using _meta_tpl = $reflect(this::template);
 
 	// reflects the instantiation not the template
-	using _meta_cls = reflexpr(this::class);
+	using _meta_cls = $reflect(this::class);
 };
 \end{minted}

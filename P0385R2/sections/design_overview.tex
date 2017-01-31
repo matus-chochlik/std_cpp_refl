@@ -19,22 +19,22 @@ specifier, etc.}, so that we can pass it as an argument or a return value
 in metaprograms and to separate the reflection of a declaration from the querying
 of metadata\footnote {Which will happen very often in the more complex use cases}.
 
-We introduce a new reflection operator -- \verb@reflexpr@ which returns a
+We introduce a new reflection operator -- \verb@$reflect@ which returns a
 metaobject type reflecting its operand.
 
 For example:
 
 \begin{minted}{cpp}
-typedef reflexpr() meta_global_scope;
-typedef reflexpr(int) meta_int;
-typedef reflexpr(std) meta_std;
-typedef reflexpr(std::size_t) meta_std_size_t;
-typedef reflexpr(std::thread) meta_std_thread;
-typedef reflexpr(std::pair) meta_std_pair;
-typedef reflexpr(std::launch) meta_std_launch;
-typedef reflexpr(std::launch::async) meta_std_launch_async;
-typedef reflexpr(static) meta_static;
-typedef reflexpr(public) meta_public;
+typedef $reflect() meta_global_scope;
+typedef $reflect(int) meta_int;
+typedef $reflect(std) meta_std;
+typedef $reflect(std::size_t) meta_std_size_t;
+typedef $reflect(std::thread) meta_std_thread;
+typedef $reflect(std::pair) meta_std_pair;
+typedef $reflect(std::launch) meta_std_launch;
+typedef $reflect(std::launch::async) meta_std_launch_async;
+typedef $reflect(static) meta_static;
+typedef $reflect(public) meta_public;
 \end{minted}
 
 Since there are many different kinds of
@@ -44,20 +44,20 @@ metaobjects and to indicate whether a metaobjects has or has not a particular
 property;
 
 \begin{minted}{cpp}
-static_assert(meta::Named<reflexpr(std)>, "");
-static_assert(meta::ScopeMember<reflexpr(int)>, "");
-static_assert(meta::Scope<reflexpr(std::string)>, "");
-static_assert(meta::Alias<reflexpr(std::string::size_type)>, "");
+static_assert(meta::Named<$reflect(std)>, "");
+static_assert(meta::ScopeMember<$reflect(int)>, "");
+static_assert(meta::Scope<$reflect(std::string)>, "");
+static_assert(meta::Alias<$reflect(std::string::size_type)>, "");
 \end{minted}
 
 or if is falls into a particular category:
 
 \begin{minted}{cpp}
-static_assert(meta::GlobalScope<reflexpr()>, "");
-static_assert(meta::Namespace<reflexpr(std)>, "");
-static_assert(meta::Type<reflexpr(int)>, "");
-static_assert(meta::Class<reflexpr(std::string)>, "");
-static_assert(meta::Specifier<reflexpr(virtual)>, "");
+static_assert(meta::GlobalScope<$reflect()>, "");
+static_assert(meta::Namespace<$reflect(std)>, "");
+static_assert(meta::Type<$reflect(int)>, "");
+static_assert(meta::Class<$reflect(std::string)>, "");
+static_assert(meta::Specifier<$reflect(virtual)>, "");
 \end{minted}
 
 The individual pieces of metadata can be obtained from a metaobject by using one
@@ -70,7 +70,7 @@ reflecting declaration scope or a sequence of metaobjects reflecting class membe
 etc.:
 
 \begin{minted}{cpp}
-using meta_str = reflexpr(std::string);
+using meta_str = $reflect(std::string);
 
 get_base_name_v<meta_str>; // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string

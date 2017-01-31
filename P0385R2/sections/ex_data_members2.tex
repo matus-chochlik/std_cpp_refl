@@ -1,7 +1,7 @@
 \subsubsection{Class data members (2)}
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 struct foo
@@ -78,8 +78,8 @@ void print_all_data_members(void)
 
 int main(void)
 {
-	print_data_members<reflexpr(foo)>();
-	print_all_data_members<reflexpr(foo)>();
+	print_data_members<$reflect(foo)>();
+	print_all_data_members<$reflect(foo)>();
 
 	return 0;
 }

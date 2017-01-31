@@ -28,7 +28,7 @@ The proposed reflection facility\footnote{assuming it is fully completed}:
 
 \subsubsection{The bad}
 
-This proposal requires the addition of a new operator -- \texttt{reflexpr}
+This proposal requires the addition of a new operator -- \texttt{\$reflect}
 which {\em may} cause conflicts with identifiers in existing code.
 
 For what it's worth, we have performed a quick analysis on \num{994} third-party,
@@ -38,7 +38,7 @@ not forks.}, where we counted identifiers in the C++ source files.
 
 We have found \num{646313149} instances of \num{7903042} {\em distinct} words
 matching the C++ identifier rules.  We did not find {\em any} occurrence of
-\say{reflexpr}.
+\say{\$reflect}.
 
 \subsubsection{The ugly}
 
@@ -55,7 +55,7 @@ Representing the metaobjects as types may be suboptimal in some simple
 use cases. For example:
 
 \begin{minted}[tabsize=4]{cpp}
-std::string(std::meta::get_base_name_v<reflexpr(T)>);
+std::string(std::meta::get_base_name_v<\$reflect(T)>);
 \end{minted}
 
 However, the compilers already are doing many other AST transformations,

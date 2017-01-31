@@ -7,7 +7,7 @@ a visualization of a static class or dynamic object hierarchy or graph.
 Reflection makes this task trivial:
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 template <typename T>
@@ -62,7 +62,7 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type)
 template <typename T>
 std::ostream& value_to_json(std::ostream& out, const T& v)
 {
-	typedef reflexpr(T) meta_T;
+	typedef $reflect(T) meta_T;
 	return reflected_to_json<meta_T>(
 		out, v,
 		std::meta::Record<meta_T>()

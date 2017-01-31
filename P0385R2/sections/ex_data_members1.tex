@@ -1,7 +1,7 @@
 \subsubsection{Class data members (1)}
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 struct foo
@@ -19,7 +19,7 @@ int main(void)
 {
 	using namespace std;
 
-	typedef reflexpr(foo) meta_foo;
+	typedef $reflect(foo) meta_foo;
 
 	// public data members
 	typedef meta::get_public_data_members_m<meta_foo> meta_data_mems;

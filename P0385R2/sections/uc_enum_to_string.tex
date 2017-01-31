@@ -75,7 +75,7 @@ public:
 	{
 		using namespace std;
 
-		using ME = reflexpr(Enum);
+		using ME = $reflect(Enum);
 		using hlpr = meta::unpack_sequence_t<
 			meta::get_enumerators_m<ME>,
 			_hlpr
@@ -115,7 +115,7 @@ public:
 	{
 		using namespace std;
 
-		using ME = reflexpr(Enum);
+		using ME = $reflect(Enum);
 		using hlpr = meta::unpack_sequence_t<
 			meta::get_enumerators_m<ME>,
 			_hlpr

@@ -70,7 +70,7 @@ struct is_metaobject<__metaobject<MoId>> : true_type { }
 } // namespace std
 \end{minted}
 
-The invocation of the \verb@reflexpr@ operator yields specializations of
+The invocation of the \verb@$reflect@ operator yields specializations of
 the \verb@std::__metaobject@ template, where the value of the \verb@MoId@
 argument is a handle to a representation of the metaobject inside of
 the compiler, as described below. 

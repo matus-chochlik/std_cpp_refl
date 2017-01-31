@@ -53,12 +53,12 @@ the preprocessor.
 We either have to add the ability to create identifiers from compile-time strings
 which may be fairly complicated, or look for some simpler workarounds.
 
-First, let's say that we have a magic operator, like \verb@idreflexpr@ as
+First, let's say that we have a magic operator, like \verb@$identifier@ as
 described in \ref{fut-op-identifier1} , which \say{creates} an identifier from
 a compile-time string, so that for example:
 
 \begin{minted}[tabsize=4]{cpp}
-idreflexpr("long") idreflexpr("foo")(int i, int j);
+$identifier("long") $identifier("foo")(int i, int j);
 \end{minted}
 
 would be equivalent to 
@@ -77,9 +77,9 @@ struct bar
 	int foo;
 };
 
-using meta_bar_foo = reflexpr(bar::foo);
+using meta_bar_foo = $reflect(bar::foo);
 
-long idreflexpr(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
+long $identifier(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 In order to do anything more complex than just
@@ -88,7 +88,7 @@ string manipulation utility implementing for example functions for
 compile-time string concatenation, like \verb@ct_concat@:
 
 \begin{minted}[tabsize=4]{cpp}
-int idreflexpr(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
+int $identifier(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -109,7 +109,7 @@ struct soa_single_member
 {
 	// vector<T> Xs;
 	vector<meta::get_reflected_type_t<meta::get_type_m<MetaDataMember>>>
-		idreflexpr(ct_concat(meta::get_base_name_v<MetaDataMember>, "s"));
+		$identifier(ct_concat(meta::get_base_name_v<MetaDataMember>, "s"));
 
 	/* constructors, forwarding parameters to the vector, ... */
 };
@@ -122,14 +122,14 @@ struct soa_inherit_all
 template <typename T>
 struct soa
  : meta::unpack_sequence_t<
-	meta::get_data_members_m<reflexpr(T)>,
+	meta::get_data_members_m<$reflect(T)>,
 	soa_inherit_all
 > { /* constructors forwarding parameters to soa_inherit_all */ };
 
 using soa_foo = soa<foo>;
 \end{minted}
 
-If we don't want to implement the magic operator \verb@idreflexpr@,
+If we don't want to implement the magic operator \verb@$identifier@,
 we could instead add a new template \verb@named_data_member@
 for \meta{Named} metaobjects, described in greater detail in section
 \ref{fut-named-member-X}:
@@ -144,7 +144,7 @@ for example \verb@foo::c@, would look like this:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
-struct named_data_member<reflexpr(foo::c), X>
+struct named_data_member<$reflect(foo::c), X>
 {
 	struct type
 	{
@@ -177,7 +177,7 @@ struct soa_inherit_all
 template <typename T>
 struct soa
  : meta::unpack_sequence_t<
-	meta::get_data_members_m<reflexpr(T)>,
+	meta::get_data_members_m<$reflect(T)>,
 	soa_inherit_all
 > { /* constructors forwarding parameters to soa_inherit_all */ };
 

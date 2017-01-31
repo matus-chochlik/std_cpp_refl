@@ -175,7 +175,7 @@ public:
 template <typename MetaFunction>
 constexpr bool logging_enabled =
 	is_same_v<
-		reflexpr(std),
+		$reflect(std),
 		get_scope_m<MetaFunction>
 	> && is_same_v<
 		std::string,
@@ -218,7 +218,7 @@ struct autorization_enabled
  : integral_constant<
 	bool,
 	is_base_of<
-		reflexpr(foo::bar),
+		$reflect(foo::bar),
 		get_scope_m<MetaFunction>
 	> && constexpr_starts_with(
 		get_base_name_v<MetaFunction>,
@@ -246,13 +246,13 @@ public:
 
 void func1(int a, int b)
 {
-	const func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<$reflect(this::function)> _fa;
 	/* function body */
 }
 
 double func2(double a, float b, long c)
 {
-	const func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<$reflect(this::function)> _fa;
 	/* function body */
 }
 
@@ -260,7 +260,7 @@ namespace foo {
 
 long func3(int x)
 {
-	const func_aspects<reflexpr(this::function)> _fa;
+	const func_aspects<$reflect(this::function)> _fa;
 	/* function body */
 }
 
@@ -292,7 +292,7 @@ class cls1
 private:
 	int member1;
 	/* ... other members ... */
-	class_aspect<reflexpr(this::class)> _ca;
+	class_aspect<$reflect(this::class)> _ca;
 public:
 	cls1(void)
 	 : member1(...)

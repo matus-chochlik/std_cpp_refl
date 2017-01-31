@@ -1,7 +1,7 @@
 \subsubsection{Scope reflection}
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 namespace foo {
@@ -19,10 +19,10 @@ int main(void)
 {
 	using namespace std;
 
-	typedef reflexpr(int) meta_int;
-	typedef reflexpr(foo::bar) meta_foo_bar;
-	typedef reflexpr(foo::bar::baz) meta_foo_bar_baz;
-	typedef reflexpr(foobar) meta_foobar;
+	typedef $reflect(int) meta_int;
+	typedef $reflect(foo::bar) meta_foo_bar;
+	typedef $reflect(foo::bar::baz) meta_foo_bar_baz;
+	typedef $reflect(foobar) meta_foobar;
 
 	static_assert(meta::ScopeMember<meta_int>, "");
 	static_assert(meta::ScopeMember<meta_foo_bar>, "");

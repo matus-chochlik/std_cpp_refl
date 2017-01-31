@@ -1,7 +1,7 @@
 \subsubsection{Typedef reflection}
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 namespace foo {
@@ -15,7 +15,7 @@ int main(void)
 {
 	using namespace std;
 
-	typedef reflexpr(foo::baz) meta_foo_baz;
+	typedef $reflect(foo::baz) meta_foo_baz;
 
 	static_assert(is_metaobject_v<meta_foo_baz>, "");
 	static_assert(meta::Type<meta_foo_baz>, "");

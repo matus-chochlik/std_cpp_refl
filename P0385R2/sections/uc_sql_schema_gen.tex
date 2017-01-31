@@ -81,7 +81,7 @@ struct create_schema_from
 int main(void)
 {
 	create_schema_from create;
-	create(reflexpr(foo){});
+	create($reflect(foo){});
 	return 0;
 }
 

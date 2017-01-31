@@ -1,7 +1,7 @@
 \subsubsection{Namespace reflection}
 
 \begin{minted}[tabsize=4]{cpp}
-#include <reflexpr>
+#include <reflect>
 #include <iostream>
 
 namespace foo { namespace bar { } }
@@ -12,7 +12,7 @@ int main(void)
 {
 	using namespace std;
 
-	typedef reflexpr(foo) meta_foo;
+	typedef $reflect(foo) meta_foo;
 
 	static_assert(is_metaobject_v<meta_foo>, "");
 
@@ -25,7 +25,7 @@ int main(void)
 	static_assert(meta::ScopeMember<meta_foo>, "");
 	cout << meta::get_base_name_v<meta_foo> << endl;
 
-	typedef reflexpr(foo::bar) meta_foo_bar;
+	typedef $reflect(foo::bar) meta_foo_bar;
 
 	static_assert(is_metaobject_v<meta_foo_bar>, "");
 
@@ -38,7 +38,7 @@ int main(void)
 	static_assert(meta::ScopeMember<meta_foo_bar>, "");
 	cout << meta::get_base_name_v<meta_foo_bar> << endl;
 
-	typedef reflexpr(foobar) meta_foobar;
+	typedef $reflect(foobar) meta_foobar;
 
 	static_assert(is_metaobject_v<meta_foobar>, "");
 

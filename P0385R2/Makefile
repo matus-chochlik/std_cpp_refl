@@ -1,5 +1,5 @@
 # the output documents
-input_tex = P0385R1
+input_tex = P0385R2
 
 XSLTPROC = xsltproc
 

@@ -32,7 +32,7 @@ void for_each(UnaryFunction func)
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-meta::for_each<meta::get_data_members_m<reflexpr(my_class)>>(
+meta::for_each<meta::get_data_members_m<$reflect(my_class)>>(
 	[](auto idmo)
 	{
 		using MO = decltype(idmo);
