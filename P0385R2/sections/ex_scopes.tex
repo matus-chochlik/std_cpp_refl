@@ -25,31 +25,31 @@ int main(void)
 	typedef $reflect(foo::bar::baz) meta_foo_bar_baz;
 	typedef $reflect(foobar) meta_foobar;
 
-	static_assert(ScopeMember<meta_int>, "");
-	static_assert(ScopeMember<meta_foo_bar>, "");
-	static_assert(ScopeMember<meta_foo_bar_baz>, "");
-	static_assert(ScopeMember<meta_foobar>, "");
+	static_assert(ScopeMember<meta_int>);
+	static_assert(ScopeMember<meta_foo_bar>);
+	static_assert(ScopeMember<meta_foo_bar_baz>);
+	static_assert(ScopeMember<meta_foobar>);
 
 	typedef get_scope_t<meta_int> meta_int_s;
 	typedef get_scope_t<meta_foo_bar> meta_foo_bar_s;
 	typedef get_scope_t<meta_foo_bar_baz> meta_foo_bar_baz_s;
 	typedef get_scope_t<meta_foobar> meta_foobar_s;
 
-	static_assert(Scope<meta_int_s>, "");
-	static_assert(Scope<meta_foo_bar_s>, "");
-	static_assert(Scope<meta_foo_bar_baz_s>, "");
-	static_assert(Scope<meta_foobar_s>, "");
+	static_assert(Scope<meta_int_s>);
+	static_assert(Scope<meta_foo_bar_s>);
+	static_assert(Scope<meta_foo_bar_baz_s>);
+	static_assert(Scope<meta_foobar_s>);
 
-	static_assert(Namespace<meta_int_s>, "");
-	static_assert(GlobalScope<meta_int_s>, "");
-	static_assert(Namespace<meta_foo_bar_s>, "");
-	static_assert(!GlobalScope<meta_foo_bar_s>, "");
-	static_assert(Type<meta_foo_bar_baz_s>, "");
-	static_assert(Class<meta_foo_bar_baz_s>, "");
-	static_assert(!Namespace<meta_foo_bar_baz_s>, "");
-	static_assert(Namespace<meta_foobar_s>, "");
-	static_assert(GlobalScope<meta_foobar_s>, "");
-	static_assert(!Class<meta_foobar_s>, "");
+	static_assert(Namespace<meta_int_s>);
+	static_assert(GlobalScope<meta_int_s>);
+	static_assert(Namespace<meta_foo_bar_s>);
+	static_assert(!GlobalScope<meta_foo_bar_s>);
+	static_assert(Type<meta_foo_bar_baz_s>);
+	static_assert(Class<meta_foo_bar_baz_s>);
+	static_assert(!Namespace<meta_foo_bar_baz_s>);
+	static_assert(Namespace<meta_foobar_s>);
+	static_assert(GlobalScope<meta_foobar_s>);
+	static_assert(!Class<meta_foobar_s>);
 
 	cout << get_base_name_v<meta_foo_bar_baz> << endl;
 	cout << get_base_name_v<meta_foo_bar_baz_s> << endl;

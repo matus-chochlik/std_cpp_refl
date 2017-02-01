@@ -164,7 +164,7 @@ For example:
 
 \begin{minted}{cpp}
 using meta_int = $reflect(int);
-static_assert(is_integral_v<reflect::get_reflected_type_t<meta_int>>, "");
+static_assert(is_integral_v<reflect::get_reflected_type_t<meta_int>>);
 \end{minted}
 
 \subsubsection{Extensibility}

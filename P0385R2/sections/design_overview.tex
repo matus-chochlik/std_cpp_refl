@@ -25,16 +25,16 @@ metaobject type reflecting its operand.
 For example:
 
 \begin{minted}{cpp}
-typedef $reflect() meta_global_scope;
-typedef $reflect(int) meta_int;
-typedef $reflect(std) meta_std;
-typedef $reflect(std::size_t) meta_std_size_t;
-typedef $reflect(std::thread) meta_std_thread;
-typedef $reflect(std::pair) meta_std_pair;
-typedef $reflect(std::launch) meta_std_launch;
-typedef $reflect(std::launch::async) meta_std_launch_async;
-typedef $reflect(static) meta_static;
-typedef $reflect(public) meta_public;
+using meta_global_scope     = $reflect();
+using meta_int              = $reflect(int);
+using meta_std              = $reflect(std);
+using meta_std_size_t       = $reflect(std::size_t);
+using meta_std_thread       = $reflect(std::thread);
+using meta_std_pair         = $reflect(std::pair);
+using meta_std_launch       = $reflect(std::launch);
+using meta_std_launch_async = $reflect(std::launch::async);
+using meta_static           = $reflect(static);
+using meta_public           = $reflect(public);
 \end{minted}
 
 Since there are many different kinds of
@@ -44,20 +44,20 @@ metaobjects and to indicate whether a metaobjects has or has not a particular
 property;
 
 \begin{minted}{cpp}
-static_assert(reflect::Named<$reflect(std)>, "");
-static_assert(reflect::ScopeMember<$reflect(int)>, "");
-static_assert(reflect::Scope<$reflect(std::string)>, "");
-static_assert(reflect::Alias<$reflect(std::string::size_type)>, "");
+static_assert(reflect::Named<$reflect(std)>);
+static_assert(reflect::ScopeMember<$reflect(int)>);
+static_assert(reflect::Scope<$reflect(std::string)>);
+static_assert(reflect::Alias<$reflect(std::string::size_type)>);
 \end{minted}
 
 or if is falls into a particular category:
 
 \begin{minted}{cpp}
-static_assert(reflect::GlobalScope<$reflect()>, "");
-static_assert(reflect::Namespace<$reflect(std)>, "");
-static_assert(reflect::Type<$reflect(int)>, "");
-static_assert(reflect::Class<$reflect(std::string)>, "");
-static_assert(reflect::Specifier<$reflect(virtual)>, "");
+static_assert(reflect::GlobalScope<$reflect()>);
+static_assert(reflect::Namespace<$reflect(std)>);
+static_assert(reflect::Type<$reflect(int)>);
+static_assert(reflect::Class<$reflect(std::string)>);
+static_assert(reflect::Specifier<$reflect(virtual)>);
 \end{minted}
 
 The individual pieces of metadata can be obtained from a metaobject by using one

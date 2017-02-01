@@ -19,7 +19,7 @@ void eat(T ... ) { }
 template <typename Metaobjects, std::size_t I, typename T>
 int field_to_json(std::ostream& out, const T& v)
 {
-	typedef std::reflect::get_element_t<Metaobjects, I> meta_F;
+	using meta_F = std::reflect::get_element_t<Metaobjects, I>;
 
 	if(I > 0) out << ", ";
 
@@ -41,7 +41,7 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type)
 {
 	out << "{";
 
-	typedef std::reflect::get_data_members_t<MO> meta_DMs;
+	using meta_DMs = std::reflect::get_data_members_t<MO>;
 	fields_to_json<meta_DMs>(
 		out, v,
 		std::make_index_sequence<
@@ -62,7 +62,7 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type)
 template <typename T>
 std::ostream& value_to_json(std::ostream& out, const T& v)
 {
-	typedef $reflect(T) meta_T;
+	using meta_T = $reflect(T);
 	return reflected_to_json<meta_T>(
 		out, v,
 		std::reflect::Record<meta_T>()

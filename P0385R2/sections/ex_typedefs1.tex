@@ -15,46 +15,46 @@ int main(void)
 {
 	using namespace std;
 
-	typedef $reflect(foo::baz) meta_foo_baz;
+	using meta_foo_baz = $reflect(foo::baz);
 
-	static_assert(is_metaobject_v<meta_foo_baz>, "");
-	static_assert(reflect::Type<meta_foo_baz>, "");
-	static_assert(reflect::Alias<meta_foo_baz>, "");
+	static_assert(is_metaobject_v<meta_foo_baz>);
+	static_assert(reflect::Type<meta_foo_baz>);
+	static_assert(reflect::Alias<meta_foo_baz>);
 
 	static_assert(is_same_v<
 		reflect::get_reflected_type_t<meta_foo_baz>,
 		foo::baz
-	>, "");
+	>);
 
-	static_assert(reflect::Named<meta_foo_baz>, "");
+	static_assert(reflect::Named<meta_foo_baz>);
 	cout << reflect::get_base_name_v<meta_foo_baz> << endl;
 
-	typedef reflect::get_aliased_t<meta_foo_baz> meta_foo_bar;
+	using meta_foo_bar = reflect::get_aliased_t<meta_foo_baz>;
 
-	static_assert(is_metaobject_v<meta_foo_bar>, "");
-	static_assert(reflect::Type<meta_foo_bar>, "");
-	static_assert(reflect::Alias<meta_foo_bar>, "");
+	static_assert(is_metaobject_v<meta_foo_bar>);
+	static_assert(reflect::Type<meta_foo_bar>);
+	static_assert(reflect::Alias<meta_foo_bar>);
 
 	static_assert(is_same_v<
 		reflect::get_reflected_type_t<meta_foo_bar>,
 		foo::bar
-	>, "");
+	>);
 
-	static_assert(reflect::Named<meta_foo_bar>, "");
+	static_assert(reflect::Named<meta_foo_bar>);
 	cout << reflect::get_base_name_v<meta_foo_bar> << endl;
 
-	typedef reflect::get_aliased_t<meta_foo_bar> meta_int;
+	using meta_int = reflect::get_aliased_t<meta_foo_bar>;
 
-	static_assert(is_metaobject_v<meta_int>, "");
-	static_assert(reflect::Type<meta_int>, "");
-	static_assert(!reflect::Alias<meta_int>, "");
+	static_assert(is_metaobject_v<meta_int>);
+	static_assert(reflect::Type<meta_int>);
+	static_assert(!reflect::Alias<meta_int>);
 
 	static_assert(is_same_v<
 		reflect::get_reflected_type_t<meta_int>,
 		int
-	>, "");
+	>);
 
-	static_assert(reflect::Named<meta_int>, "");
+	static_assert(reflect::Named<meta_int>);
 	cout << reflect::get_base_name_v<meta_int> << endl;
 
 	return 0;

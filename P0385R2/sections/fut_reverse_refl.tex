@@ -26,9 +26,9 @@ using MT = $reflect(int);
 using T = get_reflected_type_t<MT>;
 
 // we could do:
-static_assert(reflect::Reversible<MT> && reflect::Type<MT>, "");
+static_assert(reflect::Reversible<MT> && reflect::Type<MT>);
 using T = $unreflect(MT);
-static_assert(is_same_v<T, int>, "");
+static_assert(is_same_v<T, int>);
 
 \end{minted}
 

@@ -24,18 +24,19 @@ public:
 int main(void)
 {
 	using namespace std;
+	using namespace std::reflect;
 
-	typedef $reflect(A) meta_A;
-	typedef $reflect(B) meta_B;
-	typedef $reflect(C) meta_C;
+	using meta_A = $reflect(A);
+	using meta_B = $reflect(B);
+	using meta_C = $reflect(C);
 
-	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_A>> << endl;
-	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_B>> << endl;
-	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_C>> << endl;
+	cout << get_size_v<get_public_data_members_t<meta_A>> << endl;
+	cout << get_size_v<get_public_data_members_t<meta_B>> << endl;
+	cout << get_size_v<get_public_data_members_t<meta_C>> << endl;
 
-	cout << reflect::get_size_v<reflect::get_data_members_t<meta_A>> << endl;
-	cout << reflect::get_size_v<reflect::get_data_members_t<meta_B>> << endl;
-	cout << reflect::get_size_v<reflect::get_data_members_t<meta_C>> << endl;
+	cout << get_size_v<get_data_members_t<meta_A>> << endl;
+	cout << get_size_v<get_data_members_t<meta_B>> << endl;
+	cout << get_size_v<get_data_members_t<meta_C>> << endl;
 
 	return 0;
 }

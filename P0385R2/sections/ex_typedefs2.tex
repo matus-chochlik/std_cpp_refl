@@ -14,26 +14,26 @@ int main(void)
 
 	typedef $reflect(bar) meta_bar;
 
-	static_assert(is_metaobject_v<meta_bar>, "");
-	static_assert(Type<meta_bar>, "");
-	static_assert(Class<meta_bar>, "");
-	static_assert(Alias<meta_bar>, "");
+	static_assert(is_metaobject_v<meta_bar>);
+	static_assert(Type<meta_bar>);
+	static_assert(Class<meta_bar>);
+	static_assert(Alias<meta_bar>);
 
-	static_assert(is_same_v<get_reflected_type_t<meta_bar>, bar>, "");
+	static_assert(is_same_v<get_reflected_type_t<meta_bar>, bar>);
 
-	static_assert(Named<meta_bar>, "");
+	static_assert(Named<meta_bar>);
 	cout << get_base_name_v<meta_bar> << endl;
 
 	typedef get_aliased_t<meta_bar> meta_foo;
 
-	static_assert(is_metaobject_v<meta_foo>, "");
-	static_assert(Type<meta_foo>, "");
-	static_assert(Class<meta_foo>, "");
-	static_assert(!Alias<meta_foo>, "");
+	static_assert(is_metaobject_v<meta_foo>);
+	static_assert(Type<meta_foo>);
+	static_assert(Class<meta_foo>);
+	static_assert(!Alias<meta_foo>);
 
-	static_assert(is_same_v<get_reflected_type_t<meta_foo>, foo>, "");
+	static_assert(is_same_v<get_reflected_type_t<meta_foo>, foo>);
 
-	static_assert(Named<meta_foo>, "");
+	static_assert(Named<meta_foo>);
 	cout << get_base_name_v<meta_foo> << endl;
 
 	return 0;

@@ -150,15 +150,15 @@ struct identity
 };
 
 // "values" are equality comparable and they are distinguishable
-assert(!std::is_same_v<value_a, value_b>, "");
+assert(!std::is_same_v<value_a, value_b>);
 // and can be used for overloading
-assert(!std::is_same_v<identity<value_a>, identity<value_b>>, "");
+assert(!std::is_same_v<identity<value_a>, identity<value_b>>);
 
 // they can be stored in named "variables" ...
 using x = value_a;
 
 // ... while maintaining their identity
-assert(std::is_same_v<value_a, x>, "");
+assert(std::is_same_v<value_a, x>);
 
 // they can be passed as parameters to subroutines
 identity<value_a>;
@@ -169,10 +169,10 @@ using y = identity<value_a>::result;
 using z = identity<value_b>::result;
 
 // ... while still maintaining their identity
-assert(std::is_same_v<value_a, y>, "");
-assert(std::is_same_v<value_b, z>, "");
+assert(std::is_same_v<value_a, y>);
+assert(std::is_same_v<value_b, z>);
 // and still being distinguishable
-assert(!std::is_same_v<y, z>, "");
+assert(!std::is_same_v<y, z>);
 \end{minted}
 
 

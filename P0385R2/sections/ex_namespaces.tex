@@ -14,41 +14,41 @@ int main(void)
 
 	typedef $reflect(foo) meta_foo;
 
-	static_assert(is_metaobject_v<meta_foo>, "");
+	static_assert(is_metaobject_v<meta_foo>);
 
-	static_assert(!reflect::GlobalScope<meta_foo>, "");
-	static_assert(reflect::Namespace<meta_foo>, "");
-	static_assert(!reflect::Type<meta_foo>, "");
-	static_assert(!reflect::Alias<meta_foo>, "");
+	static_assert(!reflect::GlobalScope<meta_foo>);
+	static_assert(reflect::Namespace<meta_foo>);
+	static_assert(!reflect::Type<meta_foo>);
+	static_assert(!reflect::Alias<meta_foo>);
 
-	static_assert(reflect::Named<meta_foo>, "");
-	static_assert(reflect::ScopeMember<meta_foo>, "");
+	static_assert(reflect::Named<meta_foo>);
+	static_assert(reflect::ScopeMember<meta_foo>);
 	cout << reflect::get_base_name_v<meta_foo> << endl;
 
 	typedef $reflect(foo::bar) meta_foo_bar;
 
-	static_assert(is_metaobject_v<meta_foo_bar>, "");
+	static_assert(is_metaobject_v<meta_foo_bar>);
 
-	static_assert(!reflect::GlobalScope<meta_foo_bar>, "");
-	static_assert(reflect::Namespace<meta_foo_bar>, "");
-	static_assert(!reflect::Type<meta_foo_bar>, "");
-	static_assert(!reflect::Alias<meta_foo_bar>, "");
+	static_assert(!reflect::GlobalScope<meta_foo_bar>);
+	static_assert(reflect::Namespace<meta_foo_bar>);
+	static_assert(!reflect::Type<meta_foo_bar>);
+	static_assert(!reflect::Alias<meta_foo_bar>);
 
-	static_assert(reflect::Named<meta_foo_bar>, "");
-	static_assert(reflect::ScopeMember<meta_foo_bar>, "");
+	static_assert(reflect::Named<meta_foo_bar>);
+	static_assert(reflect::ScopeMember<meta_foo_bar>);
 	cout << reflect::get_base_name_v<meta_foo_bar> << endl;
 
 	typedef $reflect(foobar) meta_foobar;
 
-	static_assert(is_metaobject_v<meta_foobar>, "");
+	static_assert(is_metaobject_v<meta_foobar>);
 
-	static_assert(!reflect::GlobalScope<meta_foobar>, "");
-	static_assert(reflect::Namespace<meta_foobar>, "");
-	static_assert(!reflect::Type<meta_foobar>, "");
-	static_assert(reflect::Alias<meta_foobar>, "");
+	static_assert(!reflect::GlobalScope<meta_foobar>);
+	static_assert(reflect::Namespace<meta_foobar>);
+	static_assert(!reflect::Type<meta_foobar>);
+	static_assert(reflect::Alias<meta_foobar>);
 
-	static_assert(reflect::Named<meta_foobar>, "");
-	static_assert(reflect::ScopeMember<meta_foobar>, "");
+	static_assert(reflect::Named<meta_foobar>);
+	static_assert(reflect::ScopeMember<meta_foobar>);
 	cout << reflect::get_base_name_v<meta_foobar> << " a.k.a ";
 	cout << reflect::get_base_name_v<reflect::get_aliased_t<meta_foobar>> << endl;
 
