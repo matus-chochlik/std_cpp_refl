@@ -29,13 +29,13 @@ int main(void)
 	typedef $reflect(B) meta_B;
 	typedef $reflect(C) meta_C;
 
-	cout << meta::get_size_v<meta::get_public_data_members_m<meta_A>> << endl;
-	cout << meta::get_size_v<meta::get_public_data_members_m<meta_B>> << endl;
-	cout << meta::get_size_v<meta::get_public_data_members_m<meta_C>> << endl;
+	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_A>> << endl;
+	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_B>> << endl;
+	cout << reflect::get_size_v<reflect::get_public_data_members_t<meta_C>> << endl;
 
-	cout << meta::get_size_v<meta::get_data_members_m<meta_A>> << endl;
-	cout << meta::get_size_v<meta::get_data_members_m<meta_B>> << endl;
-	cout << meta::get_size_v<meta::get_data_members_m<meta_C>> << endl;
+	cout << reflect::get_size_v<reflect::get_data_members_t<meta_A>> << endl;
+	cout << reflect::get_size_v<reflect::get_data_members_t<meta_B>> << endl;
+	cout << reflect::get_size_v<reflect::get_data_members_t<meta_C>> << endl;
 
 	return 0;
 }

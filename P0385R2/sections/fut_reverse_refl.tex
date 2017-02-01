@@ -26,7 +26,7 @@ using MT = $reflect(int);
 using T = get_reflected_type_t<MT>;
 
 // we could do:
-static_assert(meta::Reversible<MT> && meta::Type<MT>, "");
+static_assert(reflect::Reversible<MT> && reflect::Type<MT>, "");
 using T = $unreflect(MT);
 static_assert(is_same_v<T, int>, "");
 
@@ -46,7 +46,7 @@ using MV = $reflect(foo::str); // Meta-Variable
 
 // ... lots of code here ...
 // using namespace foo;
-using namespace $unreflect(get_scope_m<MV>);
+using namespace $unreflect(get_scope_t<MV>);
 
 // [foo::]bar(foo::str);
 bar($unreflect(MV));

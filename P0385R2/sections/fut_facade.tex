@@ -13,7 +13,7 @@ The \verb@for_each@ function should sequentially call a specified
 a \meta{ObjectSequence}. It should {\em be equivalent} to the following:
 
 \begin{minted}[tabsize=4]{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <typename MetaObjectSequence, typename UnaryFunction>
@@ -26,13 +26,13 @@ void for_each(UnaryFunction func)
 }
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-meta::for_each<meta::get_data_members_m<$reflect(my_class)>>(
+reflect::for_each<reflect::get_data_members_t<$reflect(my_class)>>(
 	[](auto idmo)
 	{
 		using MO = decltype(idmo);
@@ -48,7 +48,7 @@ We already have the \verb@unpack_sequence@ template which instantiates
 the provided variadic template with metaobjects from a \meta{ObjectSequence}.
 
 \begin{minted}[tabsize=4]{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <typename MetaObjectSequence, template <typename ...> class Template>
@@ -62,14 +62,14 @@ using unpack_sequence_t =
 	typename unpack_sequence<MetaobjectSequence, Template>::type;
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 
 We could also add the following variant of \verb@unpack_sequence@ to be
 able to unpack only metaobjects satisfying a given predicate:
 
 \begin{minted}[tabsize=4]{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <
@@ -95,6 +95,6 @@ using unpack_sequence_if_t =
 	>::type;
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 

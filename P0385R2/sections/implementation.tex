@@ -89,18 +89,18 @@ The built-ins can yield compile-time constant values of the following types:
 
 \begin{itemize}
 \item{{\em boolean constants} -- used mostly by the metaobject concept definitions
-like \verb@std::meta::Named@, \verb@std::meta::ScopeMember@, etc. and operations
-like \verb@std::meta::is_anonymous@.}
+like \verb@std::reflect::Named@, \verb@std::reflect::ScopeMember@, etc. and operations
+like \verb@std::reflect::is_anonymous@.}
 
-\item{{\em integral constants} -- for operations like \verb@std::meta::get_source_line@
-or \verb@std::meta::get_size@ and \verb@std::meta::get_constant@.}
+\item{{\em integral constants} -- for operations like \verb@std::reflect::get_source_line@
+or \verb@std::reflect::get_size@ and \verb@std::reflect::get_constant@.}
 
-\item{{\em pointer constants} -- for operations like \verb@std::meta::get_pointer@.}
+\item{{\em pointer constants} -- for operations like \verb@std::reflect::get_pointer@.}
 
-\item{{\em c-string literals} -- for operations like \verb@std::meta::get_base_name@.}
+\item{{\em c-string literals} -- for operations like \verb@std::reflect::get_base_name@.}
 
-\item{{\em metaobject IDs} -- for operations like \verb@std::meta::get_scope@,
-\verb@std::meta::get_base_classes@ or \verb@std::meta::get_element@.}
+\item{{\em metaobject IDs} -- for operations like \verb@std::reflect::get_scope@,
+\verb@std::reflect::get_base_classes@ or \verb@std::reflect::get_element@.}
 \end{itemize}
 
 
@@ -117,7 +117,7 @@ following manner:
 
 \begin{minted}{cpp}
 namespace std {
-namespace meta {
+namespace reflect {
 
 template <typename T>
 concept bool Object = is_metaobject<T>;
@@ -125,7 +125,7 @@ concept bool Object = is_metaobject<T>;
 template <Object T>
 concept bool Named = __metaobject_is_meta_named(__unwrap_id<T>);
 
-} // namespace meta
+} // namespace reflect
 } // namespace std
 \end{minted}
 
@@ -137,7 +137,7 @@ The \verb@get_base_name@ operation is implemented with the help of the
 constexpr const char [] __metaobject_get_base_name(__metaobject_id moid);
 
 namespace std {
-namespace meta {
+namespace reflect {
 
 template <Named T>
 struct get_base_name
@@ -146,11 +146,11 @@ struct get_base_name
 		__metaobject_get_base_name(__unwrap_id_v<T>);
 };
 
-} // namespace meta
+} // namespace reflect
 } // namespace std
 \end{minted}
 
-There is also the \verb@std::meta::get_reflected_type@ operation which instead
+There is also the \verb@std::reflect::get_reflected_type@ operation which instead
 of a compile-time constant value, yields a type. This operation is implemented
 by the \verb@__unrefltype@ built-in operator:
 
@@ -162,7 +162,7 @@ The template \verb@get_reflected_type@ is then implemented as follows:
 
 \begin{minted}{cpp}
 namespace std {
-namespace meta {
+namespace reflect {
 
 template <Type T>
 struct get_reflected_type
@@ -170,6 +170,6 @@ struct get_reflected_type
 	using type = __unrefltype(__unwrap_id_v<T>);
 };
 
-} // namespace meta
+} // namespace reflect
 } // namespace std
 \end{minted}

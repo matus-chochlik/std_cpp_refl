@@ -64,8 +64,8 @@ private:
 
 			map<Enum, string> res;
 			_eat(res.emplace(
-				meta::get_constant_v<MEC>,
-				string(meta::get_base_name<MEC>())
+				reflect::get_constant_v<MEC>,
+				string(reflect::get_base_name<MEC>())
 			).second...);
 			return res;
 		}
@@ -76,8 +76,8 @@ public:
 		using namespace std;
 
 		using ME = $reflect(Enum);
-		using hlpr = meta::unpack_sequence_t<
-			meta::get_enumerators_m<ME>,
+		using hlpr = reflect::unpack_sequence_t<
+			reflect::get_enumerators_t<ME>,
 			_hlpr
 		>;
 		static auto m = hlpr::_make_map();
@@ -104,8 +104,8 @@ private:
 
 			map<string, Enum> res;
 			_eat(res.emplace(
-				string(meta::get_base_name<MEC>()),
-				meta::get_constant_v<MEC>
+				string(reflect::get_base_name<MEC>()),
+				reflect::get_constant_v<MEC>
 			).second...);
 			return res;
 		}
@@ -116,8 +116,8 @@ public:
 		using namespace std;
 
 		using ME = $reflect(Enum);
-		using hlpr = meta::unpack_sequence_t<
-			meta::get_enumerators_m<ME>,
+		using hlpr = reflect::unpack_sequence_t<
+			reflect::get_enumerators_t<ME>,
 			_hlpr
 		>;
 		static auto m = hlpr::_make_map();

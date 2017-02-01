@@ -164,7 +164,7 @@ For example:
 
 \begin{minted}{cpp}
 using meta_int = $reflect(int);
-static_assert(is_integral_v<meta::get_reflected_type_t<meta_int>>, "");
+static_assert(is_integral_v<reflect::get_reflected_type_t<meta_int>>, "");
 \end{minted}
 
 \subsubsection{Extensibility}
@@ -179,7 +179,7 @@ the reflection of functions, we define a new {\em metaobject concept} like
 \meta{Function} and \meta{OverloadedFunction}.
 
 \begin{minted}{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 
@@ -195,7 +195,7 @@ concept bool OverloadedFunction =
 
 \end{minted}
 \begin{minted}{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 
 Then it is necessary to extend the list of expressions which can appear
@@ -211,7 +211,7 @@ returning for example the elaborated type specifier of a class we need to
 add a new template like:
 
 \begin{minted}{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <Class T>
@@ -234,6 +234,6 @@ struct get_parameters
 
 \end{minted}
 \begin{minted}{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 

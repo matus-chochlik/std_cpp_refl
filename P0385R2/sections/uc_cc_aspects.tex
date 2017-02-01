@@ -176,10 +176,10 @@ template <typename MetaFunction>
 constexpr bool logging_enabled =
 	is_same_v<
 		$reflect(std),
-		get_scope_m<MetaFunction>
+		get_scope_t<MetaFunction>
 	> && is_same_v<
 		std::string,
-		get_reflected_type_t<get_result_m<MetaFunction>>
+		get_reflected_type_t<get_result_t<MetaFunction>>
 	> &&
 	/* ... etc. ... */
 ;
@@ -219,7 +219,7 @@ struct autorization_enabled
 	bool,
 	is_base_of<
 		$reflect(foo::bar),
-		get_scope_m<MetaFunction>
+		get_scope_t<MetaFunction>
 	> && constexpr_starts_with(
 		get_base_name_v<MetaFunction>,
 		"secure_"

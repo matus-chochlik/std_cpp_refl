@@ -162,7 +162,7 @@ implement the best option and to use all the tricks at their disposal
 to make expressions like;
 
 \begin{minted}{cpp}
-std::string(std::meta::get_base_name_v<$reflect(std::pair)>);
+std::string(std::reflect::get_base_name_v<$reflect(std::pair)>);
 \end{minted}
 
 as efficient as possible.
@@ -171,8 +171,8 @@ as efficient as possible.
 
 \textbf{Q:} {\em There are situations where you can do something much more
 easily without reflection than with it, like \verb@&variable@ vs.
-\verb@meta::get_pointer_v<$reflect(variable)>@ or\\\verb@decltype(var)@ vs.
-\verb@meta::get_reflected_type_t<meta::get_type_m<$reflect(var)>>@, etc.}
+\verb@reflect::get_pointer_v<$reflect(variable)>@ or\\\verb@decltype(var)@ vs.
+\verb@reflect::get_reflected_type_t<reflect::get_type_t<$reflect(var)>>@, etc.}
 
 \textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
@@ -197,8 +197,8 @@ void handle_meta_var(void)
 	{
 		// we need the pointer just here
 		handle_var(
-			meta::get_base_name_v<MV>,
-			meta::get_pointer_v<MV>
+			reflect::get_base_name_v<MV>,
+			reflect::get_pointer_v<MV>
 		);
 	}
 }
@@ -216,7 +216,7 @@ template <Metaobject MO>
 void generic_func_1(void)
 {
 	// this may be true only in a fraction of cases
-	if(meta::Variable<MO>)
+	if(reflect::Variable<MO>)
 	{
 		handle_meta_var<MO>();
 	}
@@ -467,7 +467,7 @@ classes or just get the metaobject reflecting only the first\footnote
 {zero-th} data member of a class having hundreds of members:
 
 \begin{minted}{cpp}
-get_element_m<get_data_members_m<$reflect(my_class)>, 0>;
+get_element_t<get_data_members_t<$reflect(my_class)>, 0>;
 \end{minted}
 
 This operation would involve the creation of two metaobjects:
@@ -482,7 +482,7 @@ were not used afterwards.
 
 What we can do is to add an operation converting a \meta{ObjectSequence}
 into a typelist on demand, which can be implemented trivially with the
-\verb@meta::unpack_sequence@ template:
+\verb@reflect::unpack_sequence@ template:
 
 \begin{minted}{cpp}
 template <typename ... T>
@@ -507,9 +507,9 @@ In other words why don't we instead of:
 \begin{minted}{cpp}
 using mo = $reflect(my_ns::my_class);
 
-std::cout << meta::get_base_name_v<mo> << std::endl;
-std::cout << meta::get_base_name_v<meta::get_scope_m<mo>> << std::endl;
-meta::for_each<meta::get_data_members_m<mo>>(my_func);
+std::cout << reflect::get_base_name_v<mo> << std::endl;
+std::cout << reflect::get_base_name_v<reflect::get_scope_t<mo>> << std::endl;
+reflect::for_each<reflect::get_data_members_t<mo>>(my_func);
 \end{minted}
 
 do something like one of the following:
@@ -518,21 +518,21 @@ do something like one of the following:
 
 \item
 \begin{minted}{cpp}
-meta::object mo = $reflect(my_ns::my_class);
+reflect::object mo = $reflect(my_ns::my_class);
 
-std::cout << meta::get_base_name(mo) << std::endl;
-std::cout << meta::get_base_name(meta::get_scope_t(mo)) << std::endl;
-meta::for_each(meta::get_data_members_t(mo), my_func);
+std::cout << reflect::get_base_name(mo) << std::endl;
+std::cout << reflect::get_base_name(reflect::get_scope_t(mo)) << std::endl;
+reflect::for_each(reflect::get_data_members_t(mo), my_func);
 \end{minted}
 
 \item
 \begin{minted}{cpp}
-meta::object mo = $reflect(my_ns::my_class);
+reflect::object mo = $reflect(my_ns::my_class);
 
 std::cout << mo.get_base_name() << std::endl;
 std::cout << mo.get_scope().get_base_name() << std::endl;
 mo.get_data_members().for_each(my_func)
-meta::for_each(meta::get_data_members(mo, my_func);
+reflect::for_each(reflect::get_data_members(mo, my_func);
 \end{minted}
 
 \end{enumerate}

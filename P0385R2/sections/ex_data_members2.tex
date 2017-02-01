@@ -23,16 +23,16 @@ int do_print_data_member(void)
 {
 	using namespace std;
 
-	typedef meta::get_element_m<Metaobjects, I> metaobj;
+	typedef reflect::get_element_t<Metaobjects, I> metaobj;
 
 	cout	<< I << ": "
-		<< (meta::is_public_v<metaobj>?"public":"non-public")
+		<< (reflect::is_public_v<metaobj>?"public":"non-public")
 		<< " "
-		<< (meta::is_static_v<metaobj>?"static":"")
+		<< (reflect::is_static_v<metaobj>?"static":"")
 		<< " "
-		<< meta::get_base_name_v<meta::get_type_m<metaobj>>
+		<< reflect::get_base_name_v<reflect::get_type_t<metaobj>>
 		<< " "
-		<< meta::get_base_name_v<metaobj>
+		<< reflect::get_base_name_v<metaobj>
 		<< endl;
 
 	return 0;
@@ -51,7 +51,7 @@ void do_print_data_members(void)
 
 	do_print_data_members<Metaobjects>(
 		make_index_sequence<
-			meta::get_size_v<Metaobjects>
+			reflect::get_size_v<Metaobjects>
 		>()
 	);
 }
@@ -61,9 +61,9 @@ void print_data_members(void)
 {
 	using namespace std;
 
-	cout<< "Public data members of " << meta::get_base_name_v<MetaClass> << endl;
+	cout<< "Public data members of " << reflect::get_base_name_v<MetaClass> << endl;
 
-	do_print_data_members<meta::get_public_data_members_m<MetaClass>>();
+	do_print_data_members<reflect::get_public_data_members_t<MetaClass>>();
 }
 
 template <typename MetaClass>
@@ -71,9 +71,9 @@ void print_all_data_members(void)
 {
 	using namespace std;
 
-	cout << "All data members of " << meta::get_base_name_v<MetaClass> << endl;
+	cout << "All data members of " << reflect::get_base_name_v<MetaClass> << endl;
 
-	do_print_data_members<meta::get_data_members_m<MetaClass>>();
+	do_print_data_members<reflect::get_data_members_t<MetaClass>>();
 }
 
 int main(void)

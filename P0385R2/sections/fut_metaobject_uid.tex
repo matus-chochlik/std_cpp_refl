@@ -9,7 +9,7 @@ representations.
 The compile-time value representation of a metaobject could be defined as:
 
 \begin{minted}[tabsize=4]{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 class object_uid
@@ -29,7 +29,7 @@ public:
 };
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 
 The actual identifier could internally be something like a constant value of
@@ -47,7 +47,7 @@ Instances of \verb@object_uid@ could be queried from a metaobject by a new
 operation, implemented by the following template:
 
 \begin{minted}[tabsize=4]{cpp}
-namespace meta {
+namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <Object T>
@@ -60,16 +60,16 @@ template <Object T>
 constexpr object_uid get_uid_v = get_uid<T>::value;
 \end{minted}
 \begin{minted}[tabsize=4]{cpp}
-} // namespace meta
+} // namespace reflect
 \end{minted}
 
-As long as an instance of \verb@meta::object_uid@ stayed \verb@constexpr@, it would
+As long as an instance of \verb@reflect::object_uid@ stayed \verb@constexpr@, it would
 also be possible to convert it back to a metaobject (type), for example by using
 a new version of the reflection operator \verb@$reflect@:
 
 \begin{minted}[tabsize=4]{cpp}
 // pseudocode
-constexpr Object $reflect(meta::object_uid);
+constexpr Object $reflect(reflect::object_uid);
 \end{minted}
 
 This feature would make the use of reflection more convenient in some use cases

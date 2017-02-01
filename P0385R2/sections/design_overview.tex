@@ -44,20 +44,20 @@ metaobjects and to indicate whether a metaobjects has or has not a particular
 property;
 
 \begin{minted}{cpp}
-static_assert(meta::Named<$reflect(std)>, "");
-static_assert(meta::ScopeMember<$reflect(int)>, "");
-static_assert(meta::Scope<$reflect(std::string)>, "");
-static_assert(meta::Alias<$reflect(std::string::size_type)>, "");
+static_assert(reflect::Named<$reflect(std)>, "");
+static_assert(reflect::ScopeMember<$reflect(int)>, "");
+static_assert(reflect::Scope<$reflect(std::string)>, "");
+static_assert(reflect::Alias<$reflect(std::string::size_type)>, "");
 \end{minted}
 
 or if is falls into a particular category:
 
 \begin{minted}{cpp}
-static_assert(meta::GlobalScope<$reflect()>, "");
-static_assert(meta::Namespace<$reflect(std)>, "");
-static_assert(meta::Type<$reflect(int)>, "");
-static_assert(meta::Class<$reflect(std::string)>, "");
-static_assert(meta::Specifier<$reflect(virtual)>, "");
+static_assert(reflect::GlobalScope<$reflect()>, "");
+static_assert(reflect::Namespace<$reflect(std)>, "");
+static_assert(reflect::Type<$reflect(int)>, "");
+static_assert(reflect::Class<$reflect(std::string)>, "");
+static_assert(reflect::Specifier<$reflect(virtual)>, "");
 \end{minted}
 
 The individual pieces of metadata can be obtained from a metaobject by using one
@@ -74,8 +74,8 @@ using meta_str = $reflect(std::string);
 
 get_base_name_v<meta_str>; // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string
-get_scope_m<meta_str>; // another metaobject reflecting the scope
-get_data_members_m<meta_str>; // a metaobject-sequence containing other metaobjects
+get_scope_t<meta_str>; // another metaobject reflecting the scope
+get_data_members_t<meta_str>; // a metaobject-sequence containing other metaobjects
 \end{minted}
 
 P0194R2 also defines the initial subset

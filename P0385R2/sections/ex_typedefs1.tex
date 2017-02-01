@@ -18,44 +18,44 @@ int main(void)
 	typedef $reflect(foo::baz) meta_foo_baz;
 
 	static_assert(is_metaobject_v<meta_foo_baz>, "");
-	static_assert(meta::Type<meta_foo_baz>, "");
-	static_assert(meta::Alias<meta_foo_baz>, "");
+	static_assert(reflect::Type<meta_foo_baz>, "");
+	static_assert(reflect::Alias<meta_foo_baz>, "");
 
 	static_assert(is_same_v<
-		meta::get_reflected_type_t<meta_foo_baz>,
+		reflect::get_reflected_type_t<meta_foo_baz>,
 		foo::baz
 	>, "");
 
-	static_assert(meta::Named<meta_foo_baz>, "");
-	cout << meta::get_base_name_v<meta_foo_baz> << endl;
+	static_assert(reflect::Named<meta_foo_baz>, "");
+	cout << reflect::get_base_name_v<meta_foo_baz> << endl;
 
-	typedef meta::get_aliased_m<meta_foo_baz> meta_foo_bar;
+	typedef reflect::get_aliased_t<meta_foo_baz> meta_foo_bar;
 
 	static_assert(is_metaobject_v<meta_foo_bar>, "");
-	static_assert(meta::Type<meta_foo_bar>, "");
-	static_assert(meta::Alias<meta_foo_bar>, "");
+	static_assert(reflect::Type<meta_foo_bar>, "");
+	static_assert(reflect::Alias<meta_foo_bar>, "");
 
 	static_assert(is_same_v<
-		meta::get_reflected_type_t<meta_foo_bar>,
+		reflect::get_reflected_type_t<meta_foo_bar>,
 		foo::bar
 	>, "");
 
-	static_assert(meta::Named<meta_foo_bar>, "");
-	cout << meta::get_base_name_v<meta_foo_bar> << endl;
+	static_assert(reflect::Named<meta_foo_bar>, "");
+	cout << reflect::get_base_name_v<meta_foo_bar> << endl;
 
-	typedef meta::get_aliased_m<meta_foo_bar> meta_int;
+	typedef reflect::get_aliased_t<meta_foo_bar> meta_int;
 
 	static_assert(is_metaobject_v<meta_int>, "");
-	static_assert(meta::Type<meta_int>, "");
-	static_assert(!meta::Alias<meta_int>, "");
+	static_assert(reflect::Type<meta_int>, "");
+	static_assert(!reflect::Alias<meta_int>, "");
 
 	static_assert(is_same_v<
-		meta::get_reflected_type_t<meta_int>,
+		reflect::get_reflected_type_t<meta_int>,
 		int
 	>, "");
 
-	static_assert(meta::Named<meta_int>, "");
-	cout << meta::get_base_name_v<meta_int> << endl;
+	static_assert(reflect::Named<meta_int>, "");
+	cout << reflect::get_base_name_v<meta_int> << endl;
 
 	return 0;
 }

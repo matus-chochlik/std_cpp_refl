@@ -25,7 +25,7 @@ std::size_t foo(int i, int j);
 \end{minted}
 
 Remember that the string-returning operations defined on the named metaobjects,
-for example the \verb@meta::get_base_name@ operation, return \verb@constexpr@
+for example the \verb@reflect::get_base_name@ operation, return \verb@constexpr@
 arrays of \verb@char@s. This means that we can use them to copy the name of
 a declaration, from a metaobject reflecting that declaration:
 
@@ -37,7 +37,7 @@ struct bar
 
 using meta_bar_foo = $reflect(bar::foo);
 
-std::size_t $identifier(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
+std::size_t $identifier(reflect::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 which is again equivalent to:
@@ -56,7 +56,7 @@ need to have a function for compile-time string concatenation, like
 \begin{minted}[tabsize=4]{cpp}
 using meta_bar_foo = $reflect(bar::foo);
 
-int $identifier(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
+int $identifier(ct_concat("get_", reflect::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -114,7 +114,7 @@ struct named_member_typedef
 	struct type
 	{
 		// same as
-		// typedef X $identifier(meta::get_base_name_v<MO>);
+		// typedef X $identifier(reflect::get_base_name_v<MO>);
 		typedef X __builtin_identifier_of(MO);
 	};
 };
@@ -125,7 +125,7 @@ struct named_data_member
 	struct type
 	{
 		// same as
-		// X $identifier(meta::get_base_name_v<MO>);
+		// X $identifier(reflect::get_base_name_v<MO>);
 		X __builtin_identifier_of(MO);
 
 		template <typename ... P>

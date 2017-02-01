@@ -19,13 +19,13 @@ void eat(T ... ) { }
 template <typename Metaobjects, std::size_t I, typename T>
 int field_to_json(std::ostream& out, const T& v)
 {
-	typedef std::meta::get_element_m<Metaobjects, I> meta_F;
+	typedef std::reflect::get_element_t<Metaobjects, I> meta_F;
 
 	if(I > 0) out << ", ";
 
-	out << '"' << std::meta::get_base_name_v<meta_F> << "\": ";
+	out << '"' << std::reflect::get_base_name_v<meta_F> << "\": ";
 
-	value_to_json(out, (v.*std::meta::get_pointer_v<meta_F>));
+	value_to_json(out, (v.*std::reflect::get_pointer_v<meta_F>));
 
 	return 0;
 }
@@ -41,11 +41,11 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type)
 {
 	out << "{";
 
-	typedef std::meta::get_data_members_m<MO> meta_DMs;
+	typedef std::reflect::get_data_members_t<MO> meta_DMs;
 	fields_to_json<meta_DMs>(
 		out, v,
 		std::make_index_sequence<
-			std::meta::get_size_v<meta_DMs>
+			std::reflect::get_size_v<meta_DMs>
 		>()
 	);
 
@@ -65,7 +65,7 @@ std::ostream& value_to_json(std::ostream& out, const T& v)
 	typedef $reflect(T) meta_T;
 	return reflected_to_json<meta_T>(
 		out, v,
-		std::meta::Record<meta_T>()
+		std::reflect::Record<meta_T>()
 	);
 };
 

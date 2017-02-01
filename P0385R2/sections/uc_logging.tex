@@ -69,20 +69,20 @@ template <typename T>
 T min(const T& a, const T& b)
 {
 	log()   << "function: min<"
-	        << get_display_name_v<get_aliased_m<$reflect(T)>>
+	        << get_display_name_v<get_aliased_t<$reflect(T)>>
 	        << ">("
 	        << get_base_name_v<$reflect(a)> << ": "
-	        << get_display_name_v<get_aliased_m<get_type_m<$reflect(a)>>>
+	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(a)>>>
 	        << " = " << a
 	        << get_base_name_v<$reflect(b)> << ": "
-	        << get_display_name_v<get_aliased_m<get_type_m<$reflect(b)>>>
+	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(b)>>>
 	        << " = " << b
 	        << ")" << std::endl
 
 	T result = a<b?a:b;
 
 	log()   << get_base_name_v<$reflect(result)> << ": "
-	        << get_display_name_v<get_aliased_m<get_type_m<$reflect(result)>>>
+	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(result)>>>
 	        << " = " << result << std::endl;
 
 	return result;

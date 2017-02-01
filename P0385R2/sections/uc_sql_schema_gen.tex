@@ -20,12 +20,12 @@ struct create_table_column_from
 	template <typename MetaMemVar>
 	void operator()(MetaMemVar)
 	{
-		if(!meta::Variable<MetaMemVar>) return;
+		if(!reflect::Variable<MetaMemVar>) return;
 
-		std::cout << meta::get_base_name_v<MetaMemVar> << " ";
+		std::cout << reflect::get_base_name_v<MetaMemVar> << " ";
 
 		std::cout << translate_to_sql(
-			meta::get_base_name_v<meta::get_type_m<MetaMemVar>>
+			reflect::get_base_name_v<reflect::get_type_t<MetaMemVar>>
 		);
 
 		if(starts_with(get_base_name_v<MetaMemVar>, "id_"))
@@ -43,7 +43,7 @@ struct create_table_from
 	template <typename MetaClass>
 	void operator()(MetaClass)
 	{
-		if(!meta::Class<MetaClass>) return;
+		if(!reflect::Class<MetaClass>) return;
 
 		if(!starts_with(
 			get_base_name_v<MetaClass>,
@@ -55,7 +55,7 @@ struct create_table_from
 			  << strip_prefix("persistent_", get_base_name_v<MetaClass>)
 			  << "(" << std::endl;
 
-		meta::for_each<meta::get_data_members_m<MetaClass>>(
+		reflect::for_each<reflect::get_data_members_t<MetaClass>>(
 			create_table_column_from()
 		);
 
@@ -72,8 +72,8 @@ struct create_schema_from
 			  << get_base_name_v<MetaNamespace>
 			  << ";" << std::endl;
 
-		meta::for_each<meta::get_member_types<MetaNamespace>>(
-			create_table_from{meta::get_base_name_v<MetaNamespace>}
+		reflect::for_each<reflect::get_member_types<MetaNamespace>>(
+			create_table_from{reflect::get_base_name_v<MetaNamespace>}
 		);
 	}
 };

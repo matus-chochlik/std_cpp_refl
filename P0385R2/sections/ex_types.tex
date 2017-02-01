@@ -11,20 +11,20 @@ int main(void)
 	typedef $reflect(unsigned) meta_unsigned;
 
 	static_assert(is_metaobject_v<meta_unsigned>, "");
-	static_assert(meta::Type<meta_unsigned>, "");
-	static_assert(!meta::Alias<meta_unsigned>, "");
+	static_assert(reflect::Type<meta_unsigned>, "");
+	static_assert(!reflect::Alias<meta_unsigned>, "");
 
 	static_assert(is_same_v<
-		meta::get_reflected_type_t<meta_unsigned>,
+		reflect::get_reflected_type_t<meta_unsigned>,
 		unsigned
 	>, "");
 
-	static_assert(meta::Named<meta_unsigned>, "");
-	cout << meta::get_base_name_v<meta_unsigned> << endl;
+	static_assert(reflect::Named<meta_unsigned>, "");
+	cout << reflect::get_base_name_v<meta_unsigned> << endl;
 
 	typedef $reflect(unsigned*) meta_ptr_unsigned;
-	static_assert(meta::Named<meta_ptr_unsigned>, "");
-	cout << meta::get_base_name_v<meta_ptr_unsigned> << endl;
+	static_assert(reflect::Named<meta_ptr_unsigned>, "");
+	cout << reflect::get_base_name_v<meta_ptr_unsigned> << endl;
 
 	return 0;
 }

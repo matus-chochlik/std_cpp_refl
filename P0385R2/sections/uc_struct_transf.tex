@@ -79,7 +79,7 @@ struct bar
 
 using meta_bar_foo = $reflect(bar::foo);
 
-long $identifier(meta::get_base_name_v<meta_bar_foo>)(int i, int j);
+long $identifier(reflect::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 In order to do anything more complex than just
@@ -88,7 +88,7 @@ string manipulation utility implementing for example functions for
 compile-time string concatenation, like \verb@ct_concat@:
 
 \begin{minted}[tabsize=4]{cpp}
-int $identifier(ct_concat("get_", meta::get_base_name_v<meta_bar_foo>))(const bar&);
+int $identifier(ct_concat("get_", reflect::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -108,8 +108,8 @@ template <typename MetaDataMember>
 struct soa_single_member
 {
 	// vector<T> Xs;
-	vector<meta::get_reflected_type_t<meta::get_type_m<MetaDataMember>>>
-		$identifier(ct_concat(meta::get_base_name_v<MetaDataMember>, "s"));
+	vector<reflect::get_reflected_type_t<reflect::get_type_t<MetaDataMember>>>
+		$identifier(ct_concat(reflect::get_base_name_v<MetaDataMember>, "s"));
 
 	/* constructors, forwarding parameters to the vector, ... */
 };
@@ -121,8 +121,8 @@ struct soa_inherit_all
 
 template <typename T>
 struct soa
- : meta::unpack_sequence_t<
-	meta::get_data_members_m<$reflect(T)>,
+ : reflect::unpack_sequence_t<
+	reflect::get_data_members_t<$reflect(T)>,
 	soa_inherit_all
 > { /* constructors forwarding parameters to soa_inherit_all */ };
 
@@ -164,9 +164,9 @@ via multiple inheritance as before:
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename MetaDataMember>
-using soa_single_member = meta::named_data_member_m<
+using soa_single_member = reflect::named_data_member_t<
 	MetaDataMember,
-	vector<meta::get_reflected_type_t<meta::get_type_m<MetaDataMember>>>
+	vector<reflect::get_reflected_type_t<reflect::get_type_t<MetaDataMember>>>
 >;
 
 template <typename ... MetaDataMember>
@@ -176,8 +176,8 @@ struct soa_inherit_all
 
 template <typename T>
 struct soa
- : meta::unpack_sequence_t<
-	meta::get_data_members_m<$reflect(T)>,
+ : reflect::unpack_sequence_t<
+	reflect::get_data_members_t<$reflect(T)>,
 	soa_inherit_all
 > { /* constructors forwarding parameters to soa_inherit_all */ };
 
