@@ -21,9 +21,10 @@ which we included in the proposal.
 \end{itemize}
 
 The text of this paper includes several revised, updated and extended parts
-from the previous papers: N3996, N4111, N4451 and N4452.
+from the previous papers: N3996, N4111, N4451, N4452 and previous revisions
+of P0385.
 
-There is also an experimental implementation of the P0194 proposal
+There is also an experimental implementation of the P0194R2 proposal
 described in greater detail in section~\ref{implementation}
 and the {\em Mirror} reflection library built on top of the proposed
 static reflection facility described in section~\ref{mirror-lib}.
@@ -53,7 +54,8 @@ mainly the declarations of the program.
 
 In the context of this paper, metadata is data providing information
 about the base-level structure of a program.
-{\em Static} metadata is metadata which can be manipulated or reasoned
+
+{\em Static metadata} is metadata which can be manipulated or reasoned
 about at compile-time by the compiler.
 
 The metadata itself has its own structure.
@@ -65,7 +67,7 @@ from a C++ program includes;
 \item list of its base classes,
 \item list of data members,
 \item list of nested types like type aliases, classes and enumerations,
-\item the elaborated type specifier, the access specifier,
+\item the class key specifier, the access specifier,
 \item source location information,
 \item etc.
 \end{itemize}
@@ -95,7 +97,8 @@ represented by types (or compile-time constants),
 algorithms or \say{programs} by compositions of the above.
 
 Unless stated otherwise when we say \say{metaprogramming} in the following text,
-we mean template metaprogramming.
+we mean template metaprogramming\footnote{Although we envision that
+a constexpr-metaprogramming interface will also be added later in the future.}.
 
 \subsubsection{Reflection}
 
@@ -107,7 +110,9 @@ When combined with metaprogramming, this can include modification of the existin
 or the definition of new data structures, doing changes to algorithms or changing the way
 a program code is interpreted\footnote{Mostly in interpreted languages.}.
 
-For the purpose of this paper, reflection is the process of obtaining metadata.
+For the purpose of this paper -- {\em reflection is the process of obtaining
+metadata}.
+
 In the future the meaning can be expanded to include modification of the program
 in ways exceeding the capabilities of current template
 metaprogramming\footnote{For example generating new class data members.}.
