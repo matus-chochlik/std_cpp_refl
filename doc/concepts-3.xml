@@ -239,7 +239,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="RecordMember"/>
 	</operation>
 
-	<metaobject name="EnumMember"
+	<metaobject name="Enumerator"
 		since_revision="2"
 		abstract="true"
 		reflects="a enum member"

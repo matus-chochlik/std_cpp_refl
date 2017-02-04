@@ -1,8 +1,9 @@
-sinclude tmp/concepts-$(REVISION).mk
-sinclude tmp/traits-$(REVISION).mk
-sinclude tmp/operations-$(REVISION).mk
+sinclude common.mk
+sinclude $(BLDDIR)/concepts-$(REVISION).mk
+sinclude $(BLDDIR)/traits-$(REVISION).mk
+sinclude $(BLDDIR)/operations-$(REVISION).mk
 
-./tmp/%-$(REVISION).mk: ./%-mk.xsl ../concepts-$(REVISION).xml Makefile | tmp
+$(BLDDIR)/%-$(REVISION).mk: ./%-mk.xsl ../concepts-$(REVISION).xml Makefile | $(BLDDIR)
 	$(XSLTPROC) --stringparam revision $(REVISION) --output $@ $< ../concepts-$(REVISION).xml
 
 DIAGRAMS-$(REVISION) = overview hierarchy traits operations \

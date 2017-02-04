@@ -1,3 +1,5 @@
+sinclude common.mk
+
 XSLTPROC ?= xsltproc
 SED ?= sed
 DOT ?= dot
@@ -10,14 +12,14 @@ MIN_REVISION ?= $(MAX_REVISION)
 REVISIONS = $(shell seq $(MIN_REVISION) $(MAX_REVISION))
 
 ifneq ($(MAKECMDGOALS), clean)
-$(foreach R,$(REVISIONS), $(eval sinclude ./tmp/entities-$(R).mk))
+$(foreach R,$(REVISIONS), $(eval sinclude $(BLDDIR)/entities-$(R).mk))
 endif
 
-all: ./out/index.html ./out/overview.html svg-diagrams
+all: $(OUTDIR)/index.html $(OUTDIR)/overview.html svg-diagrams
 .PHONY: all
 
 ifneq ($(MAKECMDGOALS), clean)
-$(foreach R,$(REVISIONS), $(eval sinclude ./tmp/revision-$(R).mk))
+$(foreach R,$(REVISIONS), $(eval sinclude $(BLDDIR)/revision-$(R).mk))
 endif
 
 pdf-diagrams: $(foreach R,$(REVISIONS), pdf-diagrams-$(R))
@@ -26,40 +28,40 @@ pdf-diagrams: $(foreach R,$(REVISIONS), pdf-diagrams-$(R))
 svg-diagrams: $(foreach R,$(REVISIONS), svg-diagrams-$(R))
 .PHONY: svg-diagrams
 
-./out/%.pdf: ./out/%.svg
+$(OUTDIR)/%.pdf: $(OUTDIR)/%.svg
 	$(INKSCAPE) --export-pdf=$@ $<
 
-./out/%.svg: ./tmp/%.svg | out
+$(OUTDIR)/%.svg: $(BLDDIR)/%.svg | $(OUTDIR)
 	$(XSLTPROC) --nonet --output $@ ./dot-svg-fixup.xsl $^
 
-./out/%.html: %.html | out
+$(OUTDIR)/%.html: %.html | $(OUTDIR)
 	cp $< $@
 
-./tmp/concept-%.svg: ./tmp/concept-%.dot | out
+$(BLDDIR)/concept-%.svg: $(BLDDIR)/concept-%.dot | $(OUTDIR)
 	$(NEATO) -Tsvg -o $@ $<
 
-./tmp/trait-%.svg: ./tmp/trait-%.dot | out
+$(BLDDIR)/trait-%.svg: $(BLDDIR)/trait-%.dot | $(OUTDIR)
 	$(NEATO) -Tsvg -o $@ $<
 
-./tmp/operation-%.svg: ./tmp/operation-%.dot | out
+$(BLDDIR)/operation-%.svg: $(BLDDIR)/operation-%.dot | $(OUTDIR)
 	$(NEATO) -Tsvg -o $@ $<
 
-./tmp/%.svg: ./tmp/%.dot | out
+$(BLDDIR)/%.svg: $(BLDDIR)/%.dot | $(OUTDIR)
 	$(DOT) -Tsvg -o $@ $<
 
-./tmp/entities-%.mk: entities.mk Makefile | tmp
+$(BLDDIR)/entities-%.mk: entities.mk Makefile | $(BLDDIR)
 	$(SED) "s/\$$(REVISION)/$*/g;" < $< > $@
 
-./tmp/revision-%.mk: revision.mk Makefile | tmp
+$(BLDDIR)/revision-%.mk: revision.mk Makefile | $(BLDDIR)
 	$(SED) "s/\$$(REVISION)/$*/g;s/\$$(MAX_REVISION)/$(MAX_REVISION)/g;" < $< > $@
 
-out tmp:
+$(OUTDIR) $(BLDDIR):
 	mkdir -p $@
 
 clean:
-	rm -rf out tmp
+	rm -rf $(OUTDIR) $(BLDDIR)
 
 clean-pdf:
-	rm -f out/*.pdf
+	rm -f $(OUTDIR)/*.pdf
 
 .PHONY: clean clean-pdf
