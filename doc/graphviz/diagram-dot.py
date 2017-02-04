@@ -302,7 +302,7 @@ def print_metaobject_node(opts, concepts, metaobject):
 		for x in findall(opts, concepts, "trait[@indicates='%s']" % name)
 	]
 
-	if is_base: requirements += ["is_metaobject"]
+	if is_base: requirements += ["__is_metaobject"]
 
 	for item, is_last in iter_last(requirements):
 		values_in = values
@@ -603,7 +603,7 @@ def do_print_note_node(opts, name, text):
 	edge [constraint="false" style="dotted" arrowhead="none" label=""];""")
 
 	opts.output.write("""
-	%(name)s [shape="note" style="filled" fillcolor="%(cell_color)s" label="%(text)s"];""" %
+	%(name)s [shape="note" style="filled" fillcolor="%(cell_color)s" label=<%(text)s>];""" %
 	{"name": name, "text": text, "cell_color": opts.cell_color})
 
 def print_note_node(opts, name, text):
@@ -611,7 +611,7 @@ def print_note_node(opts, name, text):
 
 	wrapper = textwrap.TextWrapper()
 	wrapper.width = 22
-	text = "\n".join(wrapper.wrap(text))
+	text = "<BR/>".join(wrapper.wrap(text))
 
 	do_print_note_node(opts, name, text)
 
@@ -847,7 +847,7 @@ def print_operation(opts, concepts):
 			print_concept_edge(opts, result, element)
 			opts.output.write("""
 			edge [style="dotted" dir="forward"];""")
-			desc = "All elements must be Meta-%s(s)" % element.attrib["name"]
+			desc = "All elements must conform to %s(s)" % element.attrib["name"]
 			print_note_node(opts, "element_desc", desc)
 			print_edge(opts, result.attrib["name"], "element_desc")
 			print_edge(opts, element.attrib["name"], "element_desc")
@@ -871,10 +871,14 @@ def print_operation(opts, concepts):
 	desc = operation.attrib["brief"]
 	desc = re.sub(r"\$\(([^)]+)\)", r"%(\1)s", desc)
 	desc = desc % {
-		"result": "Meta-%s" % result.attrib["name"] if result is not None else "-",
-		"element": "Meta-%s" % element.attrib["name"] if element is not None else "-",
-		"elements": "Meta-%s(s)" % element.attrib["name"] if element is not None else "-",
-		"operand": "Meta-%s" % operand.attrib["name"] if operand is not None else "-",
+		"result":
+		"<B>%s</B>" % result.attrib["name"] if result is not None else "-",
+		"element":
+		"<B>%s</B>" % element.attrib["name"] if element is not None else "-",
+		"elements":
+		"<B>%s</B>(s)" % element.attrib["name"] if element is not None else "-",
+		"operand":
+		"<B>%s</B>" % operand.attrib["name"] if operand is not None else "-",
 		"reflected": reflected if reflected is not None else "-"
 	}
 	print_note_node(opts, "description", desc)
