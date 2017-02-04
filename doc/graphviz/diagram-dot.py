@@ -448,13 +448,7 @@ def print_operation_node(opts, concepts, operation):
 			<TD BGCOLOR="%(cell_color)s" COLSPAN="3"></TD>
 		</TR>""" % values)
 
-		if result == "StringConstant":
-			opts.output.write("""
-			<TR>
-				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" CELLPADDING="%(padding)d" ALIGN="LEFT">static constexpr const char value[N+1];</TD>
-			</TR>""" % values)
-		elif result == "Pointer":
+		if result == "Pointer":
 
 			opts.output.write("""
 			<TR>
@@ -971,12 +965,12 @@ def print_overview(opts, concepts):
 
 	# Other concepts
 	if opts.gen_traits or opts.gen_operations:
-		print_concept_node(opts, concepts, "ConstantValue", "ConstantValue")
+		print_concept_node(opts, concepts, "ConstantValue", "integral_constant&lt;C, ...&gt;")
 		print_concept_node(opts, concepts, "BooleanConstant", "integral_constant&lt;bool, ...&gt;")
 	if opts.gen_operations:
 		print_concept_node(opts, concepts, "IntegralConstant", "integral_constant&lt;size_t, ...&gt;")
 		print_concept_node(opts, concepts, "SourceLocation", "source_location")
-		print_plain_type_node(opts, concepts, "StringConstant", "StringConstant")
+		print_concept_node(opts, concepts, "StringConstant", "integral_constant&lt;const char(&amp;)[N], ...&gt;")
 		print_plain_type_node(opts, concepts, "Pointer", "pointer")
 		print_plain_type_node(opts, concepts, "FunctionPointer", "function-pointer")
 		print_plain_type_node(opts, concepts, "OriginalType", "original-type")

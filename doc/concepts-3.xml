@@ -50,7 +50,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		brief="returns the source file line number of the declaration
 		of $(reflected) reflected by a $(operand)."
-		result="StringConstant"
+		result="IntegralConstant"
 	>
 		<argument type="Object"/>
 	</operation>
@@ -59,7 +59,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		brief="returns the source file column number of the declaration
 		of $(reflected) reflected by a $(operand)."
-		result="StringConstant"
+		result="IntegralConstant"
 	>
 		<argument type="Object"/>
 	</operation>
@@ -401,6 +401,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Record"/>
 	</metaobject>
 
+	<operation name="is_final"
+		uname="is_final_class"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as final."
+	>
+		<argument type="Class"/>
+	</operation>
+
 	<operation name="get_base_classes"
 		since_revision="2"
 		result="ObjectSequence" element="Base"
@@ -482,6 +492,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Typed"/>
 		<generalization concept="ScopeMember"/>
 	</metaobject>
+
+	<operation name="is_constexpr"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as constexpr."
+	>
+		<argument type="Variable"/>
+	</operation>
 
 	<operation name="is_static"
 		since_revision="0"
