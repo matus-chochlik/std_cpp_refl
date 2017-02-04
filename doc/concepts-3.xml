@@ -44,6 +44,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="StringConstant"
 	>
 		<argument type="Object"/>
+		<order_after operation="get_source_location"/>
 	</operation>
 
 	<operation name="get_source_line"
@@ -53,6 +54,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="IntegralConstant"
 	>
 		<argument type="Object"/>
+		<order_after operation="get_source_file_name"/>
 	</operation>
 
 	<operation name="get_source_column"
@@ -62,6 +64,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="IntegralConstant"
 	>
 		<argument type="Object"/>
+		<order_after operation="get_source_line"/>
 	</operation>
 
 	<metaobject name="ObjectSequence"
@@ -90,6 +93,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<argument type="ObjectSequence" name="S"/>
 		<argument type="size_t" name="Index"/>
+		<order_after operation="get_size"/>
 	</operation>
 
 	<operation name="unpack_sequence"
@@ -135,6 +139,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		a $(operand)."
 	>
 		<argument type="Named"/>
+		<order_after operation="get_base_name"/>
 	</operation>
 
 	<metaobject name="Alias"
@@ -227,6 +232,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		was declared with protected access."
 	>
 		<argument type="RecordMember"/>
+		<order_after operation="is_public_record_member"/>
 	</operation>
 
 	<operation name="is_private"
@@ -237,6 +243,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		was declared with private access."
 	>
 		<argument type="RecordMember"/>
+		<order_after operation="is_protected_record_member"/>
 	</operation>
 
 	<metaobject name="Enumerator"
@@ -317,6 +324,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		is a struct."
 	>
 		<argument type="Type"/>
+		<order_after operation="is_class"/>
 	</operation>
 
 	<operation name="is_union"
@@ -326,6 +334,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		is a union."
 	>
 		<argument type="Type"/>
+		<order_after operation="is_struct"/>
 	</operation>
 
 	<metaobject name="Record"
@@ -350,20 +359,24 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_public_data_members"
 		since_revision="2"
 		result="ObjectSequence" element="Variable"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting
 		the public data members of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Record"/>
+		<order_after operation="get_data_members"/>
 	</operation>
 
 	<operation name="get_accessible_data_members"
 		since_revision="3"
 		result="ObjectSequence" element="Variable"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting data members
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the reflection operator."
 	>
 		<argument type="Record"/>
+		<order_after operation="get_public_data_members"/>
 	</operation>
 
 	<operation name="get_member_types"
@@ -378,20 +391,24 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_public_member_types"
 		since_revision="2"
 		result="ObjectSequence" element="Type"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting
 		the public member types of $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Record"/>
+		<order_after operation="get_member_types"/>
 	</operation>
 
 	<operation name="get_accessible_member_types"
 		since_revision="3"
 		result="ObjectSequence" element="Type"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting member types
 		of $(reflected) reflected by a $(operand) accessible from the point
 		of invocation of the reflection operator."
 	>
 		<argument type="Record"/>
+		<order_after operation="get_public_member_types"/>
 	</operation>
 
 	<metaobject name="Class"
@@ -424,21 +441,25 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_public_base_classes"
 		since_revision="2"
 		result="ObjectSequence" element="Base"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of public base clases of a $(reflected) reflected by a $(operand)."
 	>
 		<argument type="Class"/>
+		<order_after operation="get_base_classes"/>
 	</operation>
 
 	<operation name="get_accessible_base_classes"
 		since_revision="3"
 		result="ObjectSequence" element="Base"
+		secondary="true"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of those base clases of a $(reflected) reflected by a $(operand)
 		which are accessible from the point of invocation of the
 		reflection operator."
 	>
 		<argument type="Class"/>
+		<order_after operation="get_public_base_classes"/>
 	</operation>
 
 
@@ -458,6 +479,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		is scoped."
 	>
 		<argument type="Enum"/>
+		<order_after operation="is_enum"/>
 	</operation>
 
 	<operation name="get_enumerators"
@@ -471,7 +493,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<metaobject name="Constant"
 		since_revision="1"
-		abstract="true"
 		reflects="a compile-time constant value"
 	>
 		<generalization concept="Typed"/>
@@ -568,6 +589,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		was declared as protected."
 	>
 		<argument type="Base"/>
+		<order_after operation="is_public_base"/>
 	</operation>
 
 	<operation name="is_private"
@@ -578,5 +600,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		was declared as private."
 	>
 		<argument type="Base"/>
+		<order_after operation="is_protected_base"/>
 	</operation>
 </concepts>

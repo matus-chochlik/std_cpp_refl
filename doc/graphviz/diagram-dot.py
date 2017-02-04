@@ -46,6 +46,22 @@ def get_argument_parser():
 	)
 
 	argparser.add_argument(
+		"--generate-abstract", "-ga",
+		type=BoolArgValue,
+		choices=[True, False],
+		action="store",
+		default=None,
+	)
+
+	argparser.add_argument(
+		"--generate-secondary", "-gs",
+		type=BoolArgValue,
+		choices=[True, False],
+		action="store",
+		default=True,
+	)
+
+	argparser.add_argument(
 		"--generate-operations", "-go",
 		type=BoolArgValue,
 		choices=[True, False],
@@ -118,6 +134,8 @@ class options:
 		self.trait_head_color = "#8080E0"
 		self.operation_head_color = "#E08080"
 		self.cell_color = "#D0D0D0"
+		self.gen_abstract = useropts.generate_abstract
+		self.gen_secondary = useropts.generate_secondary
 		self.gen_operations = useropts.generate_operations
 		self.gen_traits = useropts.generate_traits
 		self.revision_nodes = useropts.revision_nodes
@@ -157,11 +175,47 @@ def in_a_revision(opts, node, revision):
 	try: return int(node.attrib["since_revision"]) <= revision
 	except KeyError: return True
 
-def in_revision(opts, node):
-	return in_a_revision(opts, node, opts.revision)
+def is_abstract(opts, node):
+	found = None
+
+	if node.tag == "metaobject":
+		found = node
+	else:
+		query = None
+		for attr in ["type", "concept", "result"]:
+			try:
+				query = node.attrib[attr]
+				break
+			except KeyError: pass
+
+		if query is not None:
+			found = opts.concepts.find("metaobject[@name='%s']" % query)
+
+	if found is not None:
+		abstract = None
+		try:
+			abstract = found.attrib["abstract"]
+		except KeyError: pass
+
+		if abstract in ["true", "True", "1"]:
+			return True
+		return False
+
+	return None
+
+def matching_abstractness(opts, node):
+	if opts.gen_abstract is not None:
+		is_abstr = is_abstract(opts, node)
+		if is_abstr is not None:
+			return is_abstr == opts.gen_abstract
+	return True
+
+def is_wanted_node(opts, node):
+	return in_a_revision(opts, node, opts.revision) and \
+		matching_abstractness(opts, node)
 
 def findall(opts, parent_node, query):
-	return [x for x in parent_node.findall(query) if in_revision(opts, x)]
+	return [x for x in parent_node.findall(query) if is_wanted_node(opts, x)]
 
 def find_metaobject(opts, concepts, name):
 	mos = findall(opts, concepts, "metaobject[@name='%s']" % name)
@@ -439,14 +493,10 @@ def print_operation_node(opts, concepts, operation):
 	else:
 		opts.output.write("""
 		<TR>
-			<TD BGCOLOR="%(head_color)s" COLSPAN="4" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+			<TD BGCOLOR="%(head_color)s" COLSPAN="3" ALIGN="LEFT">struct <B>%(name)s</B></TD>
+			<TD BGCOLOR="%(cell_color)s" ALIGN="CENTER">{</TD>
 		</TR>"""
 		% values)
-		opts.output.write("""
-		<TR>
-			<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">{</TD>
-			<TD BGCOLOR="%(cell_color)s" COLSPAN="3"></TD>
-		</TR>""" % values)
 
 		if result == "Pointer":
 
@@ -454,7 +504,8 @@ def print_operation_node(opts, concepts, operation):
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
 				<TD BGCOLOR="%(cell_color)s" ALIGN="LEFT">const</TD>
-				<TD BGCOLOR="%(cell_color)s" COLSPAN="2" ALIGN="LEFT">conditional_t&lt;</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="1" ALIGN="LEFT">conditional_t&lt;</TD>
+				<TD BGCOLOR="%(cell_color)s"></TD>
 			</TR>""" % values)
 
 			opts.output.write("""
@@ -557,7 +608,8 @@ def print_operation_node(opts, concepts, operation):
 			opts.output.write("""
 			<TR>
 				<TD BGCOLOR="%(cell_color)s"></TD>
-				<TD BGCOLOR="%(cell_color)s" COLSPAN="3" CELLPADDING="%(padding)d" ALIGN="LEFT">typedef %(result)s type;</TD>
+				<TD BGCOLOR="%(cell_color)s" COLSPAN="2" CELLPADDING="%(padding)d" ALIGN="LEFT">using type = %(result)s</TD>
+				<TD BGCOLOR="%(cell_color)s">;</TD>
 			</TR>""" % values)
 	
 
@@ -984,7 +1036,7 @@ def print_overview(opts, concepts):
 
 	# Metaobject nodes 
 	for metaobject in findall(opts, concepts, "metaobject"):
-		if in_revision(opts, metaobject):
+		if is_wanted_node(opts, metaobject):
 			print_metaobject_node(opts, concepts, metaobject)
 
 
@@ -1070,6 +1122,14 @@ def print_overview(opts, concepts):
 		for prev_mo in findall(opts, metaobject, "order_after"):
 			print_concept_gen_spec_edge(opts, concepts, prev_mo, metaobject)
 	opts.output.write("\n")
+
+	# Operation ordering edges
+	for operation in findall(opts, concepts, "operation"):
+		for prev_op in findall(opts, operation, "order_after"):
+			op1_name = get_node_uname(operation)
+			op2_name = prev_op.attrib["operation"]
+			print_edge(opts, op1_name, op2_name)
+	opts.output.write("\n")
 			
 	
 	prev_mo = None
@@ -1092,15 +1152,15 @@ def main():
 	import xml.etree.ElementTree as XET
 
 	opts = options();
-	concepts = XET.parse(opts.xmlinput).getroot()
+	opts.concepts = XET.parse(opts.xmlinput).getroot()
 
 	if opts.metaobject:
-		print_metaobject(opts, concepts)
+		print_metaobject(opts, opts.concepts)
 	elif opts.operation:
-		print_operation(opts, concepts)
+		print_operation(opts, opts.concepts)
 	elif opts.trait:
-		print_trait(opts, concepts)
-	else: print_overview(opts, concepts)
+		print_trait(opts, opts.concepts)
+	else: print_overview(opts, opts.concepts)
 
 
 #pass run the main function

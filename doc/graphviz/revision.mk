@@ -14,6 +14,12 @@ $(BLDDIR)/%-$(REVISION).dot: ./%-dot.xsl ../concepts-$(REVISION).xml
 $(BLDDIR)/overview-$(REVISION).dot: ../concepts-$(REVISION).xml diagram-dot.py Makefile | $(BLDDIR)
 	./diagram-dot.py $(DIAGDOTFLAGS) --output $@ --input $<
 
+$(BLDDIR)/abstract-$(REVISION).dot: ../concepts-$(REVISION).xml diagram-dot.py Makefile | $(BLDDIR)
+	./diagram-dot.py $(DIAGDOTFLAGS) -ga 1 --output $@ --input $<
+
+$(BLDDIR)/concrete-$(REVISION).dot: ../concepts-$(REVISION).xml diagram-dot.py Makefile | $(BLDDIR)
+	./diagram-dot.py $(DIAGDOTFLAGS) -ga 0 --output $@ --input $<
+
 $(BLDDIR)/hierarchy-$(REVISION).dot: ../concepts-$(REVISION).xml diagram-dot.py Makefile | $(BLDDIR)
 	./diagram-dot.py $(DIAGDOTFLAGS) -go 0 -gt 0 --output $@ --input $<
 
