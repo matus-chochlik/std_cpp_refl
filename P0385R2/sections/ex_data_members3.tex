@@ -4,25 +4,21 @@
 #include <reflect>
 #include <iostream>
 
-struct A
-{
+struct A {
 	int a;
 };
 
-class B : public A
-{
+class B : public A {
 private:
 	bool b;
 };
 
-class C : public B
-{
+class C : public B {
 public:
 	char c;
 };
 
-int main(void)
-{
+int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 

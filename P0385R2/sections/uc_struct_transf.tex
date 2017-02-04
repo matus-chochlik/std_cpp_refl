@@ -8,8 +8,7 @@ of the data members, usually their types.
 For example we need to transform a structure like:
 
 \begin{minted}[tabsize=4]{cpp}
-struct foo
-{
+struct foo {
 	bool b;
 	char c;
 	double d;
@@ -21,8 +20,7 @@ struct foo
 into
 
 \begin{minted}[tabsize=4]{cpp}
-struct rdbs_table_placeholder_foo
-{
+struct rdbs_table_placeholder_foo {
 	column_placeholder_t<bool> b;
 	column_placeholder_t<char> c;
 	column_placeholder_t<double> d;
@@ -35,8 +33,7 @@ or create a structure-of-arrays, which was one of the \say{targeted use cases}
 from the committee's CFP~\cite{ISOCPP-N3814}: 
 
 \begin{minted}[tabsize=4]{cpp}
-struct soa_foo
-{
+struct soa_foo {
 	vector<bool> bs;
 	vector<char> cs;
 	vector<double> sd;
@@ -72,8 +69,7 @@ we can use the \verb@get_base_name@ operation, which returns a \verb@constexpr@
 array of \verb@char@s:
 
 \begin{minted}[tabsize=4]{cpp}
-struct bar
-{
+struct bar {
 	int foo;
 };
 
@@ -105,8 +101,7 @@ nearly equivalent to \verb@soa_foo@ via metaprogramming:
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename MetaDataMember>
-struct soa_single_member
-{
+struct soa_single_member {
 	// vector<T> Xs;
 	vector<reflect::get_reflected_type_t<reflect::get_type_t<MetaDataMember>>>
 		$identifier(ct_concat(reflect::get_base_name_v<MetaDataMember>, "s"));
@@ -116,20 +111,23 @@ struct soa_single_member
 
 template <typename ... MetaDataMembers>
 struct soa_inherit_all
- : soa_single_member<MetaDataMembers>...
-{ /* constructors forwarding parameters to the inherited soa_single_members */ };
+ : soa_single_member<MetaDataMembers>...  {
+ /* constructors forwarding parameters to the inherited soa_single_members */
+ };
 
 template <typename T>
 struct soa
  : reflect::unpack_sequence_t<
 	reflect::get_data_members_t<$reflect(T)>,
 	soa_inherit_all
-> { /* constructors forwarding parameters to soa_inherit_all */ };
+> {
+/* constructors forwarding parameters to soa_inherit_all */
+};
 
 using soa_foo = soa<foo>;
 \end{minted}
 
-If we don't want to implement the magic operator \verb@$identifier@,
+If we don't want to implement the operator \verb@$identifier@,
 we could instead add a new template \verb@named_data_member@
 for \meta{Named} metaobjects, described in greater detail in section
 \ref{fut-named-member-X}:
@@ -144,10 +142,8 @@ for example \verb@foo::c@, would look like this:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
-struct named_data_member<$reflect(foo::c), X>
-{
-	struct type
-	{
+struct named_data_member<$reflect(foo::c), X> {
+	struct type {
 		X c;
 
 		template <typename ... P>
@@ -171,15 +167,18 @@ using soa_single_member = reflect::named_data_member_t<
 
 template <typename ... MetaDataMember>
 struct soa_inherit_all
- : soa_single_member<MetaDataMembers>...
-{ /* constructors forwarding parameters to the inherited soa_single_members */ };
+ : soa_single_member<MetaDataMembers>...  {
+ /* constructors forwarding parameters to the inherited soa_single_members */
+ };
 
 template <typename T>
 struct soa
  : reflect::unpack_sequence_t<
 	reflect::get_data_members_t<$reflect(T)>,
 	soa_inherit_all
-> { /* constructors forwarding parameters to soa_inherit_all */ };
+> {
+/* constructors forwarding parameters to soa_inherit_all */
+};
 
 using soa_foo = soa<foo>;
 \end{minted}

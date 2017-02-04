@@ -29,10 +29,7 @@ So with type-based metaobjects we can do for example the following:
 
 \begin{minted}{cpp}
 template <typename Metaobject>
-void foo(void)
-{
-	// do something terribly useful
-}
+void foo(void) { // do something terribly useful }
 
 foo<$reflect(int)>(); // works
 foo<$reflect(std)>(); // works
@@ -48,10 +45,7 @@ meanwhile without metaobjects:
 
 \begin{minted}{cpp}
 template <something Param>
-void foo(void)
-{
-	// do something terribly useful, if possible
-}
+void foo(void) { // do something terribly useful, if possible }
 
 foo<int>(); // works
 foo<std>(); // error?
@@ -144,8 +138,7 @@ So for example the implementation of the \verb@get_base_name@ operation should
 
 \begin{minted}[tabsize=4]{cpp}
 template <Named T>
-struct get_base_name
-{
+struct get_base_name {
 	typedef const char value_type[N+1];
 	static constexpr const char value[N+1] = {...,'\0'};
 };
@@ -184,17 +177,14 @@ Consider for example the following pseudo-code:
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename T>
-void handle_var(const char* name, const T* ptr)
-{
+void handle_var(const char* name, const T* ptr) {
 	/* ... */
 }
 
 template <MetaVariable MV>
-void handle_meta_var(void)
-{
+void handle_meta_var(void) {
 	// this may be true only in a fraction of cases
-	if(some_logic())
-	{
+	if(some_logic()) {
 		// we need the pointer just here
 		handle_var(
 			reflect::get_base_name_v<MV>,
@@ -213,32 +203,22 @@ template <MetaVariable MV>
 void handle_meta_ns(void);
 
 template <Metaobject MO>
-void generic_func_1(void)
-{
+void generic_func_1(void) {
 	// this may be true only in a fraction of cases
-	if(reflect::Variable<MO>)
-	{
+	if(reflect::Variable<MO>) {
 		handle_meta_var<MO>();
-	}
-	else if(meta:Class<MO>)
-	{
+	} else if(reflect::Class<MO>) {
 		handle_meta_class<MO>();
-	}
-	else if(meta:Type<MO>)
-	{
+	} else if(reflect::Type<MO>) {
 		handle_meta_type<MO>();
-	}
-	else if(meta:Namespace<MO>)
-	{
+	} else if(reflect::Namespace<MO>) {
 		handle_meta_ns<MO>();
 	}
 }
 
 template <Metaobject MO>
-void generic_func_2(void)
-{
-	if(some_trait_v<MO>)
-	{
+void generic_func_2(void) {
+	if(some_trait_v<MO>) {
 		generic_func_1<MO>();
 	}
 	else ...
@@ -248,20 +228,15 @@ void generic_func_2(void)
 // all eventually calling generic_func_1
 
 template <Metaobject MO>
-void generic_func_20(void)
-{
-	if(some_logic())
-	{
+void generic_func_20(void) {
+	if(some_logic()) {
 		generic_func_19<MO>();
-	}
-	else
-	{
+	} else {
 		generic_func_15<MO>();
 	}
 }
 
-void main(int argc, const char** argv)
-{
+void main(int argc, const char** argv) {
 	std::string str;
 	generic_func_20<$reflect(str)>();
 	generic_func_18<$reflect(std)>();

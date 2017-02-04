@@ -30,8 +30,7 @@ arrays of \verb@char@s. This means that we can use them to copy the name of
 a declaration, from a metaobject reflecting that declaration:
 
 \begin{minted}[tabsize=4]{cpp}
-struct bar
-{
+struct bar {
 	int foo;
 };
 
@@ -77,8 +76,7 @@ which would take a format string {\em literal} and optionally a pack of
 \meta{Named} metaobjects:
 
 \begin{minted}[tabsize=4]{cpp}
-struct bar
-{
+struct bar {
 	int foo;
 };
 
@@ -109,10 +107,8 @@ metaobjects {\em equivalent} to the following:
 
 \begin{minted}[tabsize=4]{cpp}
 template <MetaNamed MO, typename X>
-struct named_member_typedef
-{
-	struct type
-	{
+struct named_member_typedef {
+	struct type {
 		// same as
 		// typedef X $identifier(reflect::get_base_name_v<MO>);
 		typedef X __builtin_identifier_of(MO);
@@ -120,10 +116,8 @@ struct named_member_typedef
 };
 
 template <MetaNamed MO, typename X>
-struct named_data_member
-{
-	struct type
-	{
+struct named_data_member {
+	struct type {
 		// same as
 		// X $identifier(reflect::get_base_name_v<MO>);
 		X __builtin_identifier_of(MO);
@@ -148,19 +142,15 @@ look like this:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
-struct named_member_typedef<$reflect(bar::foo), X>
-{
-	struct type
-	{
+struct named_member_typedef<$reflect(bar::foo), X> {
+	struct type {
 		typedef X foo;
 	};
 };
 
 template <typename X>
-struct named_data_member<$reflect(bar::foo), X>
-{
-	struct type
-	{
+struct named_data_member<$reflect(bar::foo), X> {
+	struct type {
 		X foo;
 
 		template <typename ... P>

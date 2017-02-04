@@ -5,7 +5,7 @@ The proposed static reflection facility has been designed with the following
 considerations and goals in mind. 
 Note that some of the principles listed here
 apply only to the whole reflection facility as it is envisioned
-to look in the future, not to the initial, limited subset from P0194R2.
+to look in the future, not to the initial, limited subset from P0194R3.
 
 \subsubsection{Completeness and reusability}
 \label{design-completeness}
@@ -72,7 +72,7 @@ This is achieved by using the reflection operator which hides most of the
 \say{magic}, isolates reflection from the rest of the language,
 for example by allowing to pass expressions not valid elsewhere as operands.
 
-It is also consistent with the syntax of other existing operators in C++:
+It is also similar to the syntax of other existing operators in C++:
 
 \begin{minted}[tabsize=4]{cpp}
 float foo = 42.f;
@@ -92,8 +92,7 @@ metaprograms even if it was not possible with the base-level declarations.
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
-struct my_meta_algorithm
-{
+struct my_meta_algorithm {
 	using result = /* ... */;
 };
 
@@ -215,20 +214,17 @@ namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <Class T>
-struct get_member_functions
-{
+struct get_member_functions {
 	using type = /* unspecified-metaobject */;
 };
 
 template <OverloadedFunction T>
-struct get_overloads
-{
+struct get_overloads {
 	using type = /* unspecified-metaobject */;
 };
 
 template <Function T>
-struct get_parameters
-{
+struct get_parameters {
 	using type = /* unspecified-metaobject */;
 };
 

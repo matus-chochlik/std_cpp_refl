@@ -71,8 +71,7 @@ namespace bar {
 } // namespace bar
 
 template <typename MN>
-void algorithm(const string& str, int i, int j)
-{
+void algorithm(const string& str, int i, int j) {
 	// [foo|bar]::func1
 	$unreflect(MN)::func1(str);
 
@@ -80,14 +79,10 @@ void algorithm(const string& str, int i, int j)
 	$unreflect(MN)::func2($unreflect(MN)::func3(i*j, 64, i == j), i, j);
 }
 
-void func(const string& str, int i, int j, bool want_foo)
-{
-	if(want_foo)
-	{
+void func(const string& str, int i, int j, bool want_foo) {
+	if(want_foo) {
 		algorithm<$reflect(foo)>(str, i, j);
-	}
-	else 
-	{
+	} else {
 		algorithm<$reflect(bar)>(str, i, j);
 	}
 }
@@ -114,8 +109,7 @@ or back to the original class data member;
 
 \begin{minted}[tabsize=4]{cpp}
 
-struct my_struct
-{
+struct my_struct {
 	int i;
 	float f;
 };

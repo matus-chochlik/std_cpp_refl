@@ -79,8 +79,7 @@ be used as a source of metadata:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename T>
-T min(const T& a, const T& b)
-{
+T min(const T& a, const T& b) {
 	log()   << "function: min<"
 	        << get_base_name_v<get_aliased_t<$reflect(T)>>
 	        << ">("

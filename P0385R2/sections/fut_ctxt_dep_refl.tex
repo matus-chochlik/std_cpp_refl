@@ -42,7 +42,8 @@ namespace bar {
 \end{minted}
 \begin{minted}[xleftmargin=2em]{cpp}
 typedef $reflect(this::namespace) _meta_foo_bar;
-
+\end{minted}
+\begin{minted}[xleftmargin=1em]{cpp}
 } // namespace bar
 \end{minted}
 \begin{minted}{cpp}
@@ -58,8 +59,7 @@ inside of which the reflection operator was invoked.
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-struct foo
-{
+struct foo {
 	const char* _name;
 
 	// reflects foo
@@ -69,30 +69,26 @@ struct foo
 	 : _name(get_base_name_v<$reflect(this::class)>())
 	{ }
 
-	void f(void)
-	{
+	void f(void) {
 		// reflects foo
 		typedef $reflect(this::class) _meta_foo2;
 	}
 
 	double g(double, double);
 
-	struct bar
-	{
+	struct bar {
 		// reflects foo::bar
 		typedef $reflect(this::class) _meta_foo_bar;
 	};
 };
 
-double foo::g(double a, double b)
-{
+double foo::g(double a, double b) {
 	// reflects foo
 	typedef $reflect(this::class) _meta_foo3;
 	return a+b;
 }
 
-class baz
-{
+class baz {
 private:
 	typedef $reflect(this::class) _meta_baz;
 };
@@ -110,48 +106,41 @@ inside of which the reflection operator was invoked.
 For example:
 
 \begin{minted}[tabsize=4]{cpp}
-void foobar(void)
-{
+void foobar(void) {
 	// reflects this particular overload of the foobar function
 	typedef $reflect(this::function) _meta_foobar;
 }
 
-int foobar(int i)
-{
+int foobar(int i) {
 	// reflects this particular overload of the foobar function
 	typedef $reflect(this::function) _meta_foobar;
 	return i+1;
 }
 
-class foo
-{
+class foo {
 private:
-	void f(void)
-	{
+	void f(void) {
 		// reflects this particular overload of foo::f
 		typedef $reflect(this::function) _meta_foo_f;
 	}
 
-	double f(void)
-	{
+	double f(void) {
 		// reflects this particular overload of foo::f
 		typedef $reflect(this::function) _meta_foo_f;
 		return 12345.6789;
 	}
 public:
-	foo(void)
-	{
+	foo(void) {
 		// reflects this constructor of foo
 		typedef $reflect(this::function) _meta_foo_foo;
 	}
 
-	friend bool operator == (foo, foo)
-	{
+	friend bool operator == (foo, foo) {
 		// reflects this operator
 		typedef $reflect(this::function) _meta_foo_eq;
 	}
 
-	typedef $reflect(this::function) _meta_fn; // error
+	using _meta_fn = $reflect(this::function); // error
 };
 
 typedef $reflect(this::function) _meta_fn; // error
@@ -168,8 +157,7 @@ For example:
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename First, typename Second, typename Third>
-struct triplet
-{
+struct triplet {
 	// reflects the template not the instantiation
 	using _meta_tpl = $reflect(this::template);
 

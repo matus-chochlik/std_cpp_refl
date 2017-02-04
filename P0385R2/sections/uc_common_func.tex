@@ -13,8 +13,7 @@ hash functions and swap functions.
 In other words for arbitrary structured type, for example:
 
 \begin{minted}[tabsize=4]{cpp}
-struct S
-{
+struct S {
 	int i;
 	long l;
 	float f;
@@ -24,8 +23,7 @@ struct S
 we want to create equality or non-equality comparison function like:
 
 \begin{minted}[tabsize=4]{cpp}
-bool S_equal(const S& a, const S& b)
-{
+bool S_equal(const S& a, const S& b) {
 	bool result = true;
 	result &= a.i == b.i;
 	result &= a.l == b.l;
@@ -33,8 +31,7 @@ bool S_equal(const S& a, const S& b)
 	return result;
 }
 
-bool S_not_equal(const S& a, const S& b)
-{
+bool S_not_equal(const S& a, const S& b) {
 	bool result = false;
 	result |= a.i != b.i;
 	result |= a.l != b.l;
@@ -46,8 +43,7 @@ bool S_not_equal(const S& a, const S& b)
 or a hash function:
 
 \begin{minted}[tabsize=4]{cpp}
-std::size_t S_hash(const S& a)
-{
+std::size_t S_hash(const S& a) {
 	std::size_t result = 0u;
 	result ^= std::hash<int>()(a.i);
 	result ^= std::hash<long>()(a.l);
@@ -62,23 +58,20 @@ implemented along the lines of:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename T>
-struct compare_data_members
-{
+struct compare_data_members {
 	const T& a;
 	const T& b;
 	bool& result;
 
 	template <reflect::Object MetaDataMember>
-	void operator()(MetaDataMember) const
-	{
+	void operator()(MetaDataMember) const {
 		auto mem_ptr = reflect::get_pointer_v<MetaDataMember>;
 		result &= a.*mem_ptr == b.*mem_ptr;
 	}
 };
 
 template <typename T>
-bool generic_equal(const T& a, const T& b)
-{
+bool generic_equal(const T& a, const T& b) {
 	using metaT = $reflect(T);
 	bool result = true;
 
@@ -95,15 +88,13 @@ was implemented then the helper could take advantage of it:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename T>
-struct compare_data_members
-{
+struct compare_data_members {
 	const T& a;
 	const T& b;
 	bool& result;
 
 	template <reflect::Object MetaDataMem>
-	void operator()(MetaDataMem) const
-	{
+	void operator()(MetaDataMem) const {
 		result &= a.$unreflect(MetaDataMem) == b.$unreflect(MetaDataMem);
 	}
 };
@@ -114,13 +105,11 @@ The helper could also be implemented by using a lambda function:
 \begin{minted}[tabsize=4]{cpp}
 
 template <typename T>
-std::size_t generic_hash(const T& a)
-{
+std::size_t generic_hash(const T& a) {
 	std::size_t result = 0u;
 
 	reflect::for_each<reflect::get_data_members_t<$reflect(T)>>(
-		[&result,&a](auto meta_dm)
-		{
+		[&result,&a](auto meta_dm) {
 			using MetaDataMem = decltype(meta_dm)::type;
 			using MetaT = reflect::get_type_t<MetaDataMem>;
 

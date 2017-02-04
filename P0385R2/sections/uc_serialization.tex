@@ -17,8 +17,7 @@ template <typename ... T>
 void eat(T ... ) { }
 
 template <typename Metaobjects, std::size_t I, typename T>
-int field_to_json(std::ostream& out, const T& v)
-{
+int field_to_json(std::ostream& out, const T& v) {
 	using meta_F = std::reflect::get_element_t<Metaobjects, I>;
 
 	if(I > 0) out << ", ";
@@ -31,14 +30,12 @@ int field_to_json(std::ostream& out, const T& v)
 }
 
 template <typename Metaobjects, std::size_t ... I, typename T>
-void fields_to_json(std::ostream& out, const T& v, std::index_sequence<I...>)
-{
+void fields_to_json(std::ostream& out, const T& v, std::index_sequence<I...>) {
 	eat(field_to_json<Metaobjects, I>(out, v)...);
 }
 
 template <typename MO, typename T>
-std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type)
-{
+std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type) {
 	out << "{";
 
 	using meta_DMs = std::reflect::get_data_members_t<MO>;
@@ -54,14 +51,12 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type)
 }
 
 template <typename MO, typename T>
-std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type)
-{
+std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type) {
 	return out << v;
 }
 
 template <typename T>
-std::ostream& value_to_json(std::ostream& out, const T& v)
-{
+std::ostream& value_to_json(std::ostream& out, const T& v) {
 	using meta_T = $reflect(T);
 	return reflected_to_json<meta_T>(
 		out, v,
@@ -72,14 +67,12 @@ std::ostream& value_to_json(std::ostream& out, const T& v)
 struct point { float x, y, z; };
 struct triangle { point a, b, c; };
 
-struct tetrahedron
-{
+struct tetrahedron {
 	triangle base;
 	point apex;
 };
 
-int main(void)
-{
+int main(void) {
 	using namespace std;
 
 	tetrahedron t{

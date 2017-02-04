@@ -26,8 +26,7 @@ template:
 namespace std {
 
 template <__metaobject_id MoId>
-struct __metaobject
-{
+struct __metaobject {
 	__metaobject() = default;
 	__metaobject(const metaobject&) = default;
 };
@@ -45,8 +44,7 @@ template <typename T>
 struct __unwrap_id;
 
 template <__metaobject_id MoId>
-struct __unwrap_id<__metaobject<MoId>>
-{
+struct __unwrap_id<__metaobject<MoId>> {
 	static constexpr __metaobject_id value = MoId;
 };
 
@@ -140,8 +138,7 @@ namespace std {
 namespace reflect {
 
 template <Named T>
-struct get_base_name
-{
+struct get_base_name {
 	constexpr const char value[] =
 		__metaobject_get_base_name(__unwrap_id_v<T>);
 };

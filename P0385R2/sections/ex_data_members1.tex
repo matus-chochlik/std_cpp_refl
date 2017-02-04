@@ -4,8 +4,7 @@
 #include <reflect>
 #include <iostream>
 
-struct foo
-{
+struct foo {
 private:
 	int _i, _j;
 public:
@@ -15,8 +14,7 @@ private:
 	static double d;
 };
 
-int main(void)
-{
+int main(void) {
 	using namespace std;
 
 	typedef $reflect(foo) meta_foo;

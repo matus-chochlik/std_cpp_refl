@@ -149,8 +149,7 @@ struct value_b { };
 
 // a compile-time "subroutine"
 template <typename Param>
-struct identity
-{
+struct identity {
 	using result = Param;
 };
 
@@ -192,8 +191,7 @@ using bar = unsigned;
 using baz = unsigned;
 
 template <typename Param>
-struct identity
-{
+struct identity {
 	using result = Param;
 };
 

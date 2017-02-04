@@ -12,8 +12,7 @@ The compile-time value representation of a metaobject could be defined as:
 namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
-class object_uid
-{
+class object_uid {
 public:
 	constexpr object_uid(void) noexcept;
 	constexpr object_uid(const object_uid&) noexcept;
@@ -51,8 +50,7 @@ namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <Object T>
-struct get_uid
-{
+struct get_uid {
 	constexpr const object_uid value = /* ... */;
 };
 

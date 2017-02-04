@@ -17,8 +17,7 @@ namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <typename MetaObjectSequence, typename UnaryFunction>
-void for_each(UnaryFunction func)
-{
+void for_each(UnaryFunction func) {
 	func(Metaobject1{});
 	func(Metaobject2{});
 	/* ... */
@@ -33,8 +32,7 @@ For example:
 
 \begin{minted}[tabsize=4]{cpp}
 reflect::for_each<reflect::get_data_members_t<$reflect(my_class)>>(
-	[](auto idmo)
-	{
+	[](auto idmo) {
 		using MO = decltype(idmo);
 		...
 	}
@@ -52,8 +50,7 @@ namespace reflect {
 \end{minted}
 \begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
 template <typename MetaObjectSequence, template <typename ...> class Template>
-struct unpack_sequence
-{
+struct unpack_sequence {
 	typedef Template<Metaobject1, Metaobject2, ... MetaobjectN> type;
 };
 
@@ -77,8 +74,7 @@ template <
 	template <typename ...> class Template,
 	template <typename> class Predicate
 >
-struct unpack_sequence_if
-{
+struct unpack_sequence_if {
 	typedef Template<...> type;
 };
 

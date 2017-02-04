@@ -8,15 +8,12 @@ The goal is to automate the implementation of functions which for a given
 enumeration value, return the name of the enumeration value:
 
 \begin{minted}[tabsize=4]{cpp}
-enum class E
-{
+enum class E {
 	a, b, c, d, e, f
 };
 
-string E_to_string(E value)
-{
-	switch(value)
-	{
+string E_to_string(E value) {
+	switch(value) {
 		case E::a: return "a";
 		case E::b: return "b";
 		case E::c: return "c";
@@ -31,8 +28,7 @@ string E_to_string(E value)
 or the other way around:
 
 \begin{minted}[tabsize=4]{cpp}
-E string_to_E(const string& name)
-{
+E string_to_E(const string& name) {
 	if(name == "a") return E::a;
 	if(name == "b") return E::b;
 	if(name == "c") return E::c;
@@ -45,21 +41,20 @@ E string_to_E(const string& name)
 }
 \end{minted}
 
-The Mirror reflection library~\cite{Chochlik-Mirror-new-doc} shows a possible
-implementation of the \verb@enum_to_string@ utility,
+The Mirror reflection library~\cite{Chochlik-Mirror-new-doc} has several
+versions of enum-to-string and string-to-enum, based on top of the clang
+implementation of P0194R2. The following code snippet is adjusted to
+match the new wording:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename Enum>
-class enum_to_string
-{
+class enum_to_string {
 private:
 	template <typename ... MEC>
-	struct _hlpr
-	{
+	struct _hlpr {
 		static void _eat(bool ...) { }
 
-		static auto _make_map(void)
-		{
+		static auto _make_map(void) {
 			using namespace std;
 
 			map<Enum, string> res;
@@ -71,8 +66,7 @@ private:
 		}
 	};
 public:
-	const std::string& operator()(Enum e) const
-	{
+	const std::string& operator()(Enum e) const {
 		using namespace std;
 
 		using ME = $reflect(Enum);
@@ -90,16 +84,13 @@ and the \verb@string_to_enum@ utility:
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename Enum>
-class string_to_enum
-{
+class string_to_enum {
 private:
 	template <typename ... MEC>
-	struct _hlpr
-	{
+	struct _hlpr {
 		static void _eat(bool ...) { }
 
-		static auto _make_map(void)
-		{
+		static auto _make_map(void) {
 			using namespace std;
 
 			map<string, Enum> res;
@@ -111,8 +102,7 @@ private:
 		}
 	};
 public:
-	Enum operator()(const std::string& s) const
-	{
+	Enum operator()(const std::string& s) const {
 		using namespace std;
 
 		using ME = $reflect(Enum);
