@@ -1,8 +1,8 @@
 # the intermediate build and final output directory
-blddir = $(PWD)/_bld
-outdir = $(PWD)/_out
+blddir = $(HOME)/Build/std_cpp_refl/_bld
+outdir = $(HOME)/Build/std_cpp_refl/_out
 
-components = P0385 P0194R0 N4451 N4452 N4111 N3996
+components = P0385R0 P0385R1 P0385R2 P0194R0 N4451 N4452 N4111 N3996
 
 all: $(components)
 

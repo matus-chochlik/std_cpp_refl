@@ -1,7 +1,7 @@
 # the intermediate build and final output directory
 wrkdir = $(PWD)
-blddir = ../_bld/$(notdir $(PWD))
-outdir = ../_out/$(notdir $(PWD))
+blddir = $(HOME)/Build/std_cpp_refl/_bld/$(notdir $(PWD))
+outdir = $(HOME)/Build/std_cpp_refl/_out/$(notdir $(PWD))
 
 # options passed to (pdf)latex
 latexopts = -shell-escape

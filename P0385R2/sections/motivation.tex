@@ -38,12 +38,15 @@ patterns, for example the factory pattern,
 \item implementation of cross-cutting aspects like debugging, logging, profiling,
 access control, etc.,
 
+\item implementation of {\em array-of-structures} to {\em structure-of-arrays}
+transformations,
+
 \item implementation of source code generators.
 
 \end{itemize}
 
 Some of the use cases listed above are described in more detail in section
-\ref{use-cases-examples}.
+\ref{use-cases-examples}, and also in \cite{Chochlik-P0385R1,Chochlik-N4452}.
 
 There are several approaches to the implementation of the mentioned functionality.
 The most basic, straightforward and also usually the most
@@ -70,9 +73,6 @@ and third, there is a lot of repeated code related to the parsing, the
 representation and the manipulation of the input program source.
 
 Another way to automate these tasks is to use reflection and metaprogramming.
-Metaprogramming is the tool for transforming one program into another based
-on some meta-algorithm and reflection provides the input data for that algorithm
-directly from the compiler without the need for an external source code parser.
 
 For example if we want to log the execution of a function, reflection may
 be used as a source of metadata:

@@ -2,11 +2,11 @@
 
 \subsection{P0385R0}
 
-This is the initial revision of the design paper accompanying the P0194 papers.
+The initial revision of the design paper accompanying the P0194 papers.
 
-\subsection{P0385R1 -- current revision}
+\subsection{P0385R1}
 
-This revision brings the following updates reflecting\footnote{Pun not intended}
+This revision brought the following updates reflecting
 the changes made in the P0194R2 paper.
 
 \begin{itemize}
@@ -32,5 +32,47 @@ the design considerations.
 \item A description of the implementation has been added (section~\ref{implementation}).
 \item A brief introduction to the {\em Mirror reflection utilities} has been added
 (section~\ref{mirror-lib}).
+\end{itemize}
+
+\subsection{P0385R2 -- current revision}
+
+We have made several big changes in revision R3 of the P0194 paper:
+
+\begin{itemize}
+\item We introduced the \verb@$@ character to the basic source character set
+	as a prefix for all reflection-related operators -- both the primary
+	reflection operator which is already part of the wording and for
+	any which may be added in the future.
+\item The reflection-related operators have been renamed
+	\begin{itemize}
+	\item from \verb@reflexpr@ to \verb@$reflect@,
+	\item from \verb@unreflexpr@ to \verb@$unreflect@ and
+	\item from \verb@idreflexpr@ to \verb@$identifier@.
+	\end{itemize}
+\item The reflection-related namespace has been renamed from \verb@std::meta@
+	to \verb@std::reflect@ in order to avoid confusion and conflicts with
+	any potential metaprogramming library which could be added in the future.
+\item The reflection-related header file has been renamed from \verb@<reflexpr>@
+	to \verb@<reflect>@.
+\item Direct reflection of specifiers (previously \verb@reflexpr(public)@)
+	and metaobjects reflecting specifiers (conforming to the \verb@Specifier@
+	concept) have been removed temporarily and their functionality has been
+	partially replaced with boolean traits.
+\item The metaobject concept hierarchy has been slightly changed; in addition
+	to the \verb@Specifier@, the \verb@TagType@ concept has
+	also been removed, its operations were taken over by \verb@Enum@
+	and \verb@Record@ concepts. The \verb@Reversible@ concept has also
+	been removed for the time being.
+\item The order of template parameters for \verb@MetaSequence@ operations has
+	been matched to similar operations of \verb@std::tuple@.
+\item The suffix \verb@_m@ was reverted back to \verb@_t@ for all
+	metaobject-returning operations.
+\end{itemize}
+
+In this revision of P0385 we made the following changes:
+
+\begin{itemize}
+\item Some of the use-cases were removed for the sake of brevity, please see
+	the previous revisions of this paper.
 \end{itemize}
 
