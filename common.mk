@@ -33,7 +33,7 @@ $(blddir)/%.bbl: $(blddir)/%.bib $(blddir)/%.tex
 
 
 $(blddir)/%.pdf: $(blddir)/%.tex $(blddir)/%.tex.d $(blddir)/minted.sty | $(blddir)
-	cp -rf images $(blddir) || true
+	cp -rf images $(blddir)/ || true
 	cd $(blddir) && \
 		pdflatex $(latexopts) $(notdir $<) && \
 		pdflatex $(latexopts) $(notdir $<) && \

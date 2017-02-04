@@ -120,46 +120,6 @@ to the metaobject are materialized only when requested by one of the operations
 defined for that particular metaobject concept, like \verb@get_base_name@,
 \verb@get_scope@, \verb@get_data_members@, etc.
 
-\subsection{Creating a separate type for each string is so heavyweight.}
-
-\textbf{Q:} {\em Isn't the creation of a new type for each string returned
-for example from the \verb@get_base_name@ operation too heavyweight?
-Won't that lead to unacceptable increases in the memory footprint
-and compilation times?}
-
-\textbf{A:} The answer is that we {\em do not} insist on creating a separate
-type for each string returned by reflection. What we insist on is that we
-should have the ability to reason about and manipulate the strings at compile-time.
-A static, \verb@constexpr@-initialized, zero-terminated array of \verb@char@s
-gives us this ability.
-
-So for example the implementation of the \verb@get_base_name@ operation should
-{\em be equivalent} to the following:
-
-\begin{minted}[tabsize=4]{cpp}
-template <Named T>
-struct get_base_name {
-	typedef const char value_type[N+1];
-	static constexpr const char value[N+1] = {...,'\0'};
-};
-\end{minted}
-
-Some members of the committee suggested that for example the
-\texttt{basic\_string\_constant} from N4121~\cite{ISOCPP-N4121} or
-N4236~\cite{ISOCPP-N4236} or whichever compile-time
-string representation eventually makes it to the standard could
-be used to implement the \verb@get_base_name@ operation,
-but this in just an option not a requirement for our part.
-We trust in the ability of the compiler vendors to pick and
-implement the best option and to use all the tricks at their disposal
-to make expressions like;
-
-\begin{minted}{cpp}
-std::string(std::reflect::get_base_name_v<$reflect(std::pair)>);
-\end{minted}
-
-as efficient as possible.
-
 \subsection{There's already another expression for that!}
 
 \textbf{Q:} {\em There are situations where you can do something much more
@@ -170,7 +130,7 @@ easily without reflection than with it, like \verb@&variable@ vs.
 \textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
 can be separated from the actual site where you access (reflect) the variable by
-several layers of metaprogram templates.
+several layers of metaprogramming.
 
 Consider for example the following pseudo-code:
 

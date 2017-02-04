@@ -361,7 +361,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="ObjectSequence" element="Variable"
 		brief="returns a $(result) of $(elements) reflecting data members
 		of $(reflected) reflected by a $(operand) accessible from the point
-		of invocation of the operation."
+		of invocation of the reflection operator."
 	>
 		<argument type="Record"/>
 	</operation>
@@ -389,7 +389,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="ObjectSequence" element="Type"
 		brief="returns a $(result) of $(elements) reflecting member types
 		of $(reflected) reflected by a $(operand) accessible from the point
-		of invocation of the operation."
+		of invocation of the reflection operator."
 	>
 		<argument type="Record"/>
 	</operation>
@@ -435,7 +435,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 		result="ObjectSequence" element="Base"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of those base clases of a $(reflected) reflected by a $(operand)
-		which are accessible from the point of invocation of the operation."
+		which are accessible from the point of invocation of the
+		reflection operator."
 	>
 		<argument type="Class"/>
 	</operation>

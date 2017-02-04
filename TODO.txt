@@ -1,13 +1,4 @@
-- What is the scope of const std::string*&?
-- Do we need a separate meta::Union?
-- Distinguish "declaration" scope and "lookup" scope (see enums).
-- enum vs enum class:
-  - Different concepts
-  - `is_scoped` operation
-  - `is_strongly_typed` operation
 - Only direct (type and namespace) alias reflection.
-- Add the `get_display_name` operation to Named.
-- meta::GlobalScope should be a meta::ScopeMember (and a meta::Named).
 - Access to private class members:
   - Getting lists of members
     - Additional parameter to `get_data_members`, `get_member_types`, ...
@@ -47,15 +38,6 @@
 
 Additional nice to have features:
 
-- Identifier generation
-  - Possible names/spellings for the operator:
-    - reflexpr("fmtstr", MO...)
-    - unreflexpr("fmtstr", MO...) -- the best IMO
-    - idreflexpr("fmtstr", MO...) -- the second best ?
-    - reflexpr_ident
-    - reflident
-    - makeident
-    - identifier
 - Variadic composition
 - Construction of Metaobjects without reflection?
   - or modification of existing Metaobjects ?
