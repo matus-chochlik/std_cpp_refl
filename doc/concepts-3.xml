@@ -37,6 +37,33 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Object"/>
 	</operation>
 
+	<operation name="get_source_file_name"
+		since_revision="0"
+		brief="returns the source file name of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="StringConstant"
+	>
+		<argument type="Object"/>
+	</operation>
+
+	<operation name="get_source_line"
+		since_revision="0"
+		brief="returns the source file line number of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="StringConstant"
+	>
+		<argument type="Object"/>
+	</operation>
+
+	<operation name="get_source_column"
+		since_revision="0"
+		brief="returns the source file column number of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="StringConstant"
+	>
+		<argument type="Object"/>
+	</operation>
+
 	<metaobject name="ObjectSequence"
 		since_revision="0"
 		abstract="true"
@@ -46,11 +73,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 	>
 		<generalization concept="Object"/>
 	</metaobject>
-
-	<trait name="is_meta_object_sequence"
-		since_revision="0"
-		indicates="ObjectSequence"
-	/>
 
 	<operation name="get_size"
 		since_revision="0"
@@ -79,22 +101,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="VarTypeTemplate" name="Tpl"/>
 	</operation>
 
-	<metaobject name="Reversible"
-		since_revision="1"
-		abstract="true"
-		is_a="a metaobject that can be reverted to the original
-		declaration"
-		reflects="a reversible declaration"
-	>
-		<generalization concept="Object"/>
-		<order_after concept="ObjectSequence"/>
-	</metaobject>
-
-	<trait name="is_meta_reversible"
-		since_revision="1"
-		indicates="Reversible"
-	/>
-
 	<metaobject name="Named"
 		since_revision="0"
 		abstract="true"
@@ -103,11 +109,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 		<order_after concept="ObjectSequence"/>
 	</metaobject>
-
-	<trait name="is_meta_named"
-		since_revision="0"
-		indicates="Named"
-	/>
 
 	<operation name="is_anonymous"
 		since_revision="2"
@@ -144,11 +145,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Named"/>
 	</metaobject>
 
-	<trait name="is_meta_alias"
-		since_revision="0"
-		indicates="Alias"
-	/>
-
 	<operation name="get_aliased"
 		since_revision="0"
 		result="Named"
@@ -167,11 +163,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_meta_typed"
-		since_revision="0"
-		indicates="Typed"
-	/>
-
 	<operation name="get_type"
 		since_revision="0"
 		result="Type"
@@ -189,11 +180,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_meta_scope"
-		since_revision="0"
-		indicates="Scope"
-	/>
-
 	<metaobject name="ScopeMember"
 		since_revision="0"
 		abstract="true"
@@ -203,11 +189,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Object"/>
 		<order_after concept="Named"/>
 	</metaobject>
-
-	<trait name="is_meta_scope_member"
-		since_revision="0"
-		indicates="ScopeMember"
-	/>
 
 	<operation name="get_scope"
 		since_revision="0"
@@ -227,11 +208,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<constraint operation="get_scope" concept="Record"/>
 		<order_after concept="Class"/>
 	</metaobject>
-
-	<trait name="is_meta_record_member"
-		since_revision="0"
-		indicates="RecordMember"
-	/>
 
 	<operation name="is_public"
 		uname="is_public_record_member"
@@ -263,15 +239,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="RecordMember"/>
 	</operation>
 
-	<operation name="get_access_specifier"
-		since_revision="1"
-		result="Specifier"
-		brief="returns the $(result) reflecting the access specifier
-		of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="RecordMember"/>
-	</operation>
-
 	<metaobject name="EnumMember"
 		since_revision="2"
 		abstract="true"
@@ -282,11 +249,6 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<order_after concept="Enum"/>
 	</metaobject>
 
-	<trait name="is_meta_enum_member"
-		since_revision="2"
-		indicates="EnumMember"
-	/>
-
 	<metaobject name="Namespace"
 		since_revision="0"
 		reflects="a namespace"
@@ -296,10 +258,15 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="ScopeMember"/>
 	</metaobject>
 
-	<trait name="is_meta_namespace"
-		since_revision="0"
-		indicates="Namespace"
-	/>
+	<operation name="is_inline"
+		uname="is_inline_namespace"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as inline."
+	>
+		<argument type="Namespace"/>
+	</operation>
 
 	<metaobject name="GlobalScope"
 		since_revision="0"
@@ -310,23 +277,12 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<constraint operation="get_scope" concept="GlobalScope"/>
 	</metaobject>
 
-	<trait name="is_meta_global_scope"
-		since_revision="0"
-		indicates="GlobalScope"
-	/>
-
 	<metaobject name="Type"
 		since_revision="0"
 		reflects="a type"
 	>
-		<generalization concept="Reversible"/>
 		<generalization concept="Named"/>
 	</metaobject>
-
-	<trait name="is_meta_type"
-		since_revision="0"
-		indicates="Type"
-	/>
 
 	<operation name="get_reflected_type"
 		since_revision="0"
@@ -336,37 +292,13 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Type"/>
 	</operation>
 
-	<metaobject name="TagType"
-		since_revision="2"
-		abstract="true"
-		reflects="a class or an enum"
-	>
-		<generalization concept="Type"/>
-		<generalization concept="Scope"/>
-		<generalization concept="ScopeMember"/>
-	</metaobject>
-
-	<trait name="is_meta_tag_type"
-		since_revision="2"
-		indicates="TagType"
-	/>
-
-	<operation name="get_elaborated_type_specifier"
-		since_revision="2"
-		result="Specifier"
-		brief="returns a $(result) reflecting the elaborated type specifier
-		(class,struct,union,...) of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="TagType"/>
-	</operation>
-
 	<operation name="is_enum"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is an enum."
 	>
-		<argument type="TagType"/>
+		<argument type="Type"/>
 	</operation>
 
 	<operation name="is_class"
@@ -375,7 +307,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a class."
 	>
-		<argument type="TagType"/>
+		<argument type="Type"/>
 	</operation>
 
 	<operation name="is_struct"
@@ -384,7 +316,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a struct."
 	>
-		<argument type="TagType"/>
+		<argument type="Type"/>
 	</operation>
 
 	<operation name="is_union"
@@ -393,7 +325,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		is a union."
 	>
-		<argument type="TagType"/>
+		<argument type="Type"/>
 	</operation>
 
 	<metaobject name="Record"
@@ -401,13 +333,10 @@ by the compiler which allow access to metadata reflecting specific program decla
 		abstract="true"
 		reflects="a class, a scope or a union"
 	>
-		<generalization concept="TagType"/>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
 	</metaobject>
-
-	<trait name="is_meta_record_type"
-		since_revision="2"
-		indicates="Record"
-	/>
 
 	<operation name="get_data_members"
 		since_revision="0"
@@ -472,14 +401,9 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Record"/>
 	</metaobject>
 
-	<trait name="is_meta_class"
-		since_revision="0"
-		indicates="Class"
-	/>
-
 	<operation name="get_base_classes"
 		since_revision="2"
-		result="ObjectSequence" element="Inheritance"
+		result="ObjectSequence" element="Base"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of all base clases (including the private and protected ones)
 		of a $(reflected) reflected by a $(operand)."
@@ -489,7 +413,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_public_base_classes"
 		since_revision="2"
-		result="ObjectSequence" element="Inheritance"
+		result="ObjectSequence" element="Base"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of public base clases of a $(reflected) reflected by a $(operand)."
 	>
@@ -498,7 +422,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 
 	<operation name="get_accessible_base_classes"
 		since_revision="3"
-		result="ObjectSequence" element="Inheritance"
+		result="ObjectSequence" element="Base"
 		brief="returns a $(result) of $(elements) reflecting the inheritance
 		of those base clases of a $(reflected) reflected by a $(operand)
 		which are accessible from the point of invocation of the operation."
@@ -511,13 +435,10 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="an enumeration"
 	>
-		<generalization concept="TagType"/>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
 	</metaobject>
-
-	<trait name="is_meta_enum"
-		since_revision="0"
-		indicates="Enum"
-	/>
 
 	<operation name="is_scoped_enum"
 		since_revision="2"
@@ -542,14 +463,8 @@ by the compiler which allow access to metadata reflecting specific program decla
 		abstract="true"
 		reflects="a compile-time constant value"
 	>
-		<generalization concept="Reversible"/>
 		<generalization concept="Typed"/>
 	</metaobject>
-
-	<trait name="is_meta_constant"
-		since_revision="1"
-		indicates="Constant"
-	/>
 
 	<operation name="get_constant"
 		since_revision="1"
@@ -563,16 +478,10 @@ by the compiler which allow access to metadata reflecting specific program decla
 		since_revision="0"
 		reflects="a variable"
 	>
-		<generalization concept="Reversible"/>
 		<generalization concept="Named"/>
 		<generalization concept="Typed"/>
 		<generalization concept="ScopeMember"/>
 	</metaobject>
-
-	<trait name="is_meta_variable"
-		since_revision="0"
-		indicates="Variable"
-	/>
 
 	<operation name="is_static"
 		since_revision="0"
@@ -595,87 +504,59 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="Variable"/>
 	</operation>
 
-	<metaobject name="Specifier"
-		since_revision="1"
-		reflects="a specifier (const, virtual, static, noexcept, public,
-		protected, private, etc.)"
-	>
-		<generalization concept="Named"/>
-	</metaobject>
-
-	<trait name="is_meta_specifier"
-		since_revision="1"
-		indicates="Specifier"
-	/>
-
-	<metaobject name="Inheritance"
+	<metaobject name="Base"
 		since_revision="2"
-		reflects="class inheritance"
+		reflects="base class inheritance"
 	>
 		<generalization concept="Object"/>
 	</metaobject>
 
-	<trait name="is_meta_inheritance"
-		since_revision="2"
-		indicates="Inheritance"
-	/>
-
-	<operation name="get_base_class"
+	<operation name="get_class"
 		since_revision="2"
 		result="Class"
 		brief="returns the $(operand) reflecting the base $(reflected)
 		in a inheritance."
 	>
-		<argument type="Inheritance"/>
+		<argument type="Base"/>
 	</operation>
 
 	<operation name="is_virtual"
-		uname="is_virtual_inheritance"
+		uname="is_virtual_base"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="returns whether the $(reflected) reflected by a $(operand)
 		was declared as virtual."
 	>
-		<argument type="Inheritance"/>
+		<argument type="Base"/>
 	</operation>
 
 	<operation name="is_public"
-		uname="is_public_inheritance"
+		uname="is_public_base"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as public."
 	>
-		<argument type="Inheritance"/>
+		<argument type="Base"/>
 	</operation>
 
 	<operation name="is_protected"
-		uname="is_protected_inheritance"
+		uname="is_protected_base"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as protected."
 	>
-		<argument type="Inheritance"/>
+		<argument type="Base"/>
 	</operation>
 
 	<operation name="is_private"
-		uname="is_private_inheritance"
+		uname="is_private_base"
 		since_revision="2"
 		result="BooleanConstant"
 		brief="indicates whether the $(reflected) reflected by a $(operand)
 		was declared as private."
 	>
-		<argument type="Inheritance"/>
-	</operation>
-
-	<operation name="get_access_specifier"
-		uname="get_inheritance_access_specifier"
-		since_revision="2"
-		result="Specifier"
-		brief="returns the $(result) reflecting the access specifier
-		of $(reflected) reflected by a $(operand)."
-	>
-		<argument type="Inheritance"/>
+		<argument type="Base"/>
 	</operation>
 </concepts>
