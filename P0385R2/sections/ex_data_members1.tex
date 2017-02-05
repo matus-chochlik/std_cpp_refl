@@ -16,60 +16,61 @@ private:
 
 int main(void) {
 	using namespace std;
+	using namespace std::reflect;
 
-	typedef $reflect(foo) meta_foo;
+	using meta_foo = $reflect(foo);
 
 	// public data members
-	typedef reflect::get_public_data_members_t<meta_foo> meta_data_mems;
+	using meta_data_mems = get_public_data_members_t<meta_foo>;
 
-	static_assert(is_metaobject_v<meta_data_mems>);
-	static_assert(reflect::ObjectSequence<meta_data_mems>);
+	static_assert(Object<meta_data_mems>);
+	static_assert(ObjectSequence<meta_data_mems>);
 
-	cout << reflect::get_size_v<meta_data_mems> << endl;
+	cout << get_size_v<meta_data_mems> << endl;
 
 	// 0-th (public) data member
-	typedef reflect::get_element_t<meta_data_mems, 0> meta_data_mem0;
+	using meta_data_mem0 = get_element_t<meta_data_mems, 0>;
 
-	static_assert(is_metaobject_v<meta_data_mem0>);
-	static_assert(reflect::Variable<meta_data_mem0>);
-	static_assert(reflect::Typed<meta_data_mem0>);
+	static_assert(Object<meta_data_mem0>);
+	static_assert(Variable<meta_data_mem0>);
+	static_assert(Typed<meta_data_mem0>);
 
-	cout << reflect::get_base_name_v<meta_data_mem0> << endl;
+	cout << get_base_name_v<meta_data_mem0> << endl;
 
 	// 2-nd (public) data member
-	typedef reflect::get_element_t<meta_data_mems, 2> meta_data_mem2;
+	using meta_data_mem2 = get_element_t<meta_data_mems, 2>;
 
-	static_assert(is_metaobject_v<meta_data_mem2>);
-	static_assert(reflect::Variable<meta_data_mem2>);
-	static_assert(reflect::Typed<meta_data_mem2>);
+	static_assert(Object<meta_data_mem2>);
+	static_assert(Variable<meta_data_mem2>);
+	static_assert(Typed<meta_data_mem2>);
 
-	cout << reflect::get_base_name_v<meta_data_mem2> << endl;
+	cout << get_base_name_v<meta_data_mem2> << endl;
 
 	// all data members
-	typedef reflect::get_data_members_t<meta_foo> meta_all_data_mems;
+	using meta_all_data_mems = get_data_members_t<meta_foo>;
 
-	static_assert(is_metaobject_v<meta_all_data_mems>);
-	static_assert(reflect::ObjectSequence<meta_all_data_mems>);
+	static_assert(Object<meta_all_data_mems>);
+	static_assert(ObjectSequence<meta_all_data_mems>);
 
-	cout << reflect::get_size_v<meta_all_data_mems> << endl;
+	cout << get_size_v<meta_all_data_mems> << endl;
 
 	// 0-th (overall) data member
-	typedef reflect::get_element_t<meta_all_data_mems, 0> meta_all_data_mem0;
+	using meta_all_data_mem0 = get_element_t<meta_all_data_mems, 0>;
 
-	static_assert(is_metaobject_v<meta_all_data_mem0>);
-	static_assert(reflect::Variable<meta_all_data_mem0>);
-	static_assert(reflect::Typed<meta_all_data_mem0>);
+	static_assert(Object<meta_all_data_mem0>);
+	static_assert(Variable<meta_all_data_mem0>);
+	static_assert(Typed<meta_all_data_mem0>);
 
-	cout << reflect::get_base_name_v<meta_all_data_mem0> << endl;
+	cout << get_base_name_v<meta_all_data_mem0> << endl;
 
 	// 3-rd (overall) data member
-	typedef reflect::get_element_t<meta_all_data_mems, 3> meta_all_data_mem3;
+	using meta_all_data_mem3 = get_element_t<meta_all_data_mems, 3>;
 
-	static_assert(is_metaobject_v<meta_all_data_mem3>);
-	static_assert(reflect::Variable<meta_all_data_mem3>);
-	static_assert(reflect::Typed<meta_all_data_mem3>);
+	static_assert(Object<meta_all_data_mem3>);
+	static_assert(Variable<meta_all_data_mem3>);
+	static_assert(Typed<meta_all_data_mem3>);
 
-	cout << reflect::get_base_name_v<meta_all_data_mem3> << endl;
+	cout << get_base_name_v<meta_all_data_mem3> << endl;
 
 	return 0;
 }

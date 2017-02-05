@@ -187,24 +187,24 @@ namespace reflect {
 template <Object T>
 concept bool Function = 
 	Named<T> && ScopeMember<T> && Typed<T>
-	__metaobject_is_meta_function(T);
+	__metaobject_reflects_function(T);
 
 template <Object T>
 concept bool OverloadedFunction =
 	Named<T> && ScopeMember<T> &&
-	__metaobject_is_meta_overloaded_function(T);
+	__metaobject_reflects_overloaded_function(T);
 
 \end{minted}
 \begin{minted}{cpp}
 } // namespace reflect
 \end{minted}
 
-Then it is necessary to extend the list of expressions which can appear
+Then we need to extend the list of expressions which can appear
 as operands to \verb@$reflect@ to include specifiers, so that the following
 is valid code:
 
 \begin{minted}{cpp}
-using meta_func = $reflect(std::time);
+using meta_func = $reflect(std::sin);
 \end{minted}
 
 To extend the interface of an existing metaobject by adding a new operation

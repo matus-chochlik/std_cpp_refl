@@ -11,9 +11,9 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	typedef $reflect(bar) meta_bar;
+	using meta_bar = $reflect(bar);
 
-	static_assert(is_metaobject_v<meta_bar>);
+	static_assert(Object<meta_bar>);
 	static_assert(Type<meta_bar>);
 	static_assert(Class<meta_bar>);
 	static_assert(Alias<meta_bar>);
@@ -23,9 +23,9 @@ int main(void) {
 	static_assert(Named<meta_bar>);
 	cout << get_base_name_v<meta_bar> << endl;
 
-	typedef get_aliased_t<meta_bar> meta_foo;
+	using meta_foo = get_aliased_t<meta_bar>;
 
-	static_assert(is_metaobject_v<meta_foo>);
+	static_assert(Object<meta_foo>);
 	static_assert(Type<meta_foo>);
 	static_assert(Class<meta_foo>);
 	static_assert(!Alias<meta_foo>);

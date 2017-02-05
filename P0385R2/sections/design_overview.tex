@@ -42,10 +42,12 @@ using meta_std_pair         = $reflect(std::pair);          // Template
 using meta_std_sin          = $reflect(std::sin);           // OverloadedFunction
 \end{minted}
 
+etc.
+
 Since there are many different kinds of
 base-level declarations, the metaobjects reflecting them are
 modeling various {\em metaobject concepts}, which also serve to classify
-metaobjects and to indicate whether a metaobjects has or has not a particular
+metaobjects and to indicate whether a metaobject has or has not a particular
 property;
 
 \begin{minted}{cpp}
@@ -58,11 +60,10 @@ static_assert(reflect::Alias<$reflect(std::string::size_type)>);
 or if is falls into a particular category:
 
 \begin{minted}{cpp}
-static_assert(reflect::GlobalScope<$reflect()>);
+static_assert(reflect::GlobalScope<$reflect(::)>);
 static_assert(reflect::Namespace<$reflect(std)>);
 static_assert(reflect::Type<$reflect(int)>);
 static_assert(reflect::Class<$reflect(std::string)>);
-static_assert(reflect::Specifier<$reflect(virtual)>);
 \end{minted}
 
 The individual pieces of metadata can be obtained from a metaobject by using one
@@ -77,10 +78,10 @@ etc.:
 \begin{minted}{cpp}
 using meta_str = $reflect(std::string);
 
-get_base_name_v<meta_str>; // a compile-time constant string
+get_base_name_v<meta_str>;      // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string
-get_scope_t<meta_str>; // another metaobject reflecting the scope
-get_data_members_t<meta_str>; // a metaobject-sequence containing other metaobjects
+get_scope_t<meta_str>;          // another metaobject reflecting the scope
+get_data_members_t<meta_str>;   // a metaobject-sequence containing other metaobjects
 \end{minted}
 
 P0194R3 also defines the initial subset

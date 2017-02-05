@@ -6,24 +6,25 @@
 
 int main(void) {
 	using namespace std;
+	using namespace std::reflect;
 
-	typedef $reflect(unsigned) meta_unsigned;
+	using meta_unsigned = $reflect(unsigned);
 
-	static_assert(is_metaobject_v<meta_unsigned>);
-	static_assert(reflect::Type<meta_unsigned>);
-	static_assert(!reflect::Alias<meta_unsigned>);
+	static_assert(Object<meta_unsigned>);
+	static_assert(Type<meta_unsigned>);
+	static_assert(!Alias<meta_unsigned>);
 
 	static_assert(is_same_v<
-		reflect::get_reflected_type_t<meta_unsigned>,
+		get_reflected_type_t<meta_unsigned>,
 		unsigned
 	>, "");
 
-	static_assert(reflect::Named<meta_unsigned>);
-	cout << reflect::get_base_name_v<meta_unsigned> << endl;
+	static_assert(Named<meta_unsigned>);
+	cout << get_base_name_v<meta_unsigned> << endl;
 
-	typedef $reflect(unsigned*) meta_ptr_unsigned;
-	static_assert(reflect::Named<meta_ptr_unsigned>);
-	cout << reflect::get_base_name_v<meta_ptr_unsigned> << endl;
+	using meta_ptr_unsigned = $reflect(unsigned*);
+	static_assert(Named<meta_ptr_unsigned>);
+	cout << get_base_name_v<meta_ptr_unsigned> << endl;
 
 	return 0;
 }

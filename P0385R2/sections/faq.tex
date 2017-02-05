@@ -285,11 +285,11 @@ constructors, etc. (see also the Q/A above):
 namespace std {
 
 	template <something X> // problem
-	class meta_constructor /* Model of Meta-Constructor */
+	class meta_constructor /* Model of Constructor */
 	{ };
 
 	template <something X> // problem
-	class meta_namespace /* Model of Meta-Namespace */
+	class meta_namespace /* Model of Namespace */
 	{ };
 
 } // namespace std
@@ -367,7 +367,7 @@ in several use cases.
 
 \begin{itemize}
 	\item Debugging or trace messages (containing function signatures)
-		are much more readable and informative if they also contain 
+		are more readable and informative if they also contain 
 		the typedef names of parameter types, return values or variables,
 		not just their underlying types.
 	\item Cross-platform serialization or remote procedure calls may require

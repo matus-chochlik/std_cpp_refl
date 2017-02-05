@@ -21,13 +21,13 @@ inside of which the reflection operator was invoked.
 For example:
 
 \begin{minted}{cpp}
-typedef $reflect(this::namespace) _meta_gs;
+using _meta_gs = $reflect(this::namespace);
 \end{minted}
 
 reflects the global scope namespace and is equivalent to
 
 \begin{minted}{cpp}
-typedef $reflect(::) _meta_gs;
+using _meta_gs = $reflect(::);
 \end{minted}
 
 For named namespaces:
@@ -36,12 +36,12 @@ For named namespaces:
 namespace foo {
 \end{minted}
 \begin{minted}[xleftmargin=1em]{cpp}
-typedef $reflect(this::namespace) _meta_foo;
+using _meta_foo = $reflect(this::namespace);
 
 namespace bar {
 \end{minted}
 \begin{minted}[xleftmargin=2em]{cpp}
-typedef $reflect(this::namespace) _meta_foo_bar;
+using _meta_foo_bar = $reflect(this::namespace);
 \end{minted}
 \begin{minted}[xleftmargin=1em]{cpp}
 } // namespace bar
@@ -63,7 +63,7 @@ struct foo {
 	const char* _name;
 
 	// reflects foo
-	typedef $reflect(this::class) _meta_foo1;
+	using _meta_foo1 = $reflect(this::class);
 
 	foo(void)
 	 : _name(get_base_name_v<$reflect(this::class)>())
@@ -71,29 +71,29 @@ struct foo {
 
 	void f(void) {
 		// reflects foo
-		typedef $reflect(this::class) _meta_foo2;
+		using _meta_foo2 = $reflect(this::class);
 	}
 
 	double g(double, double);
 
 	struct bar {
 		// reflects foo::bar
-		typedef $reflect(this::class) _meta_foo_bar;
+		using _meta_foo_bar = $reflect(this::class);
 	};
 };
 
 double foo::g(double a, double b) {
 	// reflects foo
-	typedef $reflect(this::class) _meta_foo3;
+	using _meta_foo3 = $reflect(this::class);
 	return a+b;
 }
 
 class baz {
 private:
-	typedef $reflect(this::class) _meta_baz;
+	using _meta_baz = $reflect(this::class);
 };
 
-typedef $reflect(this::class); // error: not used inside of a class.
+using class = $reflect(this::class); // error: not used inside of a.
 
 \end{minted}
 
@@ -108,12 +108,12 @@ For example:
 \begin{minted}[tabsize=4]{cpp}
 void foobar(void) {
 	// reflects this particular overload of the foobar function
-	typedef $reflect(this::function) _meta_foobar;
+	using _meta_foobar = $reflect(this::function);
 }
 
 int foobar(int i) {
 	// reflects this particular overload of the foobar function
-	typedef $reflect(this::function) _meta_foobar;
+	using _meta_foobar = $reflect(this::function);
 	return i+1;
 }
 
@@ -121,29 +121,29 @@ class foo {
 private:
 	void f(void) {
 		// reflects this particular overload of foo::f
-		typedef $reflect(this::function) _meta_foo_f;
+		using _meta_foo_f = $reflect(this::function);
 	}
 
 	double f(void) {
 		// reflects this particular overload of foo::f
-		typedef $reflect(this::function) _meta_foo_f;
+		using _meta_foo_f = $reflect(this::function);
 		return 12345.6789;
 	}
 public:
 	foo(void) {
 		// reflects this constructor of foo
-		typedef $reflect(this::function) _meta_foo_foo;
+		using _meta_foo_foo = $reflect(this::function);
 	}
 
 	friend bool operator == (foo, foo) {
 		// reflects this operator
-		typedef $reflect(this::function) _meta_foo_eq;
+		using _meta_foo_eq = $reflect(this::function);
 	}
 
 	using _meta_fn = $reflect(this::function); // error
 };
 
-typedef $reflect(this::function) _meta_fn; // error
+using _meta_fn = $reflect(this::function); // error
 \end{minted}
 
 \subsubsection{Templates}

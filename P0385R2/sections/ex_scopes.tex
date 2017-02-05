@@ -18,20 +18,20 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	typedef $reflect(int) meta_int;
-	typedef $reflect(foo::bar) meta_foo_bar;
-	typedef $reflect(foo::bar::baz) meta_foo_bar_baz;
-	typedef $reflect(foobar) meta_foobar;
+	using meta_int         = $reflect(int);
+	using meta_foo_bar     = $reflect(foo::bar);
+	using meta_foo_bar_baz = $reflect(foo::bar::baz);
+	using meta_foobar      = $reflect(foobar);
 
 	static_assert(ScopeMember<meta_int>);
 	static_assert(ScopeMember<meta_foo_bar>);
 	static_assert(ScopeMember<meta_foo_bar_baz>);
 	static_assert(ScopeMember<meta_foobar>);
 
-	typedef get_scope_t<meta_int> meta_int_s;
-	typedef get_scope_t<meta_foo_bar> meta_foo_bar_s;
-	typedef get_scope_t<meta_foo_bar_baz> meta_foo_bar_baz_s;
-	typedef get_scope_t<meta_foobar> meta_foobar_s;
+	using meta_int_s = get_scope_t<meta_int>;
+	using meta_foo_bar_s = get_scope_t<meta_foo_bar>;
+	using meta_foo_bar_baz_s = get_scope_t<meta_foo_bar_baz>;
+	using meta_foobar_s = get_scope_t<meta_foobar>;
 
 	static_assert(Scope<meta_int_s>);
 	static_assert(Scope<meta_foo_bar_s>);

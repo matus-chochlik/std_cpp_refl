@@ -13,48 +13,49 @@ using baz = bar;
 
 int main(void) {
 	using namespace std;
+	uisng namespace std::reflect;
 
 	using meta_foo_baz = $reflect(foo::baz);
 
-	static_assert(is_metaobject_v<meta_foo_baz>);
-	static_assert(reflect::Type<meta_foo_baz>);
-	static_assert(reflect::Alias<meta_foo_baz>);
+	static_assert(Object<meta_foo_baz>);
+	static_assert(Type<meta_foo_baz>);
+	static_assert(Alias<meta_foo_baz>);
 
 	static_assert(is_same_v<
-		reflect::get_reflected_type_t<meta_foo_baz>,
+		get_reflected_type_t<meta_foo_baz>,
 		foo::baz
 	>);
 
-	static_assert(reflect::Named<meta_foo_baz>);
-	cout << reflect::get_base_name_v<meta_foo_baz> << endl;
+	static_assert(Named<meta_foo_baz>);
+	cout << get_base_name_v<meta_foo_baz> << endl;
 
-	using meta_foo_bar = reflect::get_aliased_t<meta_foo_baz>;
+	using meta_foo_bar = get_aliased_t<meta_foo_baz>;
 
-	static_assert(is_metaobject_v<meta_foo_bar>);
-	static_assert(reflect::Type<meta_foo_bar>);
-	static_assert(reflect::Alias<meta_foo_bar>);
+	static_assert(Object<meta_foo_bar>);
+	static_assert(Type<meta_foo_bar>);
+	static_assert(Alias<meta_foo_bar>);
 
 	static_assert(is_same_v<
-		reflect::get_reflected_type_t<meta_foo_bar>,
+		get_reflected_type_t<meta_foo_bar>,
 		foo::bar
 	>);
 
-	static_assert(reflect::Named<meta_foo_bar>);
-	cout << reflect::get_base_name_v<meta_foo_bar> << endl;
+	static_assert(Named<meta_foo_bar>);
+	cout << get_base_name_v<meta_foo_bar> << endl;
 
-	using meta_int = reflect::get_aliased_t<meta_foo_bar>;
+	using meta_int = get_aliased_t<meta_foo_bar>;
 
-	static_assert(is_metaobject_v<meta_int>);
-	static_assert(reflect::Type<meta_int>);
-	static_assert(!reflect::Alias<meta_int>);
+	static_assert(Object<meta_int>);
+	static_assert(Type<meta_int>);
+	static_assert(!Alias<meta_int>);
 
 	static_assert(is_same_v<
-		reflect::get_reflected_type_t<meta_int>,
+		get_reflected_type_t<meta_int>,
 		int
 	>);
 
-	static_assert(reflect::Named<meta_int>);
-	cout << reflect::get_base_name_v<meta_int> << endl;
+	static_assert(Named<meta_int>);
+	cout << get_base_name_v<meta_int> << endl;
 
 	return 0;
 }

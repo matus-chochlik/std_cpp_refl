@@ -42,7 +42,7 @@ namespace foo {
 	void bar(const std::string&);
 } // namespace foo
 
-using MV = $reflect(foo::str); // Meta-Variable
+using MV = $reflect(foo::str); // Variable
 
 // ... lots of code here ...
 // using namespace foo;
@@ -97,7 +97,7 @@ namespace foo {
 	void bar(const std::string&);
 } // namespace foo
 
-using MF = $reflect(foo::bar); // Meta-Function
+using MF = $reflect(foo::bar); // Function
 
 // ... lots of code here ...
 //   foo::bar("hello");
@@ -114,7 +114,7 @@ struct my_struct {
 	float f;
 };
 
-// Meta-DataMember
+// DataMember
 using MDM = $reflect(foo::bar::i);
 
 my_struct x {123, 45.67f};
@@ -130,7 +130,7 @@ or go back to the original template;
 
 \begin{minted}{cpp}
 
-// Meta-Template
+// Template
 using MTpl = $reflect(std::pair);
 
 // std::pair<int, std::string> p;
