@@ -84,11 +84,13 @@ using meta_foo = $reflect(foo);
 \subsubsection{Meta-level reification}
 \label{design-reification}
 
-The metaobjects giving a first-class identity to declarations
-which are only second-class in base-level C++,
-allow to partially \say{reify} namespaces, specifiers, etc., without actually
-making them first-class citizens. This in turn allows to pass their reflections around
-metaprograms even if it was not possible with the base-level declarations.
+The metaobjects giving a \hyperref[term-first-class]{first-class identity}
+to declarations which are only second-class in base-level C++,
+allow to partially \hyperref[term-reification]{\say{reify}} namespaces,
+typedefs, specifiers, etc., without actually
+making them first-class citizens. This in turn allows to pass their
+reflections around metaprograms even if it was not possible with the
+base-level declarations.
 
 \begin{minted}[tabsize=4]{cpp}
 template <typename X>
