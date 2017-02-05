@@ -93,7 +93,7 @@ private:
 	using _meta_baz = $reflect(this::class);
 };
 
-using class = $reflect(this::class); // error: not used inside of a.
+using _meta_cls = $reflect(this::class); // error: not used inside of a class.
 
 \end{minted}
 
