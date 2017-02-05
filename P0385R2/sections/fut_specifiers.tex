@@ -1,0 +1,44 @@
+\subsection{Specifier reflection}
+\label{fut-specifiers}
+
+There are several use-cases where the reflection of specifiers would
+be useful.
+
+We might want for example to \say{copy} the storage class specifier of
+one variable to other variables
+
+\begin{minted}[tabsize=4]{cpp}
+thread_local int dummy_v;
+using m_storage = get_storage_class_specifier_t<$reflect(dummy_v)>;
+
+$unreflect(m_storage) long foo_v;   // thread_local long foo_v;
+$unreflect(m_storage) double bar_v; // thread_local double bar_v;
+$unreflect(m_storage) short baz_v;  // thread_local short baz_v;
+\end{minted}
+
+or the linkage specifier from one function
+to several other functions:
+
+\begin{minted}[tabsize=4]{cpp}
+static inline void dummy_f(void);
+using m_linkage = get_linkage_specifier_t<$reflect(dummy_f)>;
+
+$unreflect(m_linkage) volatile int foo_f(int);  // static volatile int foo_f(int);
+$unreflect(m_linkage) long bar_f(short, short); // static long bar_f(short, short);
+\end{minted}
+
+The open question at the moment is whether we should allow \say{direct}
+reflection of specifiers since some keywords like \verb@inline@ or \verb@virtual@
+have several different meanings:
+
+\begin{minted}[tabsize=4]{cpp}
+#ifdef IMPLEMENT
+using m_linkage = $reflect(static);
+#else
+using m_linkage = $reflect(extern);
+#endif
+
+$unreflect(m_linkage) volatile int foo_f(int);
+$unreflect(m_linkage) long bar_f(short, short);
+\end{minted}
+
