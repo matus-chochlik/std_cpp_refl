@@ -1124,12 +1124,13 @@ def print_overview(opts, concepts):
 	opts.output.write("\n")
 
 	# Operation ordering edges
-	for operation in findall(opts, concepts, "operation"):
-		for prev_op in findall(opts, operation, "order_after"):
-			op1_name = get_node_uname(operation)
-			op2_name = prev_op.attrib["operation"]
-			print_edge(opts, op1_name, op2_name)
-	opts.output.write("\n")
+	if opts.gen_operations:
+		for operation in findall(opts, concepts, "operation"):
+			for prev_op in findall(opts, operation, "order_after"):
+				op1_name = get_node_uname(operation)
+				op2_name = prev_op.attrib["operation"]
+				print_edge(opts, op1_name, op2_name)
+		opts.output.write("\n")
 			
 	
 	prev_mo = None
