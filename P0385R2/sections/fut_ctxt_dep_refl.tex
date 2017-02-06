@@ -8,9 +8,16 @@ are names of the base-level entities which we want to reflect.
 Context-dependent reflection would allow to obtain metadata based on the context
 in which the reflection operator is invoked, instead of on the declaration name.
 
-Several new expressions would have to be added as valid operands for
-\verb@$reflect@, allowing to reflect the \say{current} namespace, class
-or even function.
+This could take the form of either something simple like:
+
+\begin{minted}{cpp}
+$reflect()
+\end{minted}
+
+which would reflect the current scope or even the current position in the
+source code, or several new expressions could be added as valid operands for
+\verb@$reflect@, allowing to reflect the current namespace, class, template
+or function as described below.
 
 \subsubsection{Namespaces}
 
