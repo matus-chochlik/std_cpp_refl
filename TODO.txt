@@ -1,9 +1,4 @@
-- Only direct (type and namespace) alias reflection.
 - Access to private class members:
-  - Getting lists of members
-    - Additional parameter to `get_data_members`, `get_member_types`, ...
-    - Additional operation allowing access to private members in a sequence:
-      - `include_nonpublic_m<get_data_members_m<reflexpr(...)>>`
   - Getting back to the base-level from a metaobject.
     - Additional parameter to `get_pointer`,`get_reflected_type`, ...
     - Additional parameter to `(un)reflexpr`?
@@ -22,10 +17,6 @@
   - meta::UserDeclared?
   - meta::UserDefined?
   - Or just a new operation `meta::is_user_defined` or `meta::has_declaration`
-
-- Rename the reverse variant of `reflexpr` to `unreflexpr`? - improves
-  greppability, helps to distinguish reflection from reverse reflection.
-  Also simplifies the implementation, and can be used for identifier generation.
 
 - Will we need separate unrefltype and unreflexpr ?
 - Or something to disambiguate unreflexpr especially in dependent contexts
