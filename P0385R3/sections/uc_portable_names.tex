@@ -1,0 +1,23 @@
+\subsection{Portable (type) names}
+
+One of the notorious problems of \verb@std::type_info@ is that the string
+returned by its \verb@name@ member function is not standardized and is
+not even guaranteed to return any meaningful, unique human-readable string,
+at least not without de-mangling, which is platform specific.
+Furthermore the returned string is not \verb@constexpr@ and cannot be
+reasoned about at compile-time and is applicable only to types.
+One other problem with \verb@typeid@ that it is not always aware of \verb@typedef@s.
+In some cases we would like to obtain the alias name, instead of the
+\say{real} name of a type or a class member or function parameter.
+
+The ability to uniquely map any type used in a program to a human-readable,
+portable, compile-time string has several use-cases described in this paper.
+
+The \meta{Named} concept reflects named language constructs
+and provides the \verb@get_base_name@ operation
+returning their basic name without any qualifiers or decorations.
+This can be with the help of metaprogramming turned into a fully-qualified
+name. The \verb@get_display_name@ operation returns a user-friendly
+implementation-dependent string containing the full name of a declaration,
+possibly retaining type alias names.
+

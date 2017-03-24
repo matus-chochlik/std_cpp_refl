@@ -1,0 +1,66 @@
+\subsubsection{Namespace reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflect>
+#include <iostream>
+
+namespace foo { namespace bar { } }
+
+namespace foobar = foo::bar;
+
+int main(void) {
+	using namespace std;
+	using namespace std::reflect;
+
+	using meta_foo = $reflect(foo);
+
+	static_assert( Object<meta_foo>);
+
+	static_assert(!GlobalScope<meta_foo>);
+	static_assert( Namespace<meta_foo>);
+	static_assert(!Type<meta_foo>);
+	static_assert(!Alias<meta_foo>);
+
+	static_assert( Named<meta_foo>);
+	static_assert( ScopeMember<meta_foo>);
+	cout << get_base_name_v<meta_foo> << endl;
+
+	using meta_foo_bar = $reflect(foo::bar);
+
+	static_assert( Object<meta_foo_bar>);
+
+	static_assert(!GlobalScope<meta_foo_bar>);
+	static_assert( Namespace<meta_foo_bar>);
+	static_assert(!Type<meta_foo_bar>);
+	static_assert(!Alias<meta_foo_bar>);
+
+	static_assert( Named<meta_foo_bar>);
+	static_assert( ScopeMember<meta_foo_bar>);
+	cout << get_base_name_v<meta_foo_bar> << endl;
+
+	using meta_foobar = $reflect(foobar);
+
+	static_assert( Object<meta_foobar>);
+
+	static_assert(!GlobalScope<meta_foobar>);
+	static_assert( Namespace<meta_foobar>);
+	static_assert(!Type<meta_foobar>);
+	static_assert( Alias<meta_foobar>);
+
+	static_assert( Named<meta_foobar>);
+	static_assert( ScopeMember<meta_foobar>);
+	cout << get_base_name_v<meta_foobar> << " a.k.a ";
+	cout << get_base_name_v<get_aliased_t<meta_foobar>> << endl;
+
+	return 0;
+}
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+foo
+bar
+foobar a.k.a bar
+\end{verbatim}
+

@@ -1,0 +1,39 @@
+\subsubsection{Type reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflect>
+#include <iostream>
+
+int main(void) {
+	using namespace std;
+	using namespace std::reflect;
+
+	using meta_unsigned = $reflect(unsigned);
+
+	static_assert( Object<meta_unsigned>);
+	static_assert( Type<meta_unsigned>);
+	static_assert(!Alias<meta_unsigned>);
+
+	static_assert( is_same_v<
+		get_reflected_type_t<meta_unsigned>,
+		unsigned
+	>);
+
+	static_assert( Named<meta_unsigned>);
+	cout << get_base_name_v<meta_unsigned> << endl;
+
+	using meta_ptr_unsigned = $reflect(unsigned*);
+	static_assert( Named<meta_ptr_unsigned>);
+	cout << get_base_name_v<meta_ptr_unsigned> << endl;
+
+	return 0;
+}
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+unsigned int
+unsigned int
+\end{verbatim}
+

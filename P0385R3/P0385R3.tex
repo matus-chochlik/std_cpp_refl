@@ -1,0 +1,111 @@
+\documentclass[11pt,oneside]{scrartcl}
+\usepackage[a4paper,total={6.5in, 9.0in}]{geometry}
+
+\newcommand{\mchname}{Mat\'{u}\v{s} Chochl\'{i}k}
+\newcommand{\mchmail}{chochlik@gmail.com}
+\newcommand{\doctitle}{Static reflection}
+\newcommand{\docsubtitle}{Rationale, design and evolution.}
+\newcommand{\docnum}{D0385R3}
+\newcommand{\docdate}{2017-03-24}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage[colorlinks=false,hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage[titletoc]{appendix}
+\usepackage{siunitx}
+\usepackage{dirtytalk}
+\usepackage{color,soul}
+\usepackage{enumitem}
+\usepackage{cite}
+\usepackage{multirow}
+
+\usepackage{listings}
+\usepackage{minted}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\textbf{\docnum} -- \doctitle\\\scriptsize{\docsubtitle}}}
+\rhead{}
+\rfoot{\fancyplain{}{\thepage}}
+\cfoot{}
+
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf}
+\usepackage{rotating}
+
+\setcounter{tocdepth}{3} 
+
+\title{\doctitle}
+\subtitle{\docsubtitle}
+
+\author{\mchname (\mchmail)}
+
+\newcommand{\concept}[1]{{\em{#1}}}
+\newcommand{\meta}[1]{\textbf{\em{#1}}}
+
+\begin{document}
+
+\begin{tabular}{r l}
+Document number: & \docnum\\
+Date: & \docdate\\
+Project: & Programming Language C++ \\
+Audience: & Reflection (SG7) / EWG \\
+	\multirow{3}{*}{Reply-to:}
+	&\mchname (\href{mailto:\mchmail}{\mchmail}),\\
+	&Axel Naumann (\href{mailto:axel@cern.ch}{axel@cern.ch}),\\
+	&David Sankel (\href{mailto:dsankel@bloomberg.net}{dsankel@bloomberg.net})\\
+\end{tabular}
+
+\begin{center}
+\vskip 2em
+{\Huge \doctitle}\\
+{\Large \docsubtitle}
+\vskip 1em
+{\em \mchname, Axel Naumann, David Sankel}
+\vskip 2em
+\end{center}
+
+\paragraph{Abstract}
+
+The aim of this paper is to provide the rationale behind the
+design of the static reflection facility proposed in P0194,
+to enumerate and describe its potential use-cases
+and to keep a written record of its evolution. It also answers questions
+frequently asked in regard to the proposal.
+
+\tableofcontents
+
+\input{sections/introduction.tex}
+\input{sections/history.tex}
+\input{sections/motivation.tex}
+\input{sections/design.tex}
+\input{sections/use_cases.tex}
+\input{sections/future.tex}
+\input{sections/issues.tex}
+\input{sections/implementation.tex}
+\input{sections/mirror_lib.tex}
+\input{sections/faq.tex}
+\input{sections/acknowledgements.tex}
+
+\input{sections/references.tex}
+
+\begin{appendices}
+\newpage
+\appendix
+\part*{Appendix}
+\addcontentsline{toc}{part}{Appendix}
+
+\begin{figure}[h!t]
+\centering
+\includegraphics[width=0.81\linewidth]{images/hierarchy.pdf}
+\caption{Metaobject concept hierarchy}
+\end{figure}
+
+\end{appendices}
+
+\end{document}

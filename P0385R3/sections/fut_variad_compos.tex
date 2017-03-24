@@ -1,0 +1,45 @@
+\subsection{Variadic composition}
+\label{fut-variadic-composition}
+
+Another feature which\footnote{together with the ability to generate identifiers}
+has the potential to greatly simplify the implementation of several important
+use cases, including the \hyperref[use-case-struct-transf]{structure data
+member transformations}, is {\em variadic composition}.
+
+We already have variadic {\em inheritance} that is used in the implementation
+of tuples for example, but we don't have variadic {\em composition}.
+
+The reason for this is simple -- every class data member needs to have a name
+which is unique in the scope of its class and since we don't have the ability
+to generate identifiers, we cannot implement variadic composition.
+
+For instance, the structure-of-arrays transformation described in section
+\ref{use-case-struct-transf} could be simplified by using variadic composition,
+together with the \say{identifier formatting operator} described in section
+\ref{fut-ident-formatting} and the \verb@unpack_sequence@ helper template
+described in section \ref{fac-unpack-sequence}:
+
+\begin{minted}[tabsize=4]{cpp}
+template <DataMember ... MDM>
+struct soa_helper {
+	std::vector<reflect::get_reflected_type_t<reflect::get_type_t<MDM>>>
+	$identifier("vec_%1", MDM)...;
+};
+
+template <typename T>
+using soa = reflect::unpack_sequence_t<
+	reflect::get_data_members_t<$reflect(T)>,
+	soa_helper
+>;
+\end{minted}
+
+With the \say{reversible reflection} feature described in section
+\ref{fut-reverse-reflection}, the \verb@soa_helper@ could be implemented as:
+
+\begin{minted}[tabsize=4]{cpp}
+template <DataMember ... MDM>
+struct soa_helper {
+	std::vector<$unreflect(reflect::get_type_t<MDM>)>
+	$identifier("vec_%1", MDM)...;
+};
+\end{minted}

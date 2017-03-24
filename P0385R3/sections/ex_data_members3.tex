@@ -1,0 +1,53 @@
+\subsubsection{Class data members (3)}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflect>
+#include <iostream>
+
+struct A {
+	int a;
+};
+
+class B : public A {
+private:
+	bool b;
+};
+
+class C : public B {
+public:
+	char c;
+};
+
+int main(void) {
+	using namespace std;
+	using namespace std::reflect;
+
+	using meta_A = $reflect(A);
+	using meta_B = $reflect(B);
+	using meta_C = $reflect(C);
+
+	cout << get_size_v<get_public_data_members_t<meta_A>> << endl;
+	cout << get_size_v<get_public_data_members_t<meta_B>> << endl;
+	cout << get_size_v<get_public_data_members_t<meta_C>> << endl;
+
+	cout << get_size_v<get_data_members_t<meta_A>> << endl;
+	cout << get_size_v<get_data_members_t<meta_B>> << endl;
+	cout << get_size_v<get_data_members_t<meta_C>> << endl;
+
+	return 0;
+}
+\end{minted}
+
+This program produces the following output:
+
+\begin{verbatim}
+1
+0
+1
+1
+1
+1
+\end{verbatim}
+
+Note that neither the result of \texttt{get\_data\_members} nor the result of
+\texttt{get\_public\_data\_members} includes the inherited data members.

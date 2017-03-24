@@ -1,0 +1,98 @@
+\subsection{Simple serialization}
+
+We need to serialize instances of assorted classes into a structured external format
+like XML, JSON, XDR or even into a format like Graphviz dot for the purpose of creating
+a visualization of a static class or dynamic object hierarchy or graph.
+
+Reflection makes this task trivial:
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflect>
+#include <iostream>
+
+template <typename T>
+std::ostream& value_to_json(std::ostream& out, const T& v);
+
+template <typename ... T>
+void eat(T ... ) { }
+
+template <typename Metaobjects, std::size_t I, typename T>
+int field_to_json(std::ostream& out, const T& v) {
+	using meta_F = std::reflect::get_element_t<Metaobjects, I>;
+
+	if(I > 0) out << ", ";
+
+	out << '"' << std::reflect::get_base_name_v<meta_F> << "\": ";
+
+	value_to_json(out, (v.*std::reflect::get_pointer_v<meta_F>));
+
+	return 0;
+}
+
+template <typename Metaobjects, std::size_t ... I, typename T>
+void fields_to_json(std::ostream& out, const T& v, std::index_sequence<I...>) {
+	eat(field_to_json<Metaobjects, I>(out, v)...);
+}
+
+template <typename MO, typename T>
+std::ostream& reflected_to_json(std::ostream& out, const T& v, std::true_type) {
+	out << "{";
+
+	using meta_DMs = std::reflect::get_data_members_t<MO>;
+	fields_to_json<meta_DMs>(
+		out, v,
+		std::make_index_sequence<
+			std::reflect::get_size_v<meta_DMs>
+		>()
+	);
+
+	out << "}";
+	return out;
+}
+
+template <typename MO, typename T>
+std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type) {
+	return out << v;
+}
+
+template <typename T>
+std::ostream& value_to_json(std::ostream& out, const T& v) {
+	using meta_T = $reflect(T);
+	return reflected_to_json<meta_T>(
+		out, v,
+		std::reflect::Record<meta_T>()
+	);
+};
+
+struct point { float x, y, z; };
+struct triangle { point a, b, c; };
+
+struct tetrahedron {
+	triangle base;
+	point apex;
+};
+
+int main(void) {
+	using namespace std;
+
+	tetrahedron t{
+		{{0.f,0.f,0.f}, {1.f,0.f,0.f}, {0.f,0.f,1.f}},
+		{0.f,1.f,0.f}
+	};
+
+	std::cout << "{\"t\": ";
+	value_to_json(std::cout, t);
+	std::cout << "}"  << std::endl;
+
+	return 0;
+}
+\end{minted}
+
+The above is a variation of an already working code from the implementation
+of P0194R2, which produces the following output:
+
+\begin{verbatim}
+{"t": {"base": {"a": {"x": 0, "y": 0, "z": 0}, "b": {"x": 1, "y": 0, "z": 0}, \
+"c": {"x": 0, "y": 0, "z": 1}}, "apex": {"x": 0, "y": 1, "z": 0}}}
+\end{verbatim}
+

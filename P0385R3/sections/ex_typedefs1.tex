@@ -1,0 +1,72 @@
+\subsubsection{Typedef reflection}
+
+\begin{minted}[tabsize=4]{cpp}
+#include <reflect>
+#include <iostream>
+
+namespace foo {
+
+typedef int bar;
+using baz = bar;
+
+} // namespace foo
+
+int main(void) {
+	using namespace std;
+	uisng namespace std::reflect;
+
+	using meta_foo_baz = $reflect(foo::baz);
+
+	static_assert( Object<meta_foo_baz>);
+	static_assert( Type<meta_foo_baz>);
+	static_assert( Alias<meta_foo_baz>);
+
+	static_assert( is_same_v<
+		get_reflected_type_t<meta_foo_baz>,
+		foo::baz
+	>);
+
+	static_assert( Named<meta_foo_baz>);
+	cout << get_base_name_v<meta_foo_baz> << endl;
+
+	using meta_foo_bar = get_aliased_t<meta_foo_baz>;
+
+	static_assert( Object<meta_foo_bar>);
+	static_assert( Type<meta_foo_bar>);
+	static_assert( Alias<meta_foo_bar>);
+
+	static_assert( is_same_v<
+		get_reflected_type_t<meta_foo_bar>,
+		foo::bar
+	>);
+
+	static_assert( Named<meta_foo_bar>);
+	cout << get_base_name_v<meta_foo_bar> << endl;
+
+	using meta_int = get_aliased_t<meta_foo_bar>;
+
+	static_assert( Object<meta_int>);
+	static_assert( Type<meta_int>);
+	static_assert(!Alias<meta_int>);
+
+	static_assert( is_same_v<
+		get_reflected_type_t<meta_int>,
+		int
+	>);
+
+	static_assert( Named<meta_int>);
+	cout << get_base_name_v<meta_int> << endl;
+
+	return 0;
+}
+
+\end{minted}
+
+Output:
+
+\begin{verbatim}
+baz
+bar
+int
+\end{verbatim}
+

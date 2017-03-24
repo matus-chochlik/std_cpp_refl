@@ -1,0 +1,237 @@
+\subsection{Design considerations}
+\label{design-prefs}
+
+The proposed static reflection facility has been designed with the following
+considerations and goals in mind. 
+Note that some of the principles listed here
+apply only to the whole reflection facility as it is envisioned
+to look in the future, not to the initial, limited subset from P0194R3.
+
+\subsubsection{Completeness and reusability}
+\label{design-completeness}
+
+The metadata provided by reflection is reusable in many situations
+and for many different purposes.
+It does not focus on nor is limited only to the simple and immediately obvious
+use cases. New use cases which we are not aware of at this moment, may emerge
+in the future. So having or not having a compelling use case for a particular
+feature is a factor in the decision whether to include it, but it should
+not be the most important one.
+
+When completed, the proposed reflection facility will provide as much useful
+metadata as possible, reflecting various base-level
+declarations like types, namespaces, variables, functions, templates,
+specifiers\footnote{Like constness, storage-class, access, etc. specifiers} and
+will provide access to scope members, base classes, etc.
+
+This will make the compiler-assisted reflection\footnote{Either by itself or
+serving as the foundation for other standard or third-party libraries.} a useful
+tool in a wide range of scenarios during both compile-time
+and run-time and under various paradigms\footnote{Object-oriented, functional,
+etc.} depending on the application needs.
+
+\subsubsection{Consistency}
+\label{design-consistency}
+
+The reflection facility as a whole is consistent, instead of being
+composed of several ad-hoc, individually-designed parts. This makes
+its interface more tidy, coherent and easier to learn and teach.
+
+\subsubsection{Encapsulation}
+\label{design-encapsulation}
+
+The metadata is not exposed directly to the user by many different compiler
+built-ins, operators or special expressions.
+Instead it is accessible through conceptually well-defined interfaces,
+inspired by the existing {\em type-traits}, already present in
+the C++ standard template library.
+
+\subsubsection{Stratification}
+\label{design-stratification}
+
+Reflection is non-intrusive and the metaobjects are separated
+from the base-level language declarations which they reflect:
+
+\begin{minted}[tabsize=4]{cpp}
+float foo = 42.f;
+
+using m_std = $reflect(std);
+using m_int = $reflect(int);
+using m_foo = $reflect(foo);
+\end{minted}
+
+instead of for example
+
+\begin{minted}[tabsize=4]{cpp}
+using m_std = std::reflect();
+using m_int = int::reflect();
+using m_foo = foo::reflect();
+\end{minted}
+
+This is achieved by using the reflection operator which hides most of the
+\say{magic}, isolates reflection from the rest of the language,
+for example by allowing to pass expressions not valid elsewhere as operands.
+
+It is also similar to the syntax of other existing operators in C++:
+
+\begin{minted}[tabsize=4]{cpp}
+float foo = 42.f;
+
+using foo_type = decltype(foo);
+using meta_foo = $reflect(foo);
+\end{minted}
+
+\subsubsection{Meta-level reification}
+\label{design-reification}
+
+The metaobjects giving a \hyperref[term-first-class]{first-class identity}
+to declarations which are only second-class in base-level C++,
+allow to partially \hyperref[term-reification]{\say{reify}} namespaces,
+typedefs, specifiers, etc., without actually
+making them first-class citizens. This in turn allows to pass their
+reflections around metaprograms even if it was not possible with the
+base-level declarations.
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename X>
+struct my_meta_algorithm {
+	using result = /* ... */;
+};
+
+using x = my_meta_algorithm<$reflect(std)>::result; // OK
+
+using y = my_meta_algorithm<std>::result; // Error
+
+\end{minted}
+
+\subsubsection{Ontological correspondence}
+\label{design-onto-corr}
+
+The meta-level 
+corresponds to the ontology of the base-level C++ language
+which it reflects. This basically means that all important existing language
+features\footnote{Within reason, we certainly do not want to reflect every token
+in a C++ program.} will eventually be reflected by appropriate metaobjects,
+but new ones not having an equivalent in the base-level language\footnote{At least
+conceptually.} will not be invented.
+
+Ontological correspondence is one of the main factors driving the definition of the
+individual metaobject concepts and the design of their interfaces.
+
+
+\subsubsection{Efficiency}
+\label{design-efficiency}
+
+The proposed reflection is fine grained as much as possible.
+Things that are not needed for a particular application,
+are not compiled into its program code nor result in
+increased compiler footprint or compilation times.
+
+The proposed reflection facility makes a completely lazy implementation of
+metaobjects possible. Metaobjects are created only when requested and
+the reflection operator is able to generate very
+lightweight types providing internal links back to the reflected declaration.
+The actual
+metadata\footnote{Like a compile-time string containing the identifier,
+the list of metaobjects reflecting class members or the scope of a declaration,
+etc.} is materialized only when requested by the programmer via the
+templates which act as the metaobject interface.
+
+\subsubsection{Ease of use}
+\label{design-ease-of-use}
+
+Although reflection-based metaprogramming should allow to implement very
+complicated meta-algorithms, we try to adhere to the principle that things
+should be kept as simple as possible, but not simpler\footnote{Credits to
+Albert Einstein.}.
+
+This can be achieved by having a solid and powerful compiler-assisted reflection
+as the foundation and by implementing a simplifying facade on top of it once
+the common use-cases are identified.
+
+Utilities such as {\em enum-to-string}, {\em string-to-enum} or {\em get-type-name},
+etc., can be implemented on top of reflection instead of each of them using their own
+\say{dedicated compiler magic}.
+
+\subsubsection{Integration}
+\label{design-integration}
+
+The proposed reflection facility is easily
+usable with the existing introspection utilities\footnote{Like the
+{\em type-traits} or \texttt{typeid} and \texttt{std::type\_info}.}
+already provided by the standard library and by other third-party libraries.
+
+For example:
+
+\begin{minted}{cpp}
+using meta_int = $reflect(int);
+static_assert(is_integral_v<reflect::get_reflected_type_t<meta_int>>);
+\end{minted}
+
+\subsubsection{Extensibility}
+\label{design-extensibility}
+
+It is important be able to gradually add new features and to allow
+reflecting new declaration kinds in the future without introducing breaking changes.
+The metaobjects make this goal easily achievable.
+
+If we want to add reflection of previously unsupported declaration kind, for example
+the reflection of functions, we define a new {\em metaobject concept} like
+\meta{Function} and \meta{OverloadedFunction}.
+
+\begin{minted}{cpp}
+namespace reflect {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+
+template <Object T>
+concept bool Function = 
+	Named<T> && ScopeMember<T> && Typed<T>
+	__metaobject_reflects_function(T);
+
+template <Object T>
+concept bool OverloadedFunction =
+	Named<T> && ScopeMember<T> &&
+	__metaobject_reflects_overloaded_function(T);
+
+\end{minted}
+\begin{minted}{cpp}
+} // namespace reflect
+\end{minted}
+
+Then we need to extend the list of expressions which can appear
+as operands to \verb@$reflect@ to include specifiers, so that the following
+is valid code:
+
+\begin{minted}{cpp}
+using meta_func = $reflect(std::sin);
+\end{minted}
+
+To extend the interface of an existing metaobject by adding a new operation
+returning for example the elaborated type specifier of a class we need to
+add a new template like:
+
+\begin{minted}{cpp}
+namespace reflect {
+\end{minted}
+\begin{minted}[xleftmargin=1em,tabsize=4]{cpp}
+template <Class T>
+struct get_member_functions {
+	using type = /* unspecified-metaobject */;
+};
+
+template <OverloadedFunction T>
+struct get_overloads {
+	using type = /* unspecified-metaobject */;
+};
+
+template <Function T>
+struct get_parameters {
+	using type = /* unspecified-metaobject */;
+};
+
+\end{minted}
+\begin{minted}{cpp}
+} // namespace reflect
+\end{minted}
+

@@ -1,0 +1,173 @@
+\subsection{Generating identifiers programmatically}
+\label{fut-ident-gen}
+
+Some of the use cases from the committee's CFP, for example the one described
+in section \ref{use-case-struct-transf}, depend on the ability to generate
+identifiers programmatically.
+
+\subsubsection{Identifier from a generic compile-time string}
+\label{fut-op-identifier1}
+
+We will start by the most powerful, but also the most difficult to implement
+option -- an operator, say \verb@$identifier(const char (&)[N])@\footnote{We
+do not insist on this particular name in case it should be implemented.},
+which \say{creates} an identifier from an arbitrary compile-time string, so that:
+
+\begin{minted}[tabsize=4]{cpp}
+$identifier("std")::$identifier("size_t")
+$identifier("foo")(int $identifier("i"), int j);
+\end{minted}
+
+would be equivalent to 
+
+\begin{minted}[tabsize=4]{cpp}
+std::size_t foo(int i, int j);
+\end{minted}
+
+Remember that the string-returning operations defined on the named metaobjects,
+for example the \verb@reflect::get_base_name@ operation, return \verb@constexpr@
+arrays of \verb@char@s. This means that we can use them to copy the name of
+a declaration, from a metaobject reflecting that declaration:
+
+\begin{minted}[tabsize=4]{cpp}
+struct bar {
+	int foo;
+};
+
+using meta_bar_foo = $reflect(bar::foo);
+
+std::size_t $identifier(reflect::get_base_name_v<meta_bar_foo>)(int i, int j);
+\end{minted}
+
+which is again equivalent to:
+
+\begin{minted}[tabsize=4]{cpp}
+std::size_t foo(int i, int j);
+\end{minted}
+
+It's important to note, that in order to do anything more complex than just
+copying the identifiers of other declarations, we would also need some compile-time
+string manipulation utility. For example to create identifiers like
+\verb@get_%@ or \verb@set_%@ where \verb@%@ is a declaration name, we would
+need to have a function for compile-time string concatenation, like
+\verb@ct_concat@:
+
+\begin{minted}[tabsize=4]{cpp}
+using meta_bar_foo = $reflect(bar::foo);
+
+int $identifier(ct_concat("get_", reflect::get_base_name_v<meta_bar_foo>))(const bar&);
+\end{minted}
+
+which would be equivalent to:
+
+\begin{minted}[tabsize=4]{cpp}
+int get_foo(const bar&);
+\end{minted}
+
+While being very appealing and powerful, implementing this feature may
+also prove to be challenging, especially taking the different phases
+of compilation into account.
+
+\subsubsection{Identifier formatting}
+\label{fut-ident-formatting}
+
+Another option is a simplified version of the operator \verb@$identifier@,
+which would take a format string {\em literal} and optionally a pack of
+\meta{Named} metaobjects:
+
+\begin{minted}[tabsize=4]{cpp}
+struct bar {
+	int foo;
+};
+
+using meta_bar = $reflect(bar);
+using meta_foo = $reflect(bar::foo);
+
+$identifier("int")
+$identifier("get_%1_%2", meta_bar, meta_foo)(const $identifier("%1", meta_bar)&);
+\end{minted}
+
+which would result in:
+
+\begin{minted}[tabsize=4]{cpp}
+int get_bar_foo(const bar&);
+\end{minted}
+
+In this case we would only allow string {\em literals}, not arbitrary
+\verb@constexpr@ string-returning expressions and the identifier formatting
+would be handled inside of the compiler.
+
+\subsubsection{\texttt{named\_data\_member} and \texttt{named\_member\_typedef}}
+\label{fut-named-member-X}
+
+If we don't want to implement the operator \verb@$identifier@ or expose it
+to the users directly, the third option is to add new operations like
+\verb@named_member_typedef@  and \verb@named_data_member@ for \meta{Named}
+metaobjects {\em equivalent} to the following:
+
+\begin{minted}[tabsize=4]{cpp}
+template <MetaNamed MO, typename X>
+struct named_member_typedef {
+	struct type {
+		// same as
+		// typedef X $identifier(reflect::get_base_name_v<MO>);
+		typedef X __builtin_identifier_of(MO);
+	};
+};
+
+template <MetaNamed MO, typename X>
+struct named_data_member {
+	struct type {
+		// same as
+		// X $identifier(reflect::get_base_name_v<MO>);
+		X __builtin_identifier_of(MO);
+
+		template <typename ... P>
+		type(P&& ... p)
+		 : __builtin_identifier_of(MO)(forward<P>(p)...) 
+		{ }
+	};
+};
+
+template <MetaNamed MO, typename X>
+using named_member_typedef_t = typename named_member_typedef<MO, X>::type;
+
+template <MetaNamed MO, typename X>
+using named_data_member_t = typename named_data_member<MO, X>::type;
+\end{minted}
+
+So for example the specializations of \verb@named_member_typedef@ and
+\verb@named_data_member@ for the metaobject reflecting \verb@bar::foo@ would
+look like this:
+
+\begin{minted}[tabsize=4]{cpp}
+template <typename X>
+struct named_member_typedef<$reflect(bar::foo), X> {
+	struct type {
+		typedef X foo;
+	};
+};
+
+template <typename X>
+struct named_data_member<$reflect(bar::foo), X> {
+	struct type {
+		X foo;
+
+		template <typename ... P>
+		type(P&& ... p)
+		 : foo(forward<P>(p)...) 
+		{ }
+	};
+};
+\end{minted}
+
+With some clever metaprogramming we can combine specializations
+of \verb@named_data_member_t<...>@ or \verb@named_member_typedef_t<...>@
+into structures having member types or variables with names, matching other
+existing declarations.
+
+Note that this option does not give use the ability to change the identifiers,
+just copy them and it's generally less powerful.
+On the other hand, implementing it may be much less complicated
+than the first two options.
+

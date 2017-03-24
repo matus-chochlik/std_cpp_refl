@@ -1,0 +1,30 @@
+\subsection{Design evaluation}
+
+The proposed reflection facility -- assuming it is fully completed -- will have
+the following properties:
+
+\begin{itemize}
+\item covers many different use cases,
+\item is fairly powerful and expressive,
+\item is non-intrusive,
+\item is fine-grained,
+\item allows for efficient implementations,
+\item allows to manipulate and reason about all provided metadata at compile-time,
+\item gives the metadata a structure by arranging it into metaobjects,
+\item makes the metaobjects first-class entities allowing to pass
+	representations of second-class base-level language entities
+	around metaprograms as arguments and return values and store them
+	in named \say{variables}\footnote{We cannot stress the importance of this
+	feature enough.},
+\item it can serve as the foundation for other, compile-time or run-time reflection
+	utilities implementing other interfaces or fa\c{c}ades aimed at various
+	paradigms or use cases,
+\item contains and isolates all the required changes within the reflection
+	operator(s),
+\item limits the impact on existing code by prefixing the names of new operators
+	with the \verb@$@ sign and by putting the concepts and templates into
+	the nested \verb@std::reflect@ namespace,
+\item does not require any other changes to the core language, especially no
+	new rules for template parameters.
+\end{itemize}
+
