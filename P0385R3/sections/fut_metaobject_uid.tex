@@ -63,11 +63,11 @@ constexpr object_uid get_uid_v = get_uid<T>::value;
 
 As long as an instance of \verb@reflect::object_uid@ stayed \verb@constexpr@, it would
 also be possible to convert it back to a metaobject (type), for example by using
-a new version of the reflection operator \verb@$reflect@:
+a new version of the reflection operator \verb@reflexpr@:
 
 \begin{minted}[tabsize=4]{cpp}
 // pseudocode
-constexpr Object $reflect(reflect::object_uid);
+constexpr Object reflexpr(reflect::object_uid);
 \end{minted}
 
 This feature would make the use of reflection more convenient in some use cases

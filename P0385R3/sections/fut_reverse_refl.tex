@@ -1,21 +1,21 @@
 \subsection{Reversing reflection}
 \label{fut-reverse-reflection}
 
-The \verb@$reflect@ operator allows to obtain the meta-level representation
+The \verb@reflexpr@ operator allows to obtain the meta-level representation
 of a base-level declaration. But what if we wanted to do the opposite: to
 get back the original declaration from a metaobject?
 
 This of course would make sense only for a subset of metaobjects, so let's
 define a new concept like \meta{Reversible}.
 
-One way to achieve this would be to add new operator -- \verb@$unreflect@.
+One way to achieve this would be to add new operator -- \verb@unreflexpr@.
 
 Let's look at some possible use cases for this feature.
 The most trivial one is to replace the \texttt{get\_reflected\_type}
 template from the interface of \meta{Type}:
 
 \begin{minted}{cpp}
-using MT = $reflect(int);
+using MT = reflexpr(int);
 
 // ... lots of other code here ...
 
@@ -27,7 +27,7 @@ using T = get_reflected_type_t<MT>;
 
 // we could do:
 static_assert(reflect::Reversible<MT> && reflect::Type<MT>);
-using T = $unreflect(MT);
+using T = unreflexpr(MT);
 static_assert(is_same_v<T, int>);
 
 \end{minted}
@@ -42,14 +42,14 @@ namespace foo {
 	void bar(const std::string&);
 } // namespace foo
 
-using MV = $reflect(foo::str); // Variable
+using MV = reflexpr(foo::str); // Variable
 
 // ... lots of code here ...
 // using namespace foo;
-using namespace $unreflect(get_scope_t<MV>);
+using namespace unreflexpr(get_scope_t<MV>);
 
 // [foo::]bar(foo::str);
-bar($unreflect(MV));
+bar(unreflexpr(MV));
 
 \end{minted}
 
@@ -73,17 +73,17 @@ namespace bar {
 template <typename MN>
 void algorithm(const string& str, int i, int j) {
 	// [foo|bar]::func1
-	$unreflect(MN)::func1(str);
+	unreflexpr(MN)::func1(str);
 
 	// [foo|bar]::func2([foo|bar]::func3(i*j, 64, i == j), i, j);
-	$unreflect(MN)::func2($unreflect(MN)::func3(i*j, 64, i == j), i, j);
+	unreflexpr(MN)::func2(unreflexpr(MN)::func3(i*j, 64, i == j), i, j);
 }
 
 void func(const string& str, int i, int j, bool want_foo) {
 	if(want_foo) {
-		algorithm<$reflect(foo)>(str, i, j);
+		algorithm<reflexpr(foo)>(str, i, j);
 	} else {
-		algorithm<$reflect(bar)>(str, i, j);
+		algorithm<reflexpr(bar)>(str, i, j);
 	}
 }
 
@@ -97,11 +97,11 @@ namespace foo {
 	void bar(const std::string&);
 } // namespace foo
 
-using MF = $reflect(foo::bar); // Function
+using MF = reflexpr(foo::bar); // Function
 
 // ... lots of code here ...
 //   foo::bar("hello");
-$unreflect(MF)("hello");
+unreflexpr(MF)("hello");
 
 \end{minted}
 
@@ -115,13 +115,13 @@ struct my_struct {
 };
 
 // DataMember
-using MDM = $reflect(foo::bar::i);
+using MDM = reflexpr(foo::bar::i);
 
 my_struct x {123, 45.67f};
 
 assert(x.i == 123);
 // x.i = 234;
-x.$unreflect(MDM) = 234;
+x.unreflexpr(MDM) = 234;
 assert(x.i == 234);
 
 \end{minted}
@@ -131,10 +131,10 @@ or go back to the original template;
 \begin{minted}{cpp}
 
 // Template
-using MTpl = $reflect(std::pair);
+using MTpl = reflexpr(std::pair);
 
 // std::pair<int, std::string> p;
-$unreflect(MTpl)<int, std::string> p{10, "Hi!"};
+unreflexpr(MTpl)<int, std::string> p{10, "Hi!"};
 
 \end{minted}
 

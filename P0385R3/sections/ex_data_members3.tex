@@ -22,9 +22,9 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	using meta_A = $reflect(A);
-	using meta_B = $reflect(B);
-	using meta_C = $reflect(C);
+	using meta_A = reflexpr(A);
+	using meta_B = reflexpr(B);
+	using meta_C = reflexpr(C);
 
 	cout << get_size_v<get_public_data_members_t<meta_A>> << endl;
 	cout << get_size_v<get_public_data_members_t<meta_B>> << endl;

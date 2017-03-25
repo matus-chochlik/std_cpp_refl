@@ -19,27 +19,27 @@ specifier, etc.}, so that we can pass it as an argument or a return value
 in metaprograms and to separate the reflection of a declaration from the querying
 of metadata\footnote {Which will happen very often in the more complex use cases}.
 
-We introduce a new reflection operator -- \verb@$reflect@ which returns a
+We introduce a new reflection operator -- \verb@reflexpr@ which returns a
 metaobject type reflecting its operand.
 
 For example:
 
 \begin{minted}{cpp}
-using meta_global_scope     = $reflect(::);                 // GlobalScope
-using meta_int              = $reflect(int);                // Type
-using meta_std              = $reflect(std);                // Namespace
-using meta_std_size_t       = $reflect(std::size_t);        // Type and Alias
-using meta_std_thread       = $reflect(std::thread);        // Class
-using meta_std_pair         = $reflect(std::pair<int, int>);// Class
-using meta_std_launch       = $reflect(std::launch);        // Enum
-using meta_std_launch_async = $reflect(std::launch::async); // Enumerator
+using meta_global_scope     = reflexpr(::);                 // GlobalScope
+using meta_int              = reflexpr(int);                // Type
+using meta_std              = reflexpr(std);                // Namespace
+using meta_std_size_t       = reflexpr(std::size_t);        // Type and Alias
+using meta_std_thread       = reflexpr(std::thread);        // Class
+using meta_std_pair         = reflexpr(std::pair<int, int>);// Class
+using meta_std_launch       = reflexpr(std::launch);        // Enum
+using meta_std_launch_async = reflexpr(std::launch::async); // Enumerator
 \end{minted}
 
 or in the future revisions;
 
 \begin{minted}{cpp}
-using meta_std_pair         = $reflect(std::pair);          // Template
-using meta_std_sin          = $reflect(std::sin);           // OverloadedFunction
+using meta_std_pair         = reflexpr(std::pair);          // Template
+using meta_std_sin          = reflexpr(std::sin);           // OverloadedFunction
 \end{minted}
 
 etc.
@@ -51,19 +51,19 @@ metaobjects and to indicate whether a metaobject has or has not a particular
 property;
 
 \begin{minted}{cpp}
-static_assert(reflect::Named<$reflect(std)>);
-static_assert(reflect::ScopeMember<$reflect(int)>);
-static_assert(reflect::Scope<$reflect(std::string)>);
-static_assert(reflect::Alias<$reflect(std::string::size_type)>);
+static_assert(reflect::Named<reflexpr(std)>);
+static_assert(reflect::ScopeMember<reflexpr(int)>);
+static_assert(reflect::Scope<reflexpr(std::string)>);
+static_assert(reflect::Alias<reflexpr(std::string::size_type)>);
 \end{minted}
 
 or if is falls into a particular category:
 
 \begin{minted}{cpp}
-static_assert(reflect::GlobalScope<$reflect(::)>);
-static_assert(reflect::Namespace<$reflect(std)>);
-static_assert(reflect::Type<$reflect(int)>);
-static_assert(reflect::Class<$reflect(std::string)>);
+static_assert(reflect::GlobalScope<reflexpr(::)>);
+static_assert(reflect::Namespace<reflexpr(std)>);
+static_assert(reflect::Type<reflexpr(int)>);
+static_assert(reflect::Class<reflexpr(std::string)>);
 \end{minted}
 
 The individual pieces of metadata can be obtained from a metaobject by using one
@@ -76,7 +76,7 @@ reflecting declaration scope or a sequence of metaobjects reflecting class membe
 etc.:
 
 \begin{minted}{cpp}
-using meta_str = $reflect(std::string);
+using meta_str = reflexpr(std::string);
 
 get_base_name_v<meta_str>;      // a compile-time constant string
 get_reflected_type_t<meta_str>; // a base-level type: std::string

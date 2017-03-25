@@ -9,11 +9,11 @@ one variable to other variables
 
 \begin{minted}[tabsize=4]{cpp}
 thread_local int dummy_v;
-using m_storage = get_storage_class_specifier_t<$reflect(dummy_v)>;
+using m_storage = get_storage_class_specifier_t<reflexpr(dummy_v)>;
 
-$unreflect(m_storage) long foo_v;   // thread_local long foo_v;
-$unreflect(m_storage) double bar_v; // thread_local double bar_v;
-$unreflect(m_storage) short baz_v;  // thread_local short baz_v;
+unreflexpr(m_storage) long foo_v;   // thread_local long foo_v;
+unreflexpr(m_storage) double bar_v; // thread_local double bar_v;
+unreflexpr(m_storage) short baz_v;  // thread_local short baz_v;
 \end{minted}
 
 or the linkage specifier from one function
@@ -21,10 +21,10 @@ to several other functions:
 
 \begin{minted}[tabsize=4]{cpp}
 static inline void dummy_f(void);
-using m_linkage = get_linkage_specifier_t<$reflect(dummy_f)>;
+using m_linkage = get_linkage_specifier_t<reflexpr(dummy_f)>;
 
-$unreflect(m_linkage) volatile int foo_f(int);  // static volatile int foo_f(int);
-$unreflect(m_linkage) long bar_f(short, short); // static long bar_f(short, short);
+unreflexpr(m_linkage) volatile int foo_f(int);  // static volatile int foo_f(int);
+unreflexpr(m_linkage) long bar_f(short, short); // static long bar_f(short, short);
 \end{minted}
 
 The open question at the moment is whether we should allow \say{direct}
@@ -33,12 +33,12 @@ have several different meanings:
 
 \begin{minted}[tabsize=4]{cpp}
 #ifdef IMPLEMENT
-using m_linkage = $reflect(static);
+using m_linkage = reflexpr(static);
 #else
-using m_linkage = $reflect(extern);
+using m_linkage = reflexpr(extern);
 #endif
 
-$unreflect(m_linkage) volatile int foo_f(int);
-$unreflect(m_linkage) long bar_f(short, short);
+unreflexpr(m_linkage) volatile int foo_f(int);
+unreflexpr(m_linkage) long bar_f(short, short);
 \end{minted}
 

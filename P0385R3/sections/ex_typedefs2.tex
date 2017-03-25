@@ -11,7 +11,7 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	using meta_bar = $reflect(bar);
+	using meta_bar = reflexpr(bar);
 
 	static_assert( Object<meta_bar>);
 	static_assert( Type<meta_bar>);

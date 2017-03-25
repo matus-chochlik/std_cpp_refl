@@ -50,12 +50,12 @@ the preprocessor.
 We either have to add the ability to create identifiers from compile-time strings
 which may be fairly complicated, or look for some simpler workarounds.
 
-First, let's say that we have a magic operator, like \verb@$identifier@ as
+First, let's say that we have a magic operator, like \verb@idreflexpr@ as
 described in \ref{fut-op-identifier1} , which \say{creates} an identifier from
 a compile-time string, so that for example:
 
 \begin{minted}[tabsize=4]{cpp}
-$identifier("long") $identifier("foo")(int i, int j);
+idreflexpr("long") idreflexpr("foo")(int i, int j);
 \end{minted}
 
 would be equivalent to 
@@ -73,9 +73,9 @@ struct bar {
 	int foo;
 };
 
-using meta_bar_foo = $reflect(bar::foo);
+using meta_bar_foo = reflexpr(bar::foo);
 
-long $identifier(reflect::get_base_name_v<meta_bar_foo>)(int i, int j);
+long idreflexpr(reflect::get_base_name_v<meta_bar_foo>)(int i, int j);
 \end{minted}
 
 In order to do anything more complex than just
@@ -84,7 +84,7 @@ string manipulation utility implementing for example functions for
 compile-time string concatenation, like \verb@ct_concat@:
 
 \begin{minted}[tabsize=4]{cpp}
-int $identifier(ct_concat("get_", reflect::get_base_name_v<meta_bar_foo>))(const bar&);
+int idreflexpr(ct_concat("get_", reflect::get_base_name_v<meta_bar_foo>))(const bar&);
 \end{minted}
 
 which would be equivalent to:
@@ -104,7 +104,7 @@ template <typename MetaDataMember>
 struct soa_single_member {
 	// vector<T> Xs;
 	vector<reflect::get_reflected_type_t<reflect::get_type_t<MetaDataMember>>>
-		$identifier(ct_concat(reflect::get_base_name_v<MetaDataMember>, "s"));
+		idreflexpr(ct_concat(reflect::get_base_name_v<MetaDataMember>, "s"));
 
 	/* constructors, forwarding parameters to the vector, ... */
 };
@@ -118,7 +118,7 @@ struct soa_inherit_all
 template <typename T>
 struct soa
  : reflect::unpack_sequence_t<
-	reflect::get_data_members_t<$reflect(T)>,
+	reflect::get_data_members_t<reflexpr(T)>,
 	soa_inherit_all
 > {
 /* constructors forwarding parameters to soa_inherit_all */

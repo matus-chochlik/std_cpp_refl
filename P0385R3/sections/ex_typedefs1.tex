@@ -15,7 +15,7 @@ int main(void) {
 	using namespace std;
 	uisng namespace std::reflect;
 
-	using meta_foo_baz = $reflect(foo::baz);
+	using meta_foo_baz = reflexpr(foo::baz);
 
 	static_assert( Object<meta_foo_baz>);
 	static_assert( Type<meta_foo_baz>);

@@ -8,7 +8,7 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	using meta_unsigned = $reflect(unsigned);
+	using meta_unsigned = reflexpr(unsigned);
 
 	static_assert( Object<meta_unsigned>);
 	static_assert( Type<meta_unsigned>);
@@ -22,7 +22,7 @@ int main(void) {
 	static_assert( Named<meta_unsigned>);
 	cout << get_base_name_v<meta_unsigned> << endl;
 
-	using meta_ptr_unsigned = $reflect(unsigned*);
+	using meta_ptr_unsigned = reflexpr(unsigned*);
 	static_assert( Named<meta_ptr_unsigned>);
 	cout << get_base_name_v<meta_ptr_unsigned> << endl;
 

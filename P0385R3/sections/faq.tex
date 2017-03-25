@@ -31,14 +31,14 @@ So with type-based metaobjects we can do for example the following:
 template <typename Metaobject>
 void foo(void) { // do something terribly useful }
 
-foo<$reflect(int)>(); // works
-foo<$reflect(std)>(); // works
-foo<$reflect(std::string)>(); // works
-foo<$reflect(std::string::size_type)>(); // works
-foo<$reflect(std::size_t)>(); // works and is different from the above
-foo<$reflect(std::pair)>(); // works
-foo<$reflect(std::sqrt)>(); // works
-foo<$reflect(static)>(); // works
+foo<reflexpr(int)>(); // works
+foo<reflexpr(std)>(); // works
+foo<reflexpr(std::string)>(); // works
+foo<reflexpr(std::string::size_type)>(); // works
+foo<reflexpr(std::size_t)>(); // works and is different from the above
+foo<reflexpr(std::pair)>(); // works
+foo<reflexpr(std::sqrt)>(); // works
+foo<reflexpr(static)>(); // works
 \end{minted}
 
 meanwhile without metaobjects:
@@ -97,7 +97,7 @@ and compilation times?}
 \textbf{A:} This might have been a problem if the metaobjects were regular
 types and if the implementation was too coarse-grained or too eager.
 
-For example if upon the invocation of \verb@$reflect(std::string)@, the representations
+For example if upon the invocation of \verb@reflexpr(std::string)@, the representations
 of all the metadata related to the \verb@std::string@ type\footnote{Like
 the compile-time representation of its name and the metaobjects reflecting its scope
 or its members.} were generated immediately.
@@ -113,7 +113,7 @@ need to point to the internal representations of the declarations\footnote
 {Which the compiler needs to maintain anyway, regardless of reflection.}
 which they reflect.
 
-Our proposal allows very fine granularity. The result of \verb@$reflect@
+Our proposal allows very fine granularity. The result of \verb@reflexpr@
 can be a very lightweight type, as we just described and the individual
 \say{attributes} like the name, scope, members, specifiers, etc. related
 to the metaobject are materialized only when requested by one of the operations
@@ -124,8 +124,8 @@ defined for that particular metaobject concept, like \verb@get_base_name@,
 
 \textbf{Q:} {\em There are situations where you can do something much more
 easily without reflection than with it, like \verb@&variable@ vs.
-\verb@reflect::get_pointer_v<$reflect(variable)>@ or\\\verb@decltype(var)@ vs.
-\verb@reflect::get_reflected_type_t<reflect::get_type_t<$reflect(var)>>@, etc.}
+\verb@reflect::get_pointer_v<reflexpr(variable)>@ or\\\verb@decltype(var)@ vs.
+\verb@reflect::get_reflected_type_t<reflect::get_type_t<reflexpr(var)>>@, etc.}
 
 \textbf{A:} Of course there are! There are also situations where the decision
 that you want to get a pointer to or a to get the type of a (reflected) variable
@@ -198,10 +198,10 @@ void generic_func_20(void) {
 
 void main(int argc, const char** argv) {
 	std::string str;
-	generic_func_20<$reflect(str)>();
-	generic_func_18<$reflect(std)>();
-	generic_func_19<$reflect(argc)>();
-	generic_func_20<$reflect(std::pair)>();
+	generic_func_20<reflexpr(str)>();
+	generic_func_18<reflexpr(std)>();
+	generic_func_19<reflexpr(argc)>();
+	generic_func_20<reflexpr(std::pair)>();
 	// etc.
 
 	return 0;
@@ -229,7 +229,7 @@ for your situation.
 \textbf{Q:} {\em This reflection proposal is too complex to be learned by
 beginning C++ programmers and the novices might start to use unnecessarily
 complicated expressions to do simple things, like doing
-\verb@get_pointer_v<$reflect(x)>@ instead of \verb@&x@.}
+\verb@get_pointer_v<reflexpr(x)>@ instead of \verb@&x@.}
 
 \textbf{A:} 
 A novice could equally do:
@@ -402,7 +402,7 @@ classes or just get the metaobject reflecting only the first\footnote
 {zero-th} data member of a class having hundreds of members:
 
 \begin{minted}{cpp}
-get_element_t<get_data_members_t<$reflect(my_class)>, 0>;
+get_element_t<get_data_members_t<reflexpr(my_class)>, 0>;
 \end{minted}
 
 This operation would involve the creation of two metaobjects:
@@ -440,7 +440,7 @@ sequences with arrays of \verb@constexpr@ instances and the templates with
 In other words why don't we instead of:
 
 \begin{minted}{cpp}
-using mo = $reflect(my_ns::my_class);
+using mo = reflexpr(my_ns::my_class);
 
 std::cout << reflect::get_base_name_v<mo> << std::endl;
 std::cout << reflect::get_base_name_v<reflect::get_scope_t<mo>> << std::endl;
@@ -453,7 +453,7 @@ do something like one of the following:
 
 \item
 \begin{minted}{cpp}
-reflect::object mo = $reflect(my_ns::my_class);
+reflect::object mo = reflexpr(my_ns::my_class);
 
 std::cout << reflect::get_base_name(mo) << std::endl;
 std::cout << reflect::get_base_name(reflect::get_scope_t(mo)) << std::endl;
@@ -462,7 +462,7 @@ reflect::for_each(reflect::get_data_members_t(mo), my_func);
 
 \item
 \begin{minted}{cpp}
-reflect::object mo = $reflect(my_ns::my_class);
+reflect::object mo = reflexpr(my_ns::my_class);
 
 std::cout << mo.get_base_name() << std::endl;
 std::cout << mo.get_scope().get_base_name() << std::endl;

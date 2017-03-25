@@ -43,7 +43,7 @@ With the help of reflection we can do:
 template <typename T>
 T min(const T& a, const T& b) {
 	log()   << "min<"
-	        << get_base_name_v<$reflect(T)>
+	        << get_base_name_v<reflexpr(T)>
 	        << ">(" << a << ", " << b << ") = ";
 
 	T result = a<b?a:b;
@@ -65,20 +65,20 @@ can be achieved by using reflection:
 template <typename T>
 T min(const T& a, const T& b) {
 	log()   << "function: min<"
-	        << get_display_name_v<get_aliased_t<$reflect(T)>>
+	        << get_display_name_v<get_aliased_t<reflexpr(T)>>
 	        << ">("
-	        << get_base_name_v<$reflect(a)> << ": "
-	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(a)>>>
+	        << get_base_name_v<reflexpr(a)> << ": "
+	        << get_display_name_v<get_aliased_t<get_type_t<reflexpr(a)>>>
 	        << " = " << a
-	        << get_base_name_v<$reflect(b)> << ": "
-	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(b)>>>
+	        << get_base_name_v<reflexpr(b)> << ": "
+	        << get_display_name_v<get_aliased_t<get_type_t<reflexpr(b)>>>
 	        << " = " << b
 	        << ")" << std::endl
 
 	T result = a<b?a:b;
 
-	log()   << get_base_name_v<$reflect(result)> << ": "
-	        << get_display_name_v<get_aliased_t<get_type_t<$reflect(result)>>>
+	log()   << get_base_name_v<reflexpr(result)> << ": "
+	        << get_display_name_v<get_aliased_t<get_type_t<reflexpr(result)>>>
 	        << " = " << result << std::endl;
 
 	return result;
@@ -103,8 +103,8 @@ result: double = 12.34
 
 It is true that the lines:
 \begin{minted}[tabsize=4]{cpp}
-	<< get_base_name_v<$reflect(a)> << " = "
-	<< get_base_name_v<$reflect(b)> << " = "
+	<< get_base_name_v<reflexpr(a)> << " = "
+	<< get_base_name_v<reflexpr(b)> << " = "
 \end{minted}
 
 could be replaced by preprocessor stringization
@@ -152,19 +152,19 @@ void log_function_exec(MetaFunction, const std::tuple<P&...>& params) {
 
 template <typename T>
 T min(T a, T b) {
-	log_function_exec($reflect(this::function), std::tie(a, b));
+	log_function_exec(reflexpr(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T max(T a, T b) {
-	log_function_exec($reflect(this::function), std::tie(a, b));
+	log_function_exec(reflexpr(this::function), std::tie(a, b));
 	/* ... */
 }
 
 template <typename T>
 T avg(T a, T b) {
-	log_function_exec($reflect(this::function), std::tie(a, b));
+	log_function_exec(reflexpr(this::function), std::tie(a, b));
 	/* ... */
 }
 \end{minted}

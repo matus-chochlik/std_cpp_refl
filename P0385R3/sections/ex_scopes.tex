@@ -18,10 +18,10 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	using meta_int         = $reflect(int);
-	using meta_foo_bar     = $reflect(foo::bar);
-	using meta_foo_bar_baz = $reflect(foo::bar::baz);
-	using meta_foobar      = $reflect(foobar);
+	using meta_int         = reflexpr(int);
+	using meta_foo_bar     = reflexpr(foo::bar);
+	using meta_foo_bar_baz = reflexpr(foo::bar::baz);
+	using meta_foobar      = reflexpr(foobar);
 
 	static_assert( ScopeMember<meta_int>);
 	static_assert( ScopeMember<meta_foo_bar>);

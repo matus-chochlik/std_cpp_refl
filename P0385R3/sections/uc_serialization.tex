@@ -57,7 +57,7 @@ std::ostream& reflected_to_json(std::ostream& out, const T& v, std::false_type) 
 
 template <typename T>
 std::ostream& value_to_json(std::ostream& out, const T& v) {
-	using meta_T = $reflect(T);
+	using meta_T = reflexpr(T);
 	return reflected_to_json<meta_T>(
 		out, v,
 		std::reflect::Record<meta_T>()

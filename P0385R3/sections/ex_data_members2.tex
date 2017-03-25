@@ -71,8 +71,8 @@ void print_all_data_members(void) {
 }
 
 int main(void) {
-	print_data_members<$reflect(foo)>();
-	print_all_data_members<$reflect(foo)>();
+	print_data_members<reflexpr(foo)>();
+	print_all_data_members<reflexpr(foo)>();
 
 	return 0;
 }

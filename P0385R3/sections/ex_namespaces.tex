@@ -12,7 +12,7 @@ int main(void) {
 	using namespace std;
 	using namespace std::reflect;
 
-	using meta_foo = $reflect(foo);
+	using meta_foo = reflexpr(foo);
 
 	static_assert( Object<meta_foo>);
 
@@ -25,7 +25,7 @@ int main(void) {
 	static_assert( ScopeMember<meta_foo>);
 	cout << get_base_name_v<meta_foo> << endl;
 
-	using meta_foo_bar = $reflect(foo::bar);
+	using meta_foo_bar = reflexpr(foo::bar);
 
 	static_assert( Object<meta_foo_bar>);
 
@@ -38,7 +38,7 @@ int main(void) {
 	static_assert( ScopeMember<meta_foo_bar>);
 	cout << get_base_name_v<meta_foo_bar> << endl;
 
-	using meta_foobar = $reflect(foobar);
+	using meta_foobar = reflexpr(foobar);
 
 	static_assert( Object<meta_foobar>);
 
