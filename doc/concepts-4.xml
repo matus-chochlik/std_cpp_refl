@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="utf8"?>
+<concepts>
+	<baseobject kind="type" name="OriginalType"/>
+	<baseobject kind="type" name="Pointer"/>
+	<baseobject kind="type" name="size_t"/>
+
+	<baseobject kind="const" name="ConstantValue" label="Constant\nValue"/>
+	<baseobject kind="const" name="IntegralConstant" label="Integral\nConstant"/>
+	<baseobject kind="const" name="BooleanConstant" label="Boolean\nConstant"/>
+	<baseobject kind="const" name="StringConstant" label="String\nConstant"/>
+	<baseobject kind="const" name="SourceLocation" label="Source\nLocation"/>
+
+	<metaobject name="Object"
+		since_revision="0"
+		abstract="true"
+		reflects="a base-level program declaration"
+		is_a="a concept modelled by stateless anonymous types generated
+by the compiler which allow access to metadata reflecting specific program declarations"
+	/>
+
+	<operation name="reflects_same"
+		since_revision="0"
+		brief="indicates whether two metaobjects reflect the same base-level
+		declaration ('entity')."
+		result="BooleanConstant"
+	>
+		<argument type="Object"/>
+		<argument type="Object"/>
+	</operation>
+
+	<operation name="get_source_location"
+		since_revision="0"
+		brief="returns the source location info of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="SourceLocation"
+	>
+		<argument type="Object"/>
+	</operation>
+
+	<operation name="get_source_file_name"
+		since_revision="0"
+		brief="returns the source file name of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="StringConstant"
+	>
+		<argument type="Object"/>
+		<order_after operation="get_source_location"/>
+	</operation>
+
+	<operation name="get_source_line"
+		since_revision="0"
+		brief="returns the source file line number of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="IntegralConstant"
+	>
+		<argument type="Object"/>
+		<order_after operation="get_source_file_name"/>
+	</operation>
+
+	<operation name="get_source_column"
+		since_revision="0"
+		brief="returns the source file column number of the declaration
+		of $(reflected) reflected by a $(operand)."
+		result="IntegralConstant"
+	>
+		<argument type="Object"/>
+		<order_after operation="get_source_line"/>
+	</operation>
+
+	<metaobject name="ObjectSequence"
+		since_revision="0"
+		abstract="true"
+		label="Object\nSequence"
+		reflects="an ordered sequence of metaobjects"
+		brief="is an ordered sequence of metaobjects."
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<operation name="get_size"
+		since_revision="0"
+		result="IntegralConstant"
+		integer="size_t"
+		brief="returns the number of elements in the sequence."
+	>
+		<argument type="ObjectSequence" name="S"/>
+	</operation>
+
+	<operation name="get_element"
+		since_revision="0"
+		result="Object"
+		brief="returns the i-th $(result) in a $(operand)."
+	>
+		<argument type="ObjectSequence" name="S"/>
+		<argument type="size_t" name="Index"/>
+		<order_after operation="get_size"/>
+	</operation>
+
+	<operation name="unpack_sequence"
+		since_revision="2"
+		result="BaseLevelType"
+		brief="unpacks the $(operand) into a template."
+	>
+		<argument type="ObjectSequence" name="S"/>
+		<argument type="VarTypeTemplate" name="Tpl"/>
+	</operation>
+
+	<metaobject name="Named"
+		since_revision="0"
+		abstract="true"
+		reflects="a named declaration"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="ObjectSequence"/>
+	</metaobject>
+
+	<operation name="is_anonymous"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is anonymous."
+	>
+		<argument type="Named"/>
+	</operation>
+
+	<operation name="get_base_name"
+		since_revision="2"
+		result="StringConstant"
+		brief="returns the basic name of the $(reflected) reflected by
+		a $(operand)."
+	>
+		<argument type="Named"/>
+	</operation>
+
+	<operation name="get_display_name"
+		since_revision="2"
+		result="StringConstant"
+		brief="returns the display name of the $(reflected) reflected by
+		a $(operand)."
+	>
+		<argument type="Named"/>
+		<order_after operation="get_base_name"/>
+	</operation>
+
+	<metaobject name="Alias"
+		since_revision="0"
+		abstract="true"
+		reflects="a type or namespace alias"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+	<operation name="get_aliased"
+		since_revision="0"
+		result="Named"
+		brief="returns the $(result) reflecting the original declaration
+		of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Alias"/>
+	</operation>
+
+	<metaobject name="Typed"
+		since_revision="0"
+		abstract="true"
+		reflects="a base-level declaration with a type (for example
+		a variable)"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<operation name="get_type"
+		since_revision="0"
+		result="Type"
+		brief="returns the $(result) reflecting the type of $(reflected)
+		reflected by a $(operand)."
+	>
+		<argument type="Typed"/>
+	</operation>
+
+	<metaobject name="Scope"
+		since_revision="0"
+		abstract="true"
+		reflects="a scope"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<metaobject name="ScopeMember"
+		since_revision="0"
+		abstract="true"
+		reflects="a declaration nested in a scope (like the global scope,
+		namespace, class, enum, etc.)"
+	>
+		<generalization concept="Object"/>
+		<order_after concept="Named"/>
+	</metaobject>
+
+	<operation name="get_scope"
+		since_revision="0"
+		result="Scope"
+		brief="returns the $(result) reflecting the scope of $(reflected)
+		reflected by a $(operand)."
+	>
+		<argument type="ScopeMember"/>
+	</operation>
+
+	<metaobject name="RecordMember"
+		since_revision="0"
+		abstract="true"
+		reflects="a class, struct or union member"
+	>
+		<generalization concept="ScopeMember"/>
+		<constraint operation="get_scope" concept="Record"/>
+	</metaobject>
+
+	<operation name="is_public"
+		uname="is_public_record_member"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared with public access."
+	>
+		<argument type="RecordMember"/>
+	</operation>
+
+	<operation name="is_protected"
+		uname="is_protected_record_member"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared with protected access."
+	>
+		<argument type="RecordMember"/>
+		<order_after operation="is_public_record_member"/>
+	</operation>
+
+	<operation name="is_private"
+		uname="is_private_record_member"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="indicates whetherthe $(reflected) reflected by a $(operand)
+		was declared with private access."
+	>
+		<argument type="RecordMember"/>
+		<order_after operation="is_protected_record_member"/>
+	</operation>
+
+	<metaobject name="Enumerator"
+		since_revision="2"
+		abstract="true"
+		reflects="a enum member"
+	>
+		<generalization concept="ScopeMember"/>
+		<constraint operation="get_scope" concept="Enum"/>
+		<order_after concept="Enum"/>
+	</metaobject>
+
+	<metaobject name="Namespace"
+		since_revision="0"
+		reflects="a namespace"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="is_inline"
+		uname="is_inline_namespace"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as inline."
+	>
+		<argument type="Namespace"/>
+	</operation>
+
+	<metaobject name="GlobalScope"
+		since_revision="0"
+		reflects="the global scope"
+		label="Global\nScope"
+	>
+		<generalization concept="Namespace"/>
+		<constraint operation="get_scope" concept="GlobalScope"/>
+	</metaobject>
+
+	<metaobject name="Type"
+		since_revision="0"
+		reflects="a type"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+	<operation name="get_reflected_type"
+		since_revision="0"
+		result="OriginalType"
+		brief="returns the the base-level type reflected by a $(operand)."
+	>
+		<argument type="Type"/>
+	</operation>
+
+	<operation name="is_enum"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is an enum."
+	>
+		<argument type="Type"/>
+	</operation>
+
+	<operation name="is_class"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is a class."
+	>
+		<argument type="Type"/>
+	</operation>
+
+	<operation name="is_struct"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is a struct."
+	>
+		<argument type="Type"/>
+		<order_after operation="is_class"/>
+	</operation>
+
+	<operation name="is_union"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is a union."
+	>
+		<argument type="Type"/>
+		<order_after operation="is_struct"/>
+	</operation>
+
+	<metaobject name="Record"
+		since_revision="2"
+		abstract="true"
+		reflects="a class, a scope or a union"
+	>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="get_data_members"
+		since_revision="0"
+		result="ObjectSequence" element="Variable"
+		brief="returns a $(result) of $(elements) reflecting all (including
+		private and protected) data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+	</operation>
+
+	<operation name="get_public_data_members"
+		since_revision="2"
+		result="ObjectSequence" element="Variable"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting
+		the public data members of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+		<order_after operation="get_data_members"/>
+	</operation>
+
+	<operation name="get_accessible_data_members"
+		since_revision="3"
+		result="ObjectSequence" element="Variable"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting data members
+		of $(reflected) reflected by a $(operand) accessible from the point
+		of invocation of the reflection operator."
+	>
+		<argument type="Record"/>
+		<order_after operation="get_public_data_members"/>
+	</operation>
+
+	<operation name="get_member_types"
+		since_revision="1"
+		result="ObjectSequence" element="Type"
+		brief="returns a $(result) of $(elements) reflecting all (including
+		private and protected) member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+	</operation>
+
+	<operation name="get_public_member_types"
+		since_revision="2"
+		result="ObjectSequence" element="Type"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting
+		the public member types of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Record"/>
+		<order_after operation="get_member_types"/>
+	</operation>
+
+	<operation name="get_accessible_member_types"
+		since_revision="3"
+		result="ObjectSequence" element="Type"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting member types
+		of $(reflected) reflected by a $(operand) accessible from the point
+		of invocation of the reflection operator."
+	>
+		<argument type="Record"/>
+		<order_after operation="get_public_member_types"/>
+	</operation>
+
+	<metaobject name="Class"
+		since_revision="0"
+		reflects="a class or a struct"
+	>
+		<generalization concept="Record"/>
+	</metaobject>
+
+	<operation name="is_final"
+		uname="is_final_class"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as final."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Base"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of all base clases (including the private and protected ones)
+		of a $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+	</operation>
+
+	<operation name="get_public_base_classes"
+		since_revision="2"
+		result="ObjectSequence" element="Base"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of public base clases of a $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Class"/>
+		<order_after operation="get_base_classes"/>
+	</operation>
+
+	<operation name="get_accessible_base_classes"
+		since_revision="3"
+		result="ObjectSequence" element="Base"
+		secondary="true"
+		brief="returns a $(result) of $(elements) reflecting the inheritance
+		of those base clases of a $(reflected) reflected by a $(operand)
+		which are accessible from the point of invocation of the
+		reflection operator."
+	>
+		<argument type="Class"/>
+		<order_after operation="get_public_base_classes"/>
+	</operation>
+
+
+	<metaobject name="Enum"
+		since_revision="0"
+		reflects="an enumeration"
+	>
+		<generalization concept="Type"/>
+		<generalization concept="Scope"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="is_scoped_enum"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="returns true if the $(reflected) reflected by a $(operand)
+		is scoped."
+	>
+		<argument type="Enum"/>
+		<order_after operation="is_enum"/>
+	</operation>
+
+	<operation name="get_enumerators"
+		since_revision="1"
+		result="ObjectSequence" element="Constant"
+		brief="returns a $(result) of $(elements) reflecting all
+		enumerators of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Enum"/>
+	</operation>
+
+	<metaobject name="Constant"
+		since_revision="1"
+		reflects="a compile-time constant value"
+	>
+		<generalization concept="Typed"/>
+	</metaobject>
+
+	<operation name="get_constant"
+		since_revision="1"
+		result="ConstantValue"
+		brief="returns the value of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Constant"/>
+	</operation>
+
+	<metaobject name="Variable"
+		since_revision="0"
+		reflects="a variable"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
+		<generalization concept="ScopeMember"/>
+	</metaobject>
+
+	<operation name="is_constexpr"
+		since_revision="3"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as constexpr."
+	>
+		<argument type="Variable"/>
+	</operation>
+
+	<operation name="is_static"
+		since_revision="0"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared with the static specifier."
+	>
+		<argument type="Variable"/>
+	</operation>
+
+
+	<operation name="get_pointer"
+		uname="get_data_member_pointer"
+		since_revision="0"
+		result="Pointer"
+		brief="returns a pointer to the $(reflected) reflected by a $(operand).
+		If the variable is a class member then the pointer is a class data member pointer,
+		otherwise it is a plain pointer."
+	>
+		<argument type="Variable"/>
+	</operation>
+
+	<metaobject name="Base"
+		since_revision="2"
+		reflects="base class inheritance"
+	>
+		<generalization concept="Object"/>
+	</metaobject>
+
+	<operation name="get_class"
+		since_revision="2"
+		result="Class"
+		brief="returns the $(operand) reflecting the base $(reflected)
+		in a inheritance."
+	>
+		<argument type="Base"/>
+	</operation>
+
+	<operation name="is_virtual"
+		uname="is_virtual_base"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="returns whether the $(reflected) reflected by a $(operand)
+		was declared as virtual."
+	>
+		<argument type="Base"/>
+	</operation>
+
+	<operation name="is_public"
+		uname="is_public_base"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as public."
+	>
+		<argument type="Base"/>
+	</operation>
+
+	<operation name="is_protected"
+		uname="is_protected_base"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as protected."
+	>
+		<argument type="Base"/>
+		<order_after operation="is_public_base"/>
+	</operation>
+
+	<operation name="is_private"
+		uname="is_private_base"
+		since_revision="2"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as private."
+	>
+		<argument type="Base"/>
+		<order_after operation="is_protected_base"/>
+	</operation>
+
+	<metaobject name="OverloadSet"
+		since_revision="4"
+		reflects="overload set"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+	<operation name="get_overloads"
+		uname="get_overloads"
+		since_revision="4"
+		result="ObjectSequence" element="Callable"
+		brief="returns a $(result) of $(elements) reflecting all
+		overloads in a overload set"
+	>
+		<argument type="OverloadSet"/>
+	</operation>
+
+	<metaobject name="Callable"
+		since_revision="4"
+		reflects="function, constructor, destructor or operator"
+		abstract="true"
+	>
+		<generalization concept="Named"/>
+		<generalization concept="ScopeMember"/>
+		<generalization concept="Scope"/>
+	</metaobject>
+
+	<operation name="get_parameters"
+		uname="get_callable_parameters"
+		since_revision="4"
+		result="ObjectSequence" element="CallableParameter"
+		brief="returns a $(result) of $(elements) reflecting
+		the parameters of a callable"
+	>
+		<argument type="OverloadSet"/>
+	</operation>
+
+	<metaobject name="Function"
+		since_revision="4"
+		reflects="function or operator"
+	>
+		<generalization concept="Callable"/>
+		<generalization concept="Typed"/>
+	</metaobject>
+
+	<metaobject name="RecordMemberFunction"
+		since_revision="4"
+		reflects="class member function or operator"
+	>
+		<generalization concept="RecordMember"/>
+		<generalization concept="Function"/>
+	</metaobject>
+
+	<metaobject name="Constructor"
+		since_revision="4"
+		reflects="constructor"
+	>
+		<generalization concept="RecordMember"/>
+		<generalization concept="Callable"/>
+	</metaobject>
+
+	<metaobject name="Destructor"
+		since_revision="4"
+		reflects="destructor"
+	>
+		<generalization concept="RecordMember"/>
+		<generalization concept="Callable"/>
+	</metaobject>
+
+	<metaobject name="Operator"
+		since_revision="4"
+		reflects="operator"
+	>
+		<generalization concept="Function"/>
+	</metaobject>
+
+	<metaobject name="ConversionOperator"
+		since_revision="4"
+		reflects="conversion operator"
+	>
+		<generalization concept="Operator"/>
+	</metaobject>
+
+	<metaobject name="Lambda"
+		since_revision="4"
+		reflects="lambda function"
+	>
+		<generalization concept="Function"/>
+	</metaobject>
+
+	<metaobject name="CallableParameter"
+		since_revision="4"
+		reflects="function, constructor, destructor or operator parameter"
+	>
+		<generalization concept="Named"/>
+	</metaobject>
+
+
+</concepts>
