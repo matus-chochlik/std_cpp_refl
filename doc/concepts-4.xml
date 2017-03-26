@@ -639,6 +639,36 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<argument type="OverloadSet"/>
 	</operation>
 
+	<operation name="is_constexpr"
+		uname="is_constexpr_callable"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as constexpr."
+	>
+		<argument type="Callable"/>
+	</operation>
+
+	<operation name="is_noexcept"
+		uname="is_noexcept_callable"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as noexcept."
+	>
+		<argument type="Callable"/>
+	</operation>
+
+	<operation name="is_inline"
+		uname="is_inline_callable"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as inline."
+	>
+		<argument type="Callable"/>
+	</operation>
+
 	<metaobject name="Function"
 		since_revision="4"
 		reflects="function or operator"
@@ -647,6 +677,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Typed"/>
 	</metaobject>
 
+	<operation name="is_static"
+		uname="is_static_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as static."
+	>
+		<argument type="Function"/>
+	</operation>
+
 	<metaobject name="RecordMemberFunction"
 		since_revision="4"
 		reflects="class member function or operator"
@@ -654,6 +694,56 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="RecordMember"/>
 		<generalization concept="Function"/>
 	</metaobject>
+
+	<operation name="is_const"
+		uname="is_const_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as const."
+	>
+		<argument type="RecordMemberFunction"/>
+	</operation>
+
+	<operation name="is_volatile"
+		uname="is_const_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as volatile."
+	>
+		<argument type="RecordMemberFunction"/>
+	</operation>
+
+	<operation name="is_virtual"
+		uname="is_virtual_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		was declared as virtual."
+	>
+		<argument type="RecordMemberFunction"/>
+	</operation>
+
+	<operation name="is_pure_virtual"
+		uname="is_pure_virtual_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is pure virtual."
+	>
+		<argument type="RecordMemberFunction"/>
+	</operation>
+
+	<operation name="is_override"
+		uname="is_override_function"
+		since_revision="4"
+		result="BooleanConstant"
+		brief="indicates whether the $(reflected) reflected by a $(operand)
+		is a virtual function override."
+	>
+		<argument type="RecordMemberFunction"/>
+	</operation>
 
 	<metaobject name="Constructor"
 		since_revision="4"
