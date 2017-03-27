@@ -632,7 +632,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 	<operation name="get_parameters"
 		uname="get_callable_parameters"
 		since_revision="4"
-		result="ObjectSequence" element="CallableParameter"
+		result="ObjectSequence" element="FunctionParameter"
 		brief="returns a $(result) of $(elements) reflecting
 		the parameters of a callable"
 	>
@@ -782,7 +782,16 @@ by the compiler which allow access to metadata reflecting specific program decla
 		<generalization concept="Function"/>
 	</metaobject>
 
-	<metaobject name="CallableParameter"
+	<operation name="get_captures"
+		since_revision="4"
+		result="ObjectSequence" element="Variable"
+		brief="returns a $(result) of $(elements) reflecting
+		the captured variables of $(reflected) reflected by a $(operand)."
+	>
+		<argument type="Lambda"/>
+	</operation>
+
+	<metaobject name="FunctionParameter"
 		since_revision="4"
 		reflects="function, constructor, destructor or operator parameter"
 	>
