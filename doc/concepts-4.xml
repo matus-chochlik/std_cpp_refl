@@ -796,6 +796,7 @@ by the compiler which allow access to metadata reflecting specific program decla
 		reflects="function, constructor, destructor or operator parameter"
 	>
 		<generalization concept="Named"/>
+		<generalization concept="Typed"/>
 	</metaobject>
 
 
