@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Function');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Typed', 'Function');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Callable', 'Function');
+

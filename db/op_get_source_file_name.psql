@@ -1,0 +1,2 @@
+INSERT INTO reflexpr.operation
+(result, name) VALUES('StringConstant', 'get_source_file_name');

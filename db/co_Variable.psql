@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Variable');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Typed', 'Variable');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'Variable');
+

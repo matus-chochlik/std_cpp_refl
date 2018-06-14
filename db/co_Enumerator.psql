@@ -1,0 +1,6 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Enumerator');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Constant', 'Enumerator');

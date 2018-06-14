@@ -1,0 +1,6 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Type');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'Type');

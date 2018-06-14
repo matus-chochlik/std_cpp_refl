@@ -1,0 +1,10 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Callable');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Scope', 'Callable');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'Callable');

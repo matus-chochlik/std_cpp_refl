@@ -1,0 +1,13 @@
+--
+-- Schema
+--
+DROP SCHEMA reflexpr CASCADE;
+CREATE SCHEMA reflexpr;
+
+CREATE DOMAIN reflexpr.identifier AS VARCHAR(64);
+\i tables.psql
+
+--
+-- Data
+--
+\i concepts.psql

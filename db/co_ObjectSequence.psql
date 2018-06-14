@@ -1,0 +1,6 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('ObjectSequence');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Object', 'ObjectSequence');

@@ -1,0 +1,10 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Constant');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Typed', 'Constant');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'Constant');

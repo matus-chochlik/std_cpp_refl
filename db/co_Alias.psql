@@ -1,0 +1,7 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Alias');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'Alias');
+

@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Enum');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Type', 'Enum');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Scope', 'Enum');
+

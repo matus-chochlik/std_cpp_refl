@@ -1,0 +1,107 @@
+--
+-- concept
+--
+CREATE TABLE reflexpr.concept (
+	concept_name reflexpr.identifier NOT NULL,
+	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+ALTER TABLE reflexpr.concept
+ADD PRIMARY KEY(concept_name);
+
+
+--
+-- concept_inheritance
+--
+CREATE TABLE reflexpr.concept_inheritance (
+	generalization reflexpr.identifier NOT NULL,
+	specialization reflexpr.identifier NOT NULL
+);
+
+ALTER TABLE reflexpr.concept_inheritance
+ADD PRIMARY KEY(generalization, specialization);
+
+ALTER TABLE reflexpr.concept_inheritance
+ADD FOREIGN KEY(generalization) REFERENCES reflexpr.concept;
+
+ALTER TABLE reflexpr.concept_inheritance
+ADD FOREIGN KEY(specialization) REFERENCES reflexpr.concept;
+
+--
+-- concept_hierarchy
+--
+CREATE TABLE reflexpr.concept_hierarchy (
+	generalization reflexpr.identifier NOT NULL,
+	specialization reflexpr.identifier NOT NULL,
+	reference_count INTEGER NOT NULL
+);
+
+ALTER TABLE reflexpr.concept_hierarchy
+ADD PRIMARY KEY(generalization, specialization);
+
+ALTER TABLE reflexpr.concept_hierarchy
+ADD FOREIGN KEY(generalization) REFERENCES reflexpr.concept;
+
+ALTER TABLE reflexpr.concept_hierarchy
+ADD FOREIGN KEY(specialization) REFERENCES reflexpr.concept;
+
+CREATE FUNCTION reflexpr.update_concept_hierarchy ()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	INSERT INTO reflexpr.concept_hierarchy
+	SELECT generalization, NEW.specialization, 1
+	FROM reflexpr.concept_hierarchy
+	WHERE specialization = NEW.generalization
+	ON CONFLICT (generalization, specialization)
+	DO UPDATE SET reference_count = reflexpr.concept_hierarchy.reference_count + 1;
+
+	INSERT INTO reflexpr.concept_hierarchy
+	(generalization, specialization, reference_count)
+	VALUES(NEW.generalization, NEW.specialization, 1)
+	ON CONFLICT (generalization, specialization)
+	DO UPDATE SET reference_count = reflexpr.concept_hierarchy.reference_count + 1;
+
+	RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_concept_hierarchy_update
+AFTER INSERT ON reflexpr.concept_inheritance
+FOR EACH ROW EXECUTE PROCEDURE reflexpr.update_concept_hierarchy();
+
+
+--
+-- operation
+--
+CREATE TABLE reflexpr.operation (
+	result reflexpr.identifier NOT NULL,
+	operation_name reflexpr.identifier NOT NULL
+);
+
+ALTER TABLE reflexpr.operation
+ADD PRIMARY KEY(result, operation_name);
+
+ALTER TABLE reflexpr.operation
+ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
+
+
+--
+-- operation_parameter
+--
+CREATE TABLE reflexpr.operation_parameter (
+	result reflexpr.identifier NOT NULL,
+	operation_name reflexpr.identifier NOT NULL,
+	parameter_name reflexpr.identifier NOT NULL,
+	order SMALLINT NOT NULL
+);
+
+ALTER TABLE reflexpr.operation_parameter
+ADD PRIMARY KEY(result, operation_name, parameter_name, order);
+
+ALTER TABLE reflexpr.operation_parameter
+ADD FOREIGN KEY(result, operation_name) REFERENCES reflexpr.operation;
+
+ALTER TABLE reflexpr.operation_parameter
+ADD FOREIGN KEY(parameter_name) REFERENCES reflexpr.concept;
+

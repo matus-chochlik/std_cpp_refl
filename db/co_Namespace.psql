@@ -1,0 +1,10 @@
+INSERT INTO reflexpr.concept
+(name) VALUES('Namespace');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Named', 'Namespace');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Scope', 'Namespace');
