@@ -1,9 +1,0 @@
-
-[/ Copyright 2015 Matus Chochlik.                             ]
-
-[section:specifiers Specifiers]
-
-[import specifiers.hpp]
-[example_specifiers]
-
-[endsect]

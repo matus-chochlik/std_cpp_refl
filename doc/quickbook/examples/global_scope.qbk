@@ -1,9 +1,0 @@
-
-[/ Copyright 2015 Matus Chochlik.                             ]
-
-[section:global_scope Global scope reflection]
-
-[import global_scope.hpp]
-[example_global_scope]
-
-[endsect]

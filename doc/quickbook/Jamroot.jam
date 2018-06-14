@@ -1,8 +1,0 @@
-project StdCppRefl ;
-
-using boostbook ;
-using quickbook ;
-
-xml index : index.qbk ;
-
-boostbook doc : index : ;

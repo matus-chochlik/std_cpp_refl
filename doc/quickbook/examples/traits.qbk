@@ -1,9 +1,0 @@
-
-[/ Copyright 2015 Matus Chochlik.                             ]
-
-[section:traits Traits]
-
-[import traits.hpp]
-[example_traits]
-
-[endsect]
