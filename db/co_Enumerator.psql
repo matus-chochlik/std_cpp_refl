@@ -1,5 +1,5 @@
 INSERT INTO reflexpr.concept
-(name) VALUES('Enumerator');
+(concept_name) VALUES('Enumerator');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)

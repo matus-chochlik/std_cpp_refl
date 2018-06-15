@@ -1,0 +1,16 @@
+\i op_reflects_same.psql
+\i op_get_source_file_name.psql
+\i op_get_source_file_line.psql
+\i op_get_source_file_column.psql
+
+\i op_get_size.psql
+\i op_get_element.psql
+\i op_unpack_sequence.psql
+
+\i op_is_unnamed.psql
+\i op_get_name.psql
+\i op_get_display_name.psql
+
+\i op_get_aliased.psql
+
+\i op_get_type.psql

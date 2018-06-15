@@ -3,7 +3,9 @@
 --
 CREATE TABLE reflexpr.concept (
 	concept_name reflexpr.identifier NOT NULL,
-	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE
+	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE,
+	is_value BOOLEAN NULL,
+	is_type BOOLEAN NULL
 );
 
 ALTER TABLE reflexpr.concept
@@ -28,47 +30,71 @@ ALTER TABLE reflexpr.concept_inheritance
 ADD FOREIGN KEY(specialization) REFERENCES reflexpr.concept;
 
 --
--- concept_hierarchy
+-- indirect_concept_inheritance
 --
-CREATE TABLE reflexpr.concept_hierarchy (
+CREATE TABLE reflexpr.indirect_concept_inheritance (
 	generalization reflexpr.identifier NOT NULL,
 	specialization reflexpr.identifier NOT NULL,
-	reference_count INTEGER NOT NULL
+	level_offset SMALLINT NOT NULL
 );
 
-ALTER TABLE reflexpr.concept_hierarchy
-ADD PRIMARY KEY(generalization, specialization);
+ALTER TABLE reflexpr.indirect_concept_inheritance
+ADD PRIMARY KEY(generalization, specialization, level_offset);
 
-ALTER TABLE reflexpr.concept_hierarchy
+ALTER TABLE reflexpr.indirect_concept_inheritance
 ADD FOREIGN KEY(generalization) REFERENCES reflexpr.concept;
 
-ALTER TABLE reflexpr.concept_hierarchy
+ALTER TABLE reflexpr.indirect_concept_inheritance
 ADD FOREIGN KEY(specialization) REFERENCES reflexpr.concept;
 
-CREATE FUNCTION reflexpr.update_concept_hierarchy ()
+CREATE FUNCTION reflexpr.update_indirect_concept_inheritance ()
 RETURNS TRIGGER AS
 $$
 BEGIN
-	INSERT INTO reflexpr.concept_hierarchy
-	SELECT generalization, NEW.specialization, 1
-	FROM reflexpr.concept_hierarchy
+	INSERT INTO reflexpr.indirect_concept_inheritance
+	SELECT generalization, NEW.specialization, level_offset + 1
+	FROM reflexpr.indirect_concept_inheritance
 	WHERE specialization = NEW.generalization
-	ON CONFLICT (generalization, specialization)
-	DO UPDATE SET reference_count = reflexpr.concept_hierarchy.reference_count + 1;
+	ON CONFLICT (generalization, specialization, level_offset)
+	DO NOTHING;
 
-	INSERT INTO reflexpr.concept_hierarchy
-	(generalization, specialization, reference_count)
-	VALUES(NEW.generalization, NEW.specialization, 1)
-	ON CONFLICT (generalization, specialization)
-	DO UPDATE SET reference_count = reflexpr.concept_hierarchy.reference_count + 1;
+	INSERT INTO reflexpr.indirect_concept_inheritance
+	SELECT NEW.generalization, specialization, level_offset + 1
+	FROM reflexpr.indirect_concept_inheritance
+	WHERE generalization = NEW.specialization
+	ON CONFLICT (generalization, specialization, level_offset)
+	DO NOTHING;
+
+	INSERT INTO reflexpr.indirect_concept_inheritance
+	(generalization, specialization, level_offset)
+	VALUES(NEW.generalization, NEW.specialization, 1);
 
 	RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_concept_hierarchy_update
+CREATE TRIGGER trigger_indirect_concept_inheritance_update
 AFTER INSERT ON reflexpr.concept_inheritance
-FOR EACH ROW EXECUTE PROCEDURE reflexpr.update_concept_hierarchy();
+FOR EACH ROW EXECUTE PROCEDURE reflexpr.update_indirect_concept_inheritance();
+
+--
+-- concept_hierarchy
+--
+CREATE VIEW reflexpr.concept_hierarchy AS
+SELECT
+	concept_name AS generalization,
+	concept_name AS specialization,
+	0 AS min_level_offset,
+	0 AS max_level_offset
+FROM reflexpr.concept
+UNION
+SELECT
+	generalization,
+	specialization,
+	min(level_offset),
+	max(level_offset)
+FROM reflexpr.indirect_concept_inheritance
+GROUP BY (generalization, specialization);
 
 
 --
@@ -92,16 +118,28 @@ ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
 CREATE TABLE reflexpr.operation_parameter (
 	result reflexpr.identifier NOT NULL,
 	operation_name reflexpr.identifier NOT NULL,
-	parameter_name reflexpr.identifier NOT NULL,
-	order SMALLINT NOT NULL
+	parameter reflexpr.identifier NOT NULL,
+	number SMALLINT NOT NULL
 );
 
 ALTER TABLE reflexpr.operation_parameter
-ADD PRIMARY KEY(result, operation_name, parameter_name, order);
+ADD PRIMARY KEY(result, operation_name, number);
 
 ALTER TABLE reflexpr.operation_parameter
 ADD FOREIGN KEY(result, operation_name) REFERENCES reflexpr.operation;
 
 ALTER TABLE reflexpr.operation_parameter
-ADD FOREIGN KEY(parameter_name) REFERENCES reflexpr.concept;
+ADD FOREIGN KEY(parameter) REFERENCES reflexpr.concept;
 
+--
+-- derived_operation_parameter
+--
+CREATE VIEW reflexpr.derived_operation_parameter AS
+SELECT
+	result,
+	operation_name,
+	specialization AS parameter,
+	number
+FROM reflexpr.operation_parameter op
+JOIN reflexpr.concept_hierarchy ch
+ON(op.parameter = ch.generalization);

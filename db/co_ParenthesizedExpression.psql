@@ -1,5 +1,5 @@
 INSERT INTO reflexpr.concept
-(name) VALUES('ParenthesizedExpression');
+(concept_name) VALUES('ParenthesizedExpression');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)

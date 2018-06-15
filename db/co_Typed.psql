@@ -1,5 +1,5 @@
 INSERT INTO reflexpr.concept
-(name) VALUES('Typed');
+(concept_name) VALUES('Typed');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)

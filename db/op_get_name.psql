@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
 (result, operation_name)
-VALUES('StringConstant', 'get_source_file_name');
+VALUES('StringConstant', 'get_name');
 
 INSERT INTO reflexpr.operation_parameter
 (result, operation_name, number, parameter)
-VALUES('StringConstant', 'get_source_file_name', 0, 'Object');
+VALUES('StringConstant', 'get_name', 0, 'Named');

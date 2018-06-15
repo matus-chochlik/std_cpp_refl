@@ -11,3 +11,4 @@ CREATE DOMAIN reflexpr.identifier AS VARCHAR(64);
 -- Data
 --
 \i concepts.psql
+\i operations.psql

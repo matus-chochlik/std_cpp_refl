@@ -1,4 +1,8 @@
-\i ty_StringConstant.psql
+\i sc_StringConstant.psql
+\i sc_IntegerConstant.psql
+\i sc_BooleanConstant.psql
+\i sc_UnpackTemplate.psql
+\i sc_BaseLevelType.psql
 
 \i co_Object.psql
 \i co_ObjectSequence.psql

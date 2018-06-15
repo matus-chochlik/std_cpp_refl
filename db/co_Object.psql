@@ -1,2 +1,2 @@
 INSERT INTO reflexpr.concept
-(name) VALUES('Object');
+(concept_name) VALUES('Object');
