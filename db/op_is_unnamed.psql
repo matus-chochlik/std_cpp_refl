@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('BooleanConstant', 'is_unnamed');
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_unnamed', 'Named');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('BooleanConstant', 'is_unnamed', 0, 'Named');
+(operation_name, operation_overload, position, parameter)
+VALUES('is_unnamed', 'Named', 0, 'Named');

@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('Type', 'get_type');
+(result, operation_name, operation_overload)
+VALUES('Type', 'get_type', 'Typed');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('Type', 'get_type', 0, 'Typed');
+(operation_name, operation_overload, position, parameter)
+VALUES('get_type', 'Typed', 0, 'Typed');

@@ -1,11 +1,11 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('BaseLevelType', 'unpack_sequence');
+(result, operation_name, operation_overload)
+VALUES('BaseLevelType', 'unpack_sequence', 'ObjectSequence');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('BaseLevelType', 'unpack_sequence', 0, 'UnpackTemplate');
+(operation_name, operation_overload, position, parameter)
+VALUES('unpack_sequence', 'ObjectSequence', 0, 'UnpackTemplate');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('BaseLevelType', 'unpack_sequence', 1, 'ObjectSequence');
+(operation_name, operation_overload, position, parameter)
+VALUES('unpack_sequence', 'ObjectSequence', 1, 'ObjectSequence');

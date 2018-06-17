@@ -1,11 +1,11 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('BooleanConstant', 'reflects_same');
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'reflects_same', 'Object');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('BooleanConstant', 'reflects_same', 0, 'Object');
+(operation_name, operation_overload, position, parameter)
+VALUES('reflects_same', 'Object', 0, 'Object');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('BooleanConstant', 'reflects_same', 1, 'Object');
+(operation_name, operation_overload, position, parameter)
+VALUES('reflects_same', 'Object', 1, 'Object');

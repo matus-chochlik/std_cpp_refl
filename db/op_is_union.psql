@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('StringConstant', 'get_name', 'Named');
+VALUES('BooleanConstant', 'is_union', 'Type');
 
 INSERT INTO reflexpr.operation_parameter
 (operation_name, operation_overload, position, parameter)
-VALUES('get_name', 'Named', 0, 'Named');
+VALUES('is_union', 'Type', 0, 'Type');

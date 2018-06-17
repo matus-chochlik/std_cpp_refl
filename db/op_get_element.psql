@@ -1,11 +1,11 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('Object', 'get_element');
+(result, operation_name, operation_overload)
+VALUES('Object', 'get_element', 'ObjectSequence');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('Object', 'get_element', 0, 'IntegerConstant');
+(operation_name, operation_overload, position, parameter)
+VALUES( 'get_element', 'ObjectSequence', 0, 'IntegerConstant');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('Object', 'get_element', 1, 'ObjectSequence');
+(operation_name, operation_overload, position, parameter)
+VALUES('get_element', 'ObjectSequence', 1, 'ObjectSequence');

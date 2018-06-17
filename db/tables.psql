@@ -102,11 +102,12 @@ GROUP BY (generalization, specialization);
 --
 CREATE TABLE reflexpr.operation (
 	result reflexpr.identifier NOT NULL,
-	operation_name reflexpr.identifier NOT NULL
+	operation_name reflexpr.identifier NOT NULL,
+	operation_overload reflexpr.identifier NOT NULL
 );
 
 ALTER TABLE reflexpr.operation
-ADD PRIMARY KEY(result, operation_name);
+ADD PRIMARY KEY(operation_name, operation_overload);
 
 ALTER TABLE reflexpr.operation
 ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
@@ -116,17 +117,17 @@ ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
 -- operation_parameter
 --
 CREATE TABLE reflexpr.operation_parameter (
-	result reflexpr.identifier NOT NULL,
 	operation_name reflexpr.identifier NOT NULL,
+	operation_overload reflexpr.identifier NOT NULL,
 	parameter reflexpr.identifier NOT NULL,
-	number SMALLINT NOT NULL
+	position SMALLINT NOT NULL
 );
 
 ALTER TABLE reflexpr.operation_parameter
-ADD PRIMARY KEY(result, operation_name, number);
+ADD PRIMARY KEY(operation_name, operation_overload, position);
 
 ALTER TABLE reflexpr.operation_parameter
-ADD FOREIGN KEY(result, operation_name) REFERENCES reflexpr.operation;
+ADD FOREIGN KEY(operation_name, operation_overload) REFERENCES reflexpr.operation;
 
 ALTER TABLE reflexpr.operation_parameter
 ADD FOREIGN KEY(parameter) REFERENCES reflexpr.concept;
@@ -136,10 +137,22 @@ ADD FOREIGN KEY(parameter) REFERENCES reflexpr.concept;
 --
 CREATE VIEW reflexpr.derived_operation_parameter AS
 SELECT
-	result,
 	operation_name,
+	operation_overload,
 	specialization AS parameter,
-	number
+	position
 FROM reflexpr.operation_parameter op
 JOIN reflexpr.concept_hierarchy ch
 ON(op.parameter = ch.generalization);
+
+--
+-- derived_operation_result
+--
+CREATE VIEW reflexpr.derived_operation_result AS
+SELECT
+	specialization AS result,
+	operation_name,
+	operation_overload
+FROM reflexpr.operation op
+JOIN reflexpr.concept_hierarchy ch
+ON(op.result = ch.generalization);

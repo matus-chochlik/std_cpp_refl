@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('IntegerConstant', 'get_source_file_line');
+(result, operation_name, operation_overload)
+VALUES('IntegerConstant', 'get_source_file_line', 'Object');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('IntegerConstant', 'get_source_file_line', 0, 'Object');
+(operation_name, operation_overload, position, parameter)
+VALUES('get_source_file_line', 'Object', 0, 'Object');

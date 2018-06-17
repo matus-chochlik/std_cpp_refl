@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
-(result, operation_name)
-VALUES('Named', 'get_aliased');
+(result, operation_name, operation_overload)
+VALUES('Named', 'get_aliased', 'Alias');
 
 INSERT INTO reflexpr.operation_parameter
-(result, operation_name, number, parameter)
-VALUES('Named', 'get_aliased', 0, 'Alias');
+(operation_name, operation_overload, position, parameter)
+VALUES('get_aliased', 'Alias', 0, 'Alias');

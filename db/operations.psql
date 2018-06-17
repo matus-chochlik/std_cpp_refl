@@ -13,4 +13,16 @@
 
 \i op_get_aliased.psql
 
+\i op_get_scope.psql
+
 \i op_get_type.psql
+\i op_get_reflected_type.psql
+
+\i op_is_enum.psql
+\i op_is_struct.psql
+\i op_is_class.psql
+\i op_is_union.psql
+
+\i op_is_public.psql
+\i op_is_protected.psql
+\i op_is_private.psql
