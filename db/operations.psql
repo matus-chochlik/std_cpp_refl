@@ -26,3 +26,7 @@
 \i op_is_public.psql
 \i op_is_protected.psql
 \i op_is_private.psql
+
+\i op_get_public_data_members.psql
+\i op_get_accessible_data_members.psql
+\i op_get_data_members.psql

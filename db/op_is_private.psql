@@ -2,14 +2,14 @@ INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
 VALUES('BooleanConstant', 'is_private', 'RecordMember');
 
-INSERT INTO reflexpr.operation_parameter
-(operation_name, operation_overload, position, parameter)
-VALUES('is_private', 'RecordMember', 0, 'RecordMember');
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_private', 'RecordMember');
 
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
 VALUES('BooleanConstant', 'is_private', 'Base');
 
-INSERT INTO reflexpr.operation_parameter
-(operation_name, operation_overload, position, parameter)
-VALUES('is_private', 'Base', 0, 'Base');
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_private', 'Base');

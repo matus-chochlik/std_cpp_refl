@@ -120,7 +120,7 @@ CREATE TABLE reflexpr.operation_parameter (
 	operation_name reflexpr.identifier NOT NULL,
 	operation_overload reflexpr.identifier NOT NULL,
 	parameter reflexpr.identifier NOT NULL,
-	position SMALLINT NOT NULL
+	position SMALLINT NOT NULL DEFAULT 0
 );
 
 ALTER TABLE reflexpr.operation_parameter
@@ -131,6 +131,29 @@ ADD FOREIGN KEY(operation_name, operation_overload) REFERENCES reflexpr.operatio
 
 ALTER TABLE reflexpr.operation_parameter
 ADD FOREIGN KEY(parameter) REFERENCES reflexpr.concept;
+
+--
+-- simple_operation_parameter
+--
+CREATE VIEW reflexpr.simple_operation_parameter AS
+SELECT operation_name, parameter
+FROM reflexpr.operation_parameter;
+
+CREATE FUNCTION reflexpr.insert_simple_operation_parameter () RETURNS TRIGGER
+AS $$
+BEGIN
+INSERT INTO reflexpr.operation_parameter
+(operation_name, operation_overload, parameter, position)
+VALUES(NEW.operation_name, NEW.parameter, NEW.parameter, 0);
+
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_simple_operation_parameter_insert
+INSTEAD OF INSERT ON reflexpr.simple_operation_parameter
+FOR EACH ROW
+EXECUTE PROCEDURE reflexpr.insert_simple_operation_parameter ();
 
 --
 -- derived_operation_parameter

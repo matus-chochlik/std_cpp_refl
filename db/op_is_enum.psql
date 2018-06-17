@@ -2,6 +2,6 @@ INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
 VALUES('BooleanConstant', 'is_enum', 'Type');
 
-INSERT INTO reflexpr.operation_parameter
-(operation_name, operation_overload, position, parameter)
-VALUES('is_enum', 'Type', 0, 'Type');
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_enum', 'Type');
