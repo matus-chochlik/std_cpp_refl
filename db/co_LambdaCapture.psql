@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('LambdaCapture');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Typed', 'LambdaCapture');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ScopeMember', 'LambdaCapture');
+

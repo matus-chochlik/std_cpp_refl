@@ -32,6 +32,8 @@
 \i co_Function.psql
 \i co_MemberFunction.psql
 \i co_SpecialMemberFunction.psql
+\i co_Operator.psql
+\i co_ConversionOperator.psql
 
 \i co_ParenthesizedExpression.psql
 \i co_FunctionCallExpression.psql

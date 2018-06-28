@@ -1,0 +1,15 @@
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_explicit', 'Constructor');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_explicit', 'Constructor');
+
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_explicit', 'ConversionOperator');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_explicit', 'ConversionOperator');

@@ -1,0 +1,15 @@
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('PointerConstant', 'get_pointer', 'Variable');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('get_pointer', 'Variable');
+
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('PointerConstant', 'get_pointer', 'Function');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('get_pointer', 'Function');

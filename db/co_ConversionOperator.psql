@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ConversionOperator');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Operator', 'ConversionOperator');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('MemberFunction', 'ConversionOperator');
+
