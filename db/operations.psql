@@ -69,3 +69,7 @@
 \i op_is_pure_virtual.psql
 \i op_is_override.psql
 \i op_is_final.psql
+
+\i op_uses_default_copy_capture.psql
+\i op_uses_default_reference_capture.psql
+\i op_get_captures.psql

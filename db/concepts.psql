@@ -35,6 +35,9 @@
 \i co_Operator.psql
 \i co_ConversionOperator.psql
 
+\i co_Lambda.psql
+\i co_LambdaCapture.psql
+
 \i co_ParenthesizedExpression.psql
 \i co_FunctionCallExpression.psql
 \i co_FunctionalTypeConversion.psql
