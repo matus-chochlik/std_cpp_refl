@@ -1,0 +1,15 @@
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_virtual', 'Base');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_virtual', 'Base');
+
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_virtual', 'MemberFunction');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_virtual', 'MemberFunction');

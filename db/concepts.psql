@@ -1,6 +1,9 @@
+\i sc_ConstantValue.psql
 \i sc_StringConstant.psql
 \i sc_IntegerConstant.psql
 \i sc_BooleanConstant.psql
+\i sc_PointerConstant.psql
+
 \i sc_UnpackTemplate.psql
 \i sc_BaseLevelType.psql
 
@@ -28,6 +31,7 @@
 \i co_FunctionParameter.psql
 \i co_Function.psql
 \i co_MemberFunction.psql
+\i co_SpecialMemberFunction.psql
 
 \i co_ParenthesizedExpression.psql
 \i co_FunctionCallExpression.psql

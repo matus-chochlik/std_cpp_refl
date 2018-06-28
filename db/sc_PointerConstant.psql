@@ -1,0 +1,6 @@
+INSERT INTO reflexpr.concept
+(concept_name, is_metaobject, is_value) VALUES('PointerConstant', False, True);
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ConstantValue', 'PointerConstant');

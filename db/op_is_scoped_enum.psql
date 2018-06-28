@@ -1,0 +1,7 @@
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_scoped_enum', 'Enum');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_scoped_enum', 'Enum');

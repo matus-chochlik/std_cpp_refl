@@ -23,6 +23,10 @@
 \i op_is_class.psql
 \i op_is_union.psql
 
+\i op_is_scoped_enum.psql
+\i op_get_underlying_type.psql
+\i op_get_enumerators.psql
+
 \i op_is_public.psql
 \i op_is_protected.psql
 \i op_is_private.psql
@@ -47,5 +51,11 @@
 \i op_get_destructor.psql
 \i op_get_operators.psql
 
+\i op_get_constant.psql
 
 \i op_is_constexpr.psql
+\i op_is_const.psql
+\i op_is_volatile.psql
+\i op_is_inline.psql
+\i op_is_deleted.psql
+\i op_is_defaulted.psql

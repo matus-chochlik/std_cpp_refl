@@ -1,0 +1,7 @@
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('SpecialMemberFunction');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('MemberFunction', 'SpecialMemberFunction');
+
