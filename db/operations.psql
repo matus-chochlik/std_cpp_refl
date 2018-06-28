@@ -30,3 +30,22 @@
 \i op_get_public_data_members.psql
 \i op_get_accessible_data_members.psql
 \i op_get_data_members.psql
+
+\i op_get_public_member_types.psql
+\i op_get_accessible_member_types.psql
+\i op_get_member_types.psql
+
+\i op_get_public_base_classes.psql
+\i op_get_accessible_base_classes.psql
+\i op_get_base_classes.psql
+
+\i op_get_public_member_functions.psql
+\i op_get_accessible_member_functions.psql
+\i op_get_member_functions.psql
+
+\i op_get_constructors.psql
+\i op_get_destructor.psql
+\i op_get_operators.psql
+
+
+\i op_is_constexpr.psql

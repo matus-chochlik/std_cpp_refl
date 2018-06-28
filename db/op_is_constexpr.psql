@@ -1,0 +1,15 @@
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_constexpr', 'Variable');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_constexpr', 'Variable');
+
+INSERT INTO reflexpr.operation
+(result, operation_name, operation_overload)
+VALUES('BooleanConstant', 'is_constexpr', 'Callable');
+
+INSERT INTO reflexpr.simple_operation_parameter
+(operation_name, parameter)
+VALUES('is_constexpr', 'Callable');
