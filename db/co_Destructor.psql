@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('Destructor');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Callable', 'Destructor');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('SpecialMemberFunction', 'Destructor');
+

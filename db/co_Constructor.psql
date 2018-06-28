@@ -1,0 +1,11 @@
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('Constructor');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('Callable', 'Constructor');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('RecordMember', 'Constructor');
+

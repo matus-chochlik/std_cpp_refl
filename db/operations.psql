@@ -27,6 +27,9 @@
 \i op_get_underlying_type.psql
 \i op_get_enumerators.psql
 
+\i op_get_constant.psql
+\i op_get_pointer.psql
+
 \i op_is_public.psql
 \i op_is_protected.psql
 \i op_is_private.psql
@@ -51,8 +54,7 @@
 \i op_get_destructor.psql
 \i op_get_operators.psql
 
-\i op_get_constant.psql
-\i op_get_pointer.psql
+\i op_get_parameters.psql
 
 \i op_is_virtual.psql
 
@@ -65,11 +67,20 @@
 \i op_is_inline.psql
 \i op_is_deleted.psql
 \i op_is_defaulted.psql
+\i op_is_implicitly_declared.psql
 
 \i op_is_pure_virtual.psql
 \i op_is_override.psql
 \i op_is_final.psql
 
+\i op_has_default_argument.psql
+
 \i op_uses_default_copy_capture.psql
 \i op_uses_default_reference_capture.psql
 \i op_get_captures.psql
+\i op_is_explicitly_captured.psql
+\i op_is_init_capture.psql
+
+\i op_get_callable.psql
+\i op_get_subexpression.psql
+\i op_get_constructor.psql

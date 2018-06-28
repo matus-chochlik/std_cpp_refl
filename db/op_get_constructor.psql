@@ -1,7 +1,7 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('Destructor', 'get_destructor', 'Record');
+VALUES('Constructor', 'get_constructor', 'FunctionalTypeConversion');
 
 INSERT INTO reflexpr.simple_operation_parameter
 (operation_name, parameter)
-VALUES('get_destructor', 'Record');
+VALUES('get_constructor', 'FunctionalTypeConversion');
