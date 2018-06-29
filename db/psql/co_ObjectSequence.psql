@@ -16,132 +16,132 @@ VALUES('Object', 'ObjectSequence');
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<Enumerator>');
+(concept_name) VALUES('OS<Enumerator>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<Enumerator>');
+VALUES('ObjectSequence', 'OS<Enumerator>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Enumerator', 'ObjectSequence<Enumerator>');
+VALUES('Enumerator', 'OS<Enumerator>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<Base>');
+(concept_name) VALUES('OS<Base>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<Base>');
+VALUES('ObjectSequence', 'OS<Base>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Base', 'ObjectSequence<Base>');
+VALUES('Base', 'OS<Base>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<RecordMember,Variable>');
+(concept_name) VALUES('OS<RecordMember,Variable>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Variable>');
+VALUES('ObjectSequence', 'OS<RecordMember,Variable>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('RecordMember', 'ObjectSequence<RecordMember,Variable>');
+VALUES('RecordMember', 'OS<RecordMember,Variable>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Variable', 'ObjectSequence<RecordMember,Variable>');
+VALUES('Variable', 'OS<RecordMember,Variable>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<RecordMember,Type>');
+(concept_name) VALUES('OS<RecordMember,Type>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Type>');
+VALUES('ObjectSequence', 'OS<RecordMember,Type>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('RecordMember', 'ObjectSequence<RecordMember,Type>');
+VALUES('RecordMember', 'OS<RecordMember,Type>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Type', 'ObjectSequence<RecordMember,Type>');
+VALUES('Type', 'OS<RecordMember,Type>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<MemberFunction>');
+(concept_name) VALUES('OS<MemberFunction>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<MemberFunction>');
+VALUES('ObjectSequence', 'OS<MemberFunction>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('MemberFunction', 'ObjectSequence<MemberFunction>');
+VALUES('MemberFunction', 'OS<MemberFunction>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<Constructor>');
+(concept_name) VALUES('OS<Constructor>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<Constructor>');
+VALUES('ObjectSequence', 'OS<Constructor>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Constructor', 'ObjectSequence<Constructor>');
+VALUES('Constructor', 'OS<Constructor>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<Operator>');
+(concept_name) VALUES('OS<Operator>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<Operator>');
+VALUES('ObjectSequence', 'OS<Operator>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('Operator', 'ObjectSequence<Operator>');
+VALUES('Operator', 'OS<Operator>');
 
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<FunctionParameter>');
+(concept_name) VALUES('OS<FunctionParameter>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<FunctionParameter>');
+VALUES('ObjectSequence', 'OS<FunctionParameter>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('FunctionParameter', 'ObjectSequence<FunctionParameter>');
+VALUES('FunctionParameter', 'OS<FunctionParameter>');
 --
 --
 --
 INSERT INTO reflexpr.concept
-(concept_name) VALUES('ObjectSequence<LambdaCapture>');
+(concept_name) VALUES('OS<LambdaCapture>');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
-VALUES('ObjectSequence', 'ObjectSequence<LambdaCapture>');
+VALUES('ObjectSequence', 'OS<LambdaCapture>');
 
 INSERT INTO reflexpr.concept_element
 (element, container)
-VALUES('LambdaCapture', 'ObjectSequence<LambdaCapture>');
+VALUES('LambdaCapture', 'OS<LambdaCapture>');
 

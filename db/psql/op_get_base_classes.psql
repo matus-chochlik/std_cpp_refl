@@ -1,6 +1,6 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('ObjectSequence<Base>', 'get_base_classes', 'Class');
+VALUES('OS<Base>', 'get_base_classes', 'Class');
 
 INSERT INTO reflexpr.simple_operation_parameter
 (operation_name, parameter)

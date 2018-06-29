@@ -1,6 +1,6 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('ObjectSequence<FunctionParameter>', 'get_parameters', 'Callable');
+VALUES('OS<FunctionParameter>', 'get_parameters', 'Callable');
 
 INSERT INTO reflexpr.simple_operation_parameter
 (operation_name, parameter)

@@ -1,6 +1,6 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('ObjectSequence<RecordMember,Variable>', 'get_public_data_members', 'Record');
+VALUES('OS<RecordMember,Variable>', 'get_public_data_members', 'Record');
 
 INSERT INTO reflexpr.simple_operation_parameter
 (operation_name, parameter)

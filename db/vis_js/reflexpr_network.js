@@ -11,3 +11,12 @@ var reflexprNetwork = new vis.Network(
 	reflexprOptions
 );
 
+reflexprNetwork.on(
+	"selectNode",
+	function (params) {
+		options = {
+			animation: true
+		}
+		reflexprNetwork.focus(params.nodes[0], options);
+	}
+);

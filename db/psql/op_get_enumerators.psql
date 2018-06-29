@@ -1,6 +1,6 @@
 INSERT INTO reflexpr.operation
 (result, operation_name, operation_overload)
-VALUES('ObjectSequence<Enumerator>', 'get_enumerators', 'Enum');
+VALUES('OS<Enumerator>', 'get_enumerators', 'Enum');
 
 INSERT INTO reflexpr.simple_operation_parameter
 (operation_name, parameter)
