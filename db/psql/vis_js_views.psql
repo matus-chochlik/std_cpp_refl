@@ -2,8 +2,8 @@
 -- vis_js_nodes
 --
 CREATE FUNCTION reflexpr.vis_js_nodes(
-	output_concepts BOOLEAN,
-	output_operations BOOLEAN
+	output_concepts BOOLEAN DEFAULT TRUE,
+	output_operations BOOLEAN DEFAULT TRUE
 ) RETURNS TEXT AS
 $$
 DECLARE
@@ -14,7 +14,11 @@ DECLARE
 
 	cur_concept CURSOR FOR SELECT * FROM reflexpr.concept;
 
-	cur_operation CURSOR FOR SELECT * FROM reflexpr.operation;
+	cur_operation CURSOR FOR
+	SELECT *
+	FROM reflexpr.operation op
+	JOIN reflexpr.concept co
+	ON(op.result = co.concept_name);
 BEGIN
 	result = 'var reflexprNodes = new vis.DataSet([';
 
@@ -61,8 +65,13 @@ BEGIN
 
 			result = result || '{id:' || rec_operation.operation_id;
 			result = result || ',label:''' || rec_operation.operation_name || '''';
-			result = result || ',group:''operations''';
-			result = result || '}';
+			result = result || ',group:''';
+			CASE
+			WHEN rec_operation.is_value
+			THEN result = result || 'traits';
+			ELSE result = result || 'operations';
+			END CASE;
+			result = result || '''}';
 
 		END LOOP;
 	END IF;
@@ -77,14 +86,33 @@ $$ LANGUAGE plpgsql;
 -- vis_js_edges
 --
 CREATE FUNCTION reflexpr.vis_js_edges(
-	output_inheritance BOOLEAN
+	output_inheritance BOOLEAN DEFAULT TRUE,
+	output_operations BOOLEAN DEFAULT TRUE
 ) RETURNS TEXT AS
 $$
 DECLARE
 	result TEXT DEFAULT '';
 	first BOOLEAN DEFAULT TRUE;
 	rec_inheritance RECORD;
+	rec_op_results RECORD;
+	rec_op_params RECORD;
+
 	cur_inheritance CURSOR FOR SELECT * FROM reflexpr.concept_id_inheritance;
+
+	cur_op_results CURSOR FOR
+	SELECT *
+	FROM reflexpr.operation op
+	JOIN reflexpr.concept co
+	ON(op.result = co.concept_name)
+	WHERE NOT co.is_value;
+
+	cur_op_params CURSOR FOR
+	SELECT *
+	FROM reflexpr.operation_parameter opa
+	JOIN reflexpr.operation op
+	USING(operation_name, operation_overload)
+	JOIN reflexpr.concept co
+	ON(opa.parameter = co.concept_name);
 BEGIN
 	result = 'var reflexprEdges = new vis.DataSet([';
 
@@ -100,9 +128,46 @@ BEGIN
 			ELSE result = result || ',';
 			END IF;
 
-			result = result || '{from:' || rec_inheritance.generalization_id;
-			result = result || ',to:'   || rec_inheritance.specialization_id;
+			result = result || '{from:' || rec_inheritance.specialization_id;
+			result = result || ',to:'   || rec_inheritance.generalization_id;
 			result = result || ',label:''refines''';
+			result = result || '}';
+
+		END LOOP;
+	END IF;
+
+	IF output_operations
+	THEN
+		OPEN cur_op_params;
+		LOOP
+			FETCH cur_op_params INTO rec_op_params;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{from:' || rec_op_params.concept_id;
+			result = result || ',to:'   || rec_op_params.operation_id;
+			result = result || ',label:''argument''';
+			result = result || '}';
+
+		END LOOP;
+
+		OPEN cur_op_results;
+		LOOP
+			FETCH cur_op_results INTO rec_op_results;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{from:' || rec_op_results.operation_id;
+			result = result || ',to:'   || rec_op_results.concept_id;
+			result = result || ',label:''returns''';
 			result = result || '}';
 
 		END LOOP;

@@ -8,8 +8,8 @@ CREATE TABLE reflexpr.concept (
 	concept_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_unique_id'),
 	concept_name reflexpr.identifier NOT NULL,
 	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE,
-	is_value BOOLEAN NULL,
-	is_type BOOLEAN NULL
+	is_value BOOLEAN NOT NULL DEFAULT FALSE,
+	is_type BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 ALTER TABLE reflexpr.concept

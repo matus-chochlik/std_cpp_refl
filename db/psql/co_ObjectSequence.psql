@@ -1,6 +1,98 @@
+--
+-- ObjectSequence
+--
 INSERT INTO reflexpr.concept
 (concept_name) VALUES('ObjectSequence');
 
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('Object', 'ObjectSequence');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<Enumerator>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<Enumerator>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<Base>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<Base>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<RecordMember,Variable>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Variable>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<RecordMember,Type>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Type>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<MemberFunction>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<MemberFunction>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<Constructor>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<Constructor>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<Operator>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<Operator>');
+
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<FunctionParameter>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<FunctionParameter>');
+--
+--
+--
+INSERT INTO reflexpr.concept
+(concept_name) VALUES('ObjectSequence<LambdaCapture>');
+
+INSERT INTO reflexpr.concept_inheritance
+(generalization, specialization)
+VALUES('ObjectSequence', 'ObjectSequence<LambdaCapture>');
