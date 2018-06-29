@@ -1,12 +1,19 @@
 --
 -- concept
 --
+CREATE SEQUENCE reflexpr.seq_concept_id;
+
+
 CREATE TABLE reflexpr.concept (
+	concept_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_concept_id'),
 	concept_name reflexpr.identifier NOT NULL,
 	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE,
 	is_value BOOLEAN NULL,
 	is_type BOOLEAN NULL
 );
+
+ALTER TABLE reflexpr.concept
+ADD UNIQUE(concept_id);
 
 ALTER TABLE reflexpr.concept
 ADD PRIMARY KEY(concept_name);
@@ -78,36 +85,61 @@ AFTER INSERT ON reflexpr.concept_inheritance
 FOR EACH ROW EXECUTE PROCEDURE reflexpr.update_indirect_concept_inheritance();
 
 --
+-- concept_id_inheritance
+--
+CREATE VIEW reflexpr.concept_id_inheritance AS
+SELECT
+	gen.concept_id AS generalization_id,
+	inh.generalization,
+	spc.concept_id AS specialization_id,
+	inh.specialization
+FROM reflexpr.concept_inheritance inh
+JOIN reflexpr.concept gen ON(inh.generalization = gen.concept_name)
+JOIN reflexpr.concept spc ON(inh.specialization = spc.concept_name);
+
+--
 -- concept_hierarchy
 --
 CREATE VIEW reflexpr.concept_hierarchy AS
 SELECT
+	concept_id AS generalization_id,
 	concept_name AS generalization,
+	concept_id AS specialization_id,
 	concept_name AS specialization,
 	0 AS min_level_offset,
 	0 AS max_level_offset
 FROM reflexpr.concept
 UNION
 SELECT
-	generalization,
-	specialization,
+	gen.concept_id AS generalization_id,
+	inh.generalization,
+	spc.concept_id AS specialization_id,
+	inh.specialization,
 	min(level_offset),
 	max(level_offset)
-FROM reflexpr.indirect_concept_inheritance
-GROUP BY (generalization, specialization);
+FROM reflexpr.indirect_concept_inheritance inh
+JOIN reflexpr.concept gen ON(inh.generalization = gen.concept_name)
+JOIN reflexpr.concept spc ON(inh.specialization = spc.concept_name)
+GROUP BY (gen.concept_id, generalization, spc.concept_id, specialization);
 
 
 --
 -- operation
 --
+CREATE SEQUENCE reflexpr.seq_operation_id;
+
 CREATE TABLE reflexpr.operation (
 	result reflexpr.identifier NOT NULL,
+	operation_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_operation_id'),
 	operation_name reflexpr.identifier NOT NULL,
 	operation_overload reflexpr.identifier NOT NULL
 );
 
 ALTER TABLE reflexpr.operation
 ADD PRIMARY KEY(operation_name, operation_overload);
+
+ALTER TABLE reflexpr.operation
+ADD UNIQUE(operation_id);
 
 ALTER TABLE reflexpr.operation
 ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
@@ -160,22 +192,56 @@ EXECUTE PROCEDURE reflexpr.insert_simple_operation_parameter ();
 --
 CREATE VIEW reflexpr.derived_operation_parameter AS
 SELECT
+	operation_id,
 	operation_name,
 	operation_overload,
+	specialization_id AS parameter_id,
 	specialization AS parameter,
 	position
-FROM reflexpr.operation_parameter op
+FROM reflexpr.operation_parameter opa
+JOIN reflexpr.operation op
+USING(operation_name, operation_overload)
 JOIN reflexpr.concept_hierarchy ch
-ON(op.parameter = ch.generalization);
+ON(opa.parameter = ch.generalization);
 
 --
 -- derived_operation_result
 --
 CREATE VIEW reflexpr.derived_operation_result AS
 SELECT
+	specialization_id AS result_id,
 	specialization AS result,
+	operation_id,
 	operation_name,
 	operation_overload
 FROM reflexpr.operation op
 JOIN reflexpr.concept_hierarchy ch
 ON(op.result = ch.generalization);
+
+--
+-- operand
+--
+CREATE TABLE reflexpr.operand (
+	operand reflexpr.specification NOT NULL
+);
+
+ALTER TABLE reflexpr.operand
+ADD PRIMARY KEY(operand);
+
+--
+-- reflection
+--
+CREATE TABLE reflexpr.reflection (
+	operand reflexpr.specification NOT NULL,
+	result reflexpr.identifier NOT NULL
+);
+
+ALTER TABLE reflexpr.reflection
+ADD PRIMARY KEY(operand, result);
+
+ALTER TABLE reflexpr.reflection
+ADD FOREIGN KEY(operand) REFERENCES reflexpr.operand;
+
+ALTER TABLE reflexpr.reflection
+ADD FOREIGN KEY(result) REFERENCES reflexpr.concept;
+

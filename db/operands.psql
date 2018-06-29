@@ -1,0 +1,56 @@
+--
+-- ::
+--
+INSERT INTO reflexpr.operand
+(operand)
+VALUES('::');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('::', 'GlobalScope');
+
+--
+-- namespace-name
+--
+INSERT INTO reflexpr.operand
+(operand)
+VALUES('namespace-name');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('namespace-name', 'Namespace');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('namespace-name', 'ScopeMember');
+
+--
+-- namespace-alias
+--
+INSERT INTO reflexpr.operand
+(operand)
+VALUES('namespace-alias');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('namespace-alias', 'Namespace');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('namespace-alias', 'Alias');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('namespace-alias', 'ScopeMember');
+
+--
+-- type-name
+--
+INSERT INTO reflexpr.operand
+(operand)
+VALUES('type-name');
+
+INSERT INTO reflexpr.reflection
+(operand, result)
+VALUES('type-name', 'Type');
+
