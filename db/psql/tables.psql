@@ -1,11 +1,11 @@
+CREATE SEQUENCE reflexpr.seq_unique_id;
+
 --
 -- concept
 --
-CREATE SEQUENCE reflexpr.seq_concept_id;
-
 
 CREATE TABLE reflexpr.concept (
-	concept_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_concept_id'),
+	concept_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_unique_id'),
 	concept_name reflexpr.identifier NOT NULL,
 	is_metaobject BOOLEAN NOT NULL DEFAULT TRUE,
 	is_value BOOLEAN NULL,
@@ -126,11 +126,9 @@ GROUP BY (gen.concept_id, generalization, spc.concept_id, specialization);
 --
 -- operation
 --
-CREATE SEQUENCE reflexpr.seq_operation_id;
-
 CREATE TABLE reflexpr.operation (
 	result reflexpr.identifier NOT NULL,
-	operation_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_operation_id'),
+	operation_id INTEGER NOT NULL DEFAULT nextval('reflexpr.seq_unique_id'),
 	operation_name reflexpr.identifier NOT NULL,
 	operation_overload reflexpr.identifier NOT NULL
 );

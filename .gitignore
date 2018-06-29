@@ -5,4 +5,6 @@ doc/graphviz/tmp
 doc/quickbook/bin
 doc/quickbook/html
 doc/quickbook/tmp
+db/out
+db/tmp
 .*.swp

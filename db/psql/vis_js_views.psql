@@ -1,0 +1,115 @@
+--
+-- vis_js_nodes
+--
+CREATE FUNCTION reflexpr.vis_js_nodes(
+	output_concepts BOOLEAN,
+	output_operations BOOLEAN
+) RETURNS TEXT AS
+$$
+DECLARE
+	result TEXT DEFAULT '';
+	first BOOLEAN DEFAULT TRUE;
+	rec_concept RECORD;
+	rec_operation RECORD;
+
+	cur_concept CURSOR FOR SELECT * FROM reflexpr.concept;
+
+	cur_operation CURSOR FOR SELECT * FROM reflexpr.operation;
+BEGIN
+	result = 'var reflexprNodes = new vis.DataSet([';
+
+	IF output_concepts
+	THEN
+		OPEN cur_concept;
+		LOOP
+			FETCH cur_concept INTO rec_concept;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{id:' || rec_concept.concept_id;
+			result = result || ',label:''' || rec_concept.concept_name || '''';
+			result = result || ',group:''';
+			CASE
+			WHEN rec_concept.is_metaobject
+			THEN result = result || 'metaobjects';
+			WHEN rec_concept.is_type
+			THEN result = result || 'types';
+			WHEN rec_concept.is_value
+			THEN result = result || 'values';
+			ELSE result = result || 'templates';
+			END CASE;
+			result = result || '''}';
+
+		END LOOP;
+	END IF;
+
+	IF output_operations
+	THEN
+		OPEN cur_operation;
+		LOOP
+			FETCH cur_operation INTO rec_operation;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{id:' || rec_operation.operation_id;
+			result = result || ',label:''' || rec_operation.operation_name || '''';
+			result = result || ',group:''operations''';
+			result = result || '}';
+
+		END LOOP;
+	END IF;
+
+	result = result || ']);';
+
+	RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+-- vis_js_edges
+--
+CREATE FUNCTION reflexpr.vis_js_edges(
+	output_inheritance BOOLEAN
+) RETURNS TEXT AS
+$$
+DECLARE
+	result TEXT DEFAULT '';
+	first BOOLEAN DEFAULT TRUE;
+	rec_inheritance RECORD;
+	cur_inheritance CURSOR FOR SELECT * FROM reflexpr.concept_id_inheritance;
+BEGIN
+	result = 'var reflexprEdges = new vis.DataSet([';
+
+	IF output_inheritance
+	THEN
+		OPEN cur_inheritance;
+		LOOP
+			FETCH cur_inheritance INTO rec_inheritance;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{from:' || rec_inheritance.generalization_id;
+			result = result || ',to:'   || rec_inheritance.specialization_id;
+			result = result || ',label:''refines''';
+			result = result || '}';
+
+		END LOOP;
+	END IF;
+
+	result = result || ']);';
+
+	RETURN result;
+END;
+$$ LANGUAGE plpgsql;

@@ -8,6 +8,7 @@ CREATE DOMAIN reflexpr.identifier AS VARCHAR(64);
 CREATE DOMAIN reflexpr.specification AS VARCHAR(128);
 
 \i tables.psql
+\i vis_js_views.psql
 
 --
 -- Data
