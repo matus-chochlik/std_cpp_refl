@@ -36,6 +36,16 @@ BEGIN
 
 			result = result || '{id:' || rec_concept.concept_id;
 			result = result || ',label:''' || rec_concept.concept_name || '''';
+
+			result = result || ',mass:';
+			CASE
+			WHEN rec_concept.is_metaobject
+			THEN result = result || '5';
+			WHEN rec_concept.is_type
+			THEN result = result || '3';
+			ELSE result = result || '1';
+			END CASE;
+
 			result = result || ',group:''';
 			CASE
 			WHEN rec_concept.is_metaobject
@@ -46,6 +56,7 @@ BEGIN
 			THEN result = result || 'values';
 			ELSE result = result || 'templates';
 			END CASE;
+
 			result = result || '''}';
 
 		END LOOP;
@@ -65,6 +76,7 @@ BEGIN
 
 			result = result || '{id:' || rec_operation.operation_id;
 			result = result || ',label:''' || rec_operation.operation_name || '''';
+			result = result || ',mass:1';
 			result = result || ',group:''';
 			CASE
 			WHEN rec_operation.is_value
@@ -87,6 +99,7 @@ $$ LANGUAGE plpgsql;
 --
 CREATE FUNCTION reflexpr.vis_js_edges(
 	output_inheritance BOOLEAN DEFAULT TRUE,
+	output_elements BOOLEAN DEFAULT TRUE,
 	output_operations BOOLEAN DEFAULT TRUE
 ) RETURNS TEXT AS
 $$
@@ -94,10 +107,25 @@ DECLARE
 	result TEXT DEFAULT '';
 	first BOOLEAN DEFAULT TRUE;
 	rec_inheritance RECORD;
+	rec_elements RECORD;
 	rec_op_results RECORD;
 	rec_op_params RECORD;
 
-	cur_inheritance CURSOR FOR SELECT * FROM reflexpr.concept_id_inheritance;
+	cur_inheritance CURSOR FOR
+	SELECT 
+		generalization_id,
+		specialization_id
+	FROM reflexpr.concept_id_inheritance;
+
+	cur_elements CURSOR FOR
+	SELECT
+		cc.concept_id AS container_id,
+		ce.concept_id AS element_id
+	FROM reflexpr.concept_element coe
+	JOIN reflexpr.concept cc
+	ON(coe.container = cc.concept_name)
+	JOIN reflexpr.concept ce
+	ON(coe.element = ce.concept_name);
 
 	cur_op_results CURSOR FOR
 	SELECT *
@@ -136,6 +164,26 @@ BEGIN
 		END LOOP;
 	END IF;
 
+	IF output_elements
+	THEN
+		OPEN cur_elements;
+		LOOP
+			FETCH cur_elements INTO rec_elements;
+			EXIT WHEN NOT FOUND;
+
+			IF first
+			THEN first = FALSE;
+			ELSE result = result || ',';
+			END IF;
+
+			result = result || '{from:' || rec_elements.container_id;
+			result = result || ',to:'   || rec_elements.element_id;
+			result = result || ',label:''contains''';
+			result = result || '}';
+
+		END LOOP;
+	END IF;
+
 	IF output_operations
 	THEN
 		OPEN cur_op_params;
@@ -150,7 +198,7 @@ BEGIN
 
 			result = result || '{from:' || rec_op_params.concept_id;
 			result = result || ',to:'   || rec_op_params.operation_id;
-			result = result || ',label:''argument''';
+			result = result || ',label:''argument of''';
 			result = result || '}';
 
 		END LOOP;

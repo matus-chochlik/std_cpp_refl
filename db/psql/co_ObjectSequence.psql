@@ -8,6 +8,10 @@ INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('Object', 'ObjectSequence');
 
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Object', 'ObjectSequence');
+
 --
 --
 --
@@ -17,6 +21,10 @@ INSERT INTO reflexpr.concept
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<Enumerator>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Enumerator', 'ObjectSequence<Enumerator>');
 
 --
 --
@@ -28,6 +36,10 @@ INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<Base>');
 
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Base', 'ObjectSequence<Base>');
+
 --
 --
 --
@@ -37,6 +49,14 @@ INSERT INTO reflexpr.concept
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Variable>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('RecordMember', 'ObjectSequence<RecordMember,Variable>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Variable', 'ObjectSequence<RecordMember,Variable>');
 
 --
 --
@@ -48,6 +68,14 @@ INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<RecordMember,Type>');
 
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('RecordMember', 'ObjectSequence<RecordMember,Type>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Type', 'ObjectSequence<RecordMember,Type>');
+
 --
 --
 --
@@ -57,6 +85,10 @@ INSERT INTO reflexpr.concept
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<MemberFunction>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('MemberFunction', 'ObjectSequence<MemberFunction>');
 
 --
 --
@@ -68,6 +100,10 @@ INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<Constructor>');
 
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Constructor', 'ObjectSequence<Constructor>');
+
 --
 --
 --
@@ -78,6 +114,10 @@ INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<Operator>');
 
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('Operator', 'ObjectSequence<Operator>');
+
 --
 --
 --
@@ -87,6 +127,10 @@ INSERT INTO reflexpr.concept
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<FunctionParameter>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('FunctionParameter', 'ObjectSequence<FunctionParameter>');
 --
 --
 --
@@ -96,3 +140,8 @@ INSERT INTO reflexpr.concept
 INSERT INTO reflexpr.concept_inheritance
 (generalization, specialization)
 VALUES('ObjectSequence', 'ObjectSequence<LambdaCapture>');
+
+INSERT INTO reflexpr.concept_element
+(element, container)
+VALUES('LambdaCapture', 'ObjectSequence<LambdaCapture>');
+

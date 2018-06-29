@@ -1,7 +1,8 @@
 var reflexprOptions = {
+	autoResize: false,
 	edges: {
-		lenght: 35,
 		font: {
+			size: 10,
 			align: 'middle'
 		},
 		arrows: {

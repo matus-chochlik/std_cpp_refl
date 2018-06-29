@@ -8,7 +8,6 @@
 \i sc_BaseLevelType.psql
 
 \i co_Object.psql
-\i co_ObjectSequence.psql
 \i co_Expression.psql
 \i co_Scope.psql
 \i co_Typed.psql
@@ -43,3 +42,5 @@
 \i co_ParenthesizedExpression.psql
 \i co_FunctionCallExpression.psql
 \i co_FunctionalTypeConversion.psql
+
+\i co_ObjectSequence.psql

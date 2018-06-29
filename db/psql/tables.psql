@@ -20,6 +20,24 @@ ADD PRIMARY KEY(concept_name);
 
 
 --
+-- concept_element
+--
+CREATE TABLE reflexpr.concept_element (
+	container reflexpr.identifier NOT NULL,
+	element reflexpr.identifier NOT NULL
+);
+
+ALTER TABLE reflexpr.concept_element
+ADD PRIMARY KEY(container, element);
+
+ALTER TABLE reflexpr.concept_element
+ADD FOREIGN KEY(container) REFERENCES reflexpr.concept;
+
+ALTER TABLE reflexpr.concept_element
+ADD FOREIGN KEY(element) REFERENCES reflexpr.concept;
+
+
+--
 -- concept_inheritance
 --
 CREATE TABLE reflexpr.concept_inheritance (
