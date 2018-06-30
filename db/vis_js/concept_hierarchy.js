@@ -1,7 +1,8 @@
 var reflexprOptions = {
+	autoResize: false,
 	edges: {
-		lenght: 25,
 		font: {
+			size: 10,
 			align: 'middle'
 		},
 		arrows: {
@@ -11,19 +12,27 @@ var reflexprOptions = {
 	groups: {
 		metaobjects: {
 			shape: 'box',
-			color: 'lime'
+			color: '#C0E0C0'
 		},
 		templates: {
 			shape: 'box',
-			color: 'lime'
+			color: '#E0E8E0'
 		},
 		types: {
 			shape: 'box',
-			color: 'lime'
+			color: '#D0D8D0'
 		},
 		values: {
 			shape: 'box',
-			color: 'lime'
+			color: '#E8F0E8'
+		},
+		operations: {
+			shape: 'ellipse',
+			color: '#FFD0D0'
+		},
+		traits: {
+			shape: 'ellipse',
+			color: '#B8B0B0'
 		}
 	}
 }

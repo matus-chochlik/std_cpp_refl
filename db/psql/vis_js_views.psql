@@ -198,7 +198,7 @@ BEGIN
 
 			result = result || '{from:' || rec_op_params.concept_id;
 			result = result || ',to:'   || rec_op_params.operation_id;
-			result = result || ',label:''argument of''';
+			result = result || ',label:''is argument of''';
 			result = result || '}';
 
 		END LOOP;
